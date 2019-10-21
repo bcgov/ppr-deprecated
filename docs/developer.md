@@ -60,9 +60,9 @@ Please don't use _git pull_ instead of the above _fetch / rebase_. _git pull_ do
 
 In the VS Code left hand navigation, click the Source Control logo to bring up the view.
 
-If you have files to _git add_, the VS Code equivalent is to either right-click the file and select _Stage Changes_ or click the _+_ symbol to the right of the filename.
+In VS Code you need to Stage your changes before commiting. To stage files that are added or edited, either right-click the file and select _Stage Changes_ or click the _+_ symbol to the right of the filename.
 
-If you have files to _git commit_, the VS Code equivalent is to select the file(s) and then enter a message in the text box at the top of the Source Control view. CTRL-Enter will commit the changes. Your message should end with the Issue number you are working on, such as "_Description of my changes #1_".
+When ready to commit, enter a message in the text box at the top of the Source Control view. Your message should end with the Issue number you are working on, such as "_Description of my changes #1_". CTRL-Enter will commit the staged changes.
 
 ## 6. Push
 
