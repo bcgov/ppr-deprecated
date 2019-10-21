@@ -28,7 +28,7 @@ This will prevent accidentally pushing to the main repository.
 
 ## 3. Branch your Code
 
-In the bottom left corner of VS Code is the Source Control logo with the name of your current branch. Ensure that it is _master_. If not, click the branch name and then select _master_ from the list of branches.
+In the bottom-left corner of VS Code is the Source Control logo with the name of your current branch. Ensure that it is _master_. If not, click the branch name and then select _master_ from the list of branches.
 
 After your first clone you will be up to date, but if you return to this step in the future you will want to ensure that your local master is up to date:
 
@@ -40,9 +40,9 @@ $ git rebase upstream/master
 Current branch master is up to date.
 ```
 
-Click the Source Control logo in the bottom corner of VS Code and select _Create new branch..._. Name your branch with the format `1-branch_description`, where `1` is the GitHub Issue number that you are working on.
+Click the Source Control logo in the bottom-left corner of VS Code and select _Create new branch..._. Name your branch with the format `1-branch_description`, where `1` is the GitHub Issue number that you are working on.
 
-Notice that in the bottom left corner you have checked out the new branch.
+Notice that in the bottom-left corner you have checked out the new branch.
 
 ## 4. Keep your Branch in Sync
 
@@ -103,6 +103,22 @@ $ git rebase -i upstream/master
 ```
 
 For mass automated fixups (e.g. automated doc formatting), use one or more commits for the changes to tooling, and a final commit to apply the fixup en masse. This makes reviews easier.
+
+## 8. Branch Cleanup
+
+You will now have some cleanup to do with the branches that you have created. In GitHub go to your repository and list your branches. Click the red garbage can icon next to your branch to delete it.
+
+In VS Code you will also want to delete your branch. You cannot delete the branch you have checked out, so click the Source Control logo in the bottom-left corner of VS Code and choose _master_ to check it out. Then go to _View > Command Palette_, enter _Git: Delete Branch..._ and select the branch to be deleted.
+
+## 9. Sync your Fork
+
+To keep your fork on GitHub up to date, you will now want to sync it. Ensure that you are in the master branch, and do the following:
+
+```sh
+$ git fetch upstream
+$ git rebase upstream/master
+$ git push
+```
 
 ## Attribution
 
