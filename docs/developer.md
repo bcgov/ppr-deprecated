@@ -104,6 +104,22 @@ $ git rebase -i upstream/master
 
 For mass automated fixups (e.g. automated doc formatting), use one or more commits for the changes to tooling, and a final commit to apply the fixup en masse. This makes reviews easier.
 
+## 8. Branch Cleanup
+
+You will now have some cleanup to do with the branches that you have created. In GitHub go to your repository and list your branches. Click the red garbage can icon next to your branch to delete it.
+
+In VS Code you will also want to delete your branch. You cannot delete the branch you have checked out, so clicking the Source Control logo in the bottom corner of VS Code and choose _master_ to check it out. Then go to _View > Command Palette_, enter _Git: Delete Branch..._ and then select the branch to be deleted.
+
+## 9. Sync your Fork
+
+To keep your fork on GitHub up to date, you will now want to sync it. Ensure that you are in the master branch, and do the following:
+
+```sh
+$ git fetch upstream
+$ git rebase upstream/master
+$ git push
+```
+
 ## Attribution
 
 This page heavily borrowed from the kubernetes.io project - thanks from our Registries team.
