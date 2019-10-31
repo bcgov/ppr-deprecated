@@ -1,0 +1,6 @@
+
+-r ../requirements.txt
+
+# For development, as these are included in the Docker image when deploying. Note that the versions here are tied to https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker
+fastapi==0.42.0
+uvicorn==0.9.0
