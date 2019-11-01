@@ -1,0 +1,46 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: ${API_NAME}
+    name: ${API_NAME}
+  spec:
+    failedBuildsHistoryLimit: 5
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${API_NAME}:latest
+    source:
+      contextDir: ppr-api
+      dockerfile: |
+        FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-2019-10-15
+
+        COPY ./app /app
+        COPY ./requirements.txt /tmp
+        RUN pip install -r /tmp/requirements.txt
+      git:
+        ref: master
+        uri: https://github.com/bcgov/ppr
+      type: Git
+    strategy:
+      dockerStrategy:
+        noCache: false
+    successfulBuildsHistoryLimit: 5
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${API_NAME}
+    name: ${API_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+parameters:
+- description: The name of the API
+  displayName: API Name
+  name: API_NAME
+  required: true
+  value: ppr-api
