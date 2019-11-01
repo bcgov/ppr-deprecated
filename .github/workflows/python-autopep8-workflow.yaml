@@ -1,0 +1,23 @@
+name: Format python code
+on: push
+jobs:
+  autopep8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: autopep8
+        uses: peter-evans/autopep8@v1.1.0
+        with:
+          args: --recursive --in-place --aggressive --aggressive .
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v1.6.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMIT_MESSAGE: autopep8 action fixes
+          COMMIT_AUTHOR_EMAIL: WalterMoar@users.noreply.github.com
+          COMMIT_AUTHOR_NAME: Walter Moar
+          PULL_REQUEST_TITLE: Fixes by autopep8 action
+          PULL_REQUEST_BODY: This is an auto-generated PR with fixes by autopep8.
+          PULL_REQUEST_LABELS: autopep8, automated pr
+          PULL_REQUEST_REVIEWERS: WalterMoar
+          PULL_REQUEST_BRANCH: autopep8-patches
