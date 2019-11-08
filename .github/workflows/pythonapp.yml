@@ -21,9 +21,9 @@ jobs:
     - name: Lint with PyLint
       working-directory: ppr-api
       run: |
-        pylint -E app
-#     - name: Test with pytest
-#       working-directory: ppr-api
-#       run: |
-#         pip install pytest
-#         pytest
+        pylint -E src
+    - name: Execute Unit Tests with PyTest
+      working-directory: ppr-api
+      run: |
+        pip install .
+        pytest tests/unit
