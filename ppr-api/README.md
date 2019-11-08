@@ -8,6 +8,18 @@ The PPR API is currently a passthrough API that calls the IMS Transaction Manage
 1. `$ (cd src && uvicorn main:app --reload)`
 1. View the [OpenAPI Docs](http://127.0.0.1:8000/docs).
 
+### Local Dependencies
+
+The api requires a **PostgreSQL** database which can be launched locally with docker compose. You must specify a password for
+the database using the `DB_PASSWORD` environment variable. This is required by both docker compose PPR API.
+
+Docker compose will also bring up an instance of Jaeger.
+
+From the project root folder:
+```
+$ docker-compose up -d
+```
+
 ## Application Configuration
 
 ### OpenShift Configuration
@@ -29,6 +41,18 @@ worker processes running.
 | -------------------- | ----------------------- |
 | PORT                 | Port to listen on: 8080 |
 | WEB_CONCURRENCY      | Number of processes: 4  |
+
+### PostgreSQL Database Configuration
+
+These settings are for building connections to the database.
+
+| Environment Variable | Description                                   |
+| -------------------- | --------------------------------------------- |
+| DB_HOSTNAME          | Host where the database is located: localhost |
+| DB_PORT              | Port to listen on: 5432                       |
+| DB_NAME              | The name of the database: ppr                 |
+| DB_USERNAME          | The username to connect with: postgres        |
+| DB_PASSWORD          | The password of the user. **Required**        |
 
 ### Sentry Configuration
 
