@@ -30,6 +30,17 @@ source ./.venv/bin/activate
 
 This will install what is needed to run in VS Code. Note that there will be errors regarding an invalid command 'bdist_wheel', but these don't appear to be a problem.
 
+## Start a local PostgreSQL database
+
+The web service is dependent on a postgres database which can be launched with docker compose.  You **must** specify a
+password for the database using the `DB_PASSWORD` environment variable.  This is required by both docker compose
+and the service.
+
+In the root project directory, run:
+```
+$ docker-compose up -d
+```
+
 ## Start the Web Service
 
 ```
@@ -37,6 +48,9 @@ This will install what is needed to run in VS Code. Note that there will be erro
 ```
 
 This should bring the web service up on http://localhost:8000, with OpenAPI documentation available at http://localhost:8000/docs.
+
+**Note:** The webservice requires the `DB_PASSWORD` environment variable, which should be the same as the one
+provided when you ran *docker-compose*.
 
 ### Using a debugger
 
