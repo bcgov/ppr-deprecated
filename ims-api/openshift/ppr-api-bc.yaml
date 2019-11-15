@@ -15,20 +15,20 @@ objects:
         kind: ImageStreamTag
         name: ${API_NAME}:latest
     source:
-      contextDir: ppr-api-2
+      contextDir: ims-api
       dockerfile: |
         FROM gradle:5.6.4-jdk11
 
-        WORKDIR ppr-api-2
+        WORKDIR ims-api
         COPY . .
         EXPOSE 8080
 
         RUN gradle --no-daemon bootJar
 
-        CMD ["java", "-jar", "build/libs/ppr-api-2.jar"]
+        CMD ["java", "-jar", "build/libs/ims-api.jar"]
       git:
-        ref: try-spring-boot
-        uri: https://github.com/vituary-solutions/ppr
+        ref: master
+        uri: https://github.com/bcgov/ppr
       type: Git
     strategy:
       dockerStrategy:

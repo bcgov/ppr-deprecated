@@ -14,6 +14,6 @@ jobs:
         with:
           java-version: 11
       - name: Build and execute tests
-        working-directory: ppr-api-2
+        working-directory: ims-api
         run: |
           ./gradlew build
