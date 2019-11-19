@@ -27,7 +27,6 @@ objects:
 
         CMD ["java", "-jar", "build/libs/ims-api.jar"]
       git:
-        ref: master
         uri: https://github.com/bcgov/ppr
       type: Git
     strategy:

@@ -30,20 +30,15 @@ objects:
           deploymentconfig: ${API_NAME}
       spec:
         containers:
-        - env:
-          - name: PORT
-            value: "8080"
-          - name: WEB_CONCURRENCY
-            value: "4"
-          imagePullPolicy: Always
+        - imagePullPolicy: Always
           name: ${API_NAME}
           ports:
           - containerPort: 8080
             protocol: TCP
           resources:
             limits:
-              cpu: 50m
-              memory: 1024Mi
+              cpu: '1'
+              memory: 1Gi
             requests:
               cpu: 20m
               memory: 256Mi
