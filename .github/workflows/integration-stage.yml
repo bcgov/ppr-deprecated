@@ -1,11 +1,11 @@
-name: ims-api Docker Image
+name: Build Continuous Integration Artifacts
 
 on:
   push:
     branches: [master]
 
 jobs:
-  build-ims-api:
+  ims-api-image-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,7 @@ jobs:
 
 # TODO: Once other jobs are complete, we may bring up some services and run a small suite of integration tests, if we wish
 #  e2e-test:
-#    needs: build-ims-api
+#    needs: ims-api-image-build
 #    runs-on: ubuntu-latest
 #    # services: https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idservices
 #    # steps: TODO run the suite of tests
