@@ -1,0 +1,68 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    failedBuildsHistoryLimit: 5
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    source:
+      dockerfile: |
+        FROM bcgov-s2i-caddy
+        RUN mkdir -p /var/www/html
+        COPY dist /var/www/html
+        RUN ls -alR /var/www/html
+      images:
+      - from:
+          kind: ImageStreamTag
+          name: ${APP_INTER}:${APP_INTER_TAG}
+        paths:
+        - destinationDir: ./
+          sourcePath: /dist
+      type: Dockerfile
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: bcgov-s2i-caddy:latest
+          namespace: openshift
+      type: Docker
+      successfulBuildsHistoryLimit: 5
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+parameters:
+- description: The name of the intermediate build image for the PPR UI
+  displayName: APP Intermediate
+  name: APP_INTER
+  required: true
+  value: ppr-ui-inter
+- description: The tag of the intermediate build
+  displayName: APP Intermediate Tag
+  name: APP_INTER_TAG
+  required: true
+  value: latest
+- description: The name of the appliction
+  displayName: APP Name
+  name: APP_NAME
+  required: true
+  value: ppr-ui
+- description: The path at which web application is deployed. Context root for the web applicaton
+  displayName: WEB_APP_CONTEXT_PATH
+  name: WEB_APP_CONTEXT_PATH
+  required: true
+  value: ppr
+
