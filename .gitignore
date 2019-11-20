@@ -13,3 +13,6 @@ __pycache__
 # Ignore Gradle project-specific cache and build directories
 /**/.gradle
 /**/build
+
+#OS Files
+.DS_Store
