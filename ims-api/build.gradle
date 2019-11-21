@@ -12,10 +12,13 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.google.guava:guava:28.1-jre'
+    implementation 'org.apache.commons:commons-lang3:3.9'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+    // TODO This project is found at http://rosemary.bcgov/svn/nro/trunk/jars/imsconnect. I explicitly built and
+    // included as local jar for now, but we would be better served to pull the artifact from Artifactory.
+    implementation files('libs/imsconnect-1.2.0.jar')
+
+    testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:3.1.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
