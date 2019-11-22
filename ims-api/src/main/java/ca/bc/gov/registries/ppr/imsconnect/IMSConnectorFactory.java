@@ -10,7 +10,7 @@ public class IMSConnectorFactory {
     private String hostname;
     @Value("${ims.port}")
     private int port;
-    @Value("${ims.dataStore}")
+    @Value("${ims.data_store}")
     private String dataStore;
     @Value("${ims.username}")
     private String username;
