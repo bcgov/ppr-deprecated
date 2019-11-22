@@ -4,8 +4,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>ppr-client</title>
+    <link rel="icon" href="<%= BASE_URL %>favicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css">
+<!--    <link rel="stylesheet" href="https://ws1.postescanada-canadapost.ca/css/addresscomplete-2.00.min.css">-->
+<!--    <script type="text/javascript" src="https://ws1.postescanada-canadapost.ca/js/addresscomplete-2.00.js"></script>-->
+    <title>PPR (POC)</title>
   </head>
   <body>
     <noscript>
@@ -14,4 +18,7 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <script>
+    sessionStorage.setItem('REDIRECTED', 'false')
+  </script>
 </html>

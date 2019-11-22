@@ -1,18 +1,32 @@
-<template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+<template lang="pug">
+  div
+    v-container(class="view-container")
+      article(id="dashboardArticle")
+        header
+          h1 PPR Sample Home Page
+
+        div(class="page-content")
+          div(class="page-content__main")
+            section
+              header
+                h2 Sample home page content
+
+          aside(class="page-content__aside")
+            section
+              header
+                h2 Sample Aside Section
+    v-container
+      v-btn(class="form-primary-btn", @click="login", color="primary") Login
+
 </template>
-
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+    import AuthHelper from '@/utils/auth-helper'
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        methods: {
+            login: function () {
+                this.$router.push('auth')
+            }
+        }
+    }
 </script>

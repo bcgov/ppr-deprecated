@@ -1,32 +1,63 @@
-<template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+<template lang="pug">
+  v-app(class="app-container, theme--light", id="app")
+    component(:is="layout")
+     router-view
 </template>
 
-<style lang="less">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+    const APP_PATH = process.env.VUE_APP_PATH || 'app-path-foo-bar'
+    const DefaultLayout = 'public'
 
-#nav {
-  padding: 30px;
+    export default {
+        components: {},
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+        data: function () {
+            return {
+                dataLoaded: false
+            }
+        },
+        provide() {
+            return {
+                originUrl: this.origin,
+                authApiUrl: this.authApiUrl
+            }
+        },
+        computed: {
+            layout() {
+                return (this.$route.meta.layout || DefaultLayout) + '-layout'
+            },
+            origin() {
+                const root = window.location.origin || ''
+                const path = APP_PATH
+                return `${root}/${path}`
+            },
+            authAPIURL() {
+                return sessionStorage.getItem('AUTH_API_URL')
+            },
+        },
+        methods: {
+            setLoaded: function (flag) {
+                this.dataLoaded = flag
+            }
+        },
+        mounted() {
+            console.log('App mounted')
+            const delay = 1111
+            this.$nextTick(() => {
+                setTimeout(function () {
+                    this.setLoaded(true)
+                }.bind(this), delay)
+            })
+        },
+        errorCaptured(err, vm, info) {
+            console.log('App errorCaptured', err)
+            // err: error trace
+            // vm: component in which error occured
+            // info: Vue specific error information such as lifecycle hooks, events etc.
+            // TODO: Perform any custom logic or log to server
+            // return false to stop the propagation of errors further to parent or global error handler
+        }
     }
-  }
-}
-</style>
+
+</script>
+

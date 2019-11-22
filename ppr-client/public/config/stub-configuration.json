@@ -1,0 +1,7 @@
+{
+  "API_URL": "http://localhost:2015/api/v1/",
+  "AUTH_URL": "http://localhost:8080/auth/",
+  "AUTH_API_URL": "https://auth-api-dev.pathfinder.gov.bc.ca/api/v1/",
+  "PAY_API_URL": "",
+  "ADDRESS_COMPLETE_KEY": "RH99-RN99-GB72-FW86"
+}

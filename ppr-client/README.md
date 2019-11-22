@@ -1,9 +1,8 @@
 # ppr-client
 
-## Project setup
-```
-npm install
-```
+## Project creation
+
+See README-project-create.md
 
 ### Compiles and hot-reloads for development
 ```

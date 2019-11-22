@@ -1,0 +1,7 @@
+{
+  "API_URL": "https://WHAT_TO_PUT_HERE.pathfinder.gov.bc.ca/api/v1/",
+  "AUTH_URL": "https://dev.bcregistry.ca/WHAT-TO_PUT_HERE/auth/",
+  "AUTH_API_URL": "https://auth-api-dev.pathfinder.gov.bc.ca/api/v1/",
+  "PAY_API_URL": "https://pay-api-dev.pathfinder.gov.bc.ca/api/v1/",
+  "ADDRESS_COMPLETE_KEY": "RH99-RN99-GB72-FW86"
+}
