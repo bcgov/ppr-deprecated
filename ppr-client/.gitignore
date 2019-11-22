@@ -1,14 +1,4 @@
-# Byte-compiled / optimized / DLL files
-__pycache__
-.pytest_cache
-.eggs
-
-# Environments
-.venv
-.env.local
-.env.*.local
-
-
+.DS_Store
 node_modules
 /dist
 
@@ -16,6 +6,10 @@ node_modules
 selenium-debug.log
 chromedriver.log
 geckodriver.log
+
+# local env files
+.env.local
+.env.*.local
 
 # Log files
 npm-debug.log*
@@ -30,10 +24,3 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
-
-# Ignore Gradle project-specific cache and build directories
-/**/.gradle
-/**/build
-
-#OS Files
-.DS_Store

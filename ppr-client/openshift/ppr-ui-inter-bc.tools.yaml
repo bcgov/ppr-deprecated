@@ -1,0 +1,47 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      build: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    source:
+      contextDir: ppr-client
+      dockerfile: |
+        FROM node:8
+        COPY . .
+        RUN npm install
+        RUN npm run build
+        # RUN ls -alR /dist
+      git:
+        # without a ref the default is a shallow copy of master
+        uri: https://github.com/bcgov/ppr
+      type: Git
+    strategy:
+      dockerStrategy:
+        noCache: false
+    failedBuildsHistoryLimit: 5
+    successfulBuildsHistoryLimit: 5
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+parameters:
+- description: The name of the intermediate build image for the PPR UI
+  displayName: APP Name
+  name: APP_NAME
+  required: true
+  value: ppr-ui-inter
+
