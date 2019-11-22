@@ -8,11 +8,13 @@ __pycache__
 .env.local
 .env.*.local
 
-
+# Node packages
 node_modules
-/dist
 
-/tests/e2e/reports/
+#Vue build and test artifacts:
+dist/
+**/tests/e2e/reports
+
 selenium-debug.log
 chromedriver.log
 geckodriver.log
