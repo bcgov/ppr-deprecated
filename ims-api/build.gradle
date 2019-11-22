@@ -13,6 +13,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // TODO This project is found at http://rosemary.bcgov/svn/nro/trunk/jars/imsconnect. I explicitly built and
     // included as local jar for now, but we would be better served to pull the artifact from Artifactory.
