@@ -148,11 +148,11 @@ parameters:
   name: VOL_APP_CONFIG
   required: true
   value: ppr-web-ui-config
-- description: The path at which web application is deployed. Context root for the web applicaton
-  displayName: WEB_APP_CONTEXT_PATH
-  name: WEB_APP_CONTEXT_PATH
-  required: true
-  value: ppr
+#- description: The path at which web application is deployed. Context root for the web applicaton
+#  displayName: WEB_APP_CONTEXT_PATH
+#  name: WEB_APP_CONTEXT_PATH
+#  required: true
+#  value: ppr
 - description: The port for the web application
   displayName: Web application port
   name: APP_PORT

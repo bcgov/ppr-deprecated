@@ -9,7 +9,6 @@ __pycache__
 .env.*.local
 
 
-.DS_Store
 node_modules
 /dist
 

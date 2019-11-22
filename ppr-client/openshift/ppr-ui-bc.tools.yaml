@@ -18,7 +18,7 @@ objects:
         FROM bcgov-s2i-caddy
         RUN mkdir -p /var/www/html
         COPY dist /var/www/html
-        RUN ls -alR /var/www/html
+        # RUN ls -alR /var/www/html
       images:
       - from:
           kind: ImageStreamTag

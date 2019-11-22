@@ -19,7 +19,7 @@ objects:
         COPY . .
         RUN npm install
         RUN npm run build
-        RUN ls -alR /dist
+        # RUN ls -alR /dist
       git:
         # without a ref the default is a shallow copy of master
         uri: https://github.com/bcgov/ppr
