@@ -25,10 +25,13 @@ settings.
 | ims.username | IMS_USERNAME | **Required**, _Max: 8 characters_ |
 | ims.password | IMS_PASSWORD | **Required**, _Max: 8 characters_ |
 | ims.l_term | IMS_LTERM | **Required**, _Max: 8 characters_ |
-| ims.client_id_prefix | IMS_CLIENT_ID_PREFIX | **Required**.  Will be truncated to 4 characters. |
 | ims.group | IMS_GROUP | **Optional**, _Default: `""`_. |
-| ims.timeout_code | IMS_TIMEOUT_CODE | **Optional**, _Default 64: (25 seconds), Max: 255_. See [Timeout specifications on input messages](https://www.ibm.com/support/knowledgecenter/en/SSEPH2_13.1.0/com.ibm.ims13.doc.ccg/ims_ct_irmtimerusage.htm). |
+| ims.execution_timeout | IMS_EXECUTION_TIMEOUT | **Optional**, _Default: 25000_. The execution timeout to specify to IMS, in milliseconds. |
 | ims.socket_timeout | IMS_SOCKET_TIMEOUT | **Optional**, _Default: 30000_. The socket timeout when calling IMS, in milliseconds. |
+| ims.pooling_enabled | IMS_POOLING_ENABLED | **Optional**, _Default: false_. Whether to use connection pooling to the IMS Server. |
+| ims.min_connections | IMS_MIN_CONNECTIONS | **Optional**, _Default: 1_. Minimum connections, when pooling is enabled. |
+| ims.max_connections | IMS_MAX_CONNECTIONS | **Optional**, _Default: 5_. Maximum connections, when pooling is enabled. |
+| ims.ssl_enabled | IMS_SSL_ENABLED | **Optional**, _Default: false_. |
 | sentry.dns | SENTRY_DSN | **Recommended**. If not specified, Sentry will not receive any notifications from the API. See [Setting the DSN](https://docs.sentry.io/clients/java/config/#setting-the-dsn). |
 | sentry.environment | SENTRY_ENVIRONMENT | **Recommended**. See [Environment](https://docs.sentry.io/clients/java/config/#environment). |
 

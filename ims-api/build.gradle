@@ -18,9 +18,12 @@ dependencies {
     implementation 'io.sentry:sentry-spring:1.7.27'
     implementation 'org.apache.commons:commons-lang3:3.9'
 
-    // TODO This project is found at http://rosemary.bcgov/svn/nro/trunk/jars/imsconnect. I explicitly built and
-    // included as local jar for now, but we would be better served to pull the artifact from Artifactory.
-    implementation files('libs/imsconnect-1.2.0.jar')
+    // IBM Libraries required for the implementation. libs extracted from download: https://www.ibm.com/marketing/iwm/iwm/web/preLogin.do?source=imscjd
+    // See https://github.com/imsdev/ims-java-springboot/blob/master/ims-springboot-tm/README.md for details
+    implementation 'javax.resource:javax.resource-api:1.7.1'
+    implementation 'com.ibm.icu:icu4j:59.2'
+    // included as local jars for now, but we would be better served to pull the artifact from Artifactory.
+    implementation files('libs/ccf2.jar', 'libs/cwybs-adapterfoundation.jar', 'libs/despi.jar', 'libs/imsico.jar', 'libs/marshall.jar')
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:3.1.0'
