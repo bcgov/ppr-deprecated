@@ -40,15 +40,6 @@
                 this.dataLoaded = flag
             }
         },
-        mounted() {
-            console.log('App mounted')
-            const delay = 1111
-            this.$nextTick(() => {
-                setTimeout(function () {
-                    this.setLoaded(true)
-                }.bind(this), delay)
-            })
-        },
         errorCaptured(err, vm, info) {
             console.log('App errorCaptured', err)
             // err: error trace
