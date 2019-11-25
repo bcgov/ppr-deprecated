@@ -1,16 +1,12 @@
 <template lang="pug">
   div
-    sbc-header(ref="sbcHeader", :brandLink="originUrl", :authURL="authAPIURL")
+    sbc-header(ref="sbcHeader", :brandLink="originUrl", :authURL="authApiUrl")
 
     div(class="app-body")
         main
             slot Main content for a component will appear here. The component is selected by the router
 
     sbc-footer
-
-    input(class="checkbox", type="checkbox", v-model="showingSpecial")
-    span show special
-    div(v-show="showingSpecial") Showing special
 
 </template>
 
@@ -26,23 +22,9 @@
         },
         data: function () {
             return {
-                showingSpecial: false
             }
         },
         inject: ['authApiUrl', 'originUrl'],
-        computed: {
-            authAPIURL() {
-                return sessionStorage.getItem('AUTH_API_URL')
-            },
-        },
-        mounted: function () {
-            console.log(this.$options.name + ' mounted')
-        },
-        watch: {
-            showingSpecial: function (flag) {
-                this.showingSpecial = flag
-            }
-        }
     }
 </script>
 
