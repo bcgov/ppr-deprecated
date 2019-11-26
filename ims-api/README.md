@@ -10,8 +10,12 @@ The IMS API is a proxy for accessing existing PPR Transactions that were built i
 ## Application Configuration
 
 Several configuration settings are needed to connect to the mainframe server.  The table below describes the settings
-available in this API.  See https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config
+available in this API. See the [Spring Boot Externalized Configuration document](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config)
 for the many ways to specify these values, including environment variables.
+
+This system uses [Sentry](https://sentry.io/) for error monitoring.  The minimum prescribed settings are described
+below. See the [Java Configuration document](https://docs.sentry.io/clients/java/config/) to see all the available
+settings.
 
 | Property Name | Environment Variable | Description |
 | ------------- | -------------------- | ----------- |
@@ -25,3 +29,5 @@ for the many ways to specify these values, including environment variables.
 | ims.group | IMS_GROUP | **Optional**, _Default: `""`_. |
 | ims.timeout_code | IMS_TIMEOUT_CODE | **Optional**, _Default 64: (25 seconds), Max: 255_. See [Timeout specifications on input messages](https://www.ibm.com/support/knowledgecenter/en/SSEPH2_13.1.0/com.ibm.ims13.doc.ccg/ims_ct_irmtimerusage.htm). |
 | ims.socket_timeout | IMS_SOCKET_TIMEOUT | **Optional**, _Default: 30000_. The socket timeout when calling IMS, in milliseconds. |
+| sentry.dns | SENTRY_DSN | **Recommended**. If not specified, Sentry will not receive any notifications from the API. See [Setting the DSN](https://docs.sentry.io/clients/java/config/#setting-the-dsn). |
+| sentry.environment | SENTRY_ENVIRONMENT | **Recommended**. See [Environment](https://docs.sentry.io/clients/java/config/#environment). |
