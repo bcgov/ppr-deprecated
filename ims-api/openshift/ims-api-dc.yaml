@@ -34,6 +34,9 @@ objects:
             - prefix: IMS_
               secretRef:
                 name: ims-connect
+            - prefix: SENTRY_
+              secretRef:
+                name: sentry
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3

@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.auth0:java-jwt:3.8.2'
     implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'io.sentry:sentry-spring:1.7.27'
 
     // TODO This project is found at http://rosemary.bcgov/svn/nro/trunk/jars/imsconnect. I explicitly built and
     // included as local jar for now, but we would be better served to pull the artifact from Artifactory.
