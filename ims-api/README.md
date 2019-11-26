@@ -31,3 +31,15 @@ settings.
 | ims.socket_timeout | IMS_SOCKET_TIMEOUT | **Optional**, _Default: 30000_. The socket timeout when calling IMS, in milliseconds. |
 | sentry.dns | SENTRY_DSN | **Recommended**. If not specified, Sentry will not receive any notifications from the API. See [Setting the DSN](https://docs.sentry.io/clients/java/config/#setting-the-dsn). |
 | sentry.environment | SENTRY_ENVIRONMENT | **Recommended**. See [Environment](https://docs.sentry.io/clients/java/config/#environment). |
+
+### Jaeger Tracing Config
+
+See the [Jaeger Client Config Documentation](https://github.com/jaegertracing/jaeger-client-java/blob/v1.0.0/jaeger-core/README.md#configuration-via-environment)
+for detailed instructions on how to configure instrumentation.  If not specified, defaults will be used.
+`JAEGER_SERVICE_NAME` will be overriden with `ims-api`.
+
+By default the `JAEGER_SAMPLER_PARAM` is set to `0.001`, so you are unlikely to see spans reported locally unless you
+override this value.
+
+The [docker-compose.yml](../docker-compose.yml) in the project root directory can be used to run Jaeger on your local
+system. The Jaeger Java client will use the instance running on `localhost` by default.
