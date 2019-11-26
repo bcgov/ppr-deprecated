@@ -2,6 +2,12 @@
 
 This project was created using the Vue CLI and the create command.  
 
+To run Vue CLI UI from the vcli subfolder 
+```shell script
+cd vcli
+node  node_modules/@vue/cli/bin/vue.js ui
+```
+
 If there comes a time when we wish to update this Vue client then we recommend the following process.
 
 ## Setup Vue CLI - local

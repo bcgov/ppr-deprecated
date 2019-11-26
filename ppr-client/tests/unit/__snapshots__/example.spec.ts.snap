@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FeatureOne.vue should have a custom label and match snapshot 1`] = `
+<div class="features">
+  <div class="v-input f-check theme--light v-input--selection-controls v-input--checkbox">
+    <div class="v-input__control">
+      <div class="v-input__slot">
+        <div class="v-input--selection-controls__input"><input aria-checked="false" id="featureOne" role="checkbox" type="checkbox" value="">
+          <div class="v-input--selection-controls__ripple"></div><i aria-hidden="true" class="v-icon notranslate mdi mdi-checkbox-blank-outline theme--light"></i>
+        </div><label for="featureOne" class="v-label theme--light" style="left: 0px; position: relative;"> Enable F One</label>
+      </div>
+      <div class="v-messages theme--light"><span name="message-transition" tag="div" class="v-messages__wrapper"></span></div>
+    </div>
+  </div>
+</div>
+`;
