@@ -7,11 +7,6 @@
             slot Main content for a component will appear here. The component is selected by the router
 
     sbc-footer
-
-    input(class="checkbox", type="checkbox", v-model="showingSpecial")
-    span show special
-    div(v-show="showingSpecial") Showing special
-
 </template>
 
 <script>
@@ -22,23 +17,12 @@
         name: 'LayoutUser',
         components: {
             SbcHeader,
-            SbcFooter,
+            SbcFooter
         },
         data: function () {
             return {
-                showingSpecial: false
             }
         },
         inject: ['authApiUrl', 'originUrl'],
-        computed: {},
-        methods: {},
-        mounted: function () {
-            console.log(this.$options.name + ' mounted')
-        },
-        watch: {
-            showingSpecial: function (flag) {
-                this.showingSpecial = flag
-            }
-        }
     }
 </script>
