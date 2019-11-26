@@ -50,5 +50,7 @@ jobs:
     - uses: actions/setup-node@v1
     - run: npm ci
       working-directory: ppr-client
+    - run: npm run lint
+      working-directory: ppr-client
     - run: npm run test:unit
       working-directory: ppr-client
