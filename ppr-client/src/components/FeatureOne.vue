@@ -1,6 +1,6 @@
 <template lang="pug">
   div(class="features")
-    v-checkbox(class="f-check", v-model="featureOneFlag", :label="fOneToggleLabel")
+    v-checkbox(id="featureOne", class="f-check", v-model="featureOneFlag", :label="fOneToggleLabel")
 </template>
 
 <script>

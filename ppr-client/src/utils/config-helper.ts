@@ -33,9 +33,12 @@ export default {
         sessionStorage.setItem('PAY_API_URL', payApiUrl)
         console.log('Set Pay API URL to: ' + payApiUrl)
 
-        const addressCompleteKey = response.data['ADDRESS_COMPLETE_KEY']
-        window['addressCompleteKey'] = addressCompleteKey
-        console.log('Set Address Complete Key')
+        // TODO use this when ppr needs canada post address lookup.  Also need to fix the type checking error
+        // Element implicitly has an 'any' type because index expression is not of type 'number'.
+        // on the window['key'] statement
+        // const addressCompleteKey = response.data['ADDRESS_COMPLETE_KEY']
+        // window['addressCompleteKey'] = addressCompleteKey
+        // console.log('Set Address Complete Key')
       })
   }
 }

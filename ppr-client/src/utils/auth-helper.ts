@@ -3,9 +3,9 @@ import router from '@/router/router'
 export default {
   authRedirect() {
     const redirected = sessionStorage.getItem('REDIRECTED')
-    const authUrl = sessionStorage.getItem('AUTH_URL')
-    console.log('redirected contains', redirected)
-    console.log('authUrl contains', authUrl)
+    const authUrl: string = sessionStorage.getItem('AUTH_URL') || ''
+    // console.log('redirected contains', redirected)
+    // console.log('authUrl contains', authUrl)
     if (redirected !== 'true') {
       if (!sessionStorage.getItem('KEYCLOAK_TOKEN')) {
         console.error('auth redirect to authUrl')
@@ -19,7 +19,6 @@ export default {
     sessionStorage.setItem('REDIRECTED', 'false')
     sessionStorage.removeItem('KEYCLOAK_TOKEN')
     try {
-      console.log('Router to home', this.$router)
       return router.push('home')
     } catch (err) {
       console.log('Error here', err)
