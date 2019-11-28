@@ -13,7 +13,7 @@ objects:
         kind: ImageStreamTag
         name: ${APP_NAME}:latest
     source:
-      contextDir: ppr-client
+      contextDir: ppr-ui
       dockerfile: |
         FROM node:8
         COPY . .

@@ -1,4 +1,4 @@
-# ppr-client
+# ppr-ui
 
 ## Project creation
 
