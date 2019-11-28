@@ -63,7 +63,7 @@ The initial version selected the following:
 ## Final steps
 After running the create the original client project folder was moved to the root
 ```shell script
-mv ppr-client ..
+mv ppr-ui ..
 ``` 
 
 In the future, you can compare the package.json file in the newly recreated project to the existing project and manually copy
