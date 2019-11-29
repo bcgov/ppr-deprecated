@@ -1,26 +1,39 @@
-<template lang="pug">
-  div
-    v-container(class="view-container")
-      article(id="dashboardArticle")
-        header
-          h1 PPR Sample Home Page
+<template>
+  <div>
+    <v-container class="view-container">
+      <article id="dashboardArticle">
+        <header>
+          <h1>PPR Sample Home Page</h1>
+        </header>
 
-        div(class="page-content")
-          div(class="page-content__main")
-            section
-              header
-                h2 Sample home page content
+        <div class="page-content">
+          <div class="page-content__main">
+            <section>
+              <header>
+                <h2>Sample home page content</h2>
+              </header>
+            </section>
+          </div>
 
-          aside(class="page-content__aside")
-            section
-              header
-                h2 Sample Aside Section
+          <aside class="page-content__aside">
+            <section>
+              <header>
+                <h2>Sample Aside Section</h2>
+              </header>
+            </section>
+          </aside>
+        </div>
+      </article>
+    </v-container>
 
-    v-container(v-if="featureOne")
-      v-btn(class="form-primary-btn", @click="login", color="primary") Login
+    <v-container v-if="featureOne">
+      <v-btn class="form-primary-btn" @click="login" color="primary">Login</v-btn>
+    </v-container>
 
-    v-container(v-if="featureTwo")
-      div Feature two is active
+    <v-container v-if="featureTwo">
+      <div>Feature two is active</div>
+    </v-container>
+  </div>
 </template>
 
 <script lang="ts">

@@ -1,6 +1,7 @@
-<template lang="pug">
-  div(class="features")
-    v-checkbox(id="featureOne", class="f-check", v-model="featureOneFlag", :label="fOneToggleLabel")
+<template>
+  <div class="features">
+    <v-checkbox class="f-check" id="featureOne" v-model="featureOneFlag" :label="fOneToggleLabel" />
+  </div>
 </template>
 
 <script lang="ts">

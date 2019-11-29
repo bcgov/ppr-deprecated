@@ -1,11 +1,15 @@
-<template lang="pug">
-  v-app(class="app-container, theme--light", id="app")
-    component(:is="layout")
-     router-view
-    div(class="ff")
-      feature-one
-    div(class="ff")
-      feature-two
+<template>
+  <v-app class="app-container, theme--light" id="app">
+    <component :is="layout">
+      <router-view />
+    </component>
+    <div class="ff">
+      <feature-one />
+    </div>
+    <div class="ff">
+      <feature-two />
+    </div>
+  </v-app>
 </template>
 
 <script lang="ts">

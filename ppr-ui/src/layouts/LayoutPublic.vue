@@ -1,13 +1,15 @@
-<template lang="pug">
-  div
-    sbc-header(ref="sbcHeader", :brandLink="originUrl", :authURL="authApiUrl")
+<template>
+  <div>
+    <sbc-header ref="sbcHeader" :brandLink="originUrl" :authURL="authApiUrl" />
 
-    div(class="app-body")
-        main
-            slot Main content for a component will appear here. The component is selected by the router
+    <div class="app-body">
+      <main>
+        <slot>Main content for a component will appear here. The component is selected by the router</slot>
+      </main>
+    </div>
 
-    sbc-footer
-
+    <sbc-footer />
+  </div>
 </template>
 
 <script lang="ts">
