@@ -2,15 +2,15 @@
   v-app(class="app-container, theme--light", id="app")
     component(:is="layout")
      router-view
-
-    feature-one
-    feature-two
+    div(class="ff")
+      feature-one
+    div(class="ff")
+      feature-two
 </template>
 
 <script>
     const APP_PATH = process.env.VUE_APP_PATH || 'app-path-foo-bar'
     const DefaultLayout = 'public'
-    import AppData from '@/utils/app-data'
     import FeatureOne from '@/components/FeatureOne'
     import FeatureTwo from '@/components/FeatureTwo'
 
@@ -37,7 +37,7 @@
                 const path = APP_PATH
                 return `${root}/${path}`
             },
-            authAPIURL() {
+            authApiUrl() {
                 return sessionStorage.getItem('AUTH_API_URL')
             },
         },
@@ -57,4 +57,9 @@
     }
 
 </script>
+<style lang="scss">
+  .ff {
+    margin-bottom: 1rem;
+  }
+</style>
 
