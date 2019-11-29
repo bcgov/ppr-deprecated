@@ -1,21 +1,28 @@
-<template lang="pug">
-  div
-    v-container
-      article
-        header
-          h1 This is an authorization stub page
-      div userName {{userName}}
-      v-card(flat)
-        div(v-if="hasSuccess")
-          div You've been signed in: {{userName}}
-          v-btn(class="form-primary-btn", @click="goToDash", color="primary") Go to dashboard.
-        div(v-else, class="intro") Try this button return do a 30-second login.
-          v-form()
-            v-text-field(filled, label="User Name", v-model="userName", required)
-            v-btn(class="form-primary-btn", @click="letUserIn", color="primary", v-bind:disabled="saveDisabled") Let me in!
+<template>
+  <div>
+    <v-container>
+      <article>
+        <header>
+          <h1>This is an authorization stub page</h1>
+        </header>
+      </article>
+      <div>userName {{userName}}</div>
+      <v-card flat>
+        <div v-if="hasSuccess">
+          <div>You've been signed in: {{userName}}</div>
+          <v-btn class="form-primary-btn" @click="goToDash" color="primary">Go to dashboard.</v-btn>
+        </div>
+        <div v-else class="intro">Try this button return do a 30-second login.
+          <v-form>
+            <v-text-field filled label="User Name" v-model="userName" required />
+            <v-btn class="form-primary-btn" @click="letUserIn" color="primary" v-bind:disabled="saveDisabled">Let me in!</v-btn>
+          </v-form>
+        </div>
+      </v-card>
 
-      div(v-show="hasError") Error {{errorMsg}}
-
+      <div v-show="hasError">Error {{errorMsg}}</div>
+    </v-container>
+  </div>
 </template>
 
 <script lang="ts">
