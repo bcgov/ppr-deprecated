@@ -28,7 +28,8 @@ export default {
       'ResponseType': 'application/json',
       'Cache-Control': 'no-cache'
     }
-    let url = 'http://localhost:8000/auth/' + userName
+    const authUrl = sessionStorage.getItem('AUTH_URL')
+    let url = authUrl + userName
     console.log('auth user url ', url)
     return axios
       .get(url, {headers})

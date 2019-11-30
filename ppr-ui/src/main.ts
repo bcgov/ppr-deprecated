@@ -2,7 +2,11 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import App from '@/App.vue'
-import './registerServiceWorker'
+// TODO figure out the best way to implement service worker.
+//     When service worker is registered FireFox does not see changes on prod.
+//     The workarounds are not easy. Is there a better way?
+//     https://stackoverflow.com/questions/41636754/how-to-clear-a-service-worker-cache-in-firefox
+// import './registerServiceWorker'
 import configHelper from '@/utils/config-helper'
 import router from '@/router/router'
 import store from './store'

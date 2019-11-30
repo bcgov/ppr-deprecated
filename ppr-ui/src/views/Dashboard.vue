@@ -32,7 +32,7 @@
     import ConfigInfo from "@/components/ConfigInfo";
 
     export default {
-        components: { ConfigInfo },
+        components: {ConfigInfo},
 
         data() {
             return {
@@ -40,13 +40,13 @@
             }
         },
         computed: {
-            featureOne () {
+            featureOne() {
                 return this.appData.features.featureOne
             },
-            featureTwo () {
+            featureTwo() {
                 return this.appData.features.featureTwo
             },
-            userName () {
+            userName() {
                 return this.appData.user.userName
             }
         },
@@ -54,6 +54,9 @@
         methods: {
             logOut: function () {
                 AuthHelper.authClear()
+                    .then(() => {
+                        this.$router.push('home')
+                    })
             }
         }
     }
