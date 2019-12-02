@@ -4,11 +4,16 @@ module.exports = {
     node: true
   },
   'extends': [
-    'plugin:vue/essential',
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:vue/recommended',
     '@vue/typescript'
   ],
   rules: {
+    'indent': 'off',
+    '@typescript-eslint/indent': ['error', 2],
+    'semi': 'off',
+    '@typescript-eslint/semi': ['error', 'never'],
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },

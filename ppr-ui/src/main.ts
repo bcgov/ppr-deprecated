@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, {VNode} from 'vue'
 import VueCompositionApi from '@vue/composition-api'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
@@ -31,7 +31,7 @@ Vue.config.productionTip = false
 Vue.component('public-layout', layoutPublic)
 Vue.component('user-layout', layoutUser)
 
-Vue.config.errorHandler = (err, vm, info) => {
+Vue.config.errorHandler = (err, vm, info): void => {
   // err: error trace
   // vm: component in which error occured
   // info: Vue specific error information such as lifecycle hooks, events etc.
@@ -40,7 +40,7 @@ Vue.config.errorHandler = (err, vm, info) => {
 };
 
 configHelper.fetchConfig()
-  .then((appConfig: Config) => {
+  .then((appConfig: Config): void => {
     try {
       Sentry.init({
         dsn: appConfig.sentryDSN,
@@ -56,10 +56,10 @@ configHelper.fetchConfig()
       vuetify: new Vuetify(opts),
       router,
       store,
-      render: h => h(App)
+      render: (h): VNode => h(App)
     }).$mount('#app')
   })
-  .catch(error => {
+  .catch((error): void => {
     console.error('error fetching config -', error)
     alert('Fatal error loading app')
   })

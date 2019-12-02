@@ -1,19 +1,20 @@
+
 class FeatureFlags {
   private _featureOne: boolean = false
-  get featureOne(): boolean {
+  public get featureOne(): boolean {
     return this._featureOne
   }
 
-  set featureOne(flag: boolean) {
+  public set featureOne(flag: boolean) {
     this._featureOne = flag
   }
 
   private _featureTwo: boolean = sessionStorage.getItem('FEATURE_TWO') === 'true'
-  get featureTwo(): boolean {
+  public get featureTwo(): boolean {
     return this._featureTwo
   }
 
-  set featureTwo(flag: boolean) {
+  public set featureTwo(flag: boolean) {
     // console.log('feature two set flag', flag)
     sessionStorage.setItem('FEATURE_TWO', flag ? 'true' : 'false')
     this._featureTwo = flag
@@ -31,46 +32,46 @@ export class Config {
   private _payApiUrl: string = sessionStorage.getItem('PAY_API_URL') || ''
   private _pprApiUrl: string = sessionStorage.getItem('PPR_API_URL') || ''
 
-  readonly sentryDSN: string
-  readonly sentryEnvironment: string
+  public readonly sentryDSN: string
+  public readonly sentryEnvironment: string
 
-  constructor(data: object) {
+  public constructor(data: object) {
     this.sentryDSN = data['SENTRY_DSN']
     this.sentryEnvironment = data['SENTRY_ENVIRONMENT'];
   }
 
-  get authUrl(): string {
+  public get authUrl(): string {
     return this._authUrl
   }
 
-  get authApiUrl() {
-    return this._authApiUrl
-  }
-
-  get payApiUrl() {
-    return this._payApiUrl
-  }
-
-  get pprApiUrl(): string {
-    return this._pprApiUrl
-  }
-
-  set authUrl(url: string) {
+  public set authUrl(url: string) {
     sessionStorage.setItem('AUTH_URL', url)
     this._authUrl = url
   }
 
-  set authApiUrl(url: string) {
+  public get authApiUrl(): string {
+    return this._authApiUrl
+  }
+
+  public set authApiUrl(url: string) {
     sessionStorage.setItem('AUTH_API_URL', url)
     this._authApiUrl = url
   }
 
-  set payApiUrl(url: string) {
+  public get payApiUrl(): string {
+    return this._payApiUrl
+  }
+
+  public set payApiUrl(url: string) {
     sessionStorage.setItem('PAY_API_URL', url)
     this._payApiUrl = url
   }
 
-  set pprApiUrl(url: string) {
+  public get pprApiUrl(): string {
+    return this._pprApiUrl
+  }
+
+  public set pprApiUrl(url: string) {
     sessionStorage.setItem('PPR_API_URL', url)
     this._pprApiUrl = url
   }
@@ -85,11 +86,11 @@ class User {
 
   private _userName: string = sessionStorage.getItem('USER_NAME') || ''
 
-  get userName(): string {
+  public get userName(): string {
     return this._userName
   }
 
-  set userName(name: string) {
+  public set userName(name: string) {
     sessionStorage.setItem('USER_NAME', name)
     this._userName = name
   }
@@ -99,21 +100,21 @@ class User {
 
 class AppDataInternal {
   private _features: FeatureFlags = new FeatureFlags()
-  get features(): FeatureFlags {
+  public get features(): FeatureFlags {
     return this._features
   }
 
   private _config: Config = new Config({})
-  get config(): Config {
+  public get config(): Config {
     return this._config
   }
 
   private _user: User = new User()
-  get user(): User {
+  public get user(): User {
     return this._user
   }
 
-  resetConfig(data: object): void {
+  public resetConfig(data: object): void {
     this._config = new Config(data)
   }
 }
