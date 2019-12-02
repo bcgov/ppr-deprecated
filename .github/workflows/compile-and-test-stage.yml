@@ -50,7 +50,7 @@ jobs:
     - uses: actions/setup-node@v1
     - run: npm ci
       working-directory: ppr-ui
-    - run: npm run lint
+    - run: npm run lint -- --no-fix
       working-directory: ppr-ui
     - run: npm run test:unit
       working-directory: ppr-ui
