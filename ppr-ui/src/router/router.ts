@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import {PositionResult} from "vue-router/types/router";
 import routes from './routes'
 import authHelper from '@/utils/auth-helper'
 import {inject, provide} from "@vue/composition-api";
@@ -13,17 +14,17 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(): PositionResult {
     // see https://router.vuejs.org/guide/advanced/scroll-behavior.html
     return {x: 0, y: 0}
   }
 })
 
 // if there is no saved Keycloak token, redirect to Auth URL
-router.afterEach((to, from) => {
+router.afterEach((to): void => {
   try {
     console.log('Router afterEach', to.matched)
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
       authHelper.authRedirect()
     }
   } catch (error) {
@@ -36,7 +37,7 @@ export function provideRouter() {
 }
 
 export function useRouter(): VueRouter {
-  const vueRouter: VueRouter = <VueRouter>inject(RouterSymbol)
+  const vueRouter: VueRouter = inject(RouterSymbol) as VueRouter
   if (!vueRouter) {
     throw Error("Router cannot be injected, has not been provided");
   }

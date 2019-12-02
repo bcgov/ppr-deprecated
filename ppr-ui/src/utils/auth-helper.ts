@@ -1,9 +1,8 @@
-import router from '@/router/router'
 import axios from "@/utils/axios-auth";
 import AppData from '@/utils/app-data';
 
 export default {
-  authRedirect() {
+  authRedirect(): void {
     const redirected = sessionStorage.getItem('REDIRECTED')
     const authUrl: string = sessionStorage.getItem('AUTH_URL') || ''
     // console.log('redirected contains', redirected)
@@ -16,13 +15,13 @@ export default {
       }
     }
   },
-  authClear() {
+  authClear(): Promise<void> {
     console.log("OK let the user out of the app")
     sessionStorage.setItem('REDIRECTED', 'false')
     sessionStorage.removeItem('KEYCLOAK_TOKEN')
     return Promise.resolve()
   },
-  authFake(userName: string) {
+  authFake(userName: string): Promise<string> {
     const headers = {
       'Accept': 'application/json',
       'ResponseType': 'application/json',
@@ -33,7 +32,7 @@ export default {
     console.log('auth user url ', url)
     return axios
       .get(url, {headers})
-      .then(response => {
+      .then((response): string => {
         const userName = response.data.user_name
         console.log('api response data ', userName)
         sessionStorage.setItem('KEYCLOAK_TOKEN', 'Some JWY Token')

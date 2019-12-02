@@ -16,10 +16,10 @@ Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
 const localVue = createLocalVue()
 
-describe('FeatureOne.vue', () => {
+describe('FeatureOne.vue', (): void => {
   let vuetify, wrapper
 
-  beforeEach(() => {
+  beforeEach((): void => {
     vuetify = new Vuetify()
     wrapper = mount(FeatureOne, {
       localVue,
@@ -28,7 +28,7 @@ describe('FeatureOne.vue', () => {
 
   })
 
-  it('Test app data features', () => {
+  it('Test app data features', (): void => {
     expect(AppData.features.featureOne).toBeFalsy()
     AppData.features.featureOne = true
     expect(AppData.features.featureOne).toBeTruthy()
@@ -36,7 +36,7 @@ describe('FeatureOne.vue', () => {
     expect(AppData.features.featureOne).toBeFalsy()
   })
 
-  it('should have a custom label and match snapshot', () => {
+  it('should have a custom label and match snapshot', (): void => {
     // With jest we can create snapshot files of the HTML output
     expect(wrapper.html()).toMatchSnapshot()
 
@@ -46,7 +46,7 @@ describe('FeatureOne.vue', () => {
     expect(checkboxLabel.text()).toContain('F One')
   })
 
-  it('check should enable feature one', () => {
+  it('check should enable feature one', (): void => {
     const checkbox = wrapper.find('#featureOne')
     checkbox.trigger('click')
     expect(AppData.features.featureOne).toBeTruthy()

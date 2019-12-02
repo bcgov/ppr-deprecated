@@ -10,6 +10,7 @@
  *
  */
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const assert = require('assert')
 
 module.exports = class {
