@@ -16,10 +16,16 @@ Popup: "Linter pylint is not installed." (`Install`)
 
 Ensure the command line prompt starts with something like `(.venv)`, otherwise ... (TBD: how to activate?).
 
+Or from the bash command line activate the virtual environment
+
+```shell script
+source ./.venv/bin/activate
+```
+
 ## Installing Development Requirements
 
 ```
-$ pip3 install -r requirements/dev.txt
+(.venv) $ pip3 install -r requirements/dev.txt
 ```
 
 This will install what is needed to run in VS Code. Note that there will be errors regarding an invalid command 'bdist_wheel', but these don't appear to be a problem.
@@ -27,7 +33,7 @@ This will install what is needed to run in VS Code. Note that there will be erro
 ## Start the Web Service
 
 ```
-$ uvicorn app.main:app --reload
+(.venv) $ uvicorn src.main:app --reload
 ```
 
 This should bring the web service up on http://localhost:8000, with OpenAPI documentation available at http://localhost:8000/docs.

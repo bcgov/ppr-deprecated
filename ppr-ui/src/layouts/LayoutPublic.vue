@@ -10,21 +10,17 @@
 
 </template>
 
-<script>
-    import SbcHeader from 'sbc-common-components/src/components/SbcHeader.vue'
-    import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
+<script lang="ts">
+  import {createComponent} from "@vue/composition-api";
+  import SbcHeader from 'sbc-common-components/src/components/SbcHeader.vue'
+  import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
 
-    export default {
-        name: 'LayoutPublic',
-        components: {
-            SbcHeader,
-            SbcFooter,
-        },
-        data: function () {
-            return {
-            }
-        },
-        inject: ['authApiUrl', 'originUrl'],
-    }
+  export default createComponent({
+    name: 'LayoutPublic',
+    components: {
+      SbcHeader,
+      SbcFooter,
+    },
+    inject: ['authApiUrl', 'originUrl']
+  })
 </script>
-

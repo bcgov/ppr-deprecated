@@ -1,44 +1,60 @@
 import axios from '@/utils/axios-auth'
+import AppData from '@/utils/app-data'
 
 export default {
   /**
    * fetch config from API
    */
   fetchConfig() {
-    // const url = `/${process.env.VUE_APP_PATH}/config/stub-configuration.json`
-    const url = '/config/stub-configuration.json'
+
+    // TODO -- follow the lear example ...
+    // const origin = window.location.origin
+    // const vueAppPath = process.env.VUE_APP_PATH
+    // const vueAppAuthPath = process.env.VUE_APP_AUTH_PATH
+    //
+    // console.log('process env', process.env)
+    // if (!vueAppPath || !vueAppAuthPath) {
+    //   throw new Error('failed to get env variables')
+    // }
+    //
+    // const baseUrl = `${origin}/${vueAppPath}/`
+    // sessionStorage.setItem('BASE_URL', baseUrl)
+    // console.log('Set Base URL to: ' + baseUrl)
+    //
+    // const authUrl = `${origin}/${vueAppAuthPath}/`
+    // sessionStorage.setItem('AUTH_URL', authUrl)
+    // console.log('Set Auth URL to: ' + authUrl)
+    //
+    // const url = `/${vueAppPath}/config/configuration.json`
+    // end of to do
+
+    // remove next line once above to do is done
+    const url = '/config/configuration.json'
+
     const headers = {
       'Accept': 'application/json',
       'ResponseType': 'application/json',
       'Cache-Control': 'no-cache'
     }
-    // console.log('Fetch config from ', url)
+    console.log('Fetch config from ', url)
 
     return axios
       .get(url, {headers})
       .then(response => {
-        const apiUrl = response.data['API_URL']
+        console.log('response data ', response.data)
+        // with the above to do workaround the response data is a string and needs to be parse.
+        // it is expected that once we do the to do above the response data with be an object
+        const rd: any = response.data
+        console.log('response data ', rd)
+        const cf: object = (typeof rd === 'string') ? JSON.parse(rd) : rd
+
+        const apiUrl: string = cf['API_URL']
         axios.defaults.baseURL = apiUrl
         console.log('Set Base URL to: ' + apiUrl)
-
-        const authUrl = response.data['AUTH_URL']
-        sessionStorage.setItem('AUTH_URL', authUrl)
-        console.log('Set Auth URL to: ' + authUrl)
-
-        const authApiUrl = response.data['AUTH_API_URL']
-        sessionStorage.setItem('AUTH_API_URL', authApiUrl)
-        console.log('Set Auth API URL to: ' + authApiUrl)
-
-        const payApiUrl = response.data['PAY_API_URL']
-        sessionStorage.setItem('PAY_API_URL', payApiUrl)
-        console.log('Set Pay API URL to: ' + payApiUrl)
-
-        // TODO use this when ppr needs canada post address lookup.  Also need to fix the type checking error
-        // Element implicitly has an 'any' type because index expression is not of type 'number'.
-        // on the window['key'] statement
-        // const addressCompleteKey = response.data['ADDRESS_COMPLETE_KEY']
-        // window['addressCompleteKey'] = addressCompleteKey
-        // console.log('Set Address Complete Key')
+        AppData.config.pprApiUrl = apiUrl
+        AppData.config.authUrl = cf['AUTH_URL']
+        AppData.config.authApiUrl = cf['AUTH_API_URL']
+        AppData.config.payApiUrl = cf['PAY_API_URL']
       })
   }
 }

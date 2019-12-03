@@ -64,11 +64,20 @@ objects:
                 memory: 100Mi
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
+            volumeMounts:
+              - mountPath: /var/www/html/config
+                name: ppr-web-ui-config
+                readOnly: true
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
+        volumes:
+          - configMap:
+              defaultMode: 420
+              name: ppr-web-ui-config
+            name: ppr-web-ui-config
     test: false
     triggers:
     - imageChangeParams:

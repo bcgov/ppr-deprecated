@@ -3,32 +3,23 @@
     v-checkbox(id="featureOne", class="f-check", v-model="featureOneFlag", :label="fOneToggleLabel")
 </template>
 
-<script>
-    import AppData from '@/utils/app-data'
-    export default {
-        data: function () {
-            return {
-                appData: AppData,
-                featureOneFlag: AppData.features.featureOne
-            }
-        },
-        computed: {
-            fOneToggleLabel() {
-                return this.featureOneFlag ? 'Disable F One' : ' Enable F One'
-            },
-            featureOne () {
-                return this.appData.features.featureOne
-            }
-        },
+<script lang="ts">
+  import {computed, createComponent, inject, ref, watch} from "@vue/composition-api";
+  import {Data} from "@vue/composition-api/dist/component";
+  import AppData from '@/utils/app-data'
 
-        watch: {
-            featureOneFlag: function (flag) {
-                this.appData.features.featureOne = flag
-            }
-        },
+  export default createComponent({
+    setup(): Data {
+      const featureOneFlag = inject("featureOne", ref(false))
+      const fOneToggleLabel = computed((): string => featureOneFlag.value ? 'Disable F One' : ' Enable F One')
 
+      watch(featureOneFlag, (flag): void => { AppData.features.featureOne = flag })
+
+      return {featureOneFlag, fOneToggleLabel}
     }
+  })
 </script>
+
 <style lang="scss">
 @import '@/assets/styles/theme.scss';
 

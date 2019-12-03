@@ -2,9 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import routes from './routes'
 import authHelper from '@/utils/auth-helper'
+import {inject, provide} from "@vue/composition-api";
 
 
 Vue.use(VueRouter)
+
+export const RouterSymbol = Symbol();
 
 const router = new VueRouter({
   mode: 'history',
@@ -27,5 +30,17 @@ router.afterEach((to, from) => {
     console.error('Router afterEach', error)
   }
 })
+
+export function provideRouter() {
+  provide(RouterSymbol, router)
+}
+
+export function useRouter(): VueRouter {
+  const vueRouter: VueRouter = <VueRouter>inject(RouterSymbol)
+  if (!vueRouter) {
+    throw Error("Router cannot be injected, has not been provided");
+  }
+  return vueRouter
+}
 
 export default router
