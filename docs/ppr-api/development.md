@@ -37,3 +37,8 @@ This will install what is needed to run in VS Code. Note that there will be erro
 ```
 
 This should bring the web service up on http://localhost:8000, with OpenAPI documentation available at http://localhost:8000/docs.
+
+### Using a debugger
+
+In order to connect to the application with a debugger, you need to run it as a script.
+See [Run your code with your debugger](https://fastapi.tiangolo.com/tutorial/debugging/#run-your-code-with-your-debugger) for details.
