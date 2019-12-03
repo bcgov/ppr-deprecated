@@ -72,7 +72,7 @@ objects:
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
-        terminationGracePeriodSeconds:
+        terminationGracePeriodSeconds: 30
         volumes:
           - configMap:
               defaultMode: 420
