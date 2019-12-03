@@ -32,13 +32,13 @@ objects:
         containers:
         - env:
           - name: PORT
-            value: "8000"
+            value: "8080"
           - name: WEB_CONCURRENCY
             value: "4"
           imagePullPolicy: Always
           name: ${API_NAME}
           ports:
-          - containerPort: 8000
+          - containerPort: 8080
             protocol: TCP
           resources:
             limits:
@@ -74,10 +74,10 @@ objects:
     name: ${API_NAME}
   spec:
     ports:
-    - name: 8000-tcp
-      port: 8000
+    - name: 8080-tcp
+      port: 8080
       protocol: TCP
-      targetPort: 8000
+      targetPort: 8080
     selector:
       deploymentconfig: ${API_NAME}
     sessionAffinity: None
@@ -91,7 +91,7 @@ objects:
   spec:
     host: ${ROUTE_URL}
     port:
-      targetPort: 8000-tcp
+      targetPort: 8080-tcp
     tls:
       insecureEdgeTerminationPolicy: Redirect
       termination: edge
