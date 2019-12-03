@@ -3,6 +3,7 @@
 // Libraries
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import VueCompositionApi from '@vue/composition-api'
 // Utilities
 import {mount, createLocalVue} from '@vue/test-utils'
 
@@ -12,6 +13,7 @@ import FeatureOne from '@/components/FeatureOne.vue'
 import AppData from '@/utils/app-data'
 
 Vue.use(Vuetify)
+Vue.use(VueCompositionApi)
 const localVue = createLocalVue()
 
 describe('FeatureOne.vue', () => {

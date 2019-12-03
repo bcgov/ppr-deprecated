@@ -22,28 +22,23 @@
     v-container(v-if="featureTwo")
       div Feature two is active
 </template>
-<script>
-    import AuthHelper from '@/utils/auth-helper'
-    import AppData from '@/utils/app-data'
 
-    export default {
-        data: function () {
-            return {
-                appData: AppData,
-            }
-        },
-        computed: {
-            featureOne () {
-                return this.appData.features.featureOne
-            },
-            featureTwo () {
-                return this.appData.features.featureTwo
-            }
-        },
-        methods: {
-            login: function () {
-                this.$router.push('auth')
-            }
-        }
+<script lang="ts">
+  import {createComponent, inject, ref} from "@vue/composition-api";
+  import {Data} from "@vue/composition-api/dist/ts-api/component";
+  import {useRouter} from '@/router/router'
+
+  export default createComponent({
+    setup(): Data {
+      const router = useRouter()
+      const featureOne = inject("featureOne", ref(false))
+      const featureTwo = inject("featureTwo", ref(false))
+
+      function login(): void {
+        router.push('auth')
+      }
+
+      return { featureOne, featureTwo, login }
     }
+  })
 </script>

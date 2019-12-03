@@ -18,12 +18,16 @@ objects:
       dockerfile: |
         FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-2019-10-15
 
-        COPY ./app /app
+        COPY ./src /app
         COPY ./requirements.txt /tmp
         RUN pip install -r /tmp/requirements.txt
       git:
-        ref: master
         uri: https://github.com/bcgov/ppr
+        # sample how to use a developer's fork
+        # uri: https://github.com/somedeveloper/ppr
+        # Defaults to shallow clone of master so no need to ref master. If you do set ref to master then clone is deep
+        # Sample to show how to override to a branch
+        # ref: branch
       type: Git
     strategy:
       dockerStrategy:

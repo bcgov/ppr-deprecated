@@ -1,5 +1,5 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -21,6 +21,19 @@ app.add_middleware(
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+# sample setting status code
+# sample read header
+# sample return json structure
+@app.get("/auth/{user_name}", status_code=201)
+async def read_item(user_name: str, user_agent: str = Header(None)):
+    my_list = ['justin', 'walter', 'bryan']
+    print(my_list)
+    print(user_name)
+    if user_name in my_list:
+        return {"user_name": user_name, "user_agent": user_agent}
+    raise HTTPException(status_code=404, detail="Invalid user name")
 
 
 if __name__ == "__main__":
