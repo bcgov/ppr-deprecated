@@ -20,7 +20,7 @@ import layoutUser from '@/layouts/LayoutUser.vue'
 Import the global style sheet
  */
 import './assets/styles/styles.scss'
-import {Config} from "@/utils/app-data";
+import {Config} from "@/utils/app-data"
 
 const opts = {iconfont: 'mdi'}
 
@@ -37,7 +37,7 @@ Vue.config.errorHandler = (err, vm, info): void => {
   // info: Vue specific error information such as lifecycle hooks, events etc.
   // TODO: Perform any custom logic or log to server
   console.error('Vue main error handler', err, vm, info)
-};
+}
 
 configHelper.fetchConfig()
   .then((appConfig: Config): void => {
@@ -46,7 +46,7 @@ configHelper.fetchConfig()
         dsn: appConfig.sentryDSN,
         environment: appConfig.sentryEnvironment,
         integrations: [new Integrations.Vue({ Vue, attachProps: true })]
-      });
+      })
     }
     catch (err) {
       console.warn(`Sentry failed to initialize: ${err.message}`, err)

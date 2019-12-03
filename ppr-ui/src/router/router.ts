@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {PositionResult} from "vue-router/types/router";
+import {PositionResult} from "vue-router/types/router"
 import routes from './routes'
 import authHelper from '@/utils/auth-helper'
-import {inject, provide} from "@vue/composition-api";
+import {inject, provide} from "@vue/composition-api"
 
 
 Vue.use(VueRouter)
 
-export const RouterSymbol = Symbol();
+export const RouterSymbol = Symbol()
 
 const router = new VueRouter({
   mode: 'history',
@@ -39,7 +39,7 @@ export function provideRouter() {
 export function useRouter(): VueRouter {
   const vueRouter: VueRouter = inject(RouterSymbol) as VueRouter
   if (!vueRouter) {
-    throw Error("Router cannot be injected, has not been provided");
+    throw Error("Router cannot be injected, has not been provided")
   }
   return vueRouter
 }

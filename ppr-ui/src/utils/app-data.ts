@@ -37,7 +37,7 @@ export class Config {
 
   public constructor(data: object) {
     this.sentryDSN = data['SENTRY_DSN']
-    this.sentryEnvironment = data['SENTRY_ENVIRONMENT'];
+    this.sentryEnvironment = data['SENTRY_ENVIRONMENT']
   }
 
   public get authUrl(): string {

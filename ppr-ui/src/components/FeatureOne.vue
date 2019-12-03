@@ -4,20 +4,20 @@
 </template>
 
 <script lang="ts">
-  import {computed, createComponent, inject, ref, watch} from "@vue/composition-api";
-  import {Data} from "@vue/composition-api/dist/component";
-  import AppData from '@/utils/app-data'
+import {computed, createComponent, inject, ref, watch} from "@vue/composition-api"
+import {Data} from "@vue/composition-api/dist/component"
+import AppData from '@/utils/app-data'
 
-  export default createComponent({
-    setup(): Data {
-      const featureOneFlag = inject("featureOne", ref(false))
-      const fOneToggleLabel = computed((): string => featureOneFlag.value ? 'Disable F One' : ' Enable F One')
+export default createComponent({
+  setup(): Data {
+    const featureOneFlag = inject("featureOne", ref(false))
+    const fOneToggleLabel = computed((): string => featureOneFlag.value ? 'Disable F One' : ' Enable F One')
 
-      watch(featureOneFlag, (flag): void => { AppData.features.featureOne = flag })
+    watch(featureOneFlag, (flag): void => { AppData.features.featureOne = flag })
 
-      return {featureOneFlag, fOneToggleLabel}
-    }
-  })
+    return {featureOneFlag, fOneToggleLabel}
+  }
+})
 </script>
 
 <style lang="scss">

@@ -21,15 +21,15 @@
 </template>
 
 <script lang="ts">
-    import {createComponent, inject, reactive} from "@vue/composition-api";
-    import {Data} from "@vue/composition-api/dist/ts-api/component";
+import {createComponent, inject, reactive} from "@vue/composition-api"
+import {Data} from "@vue/composition-api/dist/ts-api/component"
 
-    export default createComponent({
-        setup(): Data {
-            const configuration = inject("configuration", reactive({}))
-            return {configuration}
-        }
-    })
+export default createComponent({
+  setup(): Data {
+    const configuration = inject("configuration", reactive({}))
+    return {configuration}
+  }
+})
 </script>
 <style lang="scss">
   dt {

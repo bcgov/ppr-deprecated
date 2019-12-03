@@ -1,5 +1,5 @@
-import axios from "@/utils/axios-auth";
-import AppData from '@/utils/app-data';
+import axios from "@/utils/axios-auth"
+import AppData from '@/utils/app-data'
 
 export default {
   authRedirect(): void {

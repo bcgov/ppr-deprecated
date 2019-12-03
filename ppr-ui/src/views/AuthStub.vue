@@ -19,53 +19,53 @@
 </template>
 
 <script lang="ts">
-  import {computed, createComponent, ref} from "@vue/composition-api";
-  import {Data} from "@vue/composition-api/dist/ts-api/component";
-  import AuthHelper from '@/utils/auth-helper'
-  import {useRouter} from '@/router/router'
+import {computed, createComponent, ref} from "@vue/composition-api"
+import {Data} from "@vue/composition-api/dist/ts-api/component"
+import AuthHelper from '@/utils/auth-helper'
+import {useRouter} from '@/router/router'
 
-    export default createComponent({
-        setup(): Data {
-          const router = useRouter()
-            const errorMsg = ref<string>('')
-            const userName = ref<string>('')
-            const loggedInUser = ref<string>('')
+export default createComponent({
+  setup(): Data {
+    const router = useRouter()
+    const errorMsg = ref<string>('')
+    const userName = ref<string>('')
+    const loggedInUser = ref<string>('')
 
-            const hasSuccess = computed(() => loggedInUser.value.length > 0)
-            const hasError = computed(() => errorMsg.value.length > 0)
-            const saveDisabled = computed(() => userName.value.length === 0)
+    const hasSuccess = computed(() => loggedInUser.value.length > 0)
+    const hasError = computed(() => errorMsg.value.length > 0)
+    const saveDisabled = computed(() => userName.value.length === 0)
 
-            function letUserIn(): void {
-                errorMsg.value = ''
-                loggedInUser.value = ''
-                AuthHelper.authFake(userName.value)
-                    .then(() => {
-                        loggedInUser.value = userName.value
-                    })
-                    .catch(err => {
-                        console.log('authFake error', err)
-                        errorMsg.value = err.message
-                    })
-            }
-            function goToDash(): void {
-                router.push('dashboard')
-            }
+    function letUserIn(): void {
+      errorMsg.value = ''
+      loggedInUser.value = ''
+      AuthHelper.authFake(userName.value)
+        .then(() => {
+          loggedInUser.value = userName.value
+        })
+        .catch(err => {
+          console.log('authFake error', err)
+          errorMsg.value = err.message
+        })
+    }
+    function goToDash(): void {
+      router.push('dashboard')
+    }
 
-            function logOut(): void {
-                AuthHelper.authClear()
-                .then(() => {
-                  router.push('home')
-                })
-            }
+    function logOut(): void {
+      AuthHelper.authClear()
+        .then(() => {
+          router.push('home')
+        })
+    }
 
-            return {
-              errorMsg, hasError,
-              userName,  saveDisabled,
-              loggedInUser, hasSuccess,
-              letUserIn,
-              logOut,
-              goToDash
-          }
-        }
-    })
+    return {
+      errorMsg, hasError,
+      userName,  saveDisabled,
+      loggedInUser, hasSuccess,
+      letUserIn,
+      logOut,
+      goToDash
+    }
+  }
+})
 </script>
