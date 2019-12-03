@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueCompositionApi from '@vue/composition-api'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import * as Sentry from '@sentry/browser'
+import * as Integrations from '@sentry/integrations'
 import App from '@/App.vue'
 // TODO figure out the best way to implement service worker.
 //     When service worker is registered FireFox does not see changes on prod.
@@ -18,6 +20,7 @@ import layoutUser from '@/layouts/LayoutUser.vue'
 Import the global style sheet
  */
 import './assets/styles/styles.scss'
+import {Config} from "@/utils/app-data";
 
 const opts = {iconfont: 'mdi'}
 
@@ -36,13 +39,19 @@ Vue.config.errorHandler = (err, vm, info) => {
   console.error('Vue main error handler', err, vm, info)
 };
 
-window.onerror = function (message, source, lineno, colno, error) {
-  console.error('window.onerror', message, source, lineno, colno, error)
-}
-
-
 configHelper.fetchConfig()
-  .then(() => {
+  .then((appConfig: Config) => {
+    try {
+      Sentry.init({
+        dsn: appConfig.sentryDSN,
+        environment: appConfig.sentryEnvironment,
+        integrations: [new Integrations.Vue({ Vue, attachProps: true })]
+      });
+    }
+    catch (err) {
+      console.warn(`Sentry failed to initialize: ${err.message}`, err)
+    }
+
     new Vue({
       vuetify: new Vuetify(opts),
       router,

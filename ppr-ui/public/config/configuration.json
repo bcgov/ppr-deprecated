@@ -2,5 +2,7 @@
   "API_URL": "http://localhost:8000/",
   "AUTH_URL": "http://localhost:8000/auth/",
   "AUTH_API_URL": "https://auth-api-dev.pathfinder.gov.bc.ca/api/v1/",
-  "PAY_API_URL": "https://pay-api-test.pathfinder.gov.bc.ca/api/v1/"
+  "PAY_API_URL": "https://pay-api-test.pathfinder.gov.bc.ca/api/v1/",
+  "SENTRY_DSN": "",
+  "SENTRY_ENVIRONMENT": "local.developer"
 }
