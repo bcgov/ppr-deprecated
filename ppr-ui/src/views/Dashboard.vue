@@ -27,27 +27,27 @@
 </template>
 
 <script lang="ts">
-  import {createComponent, inject, ref} from "@vue/composition-api";
-  import {Data} from "@vue/composition-api/dist/ts-api/component";
-  import AuthHelper from '@/utils/auth-helper'
-  import ConfigInfo from "@/components/ConfigInfo.vue"
-  import {useRouter} from '@/router/router'
+import {createComponent, inject, ref} from "@vue/composition-api"
+import {Data} from "@vue/composition-api/dist/ts-api/component"
+import AuthHelper from '@/utils/auth-helper'
+import ConfigInfo from "@/components/ConfigInfo.vue"
+import {useRouter} from '@/router/router'
 
-  export default createComponent({
-    components: {ConfigInfo},
-    setup(): Data {
-      const router = useRouter()
-      const featureOne = inject("featureOne", ref(false))
-      const featureTwo = inject("featureTwo", ref(false))
-      function logOut(): void {
-        AuthHelper.authClear()
+export default createComponent({
+  components: {ConfigInfo},
+  setup(): Data {
+    const router = useRouter()
+    const featureOne = inject("featureOne", ref(false))
+    const featureTwo = inject("featureTwo", ref(false))
+    function logOut(): void {
+      AuthHelper.authClear()
         .then(() => {
           router.push('home')
         })
-      }
-      return { featureOne, featureTwo, logOut }
     }
-  })
+    return { featureOne, featureTwo, logOut }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

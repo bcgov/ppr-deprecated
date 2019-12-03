@@ -24,21 +24,21 @@
 </template>
 
 <script lang="ts">
-  import {createComponent, inject, ref} from "@vue/composition-api";
-  import {Data} from "@vue/composition-api/dist/ts-api/component";
-  import {useRouter} from '@/router/router'
+import {createComponent, inject, ref} from "@vue/composition-api"
+import {Data} from "@vue/composition-api/dist/ts-api/component"
+import {useRouter} from '@/router/router'
 
-  export default createComponent({
-    setup(): Data {
-      const router = useRouter()
-      const featureOne = inject("featureOne", ref(false))
-      const featureTwo = inject("featureTwo", ref(false))
+export default createComponent({
+  setup(): Data {
+    const router = useRouter()
+    const featureOne = inject("featureOne", ref(false))
+    const featureTwo = inject("featureTwo", ref(false))
 
-      function login(): void {
-        router.push('auth')
-      }
-
-      return { featureOne, featureTwo, login }
+    function login(): void {
+      router.push('auth')
     }
-  })
+
+    return { featureOne, featureTwo, login }
+  }
+})
 </script>

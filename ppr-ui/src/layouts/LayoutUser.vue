@@ -10,16 +10,16 @@
 </template>
 
 <script lang="ts">
-  import {createComponent} from "@vue/composition-api";
-  import SbcHeader from 'sbc-common-components/src/components/SbcHeader.vue'
-  import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
+import {createComponent} from "@vue/composition-api"
+import SbcHeader from 'sbc-common-components/src/components/SbcHeader.vue'
+import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
 
-  export default createComponent({
-    name: 'LayoutUser',
-    components: {
-      SbcHeader,
-      SbcFooter
-    },
-    inject: ['authApiUrl', 'originUrl'],
-  })
+export default createComponent({
+  name: 'LayoutUser',
+  components: {
+    SbcHeader,
+    SbcFooter
+  },
+  inject: ['authApiUrl', 'originUrl'],
+})
 </script>
