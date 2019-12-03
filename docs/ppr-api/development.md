@@ -33,8 +33,7 @@ This will install what is needed to run in VS Code. Note that there will be erro
 ## Start the Web Service
 
 ```
-(.venv) $ cd src
-(.venv) $ uvicorn main:app --reload
+(.venv) $ uvicorn src.main:app --reload
 ```
 
 This should bring the web service up on http://localhost:8000, with OpenAPI documentation available at http://localhost:8000/docs.
