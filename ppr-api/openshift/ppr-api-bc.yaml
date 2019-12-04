@@ -5,7 +5,9 @@ objects:
   kind: BuildConfig
   metadata:
     labels:
+      app: ppr
       build: ${API_NAME}
+      role: ${API_NAME}
     name: ${API_NAME}
   spec:
     failedBuildsHistoryLimit: 5
@@ -30,14 +32,14 @@ objects:
         # ref: branch
       type: Git
     strategy:
-      dockerStrategy:
-        noCache: false
+      dockerStrategy: {}
     successfulBuildsHistoryLimit: 5
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
     labels:
-      app: ${API_NAME}
+      app: ppr
+      role: ${API_NAME}
     name: ${API_NAME}
   spec:
     lookupPolicy:
