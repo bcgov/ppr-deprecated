@@ -11,8 +11,10 @@ objects:
     replicas: 3
     revisionHistoryLimit: 10
     selector:
-      app: ${API_NAME}
+      app: ppr
       deploymentconfig: ${API_NAME}
+      environment: ${ENVIRONMENT}
+      role: ${API_NAME}
     strategy:
       activeDeadlineSeconds: 21600
       resources: {}
@@ -26,8 +28,10 @@ objects:
     template:
       metadata:
         labels:
-          app: ${API_NAME}
+          app: ppr
           deploymentconfig: ${API_NAME}
+          environment: ${ENVIRONMENT}
+          role: ${API_NAME}
       spec:
         containers:
         - envFrom:
@@ -91,7 +95,9 @@ objects:
   kind: Service
   metadata:
     labels:
-      app: ${API_NAME}
+      app: ppr
+      environment: ${ENVIRONMENT}
+      role: ${API_NAME}
     name: ${API_NAME}
   spec:
     ports:
@@ -107,7 +113,9 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: ${API_NAME}
+      app: ppr
+      environment: ${ENVIRONMENT}
+      role: ${API_NAME}
     name: ${API_NAME}
   spec:
     host: ${ROUTE_URL}
@@ -127,10 +135,15 @@ parameters:
   name: API_NAME
   required: true
   value: ims-api
+- description: The environment, such as "dev", "dev-pr13", "test", or "prod".
+  displayName: Environment
+  name: ENVIRONMENT
+  required: true
+  value: dev
 - description: The image tag to build from.
   displayName: Image Tag
   name: IMAGE_TAG
-  required: false
+  required: true
   value: dev
 - description: The URL to use for the route.
   displayName: Route URL
