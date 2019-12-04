@@ -24,12 +24,20 @@ class FeatureFlags {
 Config
 Hides the implementation of storing configuration information.
  */
-class Config {
+export class Config {
 
   private _authUrl: string = sessionStorage.getItem('AUTH_URL') || ''
   private _authApiUrl: string = sessionStorage.getItem('AUTH_API_URL') || ''
   private _payApiUrl: string = sessionStorage.getItem('PAY_API_URL') || ''
   private _pprApiUrl: string = sessionStorage.getItem('PPR_API_URL') || ''
+
+  readonly sentryDSN: string
+  readonly sentryEnvironment: string
+
+  constructor(data: object) {
+    this.sentryDSN = data['SENTRY_DSN']
+    this.sentryEnvironment = data['SENTRY_ENVIRONMENT'];
+  }
 
   get authUrl(): string {
     return this._authUrl
@@ -95,7 +103,7 @@ class AppDataInternal {
     return this._features
   }
 
-  private _config: Config = new Config()
+  private _config: Config = new Config({})
   get config(): Config {
     return this._config
   }
@@ -105,6 +113,9 @@ class AppDataInternal {
     return this._user
   }
 
+  resetConfig(data: object): void {
+    this._config = new Config(data)
+  }
 }
 
 const AppData = new AppDataInternal()
