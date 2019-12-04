@@ -133,6 +133,7 @@ parameters:
 - description: The name of the API.
   displayName: API Name
   name: API_NAME
+  required: true
   value: ims-api
 - description: The environment, such as "dev", "dev-pr13", "test", or "prod".
   displayName: Environment
@@ -142,8 +143,10 @@ parameters:
 - description: The image tag to build from.
   displayName: Image Tag
   name: IMAGE_TAG
+  required: true
   value: dev
 - description: The URL to use for the route.
   displayName: Route URL
   name: ROUTE_URL
+  required: true
   value: ims-api-dev.pathfinder.gov.bc.ca
