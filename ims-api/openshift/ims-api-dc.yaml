@@ -5,7 +5,9 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
-      app: ${API_NAME}
+      app: ppr
+      deploymentconfig: ${API_NAME}
+      role: ${API_NAME}
     name: ${API_NAME}
   spec:
     replicas: 3
