@@ -5,14 +5,18 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
-      app: ${APP_NAME}
+      app: ppr
+      deploymentconfig: ${APP_NAME}
+      role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
     replicas: 3
     revisionHistoryLimit: 10
     selector:
-      app: ${APP_NAME}
+      app: ppr
       deploymentconfig: ${APP_NAME}
+      environment: ${ENVIRONMENT}
+      role: ${APP_NAME}
     strategy:
       activeDeadlineSeconds: 21600
       resources: {}
@@ -26,8 +30,10 @@ objects:
     template:
       metadata:
         labels:
-          app: ${APP_NAME}
+          app: ppr
           deploymentconfig: ${APP_NAME}
+          environment: ${ENVIRONMENT}
+          role: ${APP_NAME}
       spec:
         containers:
           - args: # Start Caddy inside the Docker image
@@ -87,26 +93,22 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${APP_NAME}:${IMAGE_TAG}
-          namespace: ${NS_TOOLS}
+          namespace: zwmtib-tools
       type: ImageChange
     - type: ConfigChange
 - apiVersion: v1
   kind: Service
   metadata:
     labels:
-      app: ${APP_NAME}
+      app: ppr
+      environment: ${ENVIRONMENT}
+      role: ${APP_NAME}
     name: ${APP_NAME}
-    namespace: ${NS_DEV}
   spec:
     ports:
-    - name: ${APP_PORT}-tcp
-# can not use variable substitution here because only a number is allowed in targetPort
-# If we use ${APP_PORT} then on oc apply you get this informative message
-#  "Error from server: unrecognized type: int32"
+    - name: 2015-tcp
       port: 2015
       protocol: TCP
-# Ditto for targetPort. If you use ${APP_PORT} you get this message:
-# The Service "ppr-ui" is invalid: spec.ports[0].targetPort: Invalid value: "2015": must contain at least one letter or number (a-z, 0-9)
       targetPort: 2015
     selector:
       deploymentconfig: ${APP_NAME}
@@ -116,13 +118,14 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: ${APP_NAME}
+      app: ppr
+      environment: ${ENVIRONMENT}
+      role: ${APP_NAME}
     name: ${APP_NAME}
-    namespace: ${NS_DEV}
   spec:
     host: ${ROUTE_URL}
     port:
-      targetPort: ${APP_PORT}-tcp
+      targetPort: 2015-tcp
     tls:
       insecureEdgeTerminationPolicy: Redirect
       termination: edge
@@ -137,43 +140,33 @@ parameters:
   name: APP_NAME
   required: true
   value: ppr-ui
+- description: The environment, such as "dev", "dev-pr13", "test", or "prod".
+  displayName: Environment
+  name: ENVIRONMENT
+  required: true
+  value: dev
 - description: The image tag to build from.
   displayName: Image Tag
   name: IMAGE_TAG
-  required: false
-  value: latest
+  required: true
+  value: dev
 - description: The URL to use for the route.
   displayName: Route URL
   name: ROUTE_URL
   required: true
   value: ppr-dev.pathfinder.gov.bc.ca
-- description: Volume name for caddy config
-  displayName: Caddy config volume mount name
-  name: VOL_CADDY
-  required: true
-  value: ppr-web-caddy-config
 - description: Volume name for web app config
   displayName: Web application config volume mount name
   name: VOL_APP_CONFIG
   required: true
   value: ppr-web-ui-config
+- description: Volume name for caddy config
+  displayName: Caddy config volume mount name
+  name: VOL_CADDY
+  required: true
+  value: ppr-web-caddy-config
 #- description: The path at which web application is deployed. Context root for the web applicaton
 #  displayName: WEB_APP_CONTEXT_PATH
 #  name: WEB_APP_CONTEXT_PATH
 #  required: true
 #  value: ppr
-- description: The port for the web application
-  displayName: Web application port
-  name: APP_PORT
-  required: true
-  value: "2015" #See notes above where this can not be used
-- description: The project's openshift DEV (deploy) namespace
-  displayName: Dev namespace
-  name: NS_DEV
-  required: true
-  value: zwmtib-dev
-- description: The project's openshift TOOLS (build) namespace
-  displayName: TOOLS namespace
-  name: NS_TOOLS
-  required: true
-  value: zwmtib-tools

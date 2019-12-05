@@ -5,9 +5,12 @@ objects:
   kind: BuildConfig
   metadata:
     labels:
+      app: ppr
       build: ${APP_NAME}
+      role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
+    failedBuildsHistoryLimit: 5
     output:
       to:
         kind: ImageStreamTag
@@ -19,7 +22,6 @@ objects:
         COPY . .
         RUN npm install
         RUN npm run build
-        # RUN ls -alR /dist
       git:
         uri: https://github.com/bcgov/ppr
         # sample how to use a developer's fork
@@ -29,15 +31,14 @@ objects:
         # ref: branch
       type: Git
     strategy:
-      dockerStrategy:
-        noCache: false
-    failedBuildsHistoryLimit: 5
+      dockerStrategy: {}
     successfulBuildsHistoryLimit: 5
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
     labels:
-      app: ${APP_NAME}
+      app: ppr
+      role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
     lookupPolicy:
@@ -48,4 +49,3 @@ parameters:
   name: APP_NAME
   required: true
   value: ppr-ui-inter
-
