@@ -1,0 +1,111 @@
+apiVersion: v1
+items:
+- apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  kind: NetworkSecurityPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"secops.pathfinder.gov.bc.ca/v1alpha1","kind":"NetworkSecurityPolicy","metadata":{"annotations":{},"name":"egress-internet-zwmtib-test","namespace":"zwmtib-test"},"spec":{"description":"allow zwmtib-test to talk to the internet\n","destination":[["ext:network=any"]],"source":[["$namespace=zwmtib-test"]]}}
+    creationTimestamp: 2019-10-09T16:45:55Z
+    finalizers:
+    - finalizer.secops.pathfinder.gov.bc.ca
+    generation: 1
+    name: egress-internet-zwmtib-test
+    namespace: zwmtib-test
+    resourceVersion: "1171976540"
+    selfLink: /apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/zwmtib-test/networksecuritypolicies/egress-internet-zwmtib-test
+    uid: 437b7c76-eab4-11e9-af44-005056832285
+  spec:
+    description: |
+      allow zwmtib-test to talk to the internet
+    destination:
+    - - ext:network=any
+    source:
+    - - $namespace=zwmtib-test
+  status:
+    conditions:
+    - ansibleResult:
+        changed: 3
+        completion: 2019-11-25T22:33:01.41635
+        failures: 0
+        ok: 11
+        skipped: 0
+      lastTransitionTime: 2019-10-09T17:55:40Z
+      message: Awaiting next reconciliation
+      reason: Successful
+      status: "True"
+      type: Running
+- apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  kind: NetworkSecurityPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"secops.pathfinder.gov.bc.ca/v1alpha1","kind":"NetworkSecurityPolicy","metadata":{"annotations":{},"name":"int-cluster-k8s-api-permit-zwmtib-test","namespace":"zwmtib-test"},"spec":{"description":"allow zwmtib-test pods to talk to the k8s api\n","destination":[["int:network=internal-cluster-api-endpoint"]],"source":[["$namespace=zwmtib-test"]]}}
+    creationTimestamp: 2019-10-09T16:45:57Z
+    finalizers:
+    - finalizer.secops.pathfinder.gov.bc.ca
+    generation: 1
+    name: int-cluster-k8s-api-permit-zwmtib-test
+    namespace: zwmtib-test
+    resourceVersion: "1171976408"
+    selfLink: /apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/zwmtib-test/networksecuritypolicies/int-cluster-k8s-api-permit-zwmtib-test
+    uid: 44580e7a-eab4-11e9-9f1b-0050568348cc
+  spec:
+    description: |
+      allow zwmtib-test pods to talk to the k8s api
+    destination:
+    - - int:network=internal-cluster-api-endpoint
+    source:
+    - - $namespace=zwmtib-test
+  status:
+    conditions:
+    - ansibleResult:
+        changed: 3
+        completion: 2019-11-25T22:32:58.574435
+        failures: 0
+        ok: 11
+        skipped: 0
+      lastTransitionTime: 2019-10-09T17:55:41Z
+      message: Awaiting next reconciliation
+      reason: Successful
+      status: "True"
+      type: Running
+- apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  kind: NetworkSecurityPolicy
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"secops.pathfinder.gov.bc.ca/v1alpha1","kind":"NetworkSecurityPolicy","metadata":{"annotations":{},"name":"intra-namespace-comms-zwmtib-test","namespace":"zwmtib-test"},"spec":{"description":"allow zwmtib-test pods to talk to each other\n","destination":[["$namespace=zwmtib-test"]],"source":[["$namespace=zwmtib-test"]]}}
+    creationTimestamp: 2019-10-09T16:45:56Z
+    finalizers:
+    - finalizer.secops.pathfinder.gov.bc.ca
+    generation: 1
+    name: intra-namespace-comms-zwmtib-test
+    namespace: zwmtib-test
+    resourceVersion: "1171975348"
+    selfLink: /apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/zwmtib-test/networksecuritypolicies/intra-namespace-comms-zwmtib-test
+    uid: 43e86087-eab4-11e9-9f1b-0050568348cc
+  spec:
+    description: |
+      allow zwmtib-test pods to talk to each other
+    destination:
+    - - $namespace=zwmtib-test
+    source:
+    - - $namespace=zwmtib-test
+  status:
+    conditions:
+    - ansibleResult:
+        changed: 3
+        completion: 2019-11-25T22:32:35.87426
+        failures: 0
+        ok: 11
+        skipped: 0
+      lastTransitionTime: 2019-10-09T17:55:39Z
+      message: Awaiting next reconciliation
+      reason: Successful
+      status: "True"
+      type: Running
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

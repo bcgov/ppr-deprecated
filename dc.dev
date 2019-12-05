@@ -1,0 +1,95 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","metadata":{"annotations":{},"labels":{"app":"ppr-ui"},"name":"ppr-ui","namespace":"zwmtib-dev"},"spec":{"replicas":3,"revisionHistoryLimit":10,"selector":{"app":"ppr-ui","deploymentconfig":"ppr-ui"},"strategy":{"activeDeadlineSeconds":21600,"resources":{},"rollingParams":{"intervalSeconds":1,"maxSurge":"25%","maxUnavailable":"25%","timeoutSeconds":600,"updatePeriodSeconds":1},"type":"Rolling"},"template":{"metadata":{"labels":{"app":"ppr-ui","deploymentconfig":"ppr-ui"}},"spec":{"containers":[{"args":["/tmp/scripts/run"],"imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":2015,"scheme":"HTTP"},"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"name":"ppr-ui","ports":[{"containerPort":2015,"protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":2015,"scheme":"HTTP"},"periodSeconds":10,"successThreshold":1,"timeoutSeconds":1},"resources":{"limits":{"cpu":"1","memory":"250Mi"},"requests":{"cpu":"10m","memory":"100Mi"}},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}},"test":false,"triggers":[{"imageChangeParams":{"automatic":true,"containerNames":["ppr-ui"],"from":{"kind":"ImageStreamTag","name":"ppr-ui:latest","namespace":"zwmtib-tools"}},"type":"ImageChange"},{"type":"ConfigChange"}]}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: ppr-ui
+  name: ppr-ui
+  selfLink: /apis/apps.openshift.io/v1/namespaces/zwmtib-dev/deploymentconfigs/ppr-ui
+spec:
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    app: ppr-ui
+    deploymentconfig: ppr-ui
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ppr-ui
+        deploymentconfig: ppr-ui
+    spec:
+      containers:
+      - args:
+        - /tmp/scripts/run
+        image: docker-registry.default.svc:5000/zwmtib-tools/ppr-ui@sha256:fc4766d9537fa2bef44592a91a200a6075f049b71ca8d8bca8b28f65b802238c
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 2015
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: ppr-ui
+        ports:
+        - containerPort: 2015
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 2015
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "1"
+            memory: 250Mi
+          requests:
+            cpu: 10m
+            memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - ppr-ui
+      from:
+        kind: ImageStreamTag
+        name: ppr-ui:latest
+        namespace: zwmtib-tools
+    type: ImageChange
+  - type: ConfigChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0
