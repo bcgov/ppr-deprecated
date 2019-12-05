@@ -58,9 +58,10 @@ objects:
                 path: /
                 port: 2015
                 scheme: HTTP
+              initialDelaySeconds: 5
               periodSeconds: 10
               successThreshold: 1
-              timeoutSeconds: 1
+              timeoutSeconds: 10
             resources:
               limits:
                 cpu: '1'
