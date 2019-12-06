@@ -1,36 +1,39 @@
 <template>
   <div class="features">
     <v-checkbox
-      id="featureOne"
-      v-model="featureOneFlag"
+      v-model="pocFeature1"
       class="f-check"
-      :label="fOneToggleLabel"
+      :label="featureLabel"
     />
   </div>
 </template>
 
 <script lang="ts">
-import {computed, createComponent, inject, ref, watch} from "@vue/composition-api"
+import {computed, createComponent, watch} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
-import AppData from '@/utils/app-data'
+import {useFeatureFlags, setPocFeature1} from '@/flags/feature-flags'
 
 export default createComponent({
   setup(): Data {
-    const featureOneFlag = inject("featureOne", ref(false))
-    const fOneToggleLabel = computed((): string => featureOneFlag.value ? 'Disable F One' : ' Enable F One')
+    const name = 'One'
+    const {pocFeature1} = useFeatureFlags()
 
-    watch(featureOneFlag, (flag): void => { AppData.features.featureOne = flag })
+    const featureLabel = computed((): string => (pocFeature1.value ? 'Disable' : ' Enable') + ' Feature ' + name)
 
-    return {featureOneFlag, fOneToggleLabel}
+    watch(pocFeature1, (flag): void => {
+      setPocFeature1(flag)
+    })
+
+    return { name, pocFeature1, featureLabel}
   }
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '@/assets/styles/theme.scss';
 
   .features {
-    margin-left: 2rem;
+    margin: 2rem;
     label {
       color: $gray3 !important;
       font-size: 16px;

@@ -16,9 +16,10 @@
 </template>
 
 <script lang="ts">
-import {computed, createComponent, onErrorCaptured, provide, ref} from "@vue/composition-api"
+import {createComponent, computed, onErrorCaptured, provide, ref} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
 import {provideRouter, useRouter} from "@/router/router"
+import {initializeFeatureFlags} from "@/flags/feature-flags"
 import FeatureOne from '@/components/FeatureOne.vue'
 import FeatureTwo from '@/components/FeatureTwo.vue'
 import AppData from "@/utils/app-data"
@@ -39,13 +40,14 @@ function authAPIURL(): string {
 export default createComponent({
   components: { FeatureOne, FeatureTwo },
   setup(): Data {
+
     provideRouter()
     const router = useRouter()
 
+    initializeFeatureFlags()
+
     provide("originUrl", origin())
     provide("authApiUrl", authAPIURL())
-    provide("featureOne", ref(AppData.features.featureOne))
-    provide("featureTwo", ref(AppData.features.featureTwo))
     provide("configuration", ref(AppData.config))
 
     const layout = computed((): string => (router.currentRoute.meta.layout || DefaultLayout) + '-layout')

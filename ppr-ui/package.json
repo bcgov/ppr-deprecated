@@ -8,7 +8,8 @@
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "precommit": "vue-cli-service lint --no-fix && npm run build"
   },
   "dependencies": {
     "@sentry/browser": "^5.9.1",
