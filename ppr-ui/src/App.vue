@@ -1,5 +1,8 @@
 <template>
-  <v-app class="app-container, theme--light" id="app">
+  <v-app
+    id="app"
+    class="app-container, theme--light"
+  >
     <component :is="layout">
       <router-view />
     </component>

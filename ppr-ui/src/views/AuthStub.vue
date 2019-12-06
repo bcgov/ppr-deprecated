@@ -6,21 +6,45 @@
           <h1>This is an authorization stub page</h1>
         </header>
       </article>
-      <div>userName {{userName}}</div>
+      <div>userName {{ userName }}</div>
       <v-card flat>
         <div v-if="hasSuccess">
-          <div>You've been signed in: {{userName}}</div>
-          <v-btn class="form-primary-btn" @click="goToDash" color="primary">Go to dashboard.</v-btn>
+          <div>You've been signed in: {{ userName }}</div>
+          <v-btn
+            class="form-primary-btn"
+            color="primary"
+            @click="goToDash"
+          >
+            Go to dashboard.
+          </v-btn>
         </div>
-        <div v-else class="intro">Try this button return do a 30-second login.
+        <div
+          v-else
+          class="intro"
+        >
+          Try this button return do a 30-second login.
           <v-form>
-            <v-text-field filled label="User Name" v-model="userName" required />
-            <v-btn class="form-primary-btn" @click="letUserIn" color="primary" v-bind:disabled="saveDisabled">Let me in!</v-btn>
+            <v-text-field
+              v-model="userName"
+              filled
+              label="User Name"
+              required
+            />
+            <v-btn
+              class="form-primary-btn"
+              color="primary"
+              :disabled="saveDisabled"
+              @click="letUserIn"
+            >
+              Let me in!
+            </v-btn>
           </v-form>
         </div>
       </v-card>
 
-      <div v-show="hasError">Error {{errorMsg}}</div>
+      <div v-show="hasError">
+        Error {{ errorMsg }}
+      </div>
     </v-container>
   </div>
 </template>
