@@ -12,6 +12,9 @@
               <header>
                 <h2>Sample content</h2>
               </header>
+              <v-container v-if="featureTwo">
+                <config-info />
+              </v-container>
             </section>
           </div>
 
@@ -39,18 +42,24 @@
 </template>
 
 <script lang="ts">
-import {createComponent, inject, ref} from "@vue/composition-api"
+import {createComponent} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/ts-api/component"
 import AuthHelper from '@/utils/auth-helper'
 import ConfigInfo from "@/components/ConfigInfo.vue"
 import {useRouter} from '@/router/router'
+import {useFeatureFlags} from '@/flags/feature-flags'
 
 export default createComponent({
   components: {ConfigInfo},
   setup(): Data {
     const router = useRouter()
-    const featureOne = inject("featureOne", ref(false))
-    const featureTwo = inject("featureTwo", ref(false))
+
+    // Feature Flags
+    const {
+      pocFeature1: featureOne,
+      pocFeature2: featureTwo
+    } = useFeatureFlags()
+
     function logOut(): void {
       AuthHelper.authClear()
         .then(() => {

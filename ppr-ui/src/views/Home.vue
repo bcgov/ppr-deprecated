@@ -6,6 +6,14 @@
           <h1>PPR Sample Home Page</h1>
         </header>
 
+        <div>
+          <h4>Feature Flags</h4>
+          <ul>
+            <li>poc 1 feature flags is {{ featureOneLabel }}</li>
+            <li>poc 2 feature flags is {{ featureTwoLabel }}</li>
+          </ul>
+        </div>
+
         <div class="page-content">
           <div class="page-content__main">
             <section>
@@ -35,29 +43,29 @@
         Login
       </v-btn>
     </v-container>
-
-    <v-container v-if="featureTwo">
-      <div>Feature two is active</div>
-    </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import {createComponent, inject, ref} from "@vue/composition-api"
+import {createComponent, computed} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/ts-api/component"
 import {useRouter} from '@/router/router'
+import {useFeatureFlags} from '@/flags/feature-flags'
 
 export default createComponent({
   setup(): Data {
     const router = useRouter()
-    const featureOne = inject("featureOne", ref(false))
-    const featureTwo = inject("featureTwo", ref(false))
+
+    // Feature Flags
+    const {pocFeature1: featureOne, pocFeature2: featureTwo} = useFeatureFlags()
+    const featureOneLabel = computed((): string => (featureOne.value ? 'disabled' : ' enabled'))
+    const featureTwoLabel = computed((): string => (featureTwo.value ? 'disabled' : ' enabled'))
 
     function login(): void {
       router.push('auth')
     }
 
-    return { featureOne, featureTwo, login }
+    return { featureOne, featureOneLabel, featureTwoLabel, login }
   }
 })
 </script>
