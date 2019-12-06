@@ -27,7 +27,13 @@
     </v-container>
 
     <v-container v-if="featureOne">
-      <v-btn class="form-primary-btn" @click="login" color="primary">Login</v-btn>
+      <v-btn
+        class="form-primary-btn"
+        color="primary"
+        @click="login"
+      >
+        Login
+      </v-btn>
     </v-container>
 
     <v-container v-if="featureTwo">

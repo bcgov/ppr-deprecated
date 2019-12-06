@@ -1,6 +1,10 @@
 <template>
   <div class="features">
-    <v-checkbox class="f-check" v-model="featureTwoFlag" :label="fOneToggleLabel" />
+    <v-checkbox
+      v-model="featureTwoFlag"
+      class="f-check"
+      :label="fOneToggleLabel"
+    />
   </div>
 </template>
 

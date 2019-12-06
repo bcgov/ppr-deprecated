@@ -27,7 +27,13 @@
     </v-container>
 
     <v-container>
-      <v-btn class="form-primary-btn" @click="logOut" color="primary">Let me out!</v-btn>
+      <v-btn
+        class="form-primary-btn"
+        color="primary"
+        @click="logOut"
+      >
+        Let me out!
+      </v-btn>
     </v-container>
   </div>
 </template>

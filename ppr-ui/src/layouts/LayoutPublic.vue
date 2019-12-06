@@ -1,6 +1,10 @@
 <template>
   <div>
-    <sbc-header ref="sbcHeader" :brandLink="originUrl" :authURL="authApiUrl" />
+    <sbc-header
+      ref="sbcHeader"
+      :brand-link="originUrl"
+      :auth-u-r-l="authApiUrl"
+    />
 
     <div class="app-body">
       <main>
