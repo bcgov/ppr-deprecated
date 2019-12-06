@@ -6,6 +6,14 @@
           <h1>PPR Sample Home Page</h1>
         </header>
 
+        <div>
+          <h4>Feature Flags</h4>
+          <ul>
+            <li>poc 1 {{featureOne}}</li>
+            <li>poc 2 {{featureTwo}}</li>
+          </ul>
+        </div>
+
         <div class="page-content">
           <div class="page-content__main">
             <section>
@@ -37,15 +45,17 @@
 </template>
 
 <script lang="ts">
-import {createComponent, inject, ref} from "@vue/composition-api"
+import {createComponent, Ref} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/ts-api/component"
 import {useRouter} from '@/router/router'
+import {useFlags} from '@/flags/feature-flags'
 
 export default createComponent({
   setup(): Data {
     const router = useRouter()
-    const featureOne = inject("featureOne", ref(false))
-    const featureTwo = inject("featureTwo", ref(false))
+    const flags = useFlags()
+    const featureOne: Ref = flags.pocFeature1
+    const featureTwo: Ref = flags.pocFeature2
 
     function login(): void {
       router.push('auth')

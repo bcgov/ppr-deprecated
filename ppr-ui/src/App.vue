@@ -16,6 +16,7 @@
 import {computed, createComponent, onErrorCaptured, provide, ref} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
 import {provideRouter, useRouter} from "@/router/router"
+import {FeatureFlags, provideFlags} from "@/flags/feature-flags"
 import FeatureOne from '@/components/FeatureOne.vue'
 import FeatureTwo from '@/components/FeatureTwo.vue'
 import AppData from "@/utils/app-data"
@@ -36,8 +37,12 @@ function authAPIURL(): string {
 export default createComponent({
   components: { FeatureOne, FeatureTwo },
   setup(): Data {
+    const devLDKey='key'
+    const fakeUserId = 'foobar'
+    const fflags = new FeatureFlags(devLDKey, fakeUserId)
     provideRouter()
     const router = useRouter()
+    provideFlags(fflags)
 
     provide("originUrl", origin())
     provide("authApiUrl", authAPIURL())
