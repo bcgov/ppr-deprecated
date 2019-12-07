@@ -10,7 +10,7 @@ export function initializeFeatureFlags(): void {
 }
 
 // Return object. Ideally the composition API would export the Refs<> type
-export function useFeatureFlags(): object {
+export function useFeatureFlags(): any {
   return toRefs(_flags)
 }
 
