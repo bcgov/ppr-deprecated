@@ -7,9 +7,11 @@ import VueCompositionApi from '@vue/composition-api'
 // Utilities
 import {createLocalVue, mount} from '@vue/test-utils'
 // Components
-import FeatureOne from '@/components/FeatureOne.vue'
+import Home from '@/views/Home.vue'
 // Application
 import {FeatureFlags, FeatureFlagSymbol} from "@/flags/feature-flags"
+import {RouterSymbol} from '@/router/router'
+import router from '@/router/router'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
@@ -21,35 +23,26 @@ describe('FeatureOne.vue', (): void => {
 
   beforeEach((): void => {
     vuetify = new Vuetify()
-    wrapper = mount(FeatureOne, {
+    wrapper = mount(Home, {
       localVue,
       vuetify,
-      provide: {[FeatureFlagSymbol]: featureFlags}
+      provide: {
+        [FeatureFlagSymbol]: featureFlags,
+        [RouterSymbol]: router
+      }
     })
-
   })
 
   it('Test flagging feature one', (): void => {
     expect(featureFlags.feature1).toBeFalsy()
     featureFlags.feature1 = true
     expect(featureFlags.feature1).toBeTruthy()
-    featureFlags.feature1 = false
-    expect(featureFlags.feature1).toBeFalsy()
   })
 
-  it('should have a custom label and match snapshot', (): void => {
-    // With jest we can create snapshot files of the HTML output
-    expect(wrapper.html()).toMatchSnapshot()
-
-    // We could also verify this differently by checking the text content
-    const checkboxLabel = wrapper.find('label')
-    console.log('Found checkboxLabel', checkboxLabel.text())
-    expect(checkboxLabel.text()).toContain('F One')
+  it('the feature is enabled', (): void => {
+    const element = wrapper.find('#fflag1')
+    // console.log('Found element', element.text())
+    expect(element.text()).toContain('enabled')
   })
 
-  it('check should enable feature one', (): void => {
-    const checkbox = wrapper.find('#featureOne')
-    checkbox.trigger('click')
-    expect(featureFlags).toBeTruthy()
-  })
 })
