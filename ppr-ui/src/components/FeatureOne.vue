@@ -1,6 +1,7 @@
 <template>
   <div class="features">
     <v-checkbox
+      id="featureOne"
       v-model="pocFeature1"
       class="f-check"
       :label="featureLabel"
@@ -9,19 +10,20 @@
 </template>
 
 <script lang="ts">
-import {computed, createComponent, watch} from "@vue/composition-api"
+import {computed, createComponent, ref, watch} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
-import {useFeatureFlags, setPocFeature1} from '@/flags/feature-flags'
+import {useFeatureFlags} from '@/flags/feature-flags'
 
 export default createComponent({
   setup(): Data {
     const name = 'One'
-    const {pocFeature1} = useFeatureFlags()
+    const flags = useFeatureFlags()
+    const pocFeature1 = ref(flags.feature1)
 
-    const featureLabel = computed((): string => (pocFeature1.value ? 'Disable' : ' Enable') + ' Feature ' + name)
+    const featureLabel = computed((): string => (pocFeature1.value ? 'Disable' : ' Enable') + ' F ' + name)
 
     watch(pocFeature1, (flag): void => {
-      setPocFeature1(flag)
+      flags.feature1 = flag
     })
 
     return { name, pocFeature1, featureLabel}

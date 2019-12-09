@@ -12,7 +12,7 @@
               <header>
                 <h2>Sample content</h2>
               </header>
-              <v-container v-if="featureTwo">
+              <v-container v-if="flags.featureTwo">
                 <config-info />
               </v-container>
             </section>
@@ -55,10 +55,7 @@ export default createComponent({
     const router = useRouter()
 
     // Feature Flags
-    const {
-      pocFeature1: featureOne,
-      pocFeature2: featureTwo
-    } = useFeatureFlags()
+    const flags = useFeatureFlags()
 
     function logOut(): void {
       AuthHelper.authClear()
@@ -66,7 +63,7 @@ export default createComponent({
           router.push('home')
         })
     }
-    return { featureOne, featureTwo, logOut }
+    return { flags, logOut }
   }
 })
 </script>

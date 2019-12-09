@@ -19,7 +19,7 @@
 import {createComponent, computed, onErrorCaptured, provide, ref} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
 import {provideRouter, useRouter} from "@/router/router"
-import {initializeFeatureFlags} from "@/flags/feature-flags"
+import {provideFeatureFlags} from "@/flags/feature-flags"
 import FeatureOne from '@/components/FeatureOne.vue'
 import FeatureTwo from '@/components/FeatureTwo.vue'
 import AppData from "@/utils/app-data"
@@ -44,7 +44,7 @@ export default createComponent({
     provideRouter()
     const router = useRouter()
 
-    initializeFeatureFlags()
+    provideFeatureFlags()
 
     provide("originUrl", origin())
     provide("authApiUrl", authAPIURL())

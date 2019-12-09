@@ -5,12 +5,11 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueCompositionApi from '@vue/composition-api'
 // Utilities
-import {mount, createLocalVue} from '@vue/test-utils'
-
+import {createLocalVue, mount} from '@vue/test-utils'
 // Components
 import FeatureOne from '@/components/FeatureOne.vue'
 // Application
-import AppData from '@/utils/app-data'
+import {FeatureFlags, FeatureFlagSymbol} from "@/flags/feature-flags"
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
@@ -18,22 +17,24 @@ const localVue = createLocalVue()
 
 describe('FeatureOne.vue', (): void => {
   let vuetify, wrapper
+  const featureFlags = new FeatureFlags()
 
   beforeEach((): void => {
     vuetify = new Vuetify()
     wrapper = mount(FeatureOne, {
       localVue,
       vuetify,
+      provide: {[FeatureFlagSymbol]: featureFlags}
     })
 
   })
 
-  it('Test app data features', (): void => {
-    expect(AppData.features.featureOne).toBeFalsy()
-    AppData.features.featureOne = true
-    expect(AppData.features.featureOne).toBeTruthy()
-    AppData.features.featureOne = false
-    expect(AppData.features.featureOne).toBeFalsy()
+  it('Test flagging feature one', (): void => {
+    expect(featureFlags.feature1).toBeFalsy()
+    featureFlags.feature1 = true
+    expect(featureFlags.feature1).toBeTruthy()
+    featureFlags.feature1 = false
+    expect(featureFlags.feature1).toBeFalsy()
   })
 
   it('should have a custom label and match snapshot', (): void => {
@@ -49,6 +50,6 @@ describe('FeatureOne.vue', (): void => {
   it('check should enable feature one', (): void => {
     const checkbox = wrapper.find('#featureOne')
     checkbox.trigger('click')
-    expect(AppData.features.featureOne).toBeTruthy()
+    expect(featureFlags).toBeTruthy()
   })
 })

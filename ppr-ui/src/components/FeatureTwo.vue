@@ -9,20 +9,20 @@
 </template>
 
 <script lang="ts">
-import {computed, createComponent, watch} from "@vue/composition-api"
+import {computed, createComponent, ref, watch} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
-import {useFeatureFlags, setPocFeature2} from '@/flags/feature-flags'
+import {useFeatureFlags} from '@/flags/feature-flags'
 
 export default createComponent({
   setup(): Data {
     const name = 'Two'
-
-    const {pocFeature2} = useFeatureFlags()
+    const flags = useFeatureFlags()
+    const pocFeature2 = ref(flags.feature2)
 
     const featureLabel = computed((): string => (pocFeature2.value ? 'Disable' : ' Enable') + ' Feature ' + name)
 
     watch(pocFeature2, (flag): void => {
-      setPocFeature2(flag)
+      flags.feature2 = flag
     })
 
     return { name, pocFeature2, featureLabel}

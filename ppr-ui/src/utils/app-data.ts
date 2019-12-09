@@ -1,26 +1,4 @@
 
-class FeatureFlags {
-  private _featureOne: boolean = false
-  public get featureOne(): boolean {
-    return this._featureOne
-  }
-
-  public set featureOne(flag: boolean) {
-    this._featureOne = flag
-  }
-
-  private _featureTwo: boolean = sessionStorage.getItem('FEATURE_TWO') === 'true'
-  public get featureTwo(): boolean {
-    return this._featureTwo
-  }
-
-  public set featureTwo(flag: boolean) {
-    // console.log('feature two set flag', flag)
-    sessionStorage.setItem('FEATURE_TWO', flag ? 'true' : 'false')
-    this._featureTwo = flag
-  }
-}
-
 /*
 Config
 Hides the implementation of storing configuration information.
@@ -99,11 +77,6 @@ class User {
 }
 
 class AppDataInternal {
-  private _features: FeatureFlags = new FeatureFlags()
-  public get features(): FeatureFlags {
-    return this._features
-  }
-
   private _config: Config = new Config({})
   public get config(): Config {
     return this._config
