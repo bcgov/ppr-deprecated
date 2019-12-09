@@ -7,6 +7,8 @@ export default {
    */
   async fetchConfig(): Promise<Config> {
 
+    const debug = false
+
     // TODO -- follow the lear example ...
     // const origin = window.location.origin
     // const vueAppPath = process.env.VUE_APP_PATH
@@ -36,21 +38,22 @@ export default {
       'ResponseType': 'application/json',
       'Cache-Control': 'no-cache'
     }
-    console.log('Fetch config from ', url)
+    if(debug) console.log('Fetch config from ', url)
 
     const response = await axios.get(url, {headers})
 
-    console.log('response data ', response.data)
+    if(debug) console.log('ConfigHelper url', url)
+    if(debug) console.log('ConfigHelper response data ', response.data)
     // with the above to do workaround the response data is a string and needs to be parse.
     // it is expected that once we do the to do above the response data with be an object
     const rd: any = response.data
-    console.log('response data ', rd)
+    if(debug) console.log('ConfigHelper response data ', rd)
     const cf: object = (typeof rd === 'string') ? JSON.parse(rd) : rd
 
     AppData.resetConfig(cf)
     const apiUrl: string = cf['API_URL']
     axios.defaults.baseURL = apiUrl
-    console.log('Set Base URL to: ' + apiUrl)
+    if(debug) console.log('ConfigHelper set base URL to: ' + apiUrl)
     AppData.config.pprApiUrl = apiUrl
     AppData.config.authUrl = cf['AUTH_URL']
     AppData.config.authApiUrl = cf['AUTH_API_URL']

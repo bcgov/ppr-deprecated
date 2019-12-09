@@ -4,9 +4,15 @@ export class FeatureFlags {
   private _feature1: boolean
   private _feature2: boolean
 
-  public constructor(feature1: boolean = false, feature2: boolean = false) {
+  private static _instance: FeatureFlags
+
+  private constructor(feature1: boolean = false, feature2: boolean = false) {
     this._feature1 = feature1
     this._feature2 = feature2
+  }
+
+  public static get Instance(): FeatureFlags {
+    return this._instance || (this._instance = new this())
   }
 
   public get feature1(): boolean {
@@ -28,8 +34,9 @@ export class FeatureFlags {
 
 export const FeatureFlagSymbol = Symbol()
 
+
 export function provideFeatureFlags(): void {
-  provide(FeatureFlagSymbol, reactive(new FeatureFlags()))
+  provide(FeatureFlagSymbol, reactive(FeatureFlags.Instance))
 }
 
 export function useFeatureFlags(): FeatureFlags {

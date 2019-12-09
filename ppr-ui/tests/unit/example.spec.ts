@@ -17,7 +17,7 @@ const localVue = createLocalVue()
 
 describe('FeatureOne.vue', (): void => {
   let vuetify, wrapper
-  const featureFlags = new FeatureFlags()
+  const featureFlags = FeatureFlags.Instance
 
   beforeEach((): void => {
     vuetify = new Vuetify()

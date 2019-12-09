@@ -6,12 +6,6 @@
     <component :is="layout">
       <router-view />
     </component>
-    <div class="ff">
-      <feature-one />
-    </div>
-    <div class="ff">
-      <feature-two />
-    </div>
   </v-app>
 </template>
 
@@ -20,9 +14,9 @@ import {createComponent, computed, onErrorCaptured, provide, ref} from "@vue/com
 import {Data} from "@vue/composition-api/dist/component"
 import {provideRouter, useRouter} from "@/router/router"
 import {provideFeatureFlags} from "@/flags/feature-flags"
-import FeatureOne from '@/components/FeatureOne.vue'
-import FeatureTwo from '@/components/FeatureTwo.vue'
 import AppData from "@/utils/app-data"
+import { initializeVueLdClient } from '@/flags/ld-client'
+import uuid from 'uuid'
 
 const APP_PATH = process.env.VUE_APP_PATH || 'app-path-foo-bar'
 const DefaultLayout = 'public'
@@ -37,9 +31,22 @@ function authAPIURL(): string {
   return sessionStorage.getItem('AUTH_API_URL')
 }
 
+
+/*
+  NOTE: the following userKey is TEMPORARY and will disappear when we get auth set up.
+  Create one user id per session.
+ */
+const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('userKey') : uuid.v4()
+sessionStorage.setItem('userKey', userKey)
+
 export default createComponent({
-  components: { FeatureOne, FeatureTwo },
+  components: { },
   setup(): Data {
+
+    // Make the connection to the LD server. We could explore anonymous users if we need to.
+    // For now we use a fixed per session user id.
+    // Also note that this initialization will need to happen AFTER auth.
+    initializeVueLdClient(AppData.config.launchDarklyClientKey, userKey)
 
     provideRouter()
     const router = useRouter()

@@ -4,5 +4,6 @@
   "AUTH_API_URL": "https://auth-api-dev.pathfinder.gov.bc.ca/api/v1/",
   "PAY_API_URL": "https://pay-api-dev.pathfinder.gov.bc.ca/api/v1/",
   "SENTRY_DSN": "",
-  "SENTRY_ENVIRONMENT": "dev"
+  "SENTRY_ENVIRONMENT": "dev",
+  "LAUNCH_DARKLY_CLIENT_KEY": ""
 }
