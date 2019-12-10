@@ -1,33 +1,37 @@
 package ca.bc.gov.registries.ppr.search;
 
-import ca.bc.gov.registries.imsconnect.IMSConnector;
-import ca.bc.gov.registries.ppr.imsconnect.IMSConnectorFactory;
+import ca.bc.gov.registries.ppr.imsconnect.IMSTransactionExecutor;
+import ca.bc.gov.registries.ppr.imsconnect.message.SearchInputMessage;
+import com.ibm.connector2.ims.ico.IMSInputStreamRecord;
 import org.springframework.stereotype.Component;
 
+import javax.resource.cci.Record;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.rightPad;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class IMSSearchService implements ISearchService {
-    private static final String SERIAL_SEARCH_TX = "OLPPTSS";
+    private static final String SEARCH_UNLIMITED_INPUT_FORM = "OLPSEPO";
+    private static final String SEARCH_LIMITED_INPUT_FORM = "OLPSELO";
 
-    private IMSConnectorFactory connectorFactory;
+    private IMSTransactionExecutor imsTransactionExecutor;
 
-    IMSSearchService(IMSConnectorFactory connectorFactory) {
-        this.connectorFactory = connectorFactory;
+    IMSSearchService(IMSTransactionExecutor imsTransactionExecutor) {
+        this.imsTransactionExecutor = imsTransactionExecutor;
     }
 
     @Override
     public List<String> findFinancialStatementsBySerial(String serial) throws Exception {
-        IMSConnector connector = connectorFactory.createConnection(SERIAL_SEARCH_TX);
-        try {
-            connector.connect();
-            // TODO this request is currently invalid.  Waiting on help to determine the correct contents of the request.
-            List<String> results = connector.makeRequest(rightPad(serial, 25));
-            return results;
-        } finally {
-            connector.disconnect();
-        }
+        SearchInputMessage inputMessage = new SearchInputMessage(serial.toUpperCase());
+
+        Record outputMessage = imsTransactionExecutor.executeTransaction(inputMessage, new IMSInputStreamRecord(), SEARCH_UNLIMITED_INPUT_FORM);
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(((IMSInputStreamRecord)outputMessage).getBuffer_()), "1141"));
+
+        return reader.lines().collect(toList());
     }
 }

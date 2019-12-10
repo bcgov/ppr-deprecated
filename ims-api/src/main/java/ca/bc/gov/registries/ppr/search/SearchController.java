@@ -21,7 +21,7 @@ public class SearchController {
     // Qualifier should be one of:
     //   IMSSearchService: Use IMS Connect
     //   stubSearchService: Use stubbed out fake date
-    SearchController(@Qualifier("stubSearchService") ISearchService searchService) {
+    SearchController(@Qualifier("IMSSearchService") ISearchService searchService) {
         this.searchService = searchService;
     }
 
@@ -30,7 +30,7 @@ public class SearchController {
         Map<String, Object> response = new HashMap<>();
 
         // For now, if no serial is provided to search, generate one at random
-        String queryValue = isNotBlank(serial) ? serial : randomAlphanumeric(17).toUpperCase();
+        String queryValue = isNotBlank(serial) ? serial : randomAlphanumeric(17);
         response.put("serial", queryValue);
 
         List<String> results = searchService.findFinancialStatementsBySerial(queryValue);
