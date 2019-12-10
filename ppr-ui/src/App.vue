@@ -40,7 +40,6 @@ const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('user
 sessionStorage.setItem('userKey', userKey)
 
 export default createComponent({
-  components: { },
   setup(): Data {
 
     // Make the connection to the LD server. We could explore anonymous users if we need to.
