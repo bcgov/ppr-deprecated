@@ -13,9 +13,12 @@ export class Config {
   public readonly sentryDSN: string
   public readonly sentryEnvironment: string
 
+  public readonly launchDarklyClientKey: string
+
   public constructor(data: object) {
     this.sentryDSN = data['SENTRY_DSN']
     this.sentryEnvironment = data['SENTRY_ENVIRONMENT']
+    this.launchDarklyClientKey = data['LAUNCH_DARKLY_CLIENT_KEY']
   }
 
   public get authUrl(): string {

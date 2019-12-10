@@ -9,8 +9,12 @@
         <div>
           <h4>Feature Flags</h4>
           <ul>
-            <li>poc 1 feature flags is {{ featureOneLabel }}</li>
-            <li>poc 2 feature flags is {{ featureTwoLabel }}</li>
+            <li id="fflag1">
+              poc 1 feature flags is {{ featureOneLabel }}
+            </li>
+            <li id="fflag2">
+              poc 2 feature flags is {{ featureTwoLabel }}
+            </li>
           </ul>
         </div>
 
