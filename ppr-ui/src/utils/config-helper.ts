@@ -1,5 +1,6 @@
 import axios from '@/utils/axios-auth'
 import AppData, {Config} from '@/utils/app-data'
+import {setBaseUrl} from '@/utils/axios-auth'
 
 export default {
   /**
@@ -46,18 +47,12 @@ export default {
     if(debug) console.log('ConfigHelper response data ', response.data)
     // with the above to do workaround the response data is a string and needs to be parse.
     // it is expected that once we do the to do above the response data with be an object
-    const rd: any = response.data
+    const rd: object = response.data
     if(debug) console.log('ConfigHelper response data ', rd)
     const cf: object = (typeof rd === 'string') ? JSON.parse(rd) : rd
-
     AppData.resetConfig(cf)
-    const apiUrl: string = cf['API_URL']
-    axios.defaults.baseURL = apiUrl
-    if(debug) console.log('ConfigHelper set base URL to: ' + apiUrl)
-    AppData.config.pprApiUrl = apiUrl
-    AppData.config.authUrl = cf['AUTH_URL']
-    AppData.config.authApiUrl = cf['AUTH_API_URL']
-    AppData.config.payApiUrl = cf['PAY_API_URL']
+
+    setBaseUrl(AppData.config.pprApiUrl)
 
     return AppData.config
   }

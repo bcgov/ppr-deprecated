@@ -1,12 +1,14 @@
 import axios from "@/utils/axios-auth"
 import AppData from '@/utils/app-data'
 
+let debug = false
+
 export default {
   authRedirect(): void {
     const redirected = sessionStorage.getItem('REDIRECTED')
-    const authUrl: string = sessionStorage.getItem('AUTH_URL') || ''
-    // console.log('redirected contains', redirected)
-    // console.log('authUrl contains', authUrl)
+    const authUrl = AppData.config.authUrl
+    if(debug) console.log('AuthHelper redirected contains', redirected)
+    if(debug) console.log('AuthHelper authUrl contains', authUrl)
     if (redirected !== 'true') {
       if (!sessionStorage.getItem('KEYCLOAK_TOKEN')) {
         console.error('auth redirect to authUrl')
@@ -16,7 +18,7 @@ export default {
     }
   },
   authClear(): Promise<void> {
-    console.log("OK let the user out of the app")
+    if(debug) console.log("AuthHelper OK let the user out of the app")
     sessionStorage.setItem('REDIRECTED', 'false')
     sessionStorage.removeItem('KEYCLOAK_TOKEN')
     return Promise.resolve()
@@ -27,14 +29,14 @@ export default {
       'ResponseType': 'application/json',
       'Cache-Control': 'no-cache'
     }
-    const authUrl = sessionStorage.getItem('AUTH_URL')
+    const authUrl = AppData.config.authUrl
     let url = authUrl + userName
-    console.log('auth user url ', url)
+    if(debug) console.log('AuthHelper auth user url ', url)
     return axios
       .get(url, {headers})
       .then((response): string => {
         const userName = response.data.user_name
-        console.log('api response data ', userName)
+        if(debug) console.log('AuthHelper api response data ', userName)
         sessionStorage.setItem('KEYCLOAK_TOKEN', 'Some JWY Token')
         AppData.user.userName = userName
         return userName
