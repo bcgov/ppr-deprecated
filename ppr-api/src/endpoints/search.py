@@ -14,10 +14,8 @@ async def search(serial: str, response: responses.Response):
     """
     Find financial statements that match the search criteria.
 
-    Does a search of the IMS.
-
-    Parameters:
-        serial: The serial number to search for.
+        Parameters:
+            serial: The serial number to search for.
     """
     ims_response = requests.get(
         "https://ims-api-dev.pathfinder.gov.bc.ca/search?serial={}".format(serial)
