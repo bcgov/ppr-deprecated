@@ -35,9 +35,10 @@ public class SearchControllerTest {
     @Test
     public void searchSerial_ResponseContainsSearchKeyAndIMSResults() throws Exception {
         String serial = randomAlphanumeric(6);
-        when(mockSearchService.findFinancialStatementsBySerial(anyString())).thenReturn(List.of("Hello", "World"));
+        VehicleSummarySearchResult vehicle = new VehicleSummarySearchResult(true, "MV", serial, 2010, "MAZDA");
+        when(mockSearchService.findFinancialStatementsBySerial(anyString())).thenReturn(List.of(vehicle));
 
-        Map<String, Object> expected = Map.of("serial", serial, "results", List.of("Hello", "World"));
+        Map<String, Object> expected = Map.of("serial", serial, "results", List.of(vehicle));
 
         Map<String, Object> response = controller.searchBySerial(serial);
 

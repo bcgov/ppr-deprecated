@@ -1,17 +1,12 @@
 package ca.bc.gov.registries.ppr.imsconnect.message;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import static com.ibm.etools.marshall.util.MarshallIntegerUtils.SIGN_CODING_TWOS_COMPLEMENT;
-import static com.ibm.etools.marshall.util.MarshallIntegerUtils.marshallTwoByteIntegerIntoBuffer;
-import static com.ibm.etools.marshall.util.MarshallStringUtils.*;
+import static ca.bc.gov.registries.ppr.imsconnect.message.ByteArrayUtils.writeShortToBuffer;
+import static ca.bc.gov.registries.ppr.imsconnect.message.ByteArrayUtils.writeStringToBuffer;
+import static com.ibm.etools.marshall.util.MarshallStringUtils.STRING_JUSTIFICATION_RIGHT;
 
 public class SearchInputMessage extends AbstractMessage {
     private static final short MESSAGE_SIZE = 545;
     private static final byte[] DEFAULT_BUFFER = new byte[MESSAGE_SIZE];
-    private static final String PAD_SPACE = " ";
     private static final String VERSION = "V2";
 
     private static final String DEFAULT_SEARCH_TX = "OLPPTSE";
@@ -23,11 +18,9 @@ public class SearchInputMessage extends AbstractMessage {
     private static final int SERIAL_INDEX = 126;
     private static final int SERIAL_LENGTH = 25;
 
-    private byte[] buffer;
-
     static {
-        writeShortToBuffer(MESSAGE_SIZE, DEFAULT_BUFFER,0); // 2 bytes, "LL" - message length
-        writeShortToBuffer((short) 0, DEFAULT_BUFFER,2); // 2 bytes, "ZZ"
+        writeShortToBuffer(MESSAGE_SIZE, DEFAULT_BUFFER, LL_INDEX); // 2 bytes, "LL" - message length
+        writeShortToBuffer((short) 0, DEFAULT_BUFFER, ZZ_INDEX); // 2 bytes, "ZZ"
         writeStringToBuffer(DEFAULT_SEARCH_TX, DEFAULT_BUFFER, 4, 8); // Transaction Name
         writeStringToBuffer("", DEFAULT_BUFFER, 12, 2); // EMPTY Space before function
         writeStringToBuffer(DEFAULT_FUNCTION, DEFAULT_BUFFER, 14, 2); // Function code
@@ -44,62 +37,18 @@ public class SearchInputMessage extends AbstractMessage {
         writeStringToBuffer(Integer.toString(DEFAULT_LIMIT), DEFAULT_BUFFER, 541, 4, STRING_JUSTIFICATION_RIGHT); // limit
     }
 
-    private static void writeStringToBuffer(String value, byte[] buffer, int offset, int length) {
-        writeStringToBuffer(value, buffer, offset, length, STRING_JUSTIFICATION_LEFT);
-    }
-
-    private static void writeStringToBuffer(String value, byte[] buffer, int offset, int length, int justification) {
-        marshallFixedLengthStringIntoBuffer(value, buffer, offset, EBCDIC_CHAR_SET, length, justification, PAD_SPACE);
-    }
-
-    private static void writeShortToBuffer(short value, byte[] buffer, int offset) {
-        marshallTwoByteIntegerIntoBuffer(value, buffer, offset, true, SIGN_CODING_TWOS_COMPLEMENT);
-    }
-
-    private static String readStringFromBuffer(byte[] buffer, int offset, int length) {
-        return unmarshallFixedLengthStringFromBuffer(buffer, offset, EBCDIC_CHAR_SET, length);
-    }
-
     public SearchInputMessage(String serial) {
         super();
-        initialize(serial);
+
+        writeString(serial, SERIAL_INDEX, SERIAL_LENGTH);
     }
 
-    private void initialize(String serial) {
-        buffer = DEFAULT_BUFFER.clone();
-        writeStringToBuffer(serial, buffer, SERIAL_INDEX, SERIAL_LENGTH);
+    @Override
+    protected byte[] getDefaultBuffer() {
+        return DEFAULT_BUFFER;
     }
 
     public String getSerial() {
-        return readStringFromBuffer(buffer, SERIAL_INDEX, SERIAL_LENGTH).trim();
-    }
-
-    @Override
-    public byte[] getBytes() {
-        return buffer.clone();
-    }
-
-    @Override
-    public void setBytes(byte[] bytes) {
-        if ((bytes != null) && (bytes.length != 0)) {
-            buffer = bytes.clone();
-        }
-    }
-
-    @Override
-    public int getSize() {
-        return buffer.length;
-    }
-
-    @Override
-    public void read(InputStream inputStream) throws IOException {
-        byte[] input = new byte[inputStream.available()];
-        inputStream.read(input);
-        buffer = input;
-    }
-
-    @Override
-    public void write(OutputStream outputStream) throws IOException {
-        outputStream.write(buffer, 0, getSize());
+        return readString(SERIAL_INDEX, SERIAL_LENGTH);
     }
 }
