@@ -33,7 +33,7 @@ public class SearchController {
         String queryValue = isNotBlank(serial) ? serial : randomAlphanumeric(17);
         response.put("serial", queryValue);
 
-        List<String> results = searchService.findFinancialStatementsBySerial(queryValue);
+        List<VehicleSummarySearchResult> results = searchService.findFinancialStatementsBySerial(queryValue);
         response.put("results", results);
 
         return response;

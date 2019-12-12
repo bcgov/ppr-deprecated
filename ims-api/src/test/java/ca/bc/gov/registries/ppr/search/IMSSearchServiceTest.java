@@ -2,12 +2,13 @@ package ca.bc.gov.registries.ppr.search;
 
 import ca.bc.gov.registries.ppr.imsconnect.IMSTransactionExecutor;
 import ca.bc.gov.registries.ppr.imsconnect.message.SearchInputMessage;
-import com.ibm.connector2.ims.ico.IMSInputStreamRecord;
+import com.ibm.etools.marshall.RecordBytes;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import javax.resource.cci.Record;
+import java.io.InputStream;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.junit.Assert.assertEquals;
@@ -26,8 +27,8 @@ public class IMSSearchServiceTest {
         when(mockTransactionExecutor.executeTransaction(any(), any(), anyString())).thenAnswer(invocation -> {
             // The executor will mutate the output parameter and then return it.  Make sure it has some data.
             Object[] args = invocation.getArguments();
-            IMSInputStreamRecord output = (IMSInputStreamRecord)args[1];
-            output.setBuffer_(randomAlphanumeric(10).getBytes());
+            RecordBytes output = (RecordBytes)args[1];
+            output.setBytes(readSampleResultFromClasspath());
             return output;
         });
 
@@ -53,5 +54,15 @@ public class IMSSearchServiceTest {
         service.findFinancialStatementsBySerial(serial);
 
         verify(mockTransactionExecutor).executeTransaction(any(), any(), eq("OLPSEPO"));
+    }
+
+    private byte[] readSampleResultFromClasspath() throws Exception {
+        InputStream inputStream = getClass().getResourceAsStream("/vehicle-search-output.ebcidic");
+        try {
+            return inputStream.readAllBytes();
+        }
+        finally {
+            inputStream.close();
+        }
     }
 }
