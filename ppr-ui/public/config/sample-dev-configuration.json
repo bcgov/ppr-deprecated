@@ -2,7 +2,7 @@
   "API_URL": "https://ppr-api-dev.pathfinder.gov.bc.ca/",
   "AUTH_URL": "https://dev.bcregistry.ca/ppr/auth/",
   "AUTH_API_URL": "https://auth-api-dev.pathfinder.gov.bc.ca/api/v1/",
-  "LAUNCH_DARKLY_CLIENT_KEY": "",
+  "LAUNCH_DARKLY_CLIENT_KEY": "Client side ID from https://app.launchdarkly.com/settings/projects",
   "PAY_API_URL": "https://pay-api-dev.pathfinder.gov.bc.ca/api/v1/",
   "SENTRY_DSN": "",
   "SENTRY_ENVIRONMENT": "dev"

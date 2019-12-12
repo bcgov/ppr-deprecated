@@ -5,7 +5,6 @@ import routes from './routes'
 import authHelper from '@/utils/auth-helper'
 import {inject, provide} from "@vue/composition-api"
 
-
 Vue.use(VueRouter)
 
 export const RouterSymbol = Symbol()
@@ -32,7 +31,7 @@ router.afterEach((to): void => {
   }
 })
 
-export function provideRouter() {
+export function provideRouter(): void {
   provide(RouterSymbol, router)
 }
 

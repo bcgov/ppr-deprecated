@@ -1,10 +1,17 @@
+import About from '@/views/Dashboard.vue'
+import AuthStub from '@/views/AuthStub.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import Home from '@/views/Home.vue'
+
+// TODO restore lazy load of components. Important when the app gets larger to reduce size of initial js files.
+// Disable the lazy load approach until we can determine the TS return type from something like
+// () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
 
 export default [
   {
     path: '/',
     name: 'home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
+    component: Home, //() => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
     meta: {layout: 'public'}
   },
   {
@@ -16,16 +23,13 @@ export default [
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: About, //() => import(/* webpackChunkName: "about" */ '../views/About.vue'),
     meta: {layout: 'public'}
   },
   {
     path: '/auth',
     name: 'auth',
-    component: () => import(/* webpackChunkName: "auth" */ '../views/AuthStub.vue'),
+    component: AuthStub, // () => import(/* webpackChunkName: "auth" */ '../views/AuthStub.vue'),
     meta: {layout: 'public'}
   },
   {
