@@ -2,7 +2,7 @@ import fastapi
 from starlette.middleware import cors
 import uvicorn
 
-from .endpoints import api
+from endpoints import api
 
 
 # Include all the endpoints for the API.

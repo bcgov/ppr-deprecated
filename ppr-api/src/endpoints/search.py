@@ -1,7 +1,7 @@
 import json
-import requests
 
 import fastapi
+import requests
 from starlette import responses
 
 
@@ -14,8 +14,9 @@ async def search(serial: str, response: responses.Response):
     """
     Find financial statements that match the search criteria.
 
-    Parameters:
+    Does a search of the IMS.
 
+    Parameters:
         serial: The serial number to search for.
     """
     ims_response = requests.get(
