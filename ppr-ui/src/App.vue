@@ -3,6 +3,26 @@
     id="app"
     class="app-container, theme--light"
   >
+    <!-- Any loading action can trigger display of spinner -->
+    <transition name="fade">
+      <div
+        v-show="isLoading"
+        class="loading-container"
+      >
+        <div class="loading__content">
+          <v-progress-circular
+            color="primary"
+            size="50"
+            indeterminate
+          />
+          <!-- Suppress message with spinner until we can make the message relate to the action initiated by the user ->
+          <!--<div class="loading-msg">-->
+            <!--Loading Personal Property Registry-->
+          <!--</div>-->
+        </div>
+      </div>
+    </transition>
+
     <component :is="layout">
       <router-view />
     </component>
@@ -12,8 +32,9 @@
 <script lang="ts">
 import {createComponent, computed, onErrorCaptured, provide, ref} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
-import {provideRouter, useRouter} from "@/router/router"
 import {provideFeatureFlags} from "@/flags/feature-flags"
+import {provideRouter, useRouter} from "@/router/router"
+import {provideStore, useStore} from "@/store"
 import AppData from "@/utils/app-data"
 import { initializeVueLdClient } from '@/flags/ld-client'
 import uuid from 'uuid'
@@ -47,14 +68,17 @@ export default createComponent({
     // Also note that this initialization will need to happen AFTER auth.
     initializeVueLdClient(AppData.config.launchDarklyClientKey, userKey)
 
-    provideRouter()
-    const {router} = useRouter()
-
-    provideFeatureFlags()
-
     provide("originUrl", origin())
     provide("authApiUrl", authAPIURL())
     provide("configuration", ref(AppData.config))
+    provideFeatureFlags()
+    provideStore()
+    provideRouter()
+
+    const {router} = useRouter()
+    const {store} = useStore()
+
+    const isLoading = computed(() => { return store.state.isLoading } )
 
     const layout = computed((): string => (router.currentRoute.meta.layout || DefaultLayout) + '-layout')
 
@@ -68,7 +92,7 @@ export default createComponent({
       // return false to stop the propagation of errors further to parent or global error handler
     })
 
-    return { layout }
+    return { isLoading, layout }
   }
 })
 

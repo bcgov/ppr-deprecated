@@ -44,11 +44,13 @@
 <script lang="ts">
 import {computed, createComponent, reactive, ref} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/ts-api/component"
+import {useStore} from "@/store"
 import {useRouter} from '@/router/router'
 
 
 export default createComponent({
   setup(): Data {
+    const {store} = useStore()
     const {router} = useRouter()
 
     const serialNumber = ref<string>('')
@@ -64,7 +66,12 @@ export default createComponent({
 
     function doSearch() {
       console.log('Search for ', serialNumber.value)
-      router.push({ name: 'results', params: {terms: serialNumber.value }})
+      store.dispatch('setLoading', true)
+      setTimeout( () => {
+        store.dispatch('setLoading', false)
+        router.push({ name: 'results', params: {terms: serialNumber.value }})
+      },
+      3000)
     }
 
     return {
