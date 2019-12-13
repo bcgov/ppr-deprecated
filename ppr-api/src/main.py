@@ -2,7 +2,10 @@ import uvicorn
 from fastapi import FastAPI, Header, HTTPException
 from starlette.middleware.cors import CORSMiddleware
 
+from endpoints import healthcheck
+
 app = FastAPI()
+app.include_router(healthcheck.router)
 
 origins = [
     "http://localhost:8080",
