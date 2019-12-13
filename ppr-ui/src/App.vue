@@ -48,7 +48,7 @@ export default createComponent({
     initializeVueLdClient(AppData.config.launchDarklyClientKey, userKey)
 
     provideRouter()
-    const router = useRouter()
+    const {router} = useRouter()
 
     provideFeatureFlags()
 
