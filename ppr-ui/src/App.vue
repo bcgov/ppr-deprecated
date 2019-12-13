@@ -15,9 +15,9 @@
             size="50"
             indeterminate
           />
-          <!-- Suppress message with spinner until we can make the message relate to the action initiated by the user ->
+          <!-- Suppress message with spinner until we can make the message relate to the action initiated by the user -->
           <!--<div class="loading-msg">-->
-            <!--Loading Personal Property Registry-->
+          <!--Loading Personal Property Registry-->
           <!--</div>-->
         </div>
       </div>
