@@ -16,8 +16,8 @@ Note that if the pods are not starting, and producing errors like:
 
 > [CRITICAL] WORKER TIMEOUT (pid:10)
 
-it can be that there's isn't enough CPU to start the uvicorn processes within gunicorn's 30 second timeout. Try giving
-the pods a little more CPU.
+it can be that there isn't enough CPU to start the uvicorn processes within gunicorn's 30 second timeout. Try giving the
+pods a little more CPU.
 
 ### Uvicorn/Gunicon Configuration
 
