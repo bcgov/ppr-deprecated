@@ -21,8 +21,7 @@ jobs:
       - name: Lint with PyLint
         working-directory: ppr-api
         run: |
-          # This isn't playing well with VS Code. Disabling temporarily.
-          # pylint -E src
+          pylint -E src
       - name: Execute Unit Tests with PyTest
         working-directory: ppr-api
         run: |
