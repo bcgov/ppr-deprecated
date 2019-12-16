@@ -10,9 +10,20 @@ The PPR API is currently a passthrough API that calls the IMS Transaction Manage
 
 ## Application Configuration
 
+### OpenShift Configuration
+
+Note that if the pods are not starting, and producing errors like:
+
+> [CRITICAL] WORKER TIMEOUT (pid:10)
+
+it can be that there isn't enough CPU to start the uvicorn processes within gunicorn's 30 second timeout. Try giving the
+pods a little more CPU.
+
 ### Uvicorn/Gunicon Configuration
 
 These settings configure the [Uvicorn/Gunicon](https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker) web server.
+Although the server is tuned down to 4 processes to lighten the resource usage, with three pods it still has a dozen
+worker processes running.
 
 | Environment Variable | Description             |
 | -------------------- | ----------------------- |
