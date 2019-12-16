@@ -4,10 +4,10 @@ public class VehicleSummarySearchResult {
     private boolean exactMatch;
     private String type;
     private String vin;
-    private int year;
+    private Integer year;
     private String make;
 
-    public VehicleSummarySearchResult(boolean exactMatch, String type, String vin, int year, String make) {
+    public VehicleSummarySearchResult(boolean exactMatch, String type, String vin, Integer year, String make) {
         this.exactMatch = exactMatch;
         this.type = type;
         this.vin = vin;
@@ -27,7 +27,7 @@ public class VehicleSummarySearchResult {
         return vin;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 

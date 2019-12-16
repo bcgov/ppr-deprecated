@@ -122,8 +122,17 @@ public class SearchOutputMessageTest {
         SearchOutputMessage message = getSampleMessage();
 
         List<VehicleSummarySearchResult> vehicles = message.getVehicles();
-        assertEquals(1989, vehicles.get(0).getYear());
-        assertEquals(2005, vehicles.get(1).getYear());
+        assertEquals(Integer.valueOf(1989), vehicles.get(0).getYear());
+        assertEquals(Integer.valueOf(2005), vehicles.get(1).getYear());
+    }
+
+    @Test
+    public void testGetVehicle_YearShouldBeNullWhenValueIsEmpty() throws Exception {
+        SearchOutputMessage message = getSampleMessage();
+        overwriteBytes(message, 416, "    ".getBytes(EBCDIC_CHAR_SET));
+
+        List<VehicleSummarySearchResult> vehicles = message.getVehicles();
+        assertNull(vehicles.get(0).getYear());
     }
 
     @Test
