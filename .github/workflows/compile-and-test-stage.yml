@@ -18,10 +18,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/dev.txt
-      - name: Lint with PyLint
+      - name: Lint non-test Source
         working-directory: ppr-api
         run: |
           pylint -E src
+          flake8 src
       - name: Execute Unit Tests with PyTest
         working-directory: ppr-api
         run: |
