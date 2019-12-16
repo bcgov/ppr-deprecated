@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import static ca.bc.gov.registries.ppr.imsconnect.message.ByteArrayUtils.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public abstract class AbstractMessage implements Record, RecordBytes, Streamable {
     protected static final int LL_INDEX = 0;
@@ -44,8 +45,12 @@ public abstract class AbstractMessage implements Record, RecordBytes, Streamable
         return readShortFromBuffer(buffer, offset);
     }
 
-    protected int readStringAsInteger(int offset, int length) {
-        return Integer.parseInt(readString(offset, length));
+    protected Integer readStringAsInteger(int offset, int length) {
+        String intString = readString(offset, length);
+        if (isBlank(intString)) {
+            return null;
+        }
+        return Integer.parseInt(intString);
     }
 
     @Override
