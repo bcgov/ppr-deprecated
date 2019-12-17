@@ -43,6 +43,10 @@ objects:
             value: http://ims-api.zwmtib-${ENVIRONMENT}.svc:8080
           - name: WEB_CONCURRENCY
             value: "4"
+          envFrom:
+            - prefix: DB_
+              secretRef:
+                name: ppr-database
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 3
