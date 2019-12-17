@@ -29,5 +29,6 @@ def database_status(session: sqlalchemy.orm.Session):
         session.execute('SELECT 1')
         return STATUS_UP
     except Exception:
-        logger.warning("Database healthcheck failed", exc_info=True)
+        # TODO re-add logging when database connection works.  ATM this creates a lot of noise.
+        # logger.warning("Database healthcheck failed", exc_info=True)
         return STATUS_DOWN
