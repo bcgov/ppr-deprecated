@@ -6,6 +6,7 @@ import fastapi
 import requests
 from starlette import responses
 
+import config
 
 router = fastapi.APIRouter()
 
@@ -19,9 +20,7 @@ async def search(serial: str, response: responses.Response):
         Parameters:
             serial: The serial number to search for.
     """
-    ims_response = requests.get(
-        "https://ims-api-dev.pathfinder.gov.bc.ca/search?serial={}".format(serial)
-    )
+    ims_response = requests.get(config.IMS_API_URL + "/search?serial={}".format(serial))
 
     response.status_code = ims_response.status_code
 

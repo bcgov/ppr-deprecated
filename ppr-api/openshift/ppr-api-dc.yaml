@@ -39,6 +39,8 @@ objects:
         - env:
           - name: PORT
             value: "8080"
+          - name: PPR_API_IMS_API_URL
+            value: http://ims-api.zwmtib-${ENVIRONMENT}.svc:8080
           - name: WEB_CONCURRENCY
             value: "4"
           imagePullPolicy: Always

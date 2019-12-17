@@ -4,6 +4,7 @@ The PPR API is currently a passthrough API that calls the IMS Transaction Manage
 
 ## Developer Setup
 
+1. Copy the dotenv [environment file](../docs/.env) to somewhere above the source code.
 1. `$ pip install -r requirements/dev.txt`
 1. `$ (cd src && uvicorn main:app --reload)`
 1. View the [OpenAPI Docs](http://127.0.0.1:8000/docs).
