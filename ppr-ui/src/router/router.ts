@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {PositionResult} from "vue-router/types/router"
+import {PositionResult, Route} from "vue-router/types/router"
 import routes from './routes'
 import authHelper from '@/utils/auth-helper'
 import {inject, provide} from "@vue/composition-api"
@@ -19,15 +19,19 @@ const router = new VueRouter({
   }
 })
 
+const ENABLED = false
+
 // if there is no saved Keycloak token, redirect to Auth URL
 router.afterEach((to): void => {
-  try {
-    console.log('Router afterEach', to.matched)
-    if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
-      authHelper.authRedirect()
+  if (ENABLED) {
+    try {
+      console.log('Router afterEach', to.matched)
+      if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
+        authHelper.authRedirect()
+      }
+    } catch (error) {
+      console.error('Router afterEach', error)
     }
-  } catch (error) {
-    console.error('Router afterEach', error)
   }
 })
 
@@ -35,12 +39,13 @@ export function provideRouter(): void {
   provide(RouterSymbol, router)
 }
 
-export function useRouter(): VueRouter {
-  const vueRouter: VueRouter = inject(RouterSymbol) as VueRouter
-  if (!vueRouter) {
+export function useRouter(): {route: Route; router: VueRouter} {
+  const router: VueRouter = inject(RouterSymbol) as VueRouter
+  if (!router) {
     throw Error("Router cannot be injected, has not been provided")
   }
-  return vueRouter
+  const route: Route = router.currentRoute
+  return { route, router }
 }
 
 export default router

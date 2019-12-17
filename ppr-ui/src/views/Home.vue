@@ -58,8 +58,7 @@ import {useFeatureFlags} from '@/flags/feature-flags'
 
 export default createComponent({
   setup(): Data {
-    const router = useRouter()
-
+    const {router} = useRouter()
     // Feature Flags
     const flags = useFeatureFlags()
     const featureOneLabel = computed((): string => (flags.feature1 ? 'enabled' : ' disabled'))

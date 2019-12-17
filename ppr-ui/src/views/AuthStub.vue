@@ -57,7 +57,7 @@ import {useRouter} from '@/router/router'
 
 export default createComponent({
   setup(): Data {
-    const router = useRouter()
+    const {router} = useRouter()
     const errorMsg = ref<string>('')
     const userName = ref<string>('')
     const loggedInUser = ref<string>('')

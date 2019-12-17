@@ -16,7 +16,6 @@ html {
 }
 
 body {
-  // NB: Vuetify font is set on .v-application class (see below)
   font-family: 'BCSans', sans-serif;
   font-size: 1rem;
 }
@@ -55,8 +54,25 @@ hr {
   border-style: solid;
 }
 
+// zebra strip tables
+tbody tr:nth-child(odd) {
+  background-color: #fcfbfb;
+}
+
+.v-card {
+  line-height: 1.2rem;
+  padding: 1rem;
+}
+
+/**
+The elements below were imported from the lear project and may not be important to PPR.
+ */
 .container {
   padding: 1.25rem;
+}
+
+.app-body {
+  background: $gray2;
 }
 
 .app-container.theme--light {
