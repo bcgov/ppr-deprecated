@@ -1,3 +1,4 @@
 
 email-validator==1.0.5 # Uvicorn complains without this.
+python-dotenv==0.10.3
 requests==2.22.0
