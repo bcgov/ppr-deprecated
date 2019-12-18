@@ -17,19 +17,16 @@ export class LoadIndicator {
   }
 
   public start(): void {
-    console.log('start')
     this._loadingCount++
     this._isLoading = this._loadingCount > 0
   }
 
   public stop(): void {
-    console.log('stop')
     this._loadingCount--
     this._isLoading = this._loadingCount > 0
   }
 
   public isLoading(): boolean {
-    console.log('is loading ', this._isLoading)
     return this._isLoading
   }
 }

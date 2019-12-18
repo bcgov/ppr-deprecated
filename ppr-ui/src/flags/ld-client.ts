@@ -2,26 +2,24 @@ import {initialize, LDClient, LDUser} from 'launchdarkly-js-client-sdk'
 import {anonymousUser, indentifiedUser} from './ld-user'
 import {FeatureFlags} from '@/flags/feature-flags'
 
-let debug: true
-
 class VueLdClient {
   private ldClient: LDClient
 
   public constructor(envKey: string, user: LDUser) {
-    if (debug) console.log('VueLdClient constructor ld-env-key, user', envKey, user)
+    console.debug('VueLdClient constructor ld-env-key, user', envKey, user)
 
     try {
       this.ldClient = initialize(envKey, user)
-      if (debug) console.log('VueLdClient constructor ldClient', this.ldClient)
+      console.debug('VueLdClient constructor ldClient', this.ldClient)
       this.ldClient.on('ready', (): void => {
         const allFlags = this.ldClient.allFlags()
-        if (debug) console.log('LDFlags on ready flags', allFlags)
+        console.debug('LDFlags on ready flags', allFlags)
         this.updateFlags(allFlags)
       })
 
       this.ldClient.on('change', (): void => {
         const allFlags = this.ldClient.allFlags()
-        if (debug) console.log('LDFlags on change flags', allFlags)
+        console.debug('LDFlags on change flags', allFlags)
         this.updateFlags(allFlags)
       })
     } catch (err) {
@@ -31,7 +29,7 @@ class VueLdClient {
 
   private updateFlags(allFlags): void {
     const flags = FeatureFlags.Instance
-    console.log('LDFlags on change flags', allFlags)
+    console.debug('LDFlags on change flags', allFlags)
     flags.feature1 = allFlags['poc-feature-1']
     flags.feature2 = allFlags['poc-feature-2']
   }
@@ -66,7 +64,7 @@ class VueLdClient {
   //    */
   //   this.ldClient.identify(user, hash, function() {
   //     // TODO update flags
-  //     console.log("New user's flags available");
+  //     console.debug("New user's flags available");
   //   });
   // }
 
