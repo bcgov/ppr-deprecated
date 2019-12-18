@@ -3,7 +3,6 @@
     id="app"
     class="app-container, theme--light"
   >
-
     <load-indicator />
 
     <component :is="layout">
