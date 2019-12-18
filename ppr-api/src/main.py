@@ -1,8 +1,12 @@
 import fastapi
+import sentry_sdk
 from starlette.middleware import cors
 import uvicorn
 
+import config
 from endpoints import api
+
+sentry_sdk.init(config.SENTRY_DSN)
 
 app = fastapi.FastAPI()
 app.include_router(api.router)
