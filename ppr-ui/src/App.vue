@@ -3,6 +3,9 @@
     id="app"
     class="app-container, theme--light"
   >
+
+    <load-indicator />
+
     <component :is="layout">
       <router-view />
     </component>
@@ -12,8 +15,11 @@
 <script lang="ts">
 import {createComponent, computed, onErrorCaptured, provide, ref} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/component"
-import {provideRouter, useRouter} from "@/router/router"
+import LoadIndicator from "@/load-indicator/LoadIndicator.vue"
 import {provideFeatureFlags} from "@/flags/feature-flags"
+import {provideLoadIndicator} from '@/load-indicator'
+import {provideRouter, useRouter} from "@/router/router"
+import {provideSearcherSerial} from "@/search/search-serial"
 import AppData from "@/utils/app-data"
 import { initializeVueLdClient } from '@/flags/ld-client'
 import uuid from 'uuid'
@@ -40,6 +46,9 @@ const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('user
 sessionStorage.setItem('userKey', userKey)
 
 export default createComponent({
+  components: {
+    LoadIndicator
+  },
   setup(): Data {
 
     // Make the connection to the LD server. We could explore anonymous users if we need to.
@@ -47,14 +56,15 @@ export default createComponent({
     // Also note that this initialization will need to happen AFTER auth.
     initializeVueLdClient(AppData.config.launchDarklyClientKey, userKey)
 
-    provideRouter()
-    const router = useRouter()
-
-    provideFeatureFlags()
-
     provide("originUrl", origin())
     provide("authApiUrl", authAPIURL())
     provide("configuration", ref(AppData.config))
+    provideFeatureFlags()
+    provideLoadIndicator()
+    provideSearcherSerial()
+    provideRouter()
+
+    const {router} = useRouter()
 
     const layout = computed((): string => (router.currentRoute.meta.layout || DefaultLayout) + '-layout')
 

@@ -52,8 +52,7 @@ import {useFeatureFlags} from '@/flags/feature-flags'
 export default createComponent({
   components: {ConfigInfo},
   setup(): Data {
-    const router = useRouter()
-
+    const {router} = useRouter()
     // Feature Flags
     const flags = useFeatureFlags()
 
