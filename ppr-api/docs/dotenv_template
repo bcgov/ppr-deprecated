@@ -22,4 +22,9 @@ PPR_API_DB_PASSWORD=password
 #
 PPR_API_SENTRY_DSN=
 
+# The sentry.io environment for the project. For local development this should be something unique-ish, like your
+# username.
+#
+PPR_API_SENTRY_ENVIRONMENT=local.development
+
 # =====================================================================================================================
