@@ -74,7 +74,7 @@ export default createComponent({
           loggedInUser.value = userName.value
         })
         .catch(err => {
-          console.log('authFake error', err)
+          console.error('authFake error', err)
           errorMsg.value = err.message
         })
     }

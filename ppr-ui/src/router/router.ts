@@ -25,7 +25,7 @@ const ENABLED = false
 router.afterEach((to): void => {
   if (ENABLED) {
     try {
-      console.log('Router afterEach', to.matched)
+      console.debug('Router afterEach', to.matched)
       if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
         authHelper.authRedirect()
       }

@@ -68,7 +68,7 @@ export default createComponent({
     const layout = computed((): string => (router.currentRoute.meta.layout || DefaultLayout) + '-layout')
 
     onErrorCaptured((err): void => {
-      console.log('App errorCaptured', err)
+      console.error('App errorCaptured', err)
       // err: error trace
       // The method has 2 additional parameters, which are unused in this case
       //   vm: component in which error occured

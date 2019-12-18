@@ -40,7 +40,7 @@ export function anonymousUser(): LDUser {
 // Change the user context after sign in
 /*
 ldclient.identify(newUser, hash, function() {
-  console.log("New user's flags available");
+  console.debug("New user's flags available");
 });
  */
 export function indentifiedUser(key: string): LDUser {

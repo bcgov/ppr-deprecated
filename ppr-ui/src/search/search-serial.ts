@@ -52,9 +52,8 @@ export class SearcherSerial {
   public get results(): SerialResult[] { return this._results}
 
   public doSearch(term: string): Promise<string> {
-    // save the serach term for reuse when displaying results or errors
+    // save the search term for reuse when displaying results or errors
     this._term = term
-    // console.log('Search for ', this._term)
     const headers  = {
       'Accept': 'application/json',
       'ResponseType': 'application/json',
@@ -62,15 +61,12 @@ export class SearcherSerial {
     }
 
     let url = baseUrl() + term
-    console.log('Make the search api call', url)
     return new Promise((resolve, reject): void => {
       axios
         .get(url, {headers})
         .then((response): void => {
-          console.debug('search response', response)
           if (response && response.data) {
             this._results = response.data.results
-            console.log('search success with ', this._results)
             resolve('success')
           } else {
             this._errorMessage = TEXT.errorMsg('invalid response data')
