@@ -21,11 +21,6 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
 # sample setting status code
 # sample read header
 # sample return json structure
