@@ -2,8 +2,8 @@ import About from '@/views/Dashboard.vue'
 import AuthStub from '@/views/AuthStub.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import Home from '@/views/Home.vue'
-import SearchPage from '@/views/search-page.vue'
-import ResultsPage from '@/views/results-page.vue'
+import SearchPage from '@/views/SearchPage.vue'
+import ResultsPage from '@/views/ResultsPage.vue'
 
 // TODO restore lazy load of components. Important when the app gets larger to reduce size of initial js files.
 // Disable the lazy load approach until we can determine the TS return type from something like
