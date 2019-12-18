@@ -10,5 +10,10 @@
 #     $ oc -n zwmtib-dev port-forward ims-api-XX-XXXXX 8888:8080 &
 #
 PPR_API_IMS_API_URL=http://localhost:8888
+PPR_API_DB_HOSTNAME=localhost
+PPR_API_DB_PORT=5432
+PPR_API_DB_NAME=ppr
+PPR_API_DB_USERNAME=postgres
+PPR_API_DB_PASSWORD=password
 
 # =====================================================================================================================

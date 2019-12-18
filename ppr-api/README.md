@@ -47,13 +47,13 @@ worker processes running.
 
 These settings are for building connections to the database.
 
-| Environment Variable | Description                                   |
-| -------------------- | --------------------------------------------- |
-| DB_HOSTNAME          | Host where the database is located: localhost |
-| DB_PORT              | Port to listen on: 5432                       |
-| DB_NAME              | The name of the database: ppr                 |
-| DB_USERNAME          | The username to connect with: postgres        |
-| DB_PASSWORD          | The password of the user. **Required**        |
+| Environment Variable | Description                        |
+| -------------------- | ---------------------------------- |
+| PPR_API_DB_HOSTNAME  | Host where the database is located |
+| PPR_API_DB_PORT      | Port to listen on: 5432            |
+| PPR_API_DB_NAME      | The name of the database           |
+| PPR_API_DB_USERNAME  | The username to connect with       |
+| PPR_API_DB_PASSWORD  | The password of the user           |
 
 ### Sentry Configuration
 

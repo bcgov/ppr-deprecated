@@ -1,18 +1,14 @@
-import os
-
 import sqlalchemy
 import sqlalchemy.orm
 
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-if not DB_PASSWORD:
-    raise Exception('DB_PASSWORD environment variable is required')
+import config
 
 DATABASE_URI = 'postgresql://{user}:{password}@{host}:{port}/{name}'.format(
-    user=os.getenv('DB_USERNAME', 'postgres'),
-    password=DB_PASSWORD,
-    host=os.getenv('DB_HOSTNAME', 'localhost'),
-    port=int(os.getenv('DB_PORT', '5432')),
-    name=os.getenv('DB_NAME', 'ppr')
+    user=config.DB_USERNAME,
+    password=config.DB_PASSWORD,
+    host=config.DB_HOSTNAME,
+    port=config.DB_PORT,
+    name=config.DB_NAME
 )
 
 engine = sqlalchemy.create_engine(DATABASE_URI)
