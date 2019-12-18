@@ -41,6 +41,16 @@ objects:
             value: "8080"
           - name: PPR_API_IMS_API_URL
             value: http://ims-api.zwmtib-${ENVIRONMENT}.svc:8080
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                key: DSN
+                name: sentry
+          - name: SENTRY_ENVIRONMENT
+            valueFrom:
+              secretKeyRef:
+                key: ENVIRONMENT
+                name: sentry
           - name: WEB_CONCURRENCY
             value: "4"
           envFrom:

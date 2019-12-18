@@ -10,10 +10,21 @@
 #     $ oc -n zwmtib-dev port-forward ims-api-XX-XXXXX 8888:8080 &
 #
 PPR_API_IMS_API_URL=http://localhost:8888
+
 PPR_API_DB_HOSTNAME=localhost
 PPR_API_DB_PORT=5432
 PPR_API_DB_NAME=ppr
 PPR_API_DB_USERNAME=postgres
 PPR_API_DB_PASSWORD=password
+
+# The sentry.io Data Source Name for the project. For local development this should always be blank, to prevent the
+# logging (and emailing) of errors. However it can be temporarily set when working with sentry itself.
+#
+PPR_API_SENTRY_DSN=
+
+# The sentry.io environment for the project. For local development this should be something unique-ish, like your
+# username.
+#
+PPR_API_SENTRY_ENVIRONMENT=local.development
 
 # =====================================================================================================================
