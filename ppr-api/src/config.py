@@ -13,3 +13,8 @@ import dotenv
 dotenv.load_dotenv()
 
 IMS_API_URL = os.getenv("PPR_API_IMS_API_URL")
+DB_HOSTNAME = os.getenv('PPR_API_DB_HOSTNAME')
+DB_PORT = int(os.getenv('PPR_API_DB_PORT', '5432'))
+DB_NAME = os.getenv('PPR_API_DB_NAME')
+DB_USERNAME = os.getenv('PPR_API_DB_USERNAME')
+DB_PASSWORD = os.getenv('PPR_API_DB_PASSWORD')

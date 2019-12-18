@@ -44,7 +44,7 @@ objects:
           - name: WEB_CONCURRENCY
             value: "4"
           envFrom:
-            - prefix: DB_
+            - prefix: PPR_API_DB_
               secretRef:
                 name: ppr-database
           imagePullPolicy: Always
