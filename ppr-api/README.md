@@ -4,15 +4,15 @@ The PPR API is currently a passthrough API that calls the IMS Transaction Manage
 
 ## Developer Setup
 
-1. Copy the dotenv [environment file](../docs/.env) to somewhere above the source code.
+1. Copy the [dotenv template file](../docs/dotenv_template) to somewhere above the source code and rename to `.env`.
 1. `$ pip install -r requirements/dev.txt`
 1. `$ (cd src && uvicorn main:app --reload)`
 1. View the [OpenAPI Docs](http://127.0.0.1:8000/docs).
 
 ### Local Dependencies
 
-The api requires a **PostgreSQL** database which can be launched locally with docker compose. You must specify a password for
-the database using the `DB_PASSWORD` environment variable. This is required by both docker compose PPR API.
+The api requires a **PostgreSQL** database which can be launched locally with docker compose. You must specify a
+password for the database using the `DB_PASSWORD` environment variable. This is required by both docker compose PPR API.
 
 Docker compose will also bring up an instance of Jaeger.
 
