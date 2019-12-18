@@ -28,41 +28,22 @@
         </div>
       </article>
     </v-container>
-
-    <v-container>
-      <v-btn
-        class="form-primary-btn"
-        color="primary"
-        @click="logOut"
-      >
-        Let me out!
-      </v-btn>
-    </v-container>
   </div>
 </template>
 
 <script lang="ts">
 import {createComponent} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/ts-api/component"
-import AuthHelper from '@/utils/auth-helper'
 import ConfigInfo from "@/components/ConfigInfo.vue"
-import {useRouter} from '@/router/router'
 import {useFeatureFlags} from '@/flags/feature-flags'
 
 export default createComponent({
   components: {ConfigInfo},
   setup(): Data {
-    const {router} = useRouter()
     // Feature Flags
     const flags = useFeatureFlags()
 
-    function logOut(): void {
-      AuthHelper.authClear()
-        .then(() => {
-          router.push('home')
-        })
-    }
-    return { flags, logOut }
+    return { flags }
   }
 })
 </script>
