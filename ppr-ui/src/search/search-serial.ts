@@ -3,9 +3,7 @@ import axios from "@/utils/axios-auth"
 import AppData from '@/utils/app-data'
 
 function baseUrl(): string {
-  const Config = AppData.config
-  const ApiUrl = Config.pprApiUrl
-  return ApiUrl + 'search'
+  return AppData.config.pprApiUrl + 'search'
 }
 
 const TEXT = {
