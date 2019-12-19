@@ -61,7 +61,7 @@ objects:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /health
+              path: /operations/health
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 20
@@ -75,7 +75,7 @@ objects:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /health
+              path: /operations/health
               port: 8080
               scheme: HTTP
             initialDelaySeconds: 20
