@@ -3,9 +3,7 @@ import axios from "@/utils/axios-auth"
 import AppData from '@/utils/app-data'
 
 function baseUrl(): string {
-  const Config = AppData.config
-  const ApiUrl = Config.pprApiUrl
-  return ApiUrl + 'search?serial='
+  return AppData.config.pprApiUrl + 'search'
 }
 
 const TEXT = {
@@ -54,16 +52,23 @@ export class SearcherSerial {
   public doSearch(term: string): Promise<string> {
     // save the search term for reuse when displaying results or errors
     this._term = term
-    const headers  = {
-      'Accept': 'application/json',
-      'ResponseType': 'application/json',
-      'Cache-Control': 'no-cache'
+    // console.log('Search for ', this._term)
+    const config = {
+      params: {
+        serial: term
+      },
+      headers: {
+        'Accept': 'application/json',
+        'ResponseType': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
     }
 
-    let url = baseUrl() + term
+    let url = baseUrl()
+    console.log('Make the search api call', url)
     return new Promise((resolve, reject): void => {
       axios
-        .get(url, {headers})
+        .get(url, config)
         .then((response): void => {
           if (response && response.data) {
             this._results = response.data.results
