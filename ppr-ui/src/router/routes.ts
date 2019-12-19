@@ -1,5 +1,4 @@
 import About from '@/views/Dashboard.vue'
-import AuthStub from '@/views/AuthStub.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import Home from '@/views/Home.vue'
 import SearchPage from '@/views/SearchPage.vue'
@@ -39,12 +38,6 @@ export default [
     path: '/about',
     name: 'about',
     component: About, //() => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    meta: {layout: 'public'}
-  },
-  {
-    path: '/auth',
-    name: 'auth',
-    component: AuthStub, // () => import(/* webpackChunkName: "auth" */ '../views/AuthStub.vue'),
     meta: {layout: 'public'}
   },
   {
