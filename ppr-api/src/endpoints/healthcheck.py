@@ -13,7 +13,7 @@ STATUS_DOWN = "DOWN"
 
 
 @router.get("/health")
-def health(session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
+def health():
     """
     Returns a health check for this service - if reachable always indicates up.
     """
