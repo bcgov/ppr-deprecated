@@ -38,15 +38,6 @@
       </article>
     </v-container>
 
-    <v-container v-if="flags.feature1">
-      <v-btn
-        class="form-primary-btn"
-        color="primary"
-        @click="login"
-      >
-        Login
-      </v-btn>
-    </v-container>
     <v-container v-if="flags.feature2">
       <v-btn
         class="form-primary-btn"
@@ -73,15 +64,11 @@ export default createComponent({
     const featureOneLabel = computed((): string => (flags.feature1 ? 'enabled' : ' disabled'))
     const featureTwoLabel = computed((): string => (flags.feature2 ? 'enabled' : 'disabled'))
 
-    function login(): void {
-      router.push('auth')
-    }
-
     function goSearch(): void {
       router.push('search')
     }
 
-    return { flags, featureOneLabel, featureTwoLabel, goSearch, login }
+    return { flags, featureOneLabel, featureTwoLabel, goSearch }
   }
 })
 </script>
