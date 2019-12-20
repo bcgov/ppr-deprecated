@@ -47,6 +47,15 @@
         Login
       </v-btn>
     </v-container>
+    <v-container v-if="flags.feature2">
+      <v-btn
+        class="form-primary-btn"
+        color="primary"
+        @click="goSearch"
+      >
+        Go to search
+      </v-btn>
+    </v-container>
   </div>
 </template>
 
@@ -68,7 +77,11 @@ export default createComponent({
       router.push('auth')
     }
 
-    return { flags, featureOneLabel, featureTwoLabel, login }
+    function goSearch(): void {
+      router.push('search')
+    }
+
+    return { flags, featureOneLabel, featureTwoLabel, goSearch, login }
   }
 })
 </script>
