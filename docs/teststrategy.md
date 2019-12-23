@@ -1,3 +1,3 @@
-# Test Stategy
+# Test Strategy
 
 Update test
