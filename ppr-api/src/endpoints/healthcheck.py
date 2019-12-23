@@ -2,6 +2,7 @@ import logging
 
 import fastapi
 import sqlalchemy.orm
+from starlette import responses, status
 
 import models.database
 
@@ -23,20 +24,23 @@ def health():
 
 
 @router.get("/database")
-def database(session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
+def database(response: responses.Response,
+             session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
     """
     Returns a health check for the reachability of the database.
     """
-    return {
-        "status": database_status(session)
-    }
-
-
-def database_status(session: sqlalchemy.orm.Session):
     try:
-        session.execute('SELECT 1')
-        return STATUS_UP
-    except Exception:
+        session.execute("SELECT 1")
+
+        return {
+            "status": STATUS_UP
+        }
+    except Exception as exception:
         # TODO re-add logging when database connection works.  ATM this creates a lot of noise.
         # logger.warning("Database healthcheck failed", exc_info=True)
-        return STATUS_DOWN
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+
+        return {
+            "status": STATUS_DOWN,
+            "error": str(exception)
+        }
