@@ -30,7 +30,7 @@ def database(response: responses.Response,
     Returns a health check for the reachability of the database.
     """
     try:
-        session.execute('SELECT 1')
+        session.execute("SELECT 1")
 
         return {
             "status": STATUS_UP
@@ -38,7 +38,7 @@ def database(response: responses.Response,
     except Exception as exception:
         # TODO re-add logging when database connection works.  ATM this creates a lot of noise.
         # logger.warning("Database healthcheck failed", exc_info=True)
-        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
 
         return {
             "status": STATUS_DOWN,

@@ -1,16 +1,26 @@
-import endpoints.healthcheck
+from starlette import responses, status
+
+from endpoints import healthcheck
 
 
 def test_database_status_without_exception():
     expected = "UP"
-    actual = endpoints.healthcheck.database_status(MockSession())
-    assert expected == actual
+    response = responses.Response()
+
+    actual = healthcheck.database(response, MockSession())
+
+    assert expected == actual["status"]
+    assert status.HTTP_200_OK == response.status_code
 
 
-def test_database_status_throws_exception():
+def test_database_status_with_exception():
     expected = "DOWN"
-    actual = endpoints.healthcheck.database_status(MockSession(True))
-    assert expected == actual
+    response = responses.Response()
+
+    actual = healthcheck.database(response, MockSession(True))
+
+    assert expected == actual["status"]
+    assert status.HTTP_503_SERVICE_UNAVAILABLE == response.status_code
 
 
 class MockSession:
@@ -19,5 +29,5 @@ class MockSession:
 
     def execute(self, sql):
         if self.should_fail:
-            raise Exception('execute failed intentionally')
+            raise Exception("execute failed intentionally")
         return None
