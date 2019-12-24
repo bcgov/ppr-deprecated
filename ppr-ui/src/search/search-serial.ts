@@ -7,7 +7,11 @@ function baseUrl(): string {
 }
 
 const TEXT = {
-  errorMsg: (text): string => `Search serial number error - ${text}`
+  errorMsg: (text): string => `Search serial number error - ${text}`,
+  describeValidSerial: 'Serial number can have up to 25 letters or digits',
+  defineValid: 'Serial number must be up to 25 letters or digits',
+  required: 'Require serial number',
+  tooLong: 'Serial number can only have 25 characters'
 }
 
 interface SerialResult {
@@ -40,14 +44,15 @@ export class SearcherSerial {
 
   public constructor() {
     this._serialNumberRules = [
-      (value): (boolean | string) => { return !!value || 'Require serial number' }
-      // the next comment demonstrates another check
-      , (value): (boolean | string) => { return /^\d{4}$/.test(value) || 'serial number must be 4 digits' }
+      (value): (boolean | string) => { return !!value || TEXT.required },
+      (value): (boolean | string) => { return value.length <= 25 || TEXT.tooLong },
+      (value): (boolean | string) => { return /^[0-9a-zA-Z]{1,25}$/.test(value) || TEXT.defineValid }
     ]
   }
 
   public get term(): string { return this._term}
   public get results(): SerialResult[] { return this._results}
+  public get describeValidSerial(): string { return TEXT.describeValidSerial}
 
   public doSearch(term: string): Promise<string> {
     // save the search term for reuse when displaying results or errors
