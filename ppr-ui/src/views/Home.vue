@@ -32,13 +32,37 @@
               <header>
                 <h2>Sample Aside Section</h2>
               </header>
+              <div>
+                <ul>
+                  <li>
+                    <router-link to="home">
+                      Home
+                    </router-link>
+                  </li>
+                  <li v-if="flags.feature2">
+                    <router-link to="search">
+                      Search
+                    </router-link>
+                  </li>
+                  <li v-if="flags.feature2">
+                    <router-link to="results">
+                      Results
+                    </router-link>
+                  </li>
+                  <li>
+                    <router-link to="about">
+                      About
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
             </section>
           </aside>
         </div>
       </article>
     </v-container>
 
-    <v-container v-if="flags.feature2">
+    <v-container v-if="feature2">
       <v-btn
         class="form-primary-btn"
         color="primary"
@@ -61,14 +85,15 @@ export default createComponent({
     const {router} = useRouter()
     // Feature Flags
     const flags = useFeatureFlags()
-    const featureOneLabel = computed((): string => (flags.feature1 ? 'enabled' : ' disabled'))
+    const featureOneLabel = computed((): string => (flags.feature1 ? 'enabled' : 'disabled'))
     const featureTwoLabel = computed((): string => (flags.feature2 ? 'enabled' : 'disabled'))
+    const feature2 = computed( (): boolean => flags ? flags.feature2: false)
 
     function goSearch(): void {
       router.push('search')
     }
 
-    return { flags, featureOneLabel, featureTwoLabel, goSearch }
+    return { flags, feature2, featureOneLabel, featureTwoLabel, goSearch }
   }
 })
 </script>
