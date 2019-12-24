@@ -1,31 +1,25 @@
 // test/FeatureOne.spec.js
 
-// Libraries
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueCompositionApi from '@vue/composition-api'
-// Utilities
-import {createLocalVue, mount} from '@vue/test-utils'
-// Components
+import {shallowMount} from '@vue/test-utils'
 import Home from '@/views/Home.vue'
-// Application
+
 import {FeatureFlags, FeatureFlagSymbol} from "@/flags/feature-flags"
+const featureFlags = FeatureFlags.Instance
+
 import {RouterSymbol} from '@/router/router'
 import router from '@/router/router'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
-const localVue = createLocalVue()
 
 describe('FeatureOne.vue', (): void => {
-  let vuetify, wrapper
-  const featureFlags = FeatureFlags.Instance
+  let wrapper
 
   beforeEach((): void => {
-    vuetify = new Vuetify()
-    wrapper = mount(Home, {
-      localVue,
-      vuetify,
+    wrapper = shallowMount(Home, {
       provide: {
         [FeatureFlagSymbol]: featureFlags,
         [RouterSymbol]: router
@@ -39,9 +33,16 @@ describe('FeatureOne.vue', (): void => {
     expect(featureFlags.feature1).toBeTruthy()
   })
 
+  it('Test flagging feature two', (): void => {
+    expect(featureFlags.feature2).toBeFalsy()
+    featureFlags.feature2 = true
+    expect(featureFlags.feature2).toBeTruthy()
+  })
+
   it('the feature is enabled', (): void => {
+    featureFlags.feature1 = true
     const element = wrapper.find('#fflag1')
-    // console.log('Found element', element.text())
+    console.log(`Found element '${element.text()}'`)
     expect(element.text()).toContain('enabled')
   })
 
