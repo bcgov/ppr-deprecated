@@ -10,6 +10,11 @@ oc login https://console.pathfinder.gov.bc.ca:8443 --token=....
 cd ppr-ui/openshift
 ```
 
+## Validation
+
+To any oc apply command you can append ```--validate``` to check for errors in the configuration.  Note that there is a known
+issue with a validation error saying that Route needs a status property. It doesn't so ignore.  
+
 ## Tools Namespace `BuildConfig`s
 
 ```bash
@@ -23,7 +28,7 @@ The following process of tagging is temporary as it will change once we build ou
 After building an image on the Tools namespace you will want to tag a build with the 'dev', 'test', or ... tag.
 
 ```bash
-oc tag zwmtib-tools/ppr-ui:latest ppr-ui:dev
+oc tag -n zwmtib-tools ppr-ui:latest ppr-ui:dev
 ```  
 
 
