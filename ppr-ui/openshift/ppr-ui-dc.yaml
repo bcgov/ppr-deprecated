@@ -72,10 +72,6 @@ objects:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
-              - mountPath: /etc/Caddyfile
-                name: coops-web-caddy-config
-                readOnly: true
-                subPath: Caddyfile
               - mountPath: /var/www/html/config
                 name: ppr-web-ui-config
                 readOnly: true
@@ -85,10 +81,6 @@ objects:
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-          - configMap:
-              defaultMode: 420
-              name: coops-web-caddy-config
-            name: coops-web-caddy-config
           - configMap:
               defaultMode: 420
               name: ppr-web-ui-config
