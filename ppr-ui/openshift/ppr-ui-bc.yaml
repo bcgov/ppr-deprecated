@@ -16,8 +16,13 @@ objects:
         kind: ImageStreamTag
         name: ${APP_NAME}:latest
     source:
+      # Uses the image stream created in the intermediate step, which contains the client code files and the built
+      # distribution.  Create an image with a Caddy server that uses the caddy configuration from the client code
+      # plus the built dist.
+      # Result is an imagestream ready to run the Caddy server with the application distribution files.
       dockerfile: |
         FROM bcgov-s2i-caddy
+        COPY Caddy/Caddyfile /etc/Caddyfile
         RUN mkdir -p /var/www/html
         COPY dist /var/www/html
       images:
@@ -28,6 +33,8 @@ objects:
         paths:
         - destinationDir: ./
           sourcePath: /dist
+        - destinationDir: ./
+          sourcePath: /Caddy
       type: Dockerfile
     strategy:
       dockerStrategy:

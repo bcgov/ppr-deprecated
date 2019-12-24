@@ -1,0 +1,10 @@
+version: '3'
+services:
+  caddy:
+    image: "abiosoft/caddy:latest"
+    # image: "bcgov-s2i-caddy"
+    volumes:
+      - ./Caddyfile:/etc/Caddyfile  # to mount custom Caddyfile
+      - ../dist/:/var/www/html
+    ports:
+      - "2015:2015"
