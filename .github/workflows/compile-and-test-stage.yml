@@ -27,6 +27,14 @@ jobs:
         run: |
           pip install .
           py.test tests/unit --junitxml=testresults.xml --cov-report=xml --cov=./
+      - uses: codecov/codecov-action@v1
+          with:
+            token: ${{ secrets.CODECOV_TOKEN }} #required
+            file: ./ppr-api/coverage/clover.xml #optional
+            flags: pythonunittests #optional
+            name: codecov-umbrella #optional
+            yml: ./codecov.yml #optional
+            fail_ci_if_error:          
 
   ims-api-build:
     runs-on: ubuntu-latest
@@ -59,7 +67,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }} #required
           file: ./ppr-ui/coverage/clover.xml #optional
-          flags: unittests #optional
+          flags: guiunittests #optional
           name: codecov-umbrella #optional
           yml: ./codecov.yml #optional
           fail_ci_if_error:
