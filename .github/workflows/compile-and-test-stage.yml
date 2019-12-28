@@ -68,4 +68,4 @@ jobs:
           flags: unittests #optional
           name: codecov-umbrella #optional
           yml: ./codecov.yml #optional
-          fail_ci_if_error: fals #optional (default = false)
+          fail_ci_if_error:
