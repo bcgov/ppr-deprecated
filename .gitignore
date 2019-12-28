@@ -2,6 +2,9 @@
 __pycache__
 .pytest_cache
 .eggs
+.coverage
+coverage.xml
+testresults.xml
 
 # Environments
 .venv
@@ -15,7 +18,7 @@ node_modules
 #Vue build and test artifacts:
 dist/
 **/tests/e2e/reports
-
+**/coverage
 selenium-debug.log
 chromedriver.log
 geckodriver.log
@@ -44,3 +47,4 @@ yarn-error.log*
 
 #OS Files
 .DS_Store
+ppr-ui/coverage/clover.xml

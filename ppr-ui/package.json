@@ -5,12 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "vue-cli-service test:unit",
+    "test": "npm run test:unit --coverage && npm run test:e2e",
+    "test:unit": "vue-cli-service test:unit --coverage",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
     "lint:nofix": "vue-cli-service lint --no-fix",
-    "precommit": "npm run lint:nofix && npm run test:unit && npm run build"
+    "precommit": "npm run lint:nofix && npm run test:unit --coverage && npm run build"
   },
   "scriptComments": {
     "serve": "Run the Vue serever locally with hot swapping on any changes",

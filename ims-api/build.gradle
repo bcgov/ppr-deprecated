@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.springframework.boot' version '2.1.9.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'jacoco'
 }
 
 repositories {
@@ -28,6 +29,17 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:3.1.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+jacocoTestCoverageVerification{}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        xml.destination file("${buildDir}/coverage.xml")
+        html.destination file("${buildDir}/coverage.html")
+    }
 }
 
 application {
