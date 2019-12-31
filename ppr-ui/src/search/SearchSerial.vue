@@ -3,7 +3,7 @@
     <v-text-field
       v-model="serialNumber"
       label="Serial number"
-      hint="We can provide a helpful hint here ..."
+      :hint="describeValidSerial"
       :rules="validationRules"
       required
     />
@@ -40,6 +40,9 @@ export default createComponent({
     const serialNumber = ref<string>('')
     const errorMessage = ref<string>('')
 
+    const describeValidSerial = computed(() => {
+      return searcherSerial.describeValidSerial
+    })
     const validationRules = computed(() => {
       return searcherSerial.validationRules
     })
@@ -64,6 +67,7 @@ export default createComponent({
 
     return {
       doSearch,
+      describeValidSerial,
       errorMessage,
       formValid,
       serialNumber,
