@@ -2,7 +2,7 @@ version: '3'
 services:
   caddy:
     image: "abiosoft/caddy:latest"
-    # image: "bcgov-s2i-caddy"
+    # This docker compose file is for local development so taking latest caddy is sufficient and there is no need to use image: "bcgov-s2i-caddy"
     volumes:
       - ./Caddyfile:/etc/Caddyfile  # to mount custom Caddyfile
       - ../dist/:/var/www/html
