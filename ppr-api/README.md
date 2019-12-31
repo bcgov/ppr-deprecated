@@ -9,6 +9,98 @@ The PPR API is currently a passthrough API that calls the IMS Transaction Manage
 1. `$ (cd src && uvicorn main:app --reload)`
 1. View the [OpenAPI Docs](http://127.0.0.1:8000/docs).
 
+
+## Developer virtual environment setup
+
+To do development in a virtual environment you need to install the python virtual environment package.
+```bash
+python3 -m venv .venv
+
+# pip may need to be updated ... not sure if it helps to run this outside of the virtual environment, just in case ....
+python3 -m pip install --upgrade pip
+```
+
+### Virtual environment activation and deactivation
+
+Thereafter you can activate the virtual environment with:
+
+```bash
+source ./.venv/bin/activate
+```
+When the virtual environment is active the shell prompt starts ith ```(.venv) ```.  Once inside the virtual environment you can
+run the server, unit tests, code coverage tests and static analysis tools.
+To exit the virtual environment run ```deactivate``` in the virtual environment.
+
+```
+deactivate
+``` 
+
+### Api server
+```
+# In the (.venv) virtual environment ....
+# to run the server
+pip3 install -r requirements/dev.txt
+uvicorn src.main:app --reload
+
+# This should bring the web service up on http://localhost:8000, 
+# with OpenAPI documentation available at http://localhost:8000/docs.
+
+# to exit the app press Ctrl-C
+```
+
+### Static analysis
+
+```
+# In the (.venv) virtual environment ....
+# to run lint and show warnings
+pylint src
+# lint show errors only
+pylint -E src
+# to run the common flake8 static analysis tools 
+flake8 src
+```
+Flake8 (https://pypi.org/project/flake8/) runs
+- PyFlakes (Python error checker)  https://pypi.org/project/pyflakes/
+- pycodestyle (Python style checker) https://pypi.org/project/pycodestyle/
+- Ned Batchelder’s McCabe script (complexity)  https://github.com/PyCQA/mccabe
+
+
+### Unit tests
+```
+# to avoid a warning of newer versions being available update pip prior to running unit tests:
+pip install --upgrade pip
+
+# to run the unit tests
+pip install .
+pytest tests/unit
+```
+
+### Coverage
+
+To add coverage we use ```pytest-cov```.  See https://pytest-cov.readthedocs.io/en/latest/index.html
+
+> All features offered by the coverage package should work, either through pytest-cov’s command line options or through coverage’s config file.
+
+To set up for coverage create a ```.coveragerc``` file with the following to ignore the .venv files
+
+```
+# .coveragerc to control coverage.py
+[run]
+omit =
+    .venv/*
+```
+To install the package:
+```
+# In the (.venv) virtual environment ....
+pip install pytest-cov
+```
+Thereafter to run unit tests with coverage:
+```
+pytest --cov=. tests/unit
+```
+
+
+
 ### Local Dependencies
 
 The api requires a **PostgreSQL** database which can be launched locally with docker compose. You must specify a
