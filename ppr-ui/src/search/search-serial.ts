@@ -14,7 +14,7 @@ const TEXT = {
   tooLong: 'Serial number can only have 25 characters'
 }
 
-interface SerialResult {
+export interface SerialResult {
   match: string;
   make: string;
   vin: string;
@@ -54,7 +54,7 @@ export class SearcherSerial {
   public get results(): SerialResult[] { return this._results}
   public get describeValidSerial(): string { return TEXT.describeValidSerial}
 
-  public doSearch(term: string): Promise<string> {
+  public doSearch(baseUrl: string, term: string): Promise<string> {
     // save the search term for reuse when displaying results or errors
     this._term = term
     // console.log('Search for ', this._term)
@@ -69,7 +69,7 @@ export class SearcherSerial {
       }
     }
 
-    let url = baseUrl()
+    let url = baseUrl + 'search'
     console.log('Make the search api call', url)
     return new Promise((resolve, reject): void => {
       axios

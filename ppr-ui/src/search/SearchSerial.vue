@@ -26,6 +26,7 @@
 
 <script lang="ts">
 import {computed, createComponent, ref} from "@vue/composition-api"
+import AppData from '@/utils/app-data'
 import {Data} from "@vue/composition-api/dist/ts-api/component"
 import {useLoadIndicator} from "@/load-indicator"
 import {useRouter} from '@/router/router'
@@ -51,9 +52,10 @@ export default createComponent({
     })
 
     function doSearch(): void {
+      let baseUrl = AppData.config.pprApiUrl
       loadIndicator.start()
       errorMessage.value = ''
-      searcherSerial.doSearch(serialNumber.value)
+      searcherSerial.doSearch(baseUrl, serialNumber.value)
         .then((): void => {
           router.push('results')
         })
