@@ -1,5 +1,5 @@
 import {inject, provide, reactive} from "@vue/composition-api"
-import axios from "@/utils/axios-auth"
+import axiosAuth from "@/utils/axios-auth"
 import AppData from '@/utils/app-data'
 
 function baseUrl(): string {
@@ -72,7 +72,7 @@ export class SearcherSerial {
     let url = baseUrl + 'search'
     console.log('Make the search api call', url)
     return new Promise((resolve, reject): void => {
-      axios
+      axiosAuth
         .get(url, config)
         .then((response): void => {
           if (response && response.data) {
