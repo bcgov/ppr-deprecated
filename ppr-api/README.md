@@ -2,103 +2,46 @@
 
 The PPR API is currently a passthrough API that calls the IMS Transaction Manager via the `ims-api`.
 
-## Developer Setup
 
-1. Copy the [dotenv template file](../docs/dotenv_template) to somewhere above the source code and rename to `.env`.
-1. `$ pip install -r requirements/dev.txt`
-1. `$ (cd src && uvicorn main:app --reload)`
+## Development Setup
+
+Open the ppr-api directory in VS Code to treat it as a project. To prevent version clashes, set up a virtual environment
+to install the Python packages used by this project.
+
+1. To activate the *Python* plugin, open any *.py* file. You will get error notifications about missing linters, test
+suites, and interpreters - these can be ignored.
+1. Run `python3 -m venv .venv` to create the virtual environment in the directory *.venv*. You should get a notification
+allowing you to choose it as your enviroment.
+1. Start a new terminal window to activate the `(.venv)` environment (or run `source .venv/bin/activate` in an existing
+terminal).
+1. In that terminal do `pip install -r requirements/dev.txt` to install the required packages.
+1. Next run `pip install .` to set up the environment for running tests.
+
+You also need to set up the variables used for environment-specific settings:
+1. Copy the [dotenv template file](../docs/dotenv_template) to somewhere above the source code and rename to `.env`. You
+will need to fill in missing values.
+
+
+## Running PPR-API
+
+1. Start the uvicorn server with `(cd src && uvicorn main:app --reload)`
 1. View the [OpenAPI Docs](http://127.0.0.1:8000/docs).
 
 
-## Developer virtual environment setup
+## Debugging PPR-API
 
-To do development in a virtual environment you need to install the python virtual environment package.
-```bash
-python3 -m venv .venv
-
-# pip may need to be updated ... not sure if it helps to run this outside of the virtual environment, just in case ....
-python3 -m pip install --upgrade pip
-```
-
-### Virtual environment activation and deactivation
-
-Thereafter you can activate the virtual environment with:
-
-```bash
-source ./.venv/bin/activate
-```
-When the virtual environment is active the shell prompt starts ith ```(.venv) ```.  Once inside the virtual environment you can
-run the server, unit tests, code coverage tests and static analysis tools.
-To exit the virtual environment run ```deactivate``` in the virtual environment.
-
-```
-deactivate
-``` 
-
-### Api server
-```
-# In the (.venv) virtual environment ....
-# to run the server
-pip3 install -r requirements/dev.txt
-uvicorn src.main:app --reload
-
-# This should bring the web service up on http://localhost:8000, 
-# with OpenAPI documentation available at http://localhost:8000/docs.
-
-# to exit the app press Ctrl-C
-```
-
-### Static analysis
-
-```
-# In the (.venv) virtual environment ....
-# to run lint and show warnings
-pylint src
-# lint show errors only
-pylint -E src
-# to run the common flake8 static analysis tools 
-flake8 src
-```
-Flake8 (https://pypi.org/project/flake8/) runs
-- PyFlakes (Python error checker)  https://pypi.org/project/pyflakes/
-- pycodestyle (Python style checker) https://pypi.org/project/pycodestyle/
-- Ned Batchelder’s McCabe script (complexity)  https://github.com/PyCQA/mccabe
+1. ???
 
 
-### Unit tests
-```
-# to avoid a warning of newer versions being available update pip prior to running unit tests:
-pip install --upgrade pip
+## Running Unit Tests
 
-# to run the unit tests
-pip install .
-pytest tests/unit
-```
+Tests are run from the Status bar at the bottom of the workbench. This will also run the coverage report, which appears
+in the *htmlcov* directory.
 
-### Coverage
 
-To add coverage we use ```pytest-cov```.  See https://pytest-cov.readthedocs.io/en/latest/index.html
+## Debugging Unit Tests
 
-> All features offered by the coverage package should work, either through pytest-cov’s command line options or through coverage’s config file.
-
-To set up for coverage create a ```.coveragerc``` file with the following to ignore the .venv files
-
-```
-# .coveragerc to control coverage.py
-[run]
-omit =
-    .venv/*
-```
-To install the package:
-```
-# In the (.venv) virtual environment ....
-pip install pytest-cov
-```
-Thereafter to run unit tests with coverage:
-```
-pytest --cov=. tests/unit
-```
-
+1. ???
 
 
 ### Local Dependencies

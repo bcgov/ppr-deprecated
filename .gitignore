@@ -12,12 +12,14 @@ __pycache__
 # Node packages
 node_modules
 
-#Vue build and test artifacts:
+# Vue build and test artifacts:
 dist/
 **/tests/e2e/reports
+
+# Unit test / coverage reports
 **/coverage/**
 .coverage
-
+htmlcov
 
 selenium-debug.log
 chromedriver.log
