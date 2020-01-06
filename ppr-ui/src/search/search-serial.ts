@@ -1,10 +1,6 @@
 import {inject, provide, reactive} from "@vue/composition-api"
-import axios from "@/utils/axios-auth"
+import axiosAuth from "@/utils/axios-auth"
 import AppData from '@/utils/app-data'
-
-function baseUrl(): string {
-  return AppData.config.pprApiUrl + 'search'
-}
 
 const TEXT = {
   errorMsg: (text): string => `Search serial number error - ${text}`,
@@ -14,7 +10,7 @@ const TEXT = {
   tooLong: 'Serial number can only have 25 characters'
 }
 
-interface SerialResult {
+export interface SerialResult {
   match: string;
   make: string;
   vin: string;
@@ -39,10 +35,12 @@ export class SearcherSerial {
   private _errorMessage: string
   private _results: SerialResult[]
   private _term: string
+  private readonly _baseUrl: string
 
   private readonly _serialNumberRules: VFunction[] // ((v: string) => (string | boolean))[]
 
   public constructor() {
+    this._baseUrl = AppData.config.pprApiUrl
     this._serialNumberRules = [
       (value): (boolean | string) => { return !!value || TEXT.required },
       (value): (boolean | string) => { return value.length <= 25 || TEXT.tooLong },
@@ -69,10 +67,10 @@ export class SearcherSerial {
       }
     }
 
-    let url = baseUrl()
+    let url = this._baseUrl + 'search'
     console.log('Make the search api call', url)
     return new Promise((resolve, reject): void => {
-      axios
+      axiosAuth
         .get(url, config)
         .then((response): void => {
           if (response && response.data) {

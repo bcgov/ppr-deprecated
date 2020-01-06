@@ -1,6 +1,5 @@
-import axios from '@/utils/axios-auth'
+import axiosAuth from '@/utils/axios-auth'
 import AppData, {Config} from '@/utils/app-data'
-import {setBaseUrl} from '@/utils/axios-auth'
 
 export default {
   /**
@@ -34,15 +33,13 @@ export default {
       'ResponseType': 'application/json',
       'Cache-Control': 'no-cache'
     }
-    const response = await axios.get(url, {headers})
+    const response = await axiosAuth.get(url, {headers})
 
     // with the above to do workaround the response data is a string and needs to be parse.
     // it is expected that once we do the to do above the response data with be an object
     const rd: object = response.data
     const cf: object = (typeof rd === 'string') ? JSON.parse(rd) : rd
     AppData.resetConfig(cf)
-
-    setBaseUrl(AppData.config.pprApiUrl)
 
     return AppData.config
   }

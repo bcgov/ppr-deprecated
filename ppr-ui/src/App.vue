@@ -83,8 +83,5 @@ export default createComponent({
 
 </script>
 <style lang="scss">
-  .ff {
-    margin-bottom: 1rem;
-  }
 </style>
 
