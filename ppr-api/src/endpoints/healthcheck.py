@@ -36,8 +36,7 @@ def database(response: responses.Response,
             "status": STATUS_UP
         }
     except Exception as exception:
-        # TODO re-add logging when database connection works.  ATM this creates a lot of noise.
-        # logger.warning("Database healthcheck failed", exc_info=True)
+        logger.warning("EDB database healthcheck failed", exc_info=True)
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
 
         return {
