@@ -52,10 +52,9 @@ export default createComponent({
     })
 
     function doSearch(): void {
-      let baseUrl = AppData.config.pprApiUrl
       loadIndicator.start()
       errorMessage.value = ''
-      searcherSerial.doSearch(baseUrl, serialNumber.value)
+      searcherSerial.doSearch(serialNumber.value)
         .then((): void => {
           router.push('results')
         })

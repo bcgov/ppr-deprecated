@@ -39,10 +39,12 @@ export class SearcherSerial {
   private _errorMessage: string
   private _results: SerialResult[]
   private _term: string
+  private readonly _baseUrl: string
 
   private readonly _serialNumberRules: VFunction[] // ((v: string) => (string | boolean))[]
 
   public constructor() {
+    this._baseUrl = AppData.config.pprApiUrl
     this._serialNumberRules = [
       (value): (boolean | string) => { return !!value || TEXT.required },
       (value): (boolean | string) => { return value.length <= 25 || TEXT.tooLong },
@@ -54,7 +56,7 @@ export class SearcherSerial {
   public get results(): SerialResult[] { return this._results}
   public get describeValidSerial(): string { return TEXT.describeValidSerial}
 
-  public doSearch(baseUrl: string, term: string): Promise<string> {
+  public doSearch(term: string): Promise<string> {
     // save the search term for reuse when displaying results or errors
     this._term = term
     // console.log('Search for ', this._term)
@@ -69,7 +71,7 @@ export class SearcherSerial {
       }
     }
 
-    let url = baseUrl + 'search'
+    let url = this._baseUrl + 'search'
     console.log('Make the search api call', url)
     return new Promise((resolve, reject): void => {
       axiosAuth
