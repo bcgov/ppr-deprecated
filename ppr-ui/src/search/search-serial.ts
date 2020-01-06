@@ -2,10 +2,6 @@ import {inject, provide, reactive} from "@vue/composition-api"
 import axiosAuth from "@/utils/axios-auth"
 import AppData from '@/utils/app-data'
 
-function baseUrl(): string {
-  return AppData.config.pprApiUrl + 'search'
-}
-
 const TEXT = {
   errorMsg: (text): string => `Search serial number error - ${text}`,
   describeValidSerial: 'Serial number can have up to 25 letters or digits',
