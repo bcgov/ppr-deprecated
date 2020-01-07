@@ -13,6 +13,7 @@ import dotenv
 dotenv.load_dotenv()
 
 DB_HOSTNAME = os.getenv('PPR_API_DB_HOSTNAME')
+DB_HOSTNAME_PATRONI = os.getenv('PPR_API_DB_HOSTNAME_PATRONI')
 DB_PORT = int(os.getenv('PPR_API_DB_PORT', '5432'))
 DB_NAME = os.getenv('PPR_API_DB_NAME')
 DB_USERNAME = os.getenv('PPR_API_DB_USERNAME')
