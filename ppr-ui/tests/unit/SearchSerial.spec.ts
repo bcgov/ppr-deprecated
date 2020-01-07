@@ -57,10 +57,11 @@ describe('ResultsPage.vue', (): void => {
   })
 
   it('Test flagging feature one', (): void => {
-    expect(vm.$el.querySelector('#mockSerachResultsPage').textContent).toContain('Personal Property Registry')
+    expect(vm.$el.querySelector('#mockSearchResultsPage').textContent).toContain('Personal Property Registry')
   })
 })
 
+// TODO change this to test the SearchResultsSerial component
 describe.skip('SearchSerial.vue', (): void => {
   let wrapper: Wrapper<Vue>
   let vm
@@ -84,7 +85,8 @@ describe.skip('SearchSerial.vue', (): void => {
   })
 })
 
-describe('ResultsPage.vue', (): void => {
+// TODO change this to test the SearchSerial component
+describe.skip('ResultsPage.vue', (): void => {
   let wrapper: Wrapper<Vue>
   let vm
 

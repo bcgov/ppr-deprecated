@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container class="view-container">
-      <article id="mockSerachResultsPage">
+      <article id="mockSearchResultsPage">
         <header>
           <h1>Personal Property Registry</h1>
         </header>
