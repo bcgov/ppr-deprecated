@@ -1,4 +1,7 @@
+""" Define the Kubernetes health checks, plus health check of the database. """
+
 import logging
+import time
 
 import fastapi
 import sqlalchemy.orm
@@ -30,7 +33,12 @@ def database(response: responses.Response,
     Returns a health check for the reachability of the database.
     """
     try:
+        start: float = time.perf_counter()
         session.execute("SELECT 1")
+        elapsed_time: float = time.perf_counter() - start
+
+        if elapsed_time > 1:
+            logger.info("Health check took longer than 1 second: %s", elapsed_time)
 
         return {
             "status": STATUS_UP
