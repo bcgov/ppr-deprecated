@@ -8,7 +8,7 @@
       required
     />
     <v-btn
-      id="serach-btn"
+      id="search-btn"
       color="primary"
       :disabled="!formValid"
       @click="doSearch"
