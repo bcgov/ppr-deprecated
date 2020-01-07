@@ -46,8 +46,9 @@ paths:
                 Search Response:
                   value:
                     ref: /searches/95110d7f-91ce-47f2-a996-76e2dddc3cf7
+                    type: SERIAL
                     criteria:
-                      serial: '1234'
+                      value: '1234'
                     results: /searches/95110d7f-91ce-47f2-a996-76e2dddc3cf7/results
                     searchDateTime: '2020-01-02T21:57:00Z'
             application/xml:
@@ -63,12 +64,22 @@ paths:
             examples:
               Search by Serial:
                 value:
+                  type: SERIAL
                   criteria:
-                    serial: '1234'
-              Search by Manufactured Home Registration Number:
+                    value: '1234'
+              Search by Base Registration Number:
                 value:
+                  type: REGISTRATION_NUMBER
                   criteria:
-                    serial: '1234'
+                    value: 123456B
+              Search by Debtor Name:
+                value:
+                  type: INDIVIDUAL_DEBTOR
+                  criteria:
+                    debtorName:
+                      first: Homer
+                      second: J
+                      last: Simpson
       description: Initiates a new search transaction and will return a reference that can be used to review the results
   '/searches/{searchId}':
     get:
@@ -179,13 +190,29 @@ components:
         ref:
           type: string
           format: uri
+        type:
+          type: string
+          enum:
+            - SERIAL
+            - INDIVIDUAL_DEBTOR
+            - BUSINESS_DEBTOR
+            - MHR_NUMBER
+            - REGISTRATION_NUMBER
+            - AIRCRAFT_DOT
         criteria:
           type: object
           properties:
-            serial:
+            value:
               type: string
-            manufacturedHomeRegNumber:
-              type: string
+            debtorName:
+              type: object
+              properties:
+                first:
+                  type: string
+                second:
+                  type: string
+                last:
+                  type: string
         results:
           type: string
           format: uri
@@ -195,6 +222,7 @@ components:
           format: date-time
       required:
         - criteria
+        - type
     financing-statement:
       title: financing-statement
       type: object
