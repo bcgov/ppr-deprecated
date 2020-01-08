@@ -1,8 +1,8 @@
 import {inject, provide, reactive} from "@vue/composition-api"
 import axiosAuth from "@/utils/axios-auth"
-import AppData from '@/utils/app-data'
 
-const TEXT = {
+// export text constants for use in tests
+export const SS_TEXT = {
   errorMsg: (text): string => `Search serial number error - ${text}`,
   describeValidSerial: 'Serial number can have up to 25 letters or digits',
   defineValid: 'Serial number must be up to 25 letters or digits',
@@ -25,8 +25,8 @@ export class SearcherSerial {
 
   private static _instance: SearcherSerial
 
-  public static get Instance(): SearcherSerial {
-    return this._instance || (this._instance = new this())
+  public static Instance(baseUrl): SearcherSerial {
+    return this._instance || (this._instance = new this(baseUrl))
   }
 
   /*
@@ -39,18 +39,18 @@ export class SearcherSerial {
 
   private readonly _serialNumberRules: VFunction[] // ((v: string) => (string | boolean))[]
 
-  public constructor() {
-    this._baseUrl = AppData.config.pprApiUrl
+  public constructor(baseUrl) {
+    this._baseUrl = baseUrl
     this._serialNumberRules = [
-      (value): (boolean | string) => { return !!value || TEXT.required },
-      (value): (boolean | string) => { return value.length <= 25 || TEXT.tooLong },
-      (value): (boolean | string) => { return /^[0-9a-zA-Z]{1,25}$/.test(value) || TEXT.defineValid }
+      (value): (boolean | string) => { return !!value || SS_TEXT.required },
+      (value): (boolean | string) => { return value.length <= 25 || SS_TEXT.tooLong },
+      (value): (boolean | string) => { return /^[0-9a-zA-Z]{1,25}$/.test(value) || SS_TEXT.defineValid }
     ]
   }
 
   public get term(): string { return this._term}
   public get results(): SerialResult[] { return this._results}
-  public get describeValidSerial(): string { return TEXT.describeValidSerial}
+  public get describeValidSerial(): string { return SS_TEXT.describeValidSerial}
 
   public doSearch(term: string): Promise<string> {
     // save the search term for reuse when displaying results or errors
@@ -77,12 +77,12 @@ export class SearcherSerial {
             this._results = response.data.results
             resolve('success')
           } else {
-            this._errorMessage = TEXT.errorMsg('invalid response data')
+            this._errorMessage = SS_TEXT.errorMsg('invalid response data')
             reject(this._errorMessage)
           }
         })
         .catch((error): void => {
-          this._errorMessage = TEXT.errorMsg(error.message)
+          this._errorMessage = SS_TEXT.errorMsg(error.message)
           reject(this._errorMessage)
         })
     })
@@ -104,8 +104,8 @@ export class SearcherSerial {
 
 export const SearcherSerialSymbol = Symbol()
 
-export function provideSearcherSerial(): void {
-  provide(SearcherSerialSymbol, reactive(SearcherSerial.Instance))
+export function provideSearcherSerial(baseUrl: string): void {
+  provide(SearcherSerialSymbol, reactive(SearcherSerial.Instance(baseUrl)))
 }
 
 export function useSearcherSerial(): SearcherSerial {

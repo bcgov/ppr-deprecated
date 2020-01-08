@@ -7,36 +7,34 @@
       Search terms: {{ terms }}
     </p>
 
-    <v-simple-table>
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left">
-              Match
-            </th>
-            <th class="text-left">
-              Make
-            </th>
-            <th class="text-left">
-              VIN
-            </th>
-            <th class="text-left">
-              Year
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="item in results"
-            :key="item.name"
-          >
-            <td>{{ item.exactMatch }}</td>
-            <td>{{ item.make }}</td>
-            <td>{{ item.vin }}</td>
-            <td>{{ item.year }}</td>
-          </tr>
-        </tbody>
-      </template>
+    <v-simple-table id="srsBody">
+      <thead>
+        <tr>
+          <th class="text-left">
+            Match
+          </th>
+          <th class="text-left">
+            Make
+          </th>
+          <th class="text-left">
+            VIN
+          </th>
+          <th class="text-left">
+            Year
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="item in results"
+          :key="item.name"
+        >
+          <td>{{ item.exactMatch }}</td>
+          <td>{{ item.make }}</td>
+          <td>{{ item.vin }}</td>
+          <td>{{ item.year }}</td>
+        </tr>
+      </tbody>
     </v-simple-table>
   </section>
 </template>

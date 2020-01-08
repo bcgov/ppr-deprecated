@@ -9,7 +9,7 @@ describe('serial search', (): void => {
   let ss: SearcherSerial
 
   beforeAll((): void => {
-    ss = SearcherSerial.Instance
+    ss = SearcherSerial.Instance('http://sample.base.url/')
   })
 
   it('doSearch', (): void => {
