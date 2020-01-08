@@ -68,7 +68,6 @@ export class SearcherSerial {
     }
 
     let url = this._baseUrl + 'search'
-    console.log('Make the search api call', url)
     return new Promise((resolve, reject): void => {
       axiosAuth
         .get(url, config)
