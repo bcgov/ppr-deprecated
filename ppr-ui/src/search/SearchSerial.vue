@@ -1,6 +1,7 @@
 <template>
   <v-card flat>
     <v-text-field
+      id="searchSerialNumber"
       v-model="serialNumber"
       label="Serial number"
       :hint="describeValidSerial"
@@ -17,6 +18,7 @@
     </v-btn>
     <v-banner
       v-show="errorMessage"
+      id="ssErrorMessage"
       single-line
     >
       {{ errorMessage }}
@@ -50,10 +52,10 @@ export default createComponent({
       return searcherSerial.isValid(serialNumber.value)
     })
 
-    function doSearch(): void {
+    function doSearch(): Promise<void> {
       loadIndicator.start()
       errorMessage.value = ''
-      searcherSerial.doSearch(serialNumber.value)
+      return searcherSerial.doSearch(serialNumber.value)
         .then((): void => {
           router.push('results')
         })

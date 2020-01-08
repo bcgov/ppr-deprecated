@@ -60,7 +60,7 @@ export default createComponent({
     provide("configuration", ref(AppData.config))
     provideFeatureFlags()
     provideLoadIndicator()
-    provideSearcherSerial()
+    provideSearcherSerial(AppData.config.pprApiUrl)
     provideRouter()
 
     const {router} = useRouter()
