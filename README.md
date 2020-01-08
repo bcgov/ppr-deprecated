@@ -1,3 +1,4 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bcgov_ppr&metric=alert_status)](https://sonarcloud.io/dashboard?id=bcgov_ppr)[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=bcgov_ppr&metric=ncloc)](https://sonarcloud.io/dashboard?id=bcgov_ppr)
 
 # Personal Property Registry (PPR)
 
@@ -29,3 +30,5 @@ project you agree to abide by its terms.
     WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
     License for the specific language governing permissions and limitations
     under the License.
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=bcgov_ppr)
