@@ -27,7 +27,7 @@ jobs:
         working-directory: ppr-api
         run: |
           pip install .
-          pytest --junitxml=testresults.xml --cov=. --cov-report xml tests/unit
+          pytest
         - name: Upload coverage to Codecov
           uses: codecov/codecov-action@v1
           with:
