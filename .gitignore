@@ -22,6 +22,8 @@ dist/
 **/coverage/**
 .coverage
 htmlcov
+coverage.xml
+testresults.xml
 
 selenium-debug.log
 chromedriver.log
