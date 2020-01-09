@@ -42,7 +42,6 @@ describe('FeatureOne.vue', (): void => {
   it('the feature is enabled', (): void => {
     featureFlags.feature1 = true
     const element = wrapper.find('#fflag1')
-    console.log(`Found element '${element.text()}'`)
     expect(element.text()).toContain('enabled')
   })
 
