@@ -28,9 +28,9 @@ jobs:
           pip install .
           pytest
       - name: Upload coverage to Codecov
-        working-directory: ppr-api
         uses: codecov/codecov-action@v1
         with:
+          working-directory: ppr-api
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage.xml
           flags: python_unittests
@@ -63,9 +63,9 @@ jobs:
       - run: npm run test:unit:cov
         working-directory: ppr-ui
       - name: Upload coverage to Codecov
-        working-directory: ppr-ui
         uses: codecov/codecov-action@v1
         with:
+          working-directory: ppr-api
           token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage/clover.xml
           flags: ui_unittests
