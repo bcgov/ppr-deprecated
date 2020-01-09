@@ -3,7 +3,6 @@ name: Compile and Unit Test
 on: [push, pull_request]
 
 jobs:
-
   ppr-api-build:
     runs-on: ubuntu-latest
 
@@ -28,13 +27,13 @@ jobs:
         run: |
           pip install .
           pytest
-        - name: Upload coverage to Codecov
-          uses: codecov/codecov-action@v1
-          with:
-            token: ${{ secrets.CODECOV_TOKEN }}
-            file: ./coverage.xml
-            flags: python_unittests
-            fail_ci_if_error: true
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: python_unittests
+          fail_ci_if_error: true
 
   ims-api-build:
     runs-on: ubuntu-latest
@@ -54,18 +53,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
-    - run: npm ci
-      working-directory: ppr-ui
-    - run: npm run lint -- --no-fix
-      working-directory: ppr-ui
-    - run: npm run test:unit:cov
-      working-directory: ppr-ui
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage/clover.xml
-        flags: ui_unittests
-        fail_ci_if_error: true
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+      - run: npm ci
+        working-directory: ppr-ui
+      - run: npm run lint -- --no-fix
+        working-directory: ppr-ui
+      - run: npm run test:unit:cov
+        working-directory: ppr-ui
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/clover.xml
+          flags: ui_unittests
+          fail_ci_if_error: true
