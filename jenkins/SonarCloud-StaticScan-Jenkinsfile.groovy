@@ -69,8 +69,7 @@ podTemplate(
             -Dsonar.host.url=${SONARQUBE_URL} \
             -Dsonar.login=${SONAR_TOKEN} \
             -Dsonar.projectName='${SONAR_PROJECT_NAME}' \
-            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-            -Dsonar.organization=${SONAR_ORGANIZATION}"
+            -Dsonar.projectKey=${SONAR_PROJECT_KEY}"
         )
       }
     }

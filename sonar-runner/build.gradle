@@ -21,7 +21,7 @@ sonarqube {
         property "sonar.projectName", "<Set This In Your Build/Pipeline Script>"
         property "sonar.projectKey", "<Set This In Your Build/Pipeline Script>"
         property "sonar.projectBaseDir", "../"
-        property "sonar.sources", "./"
+        property "sonar.sources", "./ppr-api/src,./ppr-ui/src"
         property "sourceEncoding", "UTF-8"
     }
 }
