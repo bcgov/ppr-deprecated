@@ -32,7 +32,7 @@ jobs:
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           flags: python_unittests
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
   ims-api-build:
     runs-on: ubuntu-latest
@@ -64,4 +64,4 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
