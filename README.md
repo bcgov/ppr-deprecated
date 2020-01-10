@@ -1,4 +1,4 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bcgov_ppr&metric=alert_status)](https://sonarcloud.io/dashboard?id=bcgov_ppr)[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=bcgov_ppr&metric=ncloc)](https://sonarcloud.io/dashboard?id=bcgov_ppr)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=bcgov_ppr&metric=alert_status)](https://sonarcloud.io/dashboard?id=bcgov_ppr)[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=bcgov_ppr&metric=ncloc)](https://sonarcloud.io/dashboard?id=bcgov_ppr)[![codecov](https://codecov.io/gh/bcgov/ppr/branch/master/graph/badge.svg)](https://codecov.io/gh/bcgov/ppr)
 
 # Personal Property Registry (PPR)
 
@@ -21,7 +21,7 @@ project you agree to abide by its terms.
 
     Licensed under the Apache License, Version 2.0 (the "License"); you may not
     use this file except in compliance with the License. You may obtain a copy
-    of the License at 
+    of the License at
 
        http://www.apache.org/licenses/LICENSE-2.0
 
@@ -32,4 +32,3 @@ project you agree to abide by its terms.
     under the License.
 
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/dashboard?id=bcgov_ppr)
-

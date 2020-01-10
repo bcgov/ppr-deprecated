@@ -3,7 +3,6 @@ name: Compile and Unit Test
 on: [push, pull_request]
 
 jobs:
-
   ppr-api-build:
     runs-on: ubuntu-latest
 
@@ -27,7 +26,13 @@ jobs:
         working-directory: ppr-api
         run: |
           pip install .
-          pytest tests/unit
+          pytest
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          flags: python_unittests
+          fail_ci_if_error: false
 
   ims-api-build:
     runs-on: ubuntu-latest
@@ -47,11 +52,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
-    - run: npm ci
-      working-directory: ppr-ui
-    - run: npm run lint -- --no-fix
-      working-directory: ppr-ui
-    - run: npm run test:unit
-      working-directory: ppr-ui
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+      - run: npm ci
+        working-directory: ppr-ui
+      - run: npm run lint -- --no-fix
+        working-directory: ppr-ui
+      - run: npm run test:unit:cov
+        working-directory: ppr-ui
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          fail_ci_if_error: false
