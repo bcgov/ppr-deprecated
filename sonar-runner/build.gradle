@@ -20,6 +20,8 @@ sonarqube {
         property "sonar.host.url", "<Set This In Your Build/Pipeline Script>"
         property "sonar.projectName", "<Set This In Your Build/Pipeline Script>"
         property "sonar.projectKey", "<Set This In Your Build/Pipeline Script>"
+        property "sonar.projectBaseDir", "../"
+        property "sonar.sources", "./"
         property "sourceEncoding", "UTF-8"
     }
 }
