@@ -31,7 +31,6 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          file: ppr-api/.
           flags: python_unittests
           fail_ci_if_error: true
 
@@ -65,5 +64,4 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          file: ppr-ui/.
           fail_ci_if_error: true
