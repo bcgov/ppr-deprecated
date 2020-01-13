@@ -187,17 +187,16 @@ components:
       x-examples: {}
       description: ''
       properties:
-        ref:
-          type: string
-          format: uri
+        id:
+          type: integer
         type:
           type: string
           enum:
-            - SERIAL
             - INDIVIDUAL_DEBTOR
             - BUSINESS_DEBTOR
             - MHR_NUMBER
             - REGISTRATION_NUMBER
+            - SERIAL_NUMBER
             - AIRCRAFT_DOT
         criteria:
           type: object
@@ -221,8 +220,8 @@ components:
           type: string
           format: date-time
       required:
-        - criteria
         - type
+        - criteria
     financing-statement:
       title: financing-statement
       type: object
