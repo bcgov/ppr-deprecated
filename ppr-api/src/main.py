@@ -24,20 +24,6 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-
-# sample setting status code
-# sample read header
-# sample return json structure
-@app.get("/auth/{user_name}", status_code=201)
-async def read_item(user_name: str, user_agent: str = fastapi.Header(None)):
-    my_list = ["justin", "walter", "bryan"]
-    print(my_list)
-    print(user_name)
-    if user_name in my_list:
-        return {"user_name": user_name, "user_agent": user_agent}
-    raise fastapi.HTTPException(status_code=404, detail="Invalid user name")
-
-
 # You should use uvicorn to run the app locally.  __main__ is provided to run it in a debugger. See
 # https://fastapi.tiangolo.com/tutorial/debugging/
 if __name__ == "__main__":
