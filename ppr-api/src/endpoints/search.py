@@ -4,12 +4,11 @@ import json
 
 import fastapi
 import requests
-import sqlalchemy.orm
 from starlette import responses
 
 import config
 import schemas.search
-import models.search
+import repository.search_repository
 
 router = fastapi.APIRouter()
 
@@ -31,7 +30,7 @@ async def search(serial: str, response: responses.Response):
 
 
 @router.get("/searches/{search_id}", response_model=schemas.search.Search, response_model_by_alias=False)
-def read_search(search_id: int, session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
+def read_search(search_id: int, search_repository: repository.search_repository.SearchRepository = fastapi.Depends()):
     """
     Get the details for a previously submitted search request
 
@@ -40,7 +39,7 @@ def read_search(search_id: int, session: sqlalchemy.orm.Session = fastapi.Depend
         Returns:
             schemas.search.Search
     """
-    search_db_row = models.search.Search.get_search(session, search_id)
+    search_db_row = search_repository.get_search(search_id)
     if search_db_row is None:
         raise fastapi.HTTPException(status_code=404, detail="Search record not found")
     return search_db_row
