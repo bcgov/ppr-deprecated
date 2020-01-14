@@ -18,17 +18,33 @@ depends_on = None
 
 
 def upgrade():
+    search_type_table = op.create_table(
+        'search_type',
+        sa.Column('short_code', sa.CHAR(length=2), primary_key=True),
+        sa.Column('long_code', sa.String(length=40), nullable=False),
+        sa.Column('description', postgresql.TEXT, nullable=False),
+    )
+
     op.create_table(
         'search',
-        sa.Column('id', postgresql.UUID, primary_key=True),
-        sa.Column('type', sa.String(length=40), nullable=False),
-        sa.Column('criteria_value', postgresql.TEXT),
-        sa.Column('debtor_first_name', postgresql.TEXT),
-        sa.Column('debtor_second_name', postgresql.TEXT),
-        sa.Column('debtor_last_name', postgresql.TEXT),
-        sa.Column('creation_date_time', sa.DateTime(timezone=True), server_default=sa.text("NOW()"), nullable=False)
+        sa.Column('id', sa.BigInteger, primary_key=True),
+        sa.Column('type_short_code', sa.CHAR(length=2), sa.ForeignKey('search_type.short_code'), nullable=False),
+        sa.Column('criteria', postgresql.JSON, nullable=False),
+        sa.Column('creation_date_time', sa.DateTime(timezone=True), server_default=sa.text('NOW()'), nullable=False)
     )
+
+    # Populate the search type code tables.  Short codes are reflective of the codes in the original PPR system,
+    # while the long codes are for use in the API moving forward.
+    op.bulk_insert(search_type_table, [
+        {'short_code': 'AS', 'long_code': 'AIRCRAFT_DOT', 'description': 'Aircraft Airframe D.O.T. Number'},
+        {'short_code': 'BS', 'long_code': 'BUSINESS_DEBTOR', 'description': 'Business Debtor Name'},
+        {'short_code': 'IS', 'long_code': 'INDIVIDUAL_DEBTOR', 'description': 'Individual Debtor Name'},
+        {'short_code': 'MS', 'long_code': 'MHR_NUMBER', 'description': 'Manufactured Home Registration Number'},
+        {'short_code': 'RS', 'long_code': 'REGISTRATION_NUMBER', 'description': 'Registration Number'},
+        {'short_code': 'SS', 'long_code': 'SERIAL', 'description': 'Serial Number'}
+    ])
 
 
 def downgrade():
     op.drop_table('search')
+    op.drop_table('search_type')
