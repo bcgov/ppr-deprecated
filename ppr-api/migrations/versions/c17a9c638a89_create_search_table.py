@@ -20,15 +20,15 @@ depends_on = None
 def upgrade():
     search_type_table = op.create_table(
         'search_type',
-        sa.Column('short_code', sa.CHAR(length=2), primary_key=True),
-        sa.Column('long_code', sa.String(length=40), nullable=False),
+        sa.Column('long_code', sa.String(length=40), primary_key=True),
+        sa.Column('short_code', sa.CHAR(length=2), nullable=False),
         sa.Column('description', postgresql.TEXT, nullable=False),
     )
 
     op.create_table(
         'search',
         sa.Column('id', sa.BigInteger, primary_key=True),
-        sa.Column('type_short_code', sa.CHAR(length=2), sa.ForeignKey('search_type.short_code'), nullable=False),
+        sa.Column('type_long_code', sa.String(length=40), sa.ForeignKey('search_type.long_code'), nullable=False),
         sa.Column('criteria', postgresql.JSON, nullable=False),
         sa.Column('creation_date_time', sa.DateTime(timezone=True), server_default=sa.text('NOW()'), nullable=False)
     )
@@ -36,12 +36,12 @@ def upgrade():
     # Populate the search type code tables.  Short codes are reflective of the codes in the original PPR system,
     # while the long codes are for use in the API moving forward.
     op.bulk_insert(search_type_table, [
-        {'short_code': 'AS', 'long_code': 'AIRCRAFT_DOT', 'description': 'Aircraft Airframe D.O.T. Number'},
-        {'short_code': 'BS', 'long_code': 'BUSINESS_DEBTOR', 'description': 'Business Debtor Name'},
-        {'short_code': 'IS', 'long_code': 'INDIVIDUAL_DEBTOR', 'description': 'Individual Debtor Name'},
-        {'short_code': 'MS', 'long_code': 'MHR_NUMBER', 'description': 'Manufactured Home Registration Number'},
-        {'short_code': 'RS', 'long_code': 'REGISTRATION_NUMBER', 'description': 'Registration Number'},
-        {'short_code': 'SS', 'long_code': 'SERIAL', 'description': 'Serial Number'}
+        {'long_code': 'AIRCRAFT_DOT', 'short_code': 'AS', 'description': 'Aircraft Airframe D.O.T. Number'},
+        {'long_code': 'BUSINESS_DEBTOR', 'short_code': 'BS', 'description': 'Business Debtor Name'},
+        {'long_code': 'INDIVIDUAL_DEBTOR', 'short_code': 'IS', 'description': 'Individual Debtor Name'},
+        {'long_code': 'MHR_NUMBER', 'short_code': 'MS', 'description': 'Manufactured Home Registration Number'},
+        {'long_code': 'REGISTRATION_NUMBER', 'short_code': 'RS', 'description': 'Registration Number'},
+        {'long_code': 'SERIAL', 'short_code': 'SS', 'description': 'Serial Number'}
     ])
 
 
