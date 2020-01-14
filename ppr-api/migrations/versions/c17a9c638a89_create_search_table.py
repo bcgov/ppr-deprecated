@@ -41,7 +41,7 @@ def upgrade():
         {'long_code': 'INDIVIDUAL_DEBTOR', 'short_code': 'IS', 'description': 'Individual Debtor Name'},
         {'long_code': 'MHR_NUMBER', 'short_code': 'MS', 'description': 'Manufactured Home Registration Number'},
         {'long_code': 'REGISTRATION_NUMBER', 'short_code': 'RS', 'description': 'Registration Number'},
-        {'long_code': 'SERIAL', 'short_code': 'SS', 'description': 'Serial Number'}
+        {'long_code': 'SERIAL_NUMBER', 'short_code': 'SS', 'description': 'Serial Number'}
     ])
 
 
