@@ -1,30 +1,14 @@
-import sqlalchemy
+"""
+A proxy class for database access for use while we have multiple databases configured.  For the time being it will
+point to the patroni configuration, but can be changed down the road when we switch to EDB.
+"""
+
 import sqlalchemy.ext.declarative
-import sqlalchemy.orm
 
-import config
+import models.patroni
 
-DATABASE_URI = 'postgresql://{user}:{password}@{host}:{port}/{name}'.format(
-    user=config.DB_USERNAME,
-    password=config.DB_PASSWORD,
-    host=config.DB_HOSTNAME,
-    port=config.DB_PORT,
-    name=config.DB_NAME
-)
-
-engine = sqlalchemy.create_engine(DATABASE_URI)
-SessionLocal = sqlalchemy.orm.sessionmaker(autocommit=False, autoflush=False, bind=engine)
+DATABASE_URI = models.patroni.DATABASE_URI
 
 BaseORM = sqlalchemy.ext.declarative.declarative_base()
 
-
-def get_session():
-    """
-    Returns a session using yield to facilitate using it as a dependency in FastAPI.  See
-    https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/
-    """
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+get_session = models.patroni.get_session
