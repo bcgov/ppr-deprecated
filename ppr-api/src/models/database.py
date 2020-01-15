@@ -1,4 +1,5 @@
 import sqlalchemy
+import sqlalchemy.ext.declarative
 import sqlalchemy.orm
 
 import config
@@ -13,6 +14,8 @@ DATABASE_URI = 'postgresql://{user}:{password}@{host}:{port}/{name}'.format(
 
 engine = sqlalchemy.create_engine(DATABASE_URI)
 SessionLocal = sqlalchemy.orm.sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+BaseORM = sqlalchemy.ext.declarative.declarative_base()
 
 
 def get_session():
