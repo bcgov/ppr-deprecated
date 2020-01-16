@@ -10,6 +10,5 @@ class Search(BaseORM):
 
     id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
     criteria = sqlalchemy.Column(postgresql.JSON)
-    creation_date_time = sqlalchemy.Column(sqlalchemy.DateTime)
-    type_code = sqlalchemy.Column('type_long_code', sqlalchemy.String(length=40),
-                                  sqlalchemy.ForeignKey('search_type.long_code'))
+    creation_date_time = sqlalchemy.Column(sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
+    type_code = sqlalchemy.Column('type_long_code', sqlalchemy.String(length=40))

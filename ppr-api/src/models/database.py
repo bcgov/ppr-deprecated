@@ -11,4 +11,5 @@ DATABASE_URI = models.patroni.DATABASE_URI
 
 BaseORM = sqlalchemy.ext.declarative.declarative_base()
 
+SessionLocal = models.patroni.SessionLocal
 get_session = models.patroni.get_session

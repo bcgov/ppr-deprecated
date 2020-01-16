@@ -6,6 +6,14 @@ jobs:
   ppr-api-build:
     runs-on: ubuntu-latest
 
+    env:
+      PPR_API_DB_HOSTNAME: localhost
+      PPR_API_DB_PORT: 5432
+      PPR_API_DB_NAME: ppr
+      PPR_API_DB_USERNAME: postgres
+      PPR_API_DB_PASSWORD: int_test_pw
+      DB_PASSWORD: int_test_pw
+
     steps:
       - uses: actions/checkout@v1
       - name: Set up Python 3.7
@@ -33,6 +41,19 @@ jobs:
           token: ${{secrets.CODECOV_TOKEN}}
           flags: python_unittests
           fail_ci_if_error: false
+      # Run the PPR-API integration tests.  If we find this takes too long, we may consider moving these steps into a
+      # separate workflow
+      - name: Start a PostgreSQL database with docker-compose
+        run: |
+          ./ready_local_db.sh
+      - name: Execute Integration Tests with PyTest
+        working-directory: ppr-api
+        run: |
+          alembic upgrade head
+          pytest tests/integration
+      - name: Shutdown docker-compose
+        run: |
+          docker-compose down
 
   ims-api-build:
     runs-on: ubuntu-latest

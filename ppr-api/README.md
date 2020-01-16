@@ -22,6 +22,16 @@ You also need to set up the variables used for environment-specific settings:
 will need to fill in missing values.
 
 
+## Running the PPR Database on localhost
+
+You can use Docker Compose to run a PostgreSQL database locally. It requires a `DB_PASSWORD` environment variable which
+can be in your `.env` file.  However, this will require you `.env` file to be in the root project directory.
+
+To prepare your local database:
+1. In the root project folder: `docker-compose up -d`
+1. In your `venv` environment: `alembic upgrade head`
+
+
 ## Running PPR-API
 
 1. Start the uvicorn server with `(cd src && uvicorn main:app --reload)`
@@ -44,17 +54,12 @@ in the *htmlcov* directory.
 1. ???
 
 
-### Local Dependencies
+## Running Integration Tests
 
-The api requires a **PostgreSQL** database which can be launched locally with docker compose. You must specify a
-password for the database using the `DB_PASSWORD` environment variable. This is required by both docker compose PPR API.
+Integration tests rely on a connection to the database and will use the same environment settings as the PPR API. With
+the database running, execute the following in your `venv` environment:
+1. `pytest tests/integration`
 
-Docker compose will also bring up an instance of Jaeger.
-
-From the project root folder:
-```
-$ docker-compose up -d
-```
 
 ## Application Configuration
 
