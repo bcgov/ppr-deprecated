@@ -29,4 +29,11 @@ PPR_API_SENTRY_DSN=
 #
 PPR_API_SENTRY_ENVIRONMENT=local.development
 
-# =====================================================================================================================
+
+# =====  docker-compose ===============================================================================================
+
+# To facilitate running dependencies on your local workstation, there is a docker-compose.yml in the root project
+# directory.  Docker Compose also uses .env files, but requires them to be in the directory where you run the command.
+
+# This value should be the same as 'PPR_API_DB_PASSWORD'
+DB_PASSWORD=password
