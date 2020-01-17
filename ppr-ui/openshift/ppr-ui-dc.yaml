@@ -7,6 +7,7 @@ objects:
     labels:
       app: ppr
       deploymentconfig: ${APP_NAME}
+      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -15,6 +16,7 @@ objects:
     selector:
       app: ppr
       deploymentconfig: ${APP_NAME}
+      pprgroup: ${PPR_GROUP}
       environment: ${ENVIRONMENT}
       role: ${APP_NAME}
     strategy:
@@ -32,6 +34,7 @@ objects:
         labels:
           app: ppr
           deploymentconfig: ${APP_NAME}
+          pprgroup: ${PPR_GROUP}
           environment: ${ENVIRONMENT}
           role: ${APP_NAME}
       spec:
@@ -42,7 +45,7 @@ objects:
             livenessProbe:
               failureThreshold: 3
               httpGet:
-                path: /
+                path: ${APP_PATH}
                 port: 2015
                 scheme: HTTP
               periodSeconds: 10
@@ -55,7 +58,7 @@ objects:
             readinessProbe:
               failureThreshold: 3
               httpGet:
-                path: /
+                path: ${APP_PATH}
                 port: 2015
                 scheme: HTTP
               initialDelaySeconds: 5
@@ -72,9 +75,13 @@ objects:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
-              - mountPath: /var/www/html/config
-                name: ppr-web-ui-config
+              - mountPath: /var/www/html${APP_PATH}/config
+                name: ${APP_CONFIG}
                 readOnly: true
+              - mountPath: /etc/Caddyfile
+                name: ${CADDY_CONFIG}
+                readOnly: true
+                subPath: Caddyfile
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
@@ -83,8 +90,12 @@ objects:
         volumes:
           - configMap:
               defaultMode: 420
-              name: ppr-web-ui-config
-            name: ppr-web-ui-config
+              name: ${APP_CONFIG}
+            name: ${APP_CONFIG}
+          - configMap:
+              defaultMode: 420
+              name: ${CADDY_CONFIG}
+            name: ${CADDY_CONFIG}
     test: false
     triggers:
     - imageChangeParams:
@@ -103,6 +114,7 @@ objects:
     labels:
       app: ppr
       environment: ${ENVIRONMENT}
+      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -120,11 +132,13 @@ objects:
   metadata:
     labels:
       app: ppr
+      pprgroup: ${PPR_GROUP}
       environment: ${ENVIRONMENT}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
-    host: ${ROUTE_URL}
+    host: ${ROUTE_HOST}
+    path: ${APP_PATH}
     port:
       targetPort: 2015-tcp
     tls:
@@ -135,7 +149,30 @@ objects:
       name: ${APP_NAME}
       weight: 100
     wildcardPolicy: None
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: ppr
+      pprgroup: ${PPR_GROUP}
+      role: ${APP_NAME}
+    name: ${CADDY_CONFIG}
+  data:
+    Caddyfile: |+
+      0.0.0.0:2015
+      root /var/www/html
+      log stdout
+      errors stdout
+      rewrite ${APP_PATH} {
+          regexp .*
+          to {path} ${APP_PATH}/
+      }
 parameters:
+- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+  displayName: PPR group
+  name: PPR_GROUP
+  required: true
+  value: ppr
 - description: The name of the Web application.
   displayName: APP Name
   name: APP_NAME
@@ -151,23 +188,23 @@ parameters:
   name: IMAGE_TAG
   required: true
   value: dev
-- description: The URL to use for the route.
-  displayName: Route URL
-  name: ROUTE_URL
+- description: The hostname to use for the route.
+  displayName: Route HOST
+  name: ROUTE_HOST
   required: true
   value: ppr-dev.pathfinder.gov.bc.ca
 - description: Volume name for web app config
   displayName: Web application config volume mount name
-  name: VOL_APP_CONFIG
+  name: APP_CONFIG
   required: true
   value: ppr-web-ui-config
-- description: Volume name for caddy config
+- description: Volume and config map name for caddy config
   displayName: Caddy config volume mount name
-  name: VOL_CADDY
+  name: CADDY_CONFIG
   required: true
-  value: ppr-web-caddy-config
-#- description: The path at which web application is deployed. Context root for the web applicaton
-#  displayName: WEB_APP_CONTEXT_PATH
-#  name: WEB_APP_CONTEXT_PATH
-#  required: true
-#  value: ppr
+  value: ppr-ui-caddy-config
+- description: The sub-path to the web application
+  displayName: APP Name
+  name: APP_PATH
+  required: false
+  value: cooperatives/ppr

@@ -7,6 +7,7 @@ objects:
     labels:
       app: ppr
       build: ${APP_NAME}
+      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -32,29 +33,50 @@ objects:
         RUN npm install
         RUN npm run build
       git:
-        uri: https://github.com/bcgov/ppr
-        # sample how to use a developer's fork
-        # uri: https://github.com/somedeveloper/ppr
-        # Defaults to shallow clone of master so no need to ref master. If you do set ref to master then clone is deep
-        # Sample to show how to override to a branch
-        # ref: branch
+        uri: ${GIT_URI}
+        ref: ${GIT_REF}
       type: Git
     strategy:
-      dockerStrategy: {}
+      dockerStrategy:
+        env:
+          - name: APP_PATH
+            value: ${APP_PATH}
+      type: Docker
     successfulBuildsHistoryLimit: 5
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
     labels:
       app: ppr
+      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
     lookupPolicy:
       local: false
 parameters:
+- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+  displayName: PPR group
+  name: PPR_GROUP
+  required: true
+  value: ppr
 - description: The name of the intermediate build image for the PPR UI
   displayName: APP Name
   name: APP_NAME
   required: true
   value: ppr-ui-inter
+- description: The git repository URI
+  displayName: Git URI
+  name: GIT_URI
+  required: true
+  value: https://github.com/bcgov/ppr
+- description: The git repository ref (branch)
+  displayName: Git ref (branch)
+  name: GIT_REF
+  required: true
+  value: master
+- description: The sub-path to the web application
+  displayName: APP Name
+  name: APP_PATH
+  required: false
+  value: cooperatives/ppr

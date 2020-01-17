@@ -22,8 +22,8 @@ import {provideSearcherSerial} from "@/search/search-serial"
 import AppData from "@/utils/app-data"
 import { initializeVueLdClient } from '@/flags/ld-client'
 import uuid from 'uuid'
+import { APP_PATH } from '@/utils/config-helper'
 
-const APP_PATH = process.env.VUE_APP_PATH || 'app-path-foo-bar'
 const DefaultLayout = 'public'
 
 function origin(): string {
