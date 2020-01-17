@@ -40,7 +40,7 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          # TODO: research if we should specify version rather than take latest ....
+          # TODO: Issue 273 research if we should specify version rather than take latest ....
           name: bcgov-s2i-caddy:latest
           namespace: openshift
       type: Docker
