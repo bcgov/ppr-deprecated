@@ -14,6 +14,7 @@ app.include_router(api.router)
 origins = [
     "http://localhost:8080",
     "https://ppr-dev.pathfinder.gov.bc.ca"
+    "https://dev.bcregistry.ca"
 ]
 
 app.add_middleware(
