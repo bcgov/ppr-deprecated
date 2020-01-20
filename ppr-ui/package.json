@@ -26,6 +26,7 @@
   "dependencies": {
     "@sentry/browser": "^5.9.1",
     "@sentry/integrations": "^5.8.0",
+    "@vue/cli": "^4.1.2",
     "@vue/composition-api": "^0.3.2",
     "axios": "^0.19.0",
     "core-js": "^3.3.2",
@@ -59,7 +60,7 @@
     "eslint-plugin-vue": "^5.0.0",
     "fibers": "^4.0.2",
     "geckodriver": "^1.19.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
     "typescript": "~3.5.3",
