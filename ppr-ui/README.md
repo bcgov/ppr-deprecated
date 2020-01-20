@@ -30,7 +30,11 @@ npm run lint
 ```
 
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+The PPR web application is currently served via https://bcregistry.ca/cooperatives/ppr. This url represents
+some technical debt and will need to be changed. The subpath ```cooperatives/ppr```
+appears in the three Openshift templates as APP_PATH; also in ```vue.config.js``` and in ```src/utils/config-helper.ts```
+
+Also see [CLI Vue Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Debugging
 

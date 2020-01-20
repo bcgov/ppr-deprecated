@@ -7,6 +7,7 @@ objects:
     labels:
       app: ppr
       build: ${APP_NAME}
+      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -23,13 +24,13 @@ objects:
       dockerfile: |
         FROM bcgov-s2i-caddy
         COPY Caddy/Caddyfile /etc/Caddyfile
-        RUN mkdir -p /var/www/html
-        COPY dist /var/www/html
+        RUN mkdir -p /var/www/html${APP_PATH}
+        COPY dist /var/www/html${APP_PATH}
       images:
       - as: null
         from:
           kind: ImageStreamTag
-          name: ${APP_INTER}:${APP_INTER_TAG}
+          name: ${APP_INTER_NAME}:${APP_INTER_TAG}
         paths:
         - destinationDir: ./
           sourcePath: /dist
@@ -50,15 +51,21 @@ objects:
   metadata:
     labels:
       app: ppr
+      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
     lookupPolicy:
       local: false
 parameters:
+- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+  displayName: PPR group
+  name: PPR_GROUP
+  required: true
+  value: ppr
 - description: The name of the intermediate build image for the PPR UI
   displayName: APP Intermediate
-  name: APP_INTER
+  name: APP_INTER_NAME
   required: true
   value: ppr-ui-inter
 - description: The tag of the intermediate build
@@ -71,9 +78,9 @@ parameters:
   name: APP_NAME
   required: true
   value: ppr-ui
-- description: The path at which web application is deployed. Context root for the web applicaton
-  displayName: WEB_APP_CONTEXT_PATH
-  name: WEB_APP_CONTEXT_PATH
-  required: true
-  value: ppr
+- description: The sub-path to the web application
+  displayName: APP Name
+  name: APP_PATH
+  required: false
+  value: /cooperatives/ppr
 

@@ -10,6 +10,8 @@ oc login https://console.pathfinder.gov.bc.ca:8443 --token=....
 cd ppr-ui/openshift
 ```
 
+Take a close look at ```process.sh`` to see how to set up parameters for build and deploy configs.
+
 ## Validation
 
 To any oc apply command you can append ```--validate``` to check for errors in the configuration.  Note that there is a known
