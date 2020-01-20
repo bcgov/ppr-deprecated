@@ -15,6 +15,13 @@ objects:
       to:
         kind: ImageStreamTag
         name: ${APP_NAME}:latest
+    resources:
+      limits:
+        cpu: '2'
+        memory: 3Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
     source:
       # 1. Checks out the repo; 2 sets the context to be the UI client code; 3 builds the Vue app.
       # result is an image containing the client code folder and a fully built Vue distribution (in dist folder)
