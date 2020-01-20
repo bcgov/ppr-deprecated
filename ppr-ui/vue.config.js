@@ -2,7 +2,7 @@
 // For local development set the APP_PATH environment variable to '/'
 // or use  'npm run serve'  (package.json)
 const APP_PATH = process.env.APP_PATH || '/cooperatives/ppr'
-console.log('Start Vue build (vue.config.js) with APP_PATH', APP_PATH)
+console.info('Start Vue build (vue.config.js) with APP_PATH', APP_PATH)
 
 module.exports = {
   lintOnSave: false,

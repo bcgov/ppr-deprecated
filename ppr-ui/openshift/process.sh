@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # Git repo values as used in the yaml config files:
-#REPO=https://github.com/bcgov/ppr
-#BRANCH=master
+REPO=https://github.com/bcgov/ppr
+BRANCH=master
 
-REPO=https://github.com/bryan-gilbert/ppr
-BRANCH=caddyExper
+#REPO=https://github.com/bryan-gilbert/ppr
+#BRANCH=caddyExper
 
 
 APP_PATH=/cooperatives/ppr
@@ -15,10 +15,10 @@ APP_PATH=/cooperatives/ppr
 # APP_PATH=/ppr
 
 APP_BASE=ppr-ui
-APP_BASE=ppr-oct
+#APP_BASE=ppr-oct
 
 APP_TAG=
-APP_TAG=-bg
+#APP_TAG=-bg
 
 APP_NAME=$APP_BASE$APP_TAG
 APP_UI_NAME=$APP_BASE$APP_TAG
