@@ -16,7 +16,6 @@ export default {
       'ResponseType': 'application/json',
       'Cache-Control': 'no-cache'
     }
-    // console.log('Retrieve configuration from url:', url)
     const response = await axiosAuth.get(url, {headers})
 
     const rd: object = response.data
