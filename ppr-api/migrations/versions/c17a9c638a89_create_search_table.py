@@ -29,7 +29,7 @@ def upgrade():
         'search',
         sa.Column('id', sa.BigInteger, primary_key=True),
         sa.Column('type_long_code', sa.String(length=40), sa.ForeignKey('search_type.long_code'), nullable=False),
-        sa.Column('criteria', postgresql.JSON, nullable=False),
+        sa.Column('criteria', postgresql.JSONB, nullable=False),
         sa.Column('creation_date_time', sa.DateTime(timezone=True), server_default=sa.text('NOW()'), nullable=False)
     )
 
