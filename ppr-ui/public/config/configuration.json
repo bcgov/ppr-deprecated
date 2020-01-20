@@ -1,7 +1,7 @@
 {
   "API_URL": "http://localhost:8080/",
   "AUTH_API_URL": "https://auth-api-dev.pathfinder.gov.bc.ca/api/v1/",
-  "AUTH_URL": "http://localhost:8000/auth/",
+  "AUTH_URL": "https://dev.bcregistry.ca/cooperatives/auth",
   "LAUNCH_DARKLY_CLIENT_KEY": "Client side ID from https://app.launchdarkly.com/settings/projects",
   "PAY_API_URL": "https://pay-api-test.pathfinder.gov.bc.ca/api/v1/",
   "SENTRY_DSN": "",

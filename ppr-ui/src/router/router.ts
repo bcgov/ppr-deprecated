@@ -19,13 +19,12 @@ const router = new VueRouter({
   }
 })
 
-const ENABLED = false
+const ENABLED = true
 
 // if there is no saved Keycloak token, redirect to Auth URL
 router.afterEach((to): void => {
   if (ENABLED) {
     try {
-      console.debug('Router afterEach', to.matched)
       if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
         authHelper.authRedirect()
       }

@@ -85,6 +85,7 @@ describe('SearchSerial.vue', (): void => {
       }
     })
     vm = wrapper.vm
+    sessionStorage.setItem('KEYCLOAK_TOKEN','foo')
   })
 
   afterEach((): void => {
