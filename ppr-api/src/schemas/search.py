@@ -18,7 +18,7 @@ class SearchBase(pydantic.BaseModel):
     criteria: dict
 
     @pydantic.validator('type')
-    def type_must_match_search_type(cls, search_type):
+    def type_must_match_search_type(cls, search_type):  # pylint:disable=no-self-argument
         try:
             SearchType[search_type]
         except KeyError:
@@ -26,7 +26,7 @@ class SearchBase(pydantic.BaseModel):
         return search_type
 
     @pydantic.validator('criteria')
-    def criteria_must_match_format_for_type(cls, criteria, values):
+    def criteria_must_match_format_for_type(cls, criteria, values):  # pylint:disable=no-self-argument
         if 'type' not in values:
             return criteria
 
