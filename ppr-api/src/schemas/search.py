@@ -1,14 +1,47 @@
 import datetime
+import enum
 
-from pydantic import BaseModel
+import pydantic
 
 
-class SearchBase(BaseModel):
+class SearchType(enum.Enum):
+    AIRCRAFT_DOT = 'AIRCRAFT_DOT'
+    BUSINESS_DEBTOR = 'BUSINESS_DEBTOR'
+    INDIVIDUAL_DEBTOR = 'INDIVIDUAL_DEBTOR'
+    MHR_NUMBER = 'MHR_NUMBER'
+    REGISTRATION_NUMBER = 'REGISTRATION_NUMBER'
+    SERIAL_NUMBER = 'SERIAL_NUMBER'
+
+
+class SearchBase(pydantic.BaseModel):
     type: str
     criteria: dict
 
+    @pydantic.validator('type')
+    def type_must_match_search_type(cls, search_type):
+        try:
+            SearchType[search_type]
+        except KeyError:
+            raise ValueError('type must be one of: {}'.format(list(map(lambda st: st.name, SearchType))))
+        return search_type
+
+    @pydantic.validator('criteria')
+    def criteria_must_match_format_for_type(cls, criteria, values):
+        if 'type' not in values:
+            return criteria
+
+        if values['type'] == SearchType.REGISTRATION_NUMBER.value:
+            if 'value' not in criteria:
+                raise ValueError('"value" is required in criteria')
+            if not criteria['value'].isalnum():
+                raise ValueError('"value" must be alphanumeric')
+            if len(criteria['value']) != 7:
+                raise ValueError('"value" must be 7 characters')
+        return criteria
+
     class Config:
         orm_mode = True
+        allow_population_by_alias = True
         fields = {
             'type': {'alias': 'type_code'}
         }
@@ -20,6 +53,7 @@ class Search(SearchBase):
 
     class Config:
         orm_mode = True
+        allow_population_by_alias = True
         fields = {
             'searchDateTime': {'alias': 'creation_date_time'}
         }
