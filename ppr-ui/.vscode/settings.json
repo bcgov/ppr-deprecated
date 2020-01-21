@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": true,
+    "editor.rulers": [
+        120
+    ],
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "vue"
+    ],
+    "files.insertFinalNewline": true,
+    "vetur.format.defaultFormatter.html": "js-beautify-html",
+    "vetur.format.defaultFormatter.ts": "vscode-typescript"
+}
