@@ -1,16 +1,15 @@
 import Vue from 'vue'
 import VueCompositionApi from '@vue/composition-api'
 // import { ref } from '@vue/composition-api'
-// import { mount, Wrapper } from '@vue/test-utils'
+import { mount, Wrapper } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
-// import SearchInput from '@/search/SearchInput.vue'
+import SearchInput from '@/search/SearchInput.vue'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
 
 describe('SearchInput', (): void => {
-  /* TODO: finish the unit tests (https://github.com/bcgov/ppr/issues/283)
   let vuetify
 
   beforeEach((): void => {
@@ -24,6 +23,7 @@ describe('SearchInput', (): void => {
     expect(wrapper.emitted().search).not.toBeDefined()
   })
 
+  /* TODO: finish the unit tests (https://github.com/bcgov/ppr/issues/283)
   it('displays a string label', (): void => {
     const customLabel = 'LABEL1'
     const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: { label: customLabel }, vuetify })
