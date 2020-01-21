@@ -1,4 +1,8 @@
-import {SearcherSerial} from '@/search/search-serial'
+import Vue from 'vue'
+import VueCompositionApi from '@vue/composition-api'
+import { SearcherSerial } from '@/search/search-serial'
+
+Vue.use(VueCompositionApi)
 
 describe('serial search', (): void => {
   let ss: SearcherSerial
@@ -35,4 +39,3 @@ describe('serial search', (): void => {
     expect(!ss.isValid('abcd$'))
   })
 })
-
