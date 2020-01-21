@@ -9,7 +9,7 @@ def test_validate_criteria_no_value_with_regnum():
     except ValueError:
         pass
     else:
-        pytest.fail("A validation error was expected since there was no value field in the criteria")
+        pytest.fail('A validation error was expected since there was no value field in the criteria')
 
 
 def test_validate_criteria_when_value_not_alphanumeric_regnum():
@@ -19,7 +19,7 @@ def test_validate_criteria_when_value_not_alphanumeric_regnum():
     except ValueError:
         pass
     else:
-        pytest.fail("A validation error was expected since the registration number has an invalid format")
+        pytest.fail('A validation error was expected since the registration number has an invalid format')
 
 
 def test_validate_criteria_when_value_not_alphanumeric_regnum():
@@ -29,7 +29,7 @@ def test_validate_criteria_when_value_not_alphanumeric_regnum():
     except ValueError:
         pass
     else:
-        pytest.fail("A validation error was expected since the registration number was an invalid length")
+        pytest.fail('A validation error was expected since the registration number was an invalid length')
 
 
 def test_validate_criteria_when_valid_with_regnum():
@@ -44,7 +44,7 @@ def test_validate_type_when_invalid():
     except ValueError:
         pass
     else:
-        pytest.fail("A validation error was expected since type was invalid")
+        pytest.fail('A validation error was expected since type was invalid')
 
 
 def test_validate_type_when_valid_enum_name():
@@ -58,4 +58,4 @@ def test_validate_when_type_invalid_and_criteria_empty():
     except ValueError:
         pass
     else:
-        pytest.fail("A validation error was expected since the input was invalid")
+        pytest.fail('A validation error was expected since the input was invalid')
