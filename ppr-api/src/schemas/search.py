@@ -3,6 +3,8 @@ import enum
 
 import pydantic
 
+import schemas.financing_statement
+
 
 class SearchType(enum.Enum):
     AIRCRAFT_DOT = 'AIRCRAFT_DOT'
@@ -60,3 +62,8 @@ class Search(SearchBase):
         json_encoders = {
             datetime.datetime: lambda dt: dt.isoformat(timespec='seconds')
         }
+
+
+class SearchResult(pydantic.BaseModel):
+    type: str
+    financingStatement: schemas.financing_statement.FinancingStatement

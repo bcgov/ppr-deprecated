@@ -1,12 +1,15 @@
 """ Define the endpoints for searching. """
 
+import datetime
 import json
+import typing
 
 import fastapi
 import requests
 from starlette import responses, status
 
 import config
+import schemas.financing_statement
 import schemas.search
 import repository.search_repository
 
@@ -52,3 +55,24 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
     search_model = search_repository.create_search(search_input)
     response.status_code = status.HTTP_201_CREATED
     return search_model
+
+
+@router.get('/searches/{search_id}/results', response_model=typing.List[schemas.search.SearchResult],
+            response_model_by_alias=False)
+def read_search_results(search_id: int,
+                        search_repository: repository.search_repository.SearchRepository = fastapi.Depends()):
+    """
+    List the results for the provided search
+
+        Parameters:
+            search_id: The identifier of the search instance to lookup
+        Returns:
+            typing.List[schemas.search.SearchResult]
+    """
+    # TODO Showing dummy data for the moment, complete as the data model fills out. Issue #222.
+    fin_stmt = schemas.financing_statement.FinancingStatement(
+        baseRegistrationNumber='123456A', documentId='B9876543', registrationDateTime=datetime.datetime.now(),
+        type='SECURITY_AGREEMENT', registeringParty={}, securedParties=[], debtors=[], vehicleCollateral=[],
+        generalCollateral=[], expiryDate=datetime.date.today()
+    )
+    return [schemas.search.SearchResult(type='EXACT', financingStatement=fin_stmt)]
