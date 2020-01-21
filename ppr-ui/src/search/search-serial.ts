@@ -1,11 +1,12 @@
-import {inject, provide, reactive} from "@vue/composition-api"
-import axiosAuth from "@/utils/axios-auth"
+import { inject, provide, reactive } from '@vue/composition-api'
+import axiosAuth from '@/utils/axios-auth'
 
 // export text constants for use in tests
 export const SS_TEXT = {
   errorMsg: (text): string => `Search serial number error - ${text}`,
   describeValidSerial: 'Serial number can have up to 25 letters or digits',
   defineValid: 'Serial number must be up to 25 letters or digits',
+  label: 'Serial number',
   required: 'Require serial number',
   tooLong: 'Serial number can only have 25 characters'
 }
@@ -22,7 +23,6 @@ interface VFunction {
 }
 
 export class SearcherSerial {
-
   private static _instance: SearcherSerial
 
   public static Instance(baseUrl): SearcherSerial {
@@ -48,14 +48,17 @@ export class SearcherSerial {
     ]
   }
 
-  public get term(): string { return this._term}
-  public get results(): SerialResult[] { return this._results}
-  public get describeValidSerial(): string { return SS_TEXT.describeValidSerial}
+  public get errorMessage(): string { return this._errorMessage }
+  public get label(): string { return SS_TEXT.label }
+  public get term(): string { return this._term }
+  public get results(): SerialResult[] { return this._results }
+  public get describeValidSerial(): string { return SS_TEXT.describeValidSerial }
 
   public doSearch(term: string): Promise<string> {
+    this._errorMessage = ''
+
     // save the search term for reuse when displaying results or errors
     this._term = term
-    // console.log('Search for ', this._term)
     const config = {
       params: {
         serial: term
@@ -97,8 +100,6 @@ export class SearcherSerial {
   public get validationRules(): VFunction[] {
     return this._serialNumberRules
   }
-
-
 }
 
 export const SearcherSerialSymbol = Symbol()
@@ -110,7 +111,7 @@ export function provideSearcherSerial(baseUrl: string): void {
 export function useSearcherSerial(): SearcherSerial {
   const searcherSerial: SearcherSerial = inject(SearcherSerialSymbol) as SearcherSerial
   if (!searcherSerial) {
-    throw Error("SearcherSerial cannot be injected, it must have been provided first")
+    throw Error('SearcherSerial cannot be injected, it must have been provided first')
   }
   return searcherSerial
 }

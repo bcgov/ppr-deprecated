@@ -18,7 +18,13 @@
           <header>
             <h2>Search the Personal Property Registry</h2>
           </header>
-          <search-serial />
+          <search-input
+            :error-message="searcherSerial.errorMessage"
+            :label="searcherSerial.label"
+            :hint="searcherSerial.describeValidSerial"
+            :rules="searcherSerial.validationRules"
+            @search="doSearchSerial"
+          />
         </section>
       </article>
     </v-container>
@@ -26,16 +32,46 @@
 </template>
 
 <script lang="ts">
-import {createComponent} from "@vue/composition-api"
-import {Data} from "@vue/composition-api/dist/ts-api/component"
-import SearchSerial from '@/search/SearchSerial.vue'
+import { createComponent } from '@vue/composition-api'
+import { Data } from '@vue/composition-api/dist/ts-api/component'
+import { useLoadIndicator } from '@/load-indicator'
+import { useRouter } from '@/router/router'
+import SearchInput from '@/search/SearchInput.vue'
+import { useSearcherSerial } from '@/search/search-serial'
+
 
 export default createComponent({
-  components: { SearchSerial },
+  components: { SearchInput },
+
   setup(): Data {
+    const loadIndicator = useLoadIndicator()
+    const { router } = useRouter()
+
+    const searcherSerial = useSearcherSerial()
+
+    function doSearch(searcher, term: string): Promise<void> {
+      loadIndicator.start()
+
+      return searcher.doSearch(term)
+        .then((): void => {
+          router.push('results')
+        })
+        .catch((/* errorMessage: string */): void => {
+          // TODO: log this somewhere, probably Sentry. https://github.com/bcgov/ppr/issues/244
+        })
+        .finally(() => {
+          loadIndicator.stop()
+        })
+    }
+
+    function doSearchSerial(term: string) {
+      doSearch(searcherSerial, term)
+    }
+
     return {
+      doSearchSerial,
+      searcherSerial
     }
   }
-})
+})   
 </script>
-
