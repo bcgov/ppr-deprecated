@@ -51,8 +51,14 @@ def read_search(search_id: int, search_repository: repository.search_repository.
 @router.post('/searches', response_model=schemas.search.Search, response_model_by_alias=False)
 def create_search(response: responses.Response, search_input: schemas.search.SearchBase,
                   search_repository: repository.search_repository.SearchRepository = fastapi.Depends()):
+    exact_matches = []
+    similar_matches = []
     # TODO execute the search query and create search_result records. See https://github.com/bcgov/ppr/issues/222
-    search_model = search_repository.create_search(search_input)
+    # The financing statements are not yet available to search, so create an exact match for now
+    if search_input.type == schemas.search.SearchType.REGISTRATION_NUMBER.value:
+        exact_matches = [search_input.criteria['value']]
+
+    search_model = search_repository.create_search(search_input, exact_matches, similar_matches)
     response.status_code = status.HTTP_201_CREATED
     return search_model
 
