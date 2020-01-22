@@ -9,6 +9,7 @@ import requests
 from starlette import responses, status
 
 import config
+import models.search
 import schemas.financing_statement
 import schemas.search
 import repository.search_repository
@@ -75,10 +76,20 @@ def read_search_results(search_id: int,
         Returns:
             typing.List[schemas.search.SearchResult]
     """
+    search_db_row = search_repository.get_search(search_id)
+    if search_db_row is None:
+        raise fastapi.HTTPException(status_code=404, detail='Search record not found')
+
+    return list(map(map_search_result_output, search_db_row.results))
+
+
+def map_search_result_output(search_result: models.search.SearchResult):
     # TODO Showing dummy data for the moment, complete as the data model fills out. Issue #222.
     fin_stmt = schemas.financing_statement.FinancingStatement(
-        baseRegistrationNumber='123456A', documentId='B9876543', registrationDateTime=datetime.datetime.now(),
-        type='SECURITY_AGREEMENT', registeringParty={}, securedParties=[], debtors=[], vehicleCollateral=[],
-        generalCollateral=[], expiryDate=datetime.date.today()
+        baseRegistrationNumber=search_result.registration_number, documentId='B9876543',
+        registrationDateTime=datetime.datetime.now(), registeringParty={}, securedParties=[], debtors=[],
+        vehicleCollateral=[], generalCollateral=[],
+        type=schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.name
     )
-    return [schemas.search.SearchResult(type='EXACT', financingStatement=fin_stmt)]
+    search_result_type = schemas.search.SearchResultType(search_result.exact).name
+    return schemas.search.SearchResult(type=search_result_type, financingStatement=fin_stmt)
