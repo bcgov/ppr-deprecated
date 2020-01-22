@@ -15,6 +15,11 @@ class SearchType(enum.Enum):
     SERIAL_NUMBER = 'SERIAL_NUMBER'
 
 
+class SearchResultType(enum.Enum):
+    EXACT = True
+    SIMILAR = False
+
+
 class SearchBase(pydantic.BaseModel):
     type: str
     criteria: dict
@@ -66,4 +71,12 @@ class Search(SearchBase):
 
 class SearchResult(pydantic.BaseModel):
     type: str
-    financingStatement: schemas.financing_statement.FinancingStatement
+    financingStatement: schemas.financing_statement.FinancingStatement = None
+
+    @pydantic.validator('type')
+    def type_must_match_search_result_type(cls, value):  # pylint:disable=no-self-argument
+        try:
+            SearchResultType[value]
+        except KeyError:
+            raise ValueError('type must be one of: {}'.format(list(map(lambda st: st.name, SearchResultType))))
+        return value

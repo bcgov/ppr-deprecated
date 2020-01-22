@@ -1,7 +1,13 @@
 import datetime
+import enum
 import typing
 
 from pydantic import BaseModel
+
+
+class RegistrationType(enum.Enum):
+    SECURITY_AGREEMENT = 'SECURITY_AGREEMENT'
+    REPAIRERS_LIEN = 'REPAIRERS_LIEN'
 
 
 class FinancingStatementBase(BaseModel):
@@ -11,7 +17,7 @@ class FinancingStatementBase(BaseModel):
     debtors: typing.List[dict]
     vehicleCollateral: typing.List[dict]
     generalCollateral: typing.List[dict]
-    expiryDate: datetime.date
+    expiryDate: datetime.date = None
 
 
 class FinancingStatement(FinancingStatementBase):
