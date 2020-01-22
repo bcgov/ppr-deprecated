@@ -38,6 +38,22 @@ def test_create_registration_number_search():
     assert body['searchDateTime'] == stored.creation_date_time.isoformat(timespec='seconds')
 
 
+def test_create_search_with_exact_match():
+    search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': '987654Z'}}
+
+    rv = client.post('/searches', json=search_input)
+
+    body = rv.json()
+    search_id = body['id']
+
+    search_results = retrieve_search_result_records(search_id)
+    assert len(search_results) == 1
+    search_result = search_results[0]
+    assert search_result.registration_number == '987654Z'
+    assert search_result.exact
+    assert search_result.selected
+
+
 def create_test_search_record(type_code: str, criteria: dict):
     db = models.database.SessionLocal()
     try:
@@ -53,6 +69,14 @@ def create_test_search_record(type_code: str, criteria: dict):
 def retrieve_search_record(search_id: int):
     db = models.database.SessionLocal()
     try:
-        return db.query(models.search.Search).filter(models.search.Search.id == search_id).first()
+        return db.query(models.search.Search).get(search_id)
+    finally:
+        db.close()
+
+
+def retrieve_search_result_records(search_id: int):
+    db = models.database.SessionLocal()
+    try:
+        return db.query(models.search.SearchResult).filter(models.search.SearchResult.search_id == search_id).all()
     finally:
         db.close()
