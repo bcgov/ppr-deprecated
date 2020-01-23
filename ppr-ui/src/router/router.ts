@@ -19,14 +19,20 @@ const router = new VueRouter({
   }
 })
 
+// Local development you'll need to disable. Auth is not possible on local dev.
+const ENABLED = true
+
 // if there is no saved Keycloak token, redirect to Auth URL
 router.afterEach((to): void => {
-  try {
-    if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
-      authHelper.authRedirect()
+  if (ENABLED) {
+    try {
+      console.debug('Router afterEach', to.matched)
+      if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
+        authHelper.authRedirect()
+      }
+    } catch (error) {
+      console.error('Router afterEach', error)
     }
-  } catch (error) {
-    console.error('Router afterEach', error)
   }
 })
 
