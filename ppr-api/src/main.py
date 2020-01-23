@@ -11,15 +11,9 @@ sentry_sdk.init(config.SENTRY_DSN, environment=config.SENTRY_ENVIRONMENT)
 app = fastapi.FastAPI()
 app.include_router(api.router)
 
-origins = [
-    "http://localhost:8080",
-    "https://ppr-dev.pathfinder.gov.bc.ca",
-    "https://dev.bcregistry.ca"
-]
-
 app.add_middleware(
     cors.CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=config.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]

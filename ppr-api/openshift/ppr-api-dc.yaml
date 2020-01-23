@@ -39,6 +39,8 @@ objects:
         - env:
           - name: PORT
             value: "8080"
+          - name: PPR_API_ALLOWED_ORIGINS
+            value: ${CORS_ORIGINS}
           - name: PPR_API_IMS_API_URL
             value: http://ims-api.zwmtib-${ENVIRONMENT}.svc:8080
           - name: SENTRY_DSN
@@ -152,6 +154,11 @@ parameters:
   name: API_NAME
   required: true
   value: ppr-api
+- description: The origin urls for the web front ends that consume the API.
+  displayName: Allowed origins for CORS
+  name: CORS_ORIGINS
+  required: true
+  value: "http://localhost:8080 https://dev.bcregistry.ca https://ppr-dev.pathfinder.gov.bc.ca"
 - description: The environment, such as "dev", "dev-pr13", "test", or "prod".
   displayName: Environment
   name: ENVIRONMENT
