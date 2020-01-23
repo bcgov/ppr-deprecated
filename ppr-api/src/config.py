@@ -12,6 +12,8 @@ import dotenv
 
 dotenv.load_dotenv()
 
+CORS_ORIGINS = os.getenv('PPR_API_ALLOWED_ORIGINS', 'http://localhost:8080 http://localhost:8081').split()
+
 DB_HOSTNAME = os.getenv('PPR_API_DB_HOSTNAME')
 DB_HOSTNAME_PATRONI = os.getenv('PPR_API_DB_HOSTNAME_PATRONI', DB_HOSTNAME)
 DB_PORT = int(os.getenv('PPR_API_DB_PORT', '5432'))

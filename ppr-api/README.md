@@ -83,6 +83,12 @@ worker processes running.
 | PORT                 | Port to listen on: 8080 |
 | WEB_CONCURRENCY      | Number of processes: 4  |
 
+### CORS Configuration
+
+| Environment Variable    | Description                                                       |
+| ----------------------- | ----------------------------------------------------------------- |
+| PPR_API_ALLOWED_ORIGINS | Allowed origins for CORS. Provide a space separated list of URLs. |
+
 ### PostgreSQL Database Configuration
 
 These settings are for building connections to the database.
