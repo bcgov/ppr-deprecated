@@ -9,6 +9,7 @@
         "vue"
     ],
     "files.insertFinalNewline": true,
+    "jest.pathToJest": "node_modules/.bin/jest",
     "vetur.format.defaultFormatter.html": "js-beautify-html",
     "vetur.format.defaultFormatter.ts": "vscode-typescript"
 }
