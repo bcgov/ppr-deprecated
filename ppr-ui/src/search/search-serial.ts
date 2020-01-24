@@ -25,7 +25,7 @@ interface VFunction {
 export class SearcherSerial {
   private static _instance: SearcherSerial
 
-  public static Instance(baseUrl): SearcherSerial {
+  public static Instance(baseUrl: string): SearcherSerial {
     return this._instance || (this._instance = new this(baseUrl))
   }
 
@@ -39,7 +39,10 @@ export class SearcherSerial {
 
   private readonly _serialNumberRules: VFunction[] // ((v: string) => (string | boolean))[]
 
-  public constructor(baseUrl) {
+  public constructor(baseUrl: string) {
+    this._errorMessage = ''
+    this._results = []
+    this._term = ''
     this._baseUrl = baseUrl
     this._serialNumberRules = [
       (value): (boolean | string) => { return !!value || SS_TEXT.required },
@@ -80,11 +83,13 @@ export class SearcherSerial {
             resolve('success')
           } else {
             this._errorMessage = SS_TEXT.errorMsg('invalid response data')
+            console.log('dosearch', this._errorMessage)
             reject(this._errorMessage)
           }
         })
         .catch((error): void => {
           this._errorMessage = SS_TEXT.errorMsg(error.message)
+          console.log('dosearch', this._errorMessage)
           reject(this._errorMessage)
         })
     })
