@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import VueCompositionApi from '@vue/composition-api'
-// import { ref } from '@vue/composition-api'
+import VueCompositionApi, { reactive } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
@@ -9,35 +8,59 @@ import SearchInput from '@/search/SearchInput.vue'
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
 
-describe('SearchInput', (): void => {
-  let vuetify
+const vuetify = new Vuetify()
 
-  beforeEach((): void => {
-    vuetify = new Vuetify()
-  })
-
+describe('SearchInput.vue', (): void => {
   it('handles no props', (): void => {
     const wrapper: Wrapper<Vue> = mount(SearchInput, { vuetify })
 
-    // Should not emit the "search" event unti the button is clicked.
+    // Just need something to test: should not emit the "search" event unti the button is clicked.
     expect(wrapper.emitted().search).not.toBeDefined()
   })
 
-  /* TODO: finish the unit tests (https://github.com/bcgov/ppr/issues/283)
-  it('displays a string label', (): void => {
-    const customLabel = 'LABEL1'
-    const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: { label: customLabel }, vuetify })
+  describe(':props', (): void => {
+    it(':errorMessage - should display the error', (): void => {
+      const properties = reactive({ errorMessage: 'ERRORMESSAGE1' })
+      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
 
-    // Should contain the label.
-    expect(wrapper.text()).toContain('LABEL1')
+      expect(wrapper.text()).toContain('ERRORMESSAGE1')
+    })
+
+    it(':errorMessage - should display the changed error', async (): Promise<void> => {
+      const properties = reactive({ errorMessage: 'ERRORMESSAGE1' })
+      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
+
+      properties.errorMessage = 'ERRORMESSAGE2'
+      await Vue.nextTick()
+
+      expect(wrapper.text()).not.toContain('ERRORMESSAGE1')
+      expect(wrapper.text()).toContain('ERRORMESSAGE2')
+    })
+
+    it(':label - should display the label', (): void => {
+      const properties = reactive({ label: 'LABEL1' })
+      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
+
+      expect(wrapper.text()).toContain('LABEL1')
+    })
+
+    it(':label - should display the changed label', async (): Promise<void> => {
+      const properties = reactive({ label: 'LABEL1' })
+      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
+
+      properties.label = 'LABEL2'
+      await Vue.nextTick()
+
+      expect(wrapper.text()).not.toContain('LABEL1')
+      expect(wrapper.text()).toContain('LABEL2')
+    })
+
+    // TODO: figure out how to test the 'hint' property: https://github.com/bcgov/ppr/issues/358
+
+    // TODO: figure out how to test the 'rules' property: https://github.com/bcgov/ppr/issues/359
   })
 
-  it('displays a ref label', async (): Promise<void> => {
-    const customLabel = ref<string>('LABEL1')
-    const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: { label: customLabel }, vuetify })
-
-    // Should contain the label.
-    expect(wrapper.text()).toContain('LABEL1')
+  describe('@events', (): void => {
+    // TODO: figure out how to test the 'search' event: https://github.com/bcgov/ppr/issues/360
   })
-  */
 })
