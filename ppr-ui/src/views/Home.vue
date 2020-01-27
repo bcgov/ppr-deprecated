@@ -6,18 +6,6 @@
           <h1>PPR Sample Home Page</h1>
         </header>
 
-        <div>
-          <h4>Feature Flags - proof of concept</h4>
-          <ul>
-            <li id="fflag1">
-              Proof of concept feature flag one is {{ featureOneLabel }}
-            </li>
-            <li id="fflag2">
-              Proof of concept feature flag two is {{ featureTwoLabel }}
-            </li>
-          </ul>
-        </div>
-
         <div class="page-content">
           <div class="page-content__main">
             <section>
@@ -46,12 +34,12 @@
                       Home
                     </router-link>
                   </li>
-                  <li v-if="flags.feature2">
+                  <li v-if="userCanSearch">
                     <router-link to="search">
                       Search
                     </router-link>
                   </li>
-                  <li v-if="flags.feature2">
+                  <li v-if="userCanSearch">
                     <router-link to="results">
                       Results
                     </router-link>
@@ -69,7 +57,7 @@
       </article>
     </v-container>
 
-    <v-container v-if="feature2">
+    <v-container v-if="userCanSearch">
       <v-btn
         class="form-primary-btn"
         color="primary"
@@ -82,25 +70,28 @@
 </template>
 
 <script lang="ts">
-import {createComponent, computed} from "@vue/composition-api"
-import {Data} from "@vue/composition-api/dist/ts-api/component"
-import {useRouter} from '@/router/router'
-import {useFeatureFlags} from '@/flags/feature-flags'
+import { createComponent, computed } from '@vue/composition-api'
+import { Data } from '@vue/composition-api/dist/ts-api/component'
+import { useRouter } from '@/router/router'
+import { useFeatureFlags } from '@/flags/feature-flags'
 
 export default createComponent({
   setup(): Data {
-    const {router} = useRouter()
+    const { router } = useRouter()
+
     // Feature Flags
     const flags = useFeatureFlags()
     const featureOneLabel = computed((): string => (flags.feature1 ? 'enabled' : 'disabled'))
     const featureTwoLabel = computed((): string => (flags.feature2 ? 'enabled' : 'disabled'))
-    const feature2 = computed( (): boolean => flags ? flags.feature2: false)
-    const userIsAuthed = computed( (): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
+
+    const userIsAuthed = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
+    const userCanSearch = computed((): boolean => flags.feature1 && userIsAuthed.value)
+
     function goSearch(): void {
       router.push('search')
     }
 
-    return { flags, feature2, featureOneLabel, featureTwoLabel, goSearch, userIsAuthed }
+    return { flags, featureOneLabel, featureTwoLabel, goSearch, userCanSearch, userIsAuthed }
   }
 })
 </script>
