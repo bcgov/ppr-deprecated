@@ -1,6 +1,6 @@
-import {initialize, LDClient, LDUser} from 'launchdarkly-js-client-sdk'
-import {anonymousUser, indentifiedUser} from './ld-user'
-import {FeatureFlags} from '@/flags/feature-flags'
+import { initialize, LDClient, LDFlagSet, LDUser } from 'launchdarkly-js-client-sdk'
+import { anonymousUser, indentifiedUser } from './ld-user'
+import { FeatureFlags } from '@/flags/feature-flags'
 
 class VueLdClient {
   private ldClient: LDClient
@@ -18,7 +18,7 @@ class VueLdClient {
       })
 
       this.ldClient.on('change', (): void => {
-        const allFlags = this.ldClient.allFlags()
+        const allFlags: LDFlagSet = this.ldClient.allFlags()
         console.debug('LDFlags on change flags', allFlags)
         this.updateFlags(allFlags)
       })
@@ -27,10 +27,10 @@ class VueLdClient {
     }
   }
 
-  private updateFlags(allFlags): void {
+  private updateFlags(allFlags: LDFlagSet): void {
     const flags = FeatureFlags.Instance
     console.debug('LDFlags on change flags', allFlags)
-    flags.feature1 = allFlags['poc-feature-1']
+    flags.feature1 = allFlags['search-document-registration-number']
     flags.feature2 = allFlags['poc-feature-2']
   }
 
