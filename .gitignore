@@ -8,7 +8,7 @@ __pycache__
 .venv
 .env
 .env.*
-.configuration.json
+configuration.json
 
 # Node packages
 node_modules
