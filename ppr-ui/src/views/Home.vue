@@ -79,19 +79,16 @@ export default createComponent({
   setup(): Data {
     const { router } = useRouter()
 
-    // Feature Flags
-    const flags = useFeatureFlags()
-    const featureOneLabel = computed((): string => (flags.feature1 ? 'enabled' : 'disabled'))
-    const featureTwoLabel = computed((): string => (flags.feature2 ? 'enabled' : 'disabled'))
-
     const userIsAuthed = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
-    const userCanSearch = computed((): boolean => flags.feature1 && userIsAuthed.value)
+
+    // Feature Flag
+    const userCanSearch = computed((): boolean => useFeatureFlags().feature1 && userIsAuthed.value)
 
     function goSearch(): void {
       router.push('search')
     }
 
-    return { flags, featureOneLabel, featureTwoLabel, goSearch, userCanSearch, userIsAuthed }
+    return { goSearch, userCanSearch, userIsAuthed }
   }
 })
 </script>
