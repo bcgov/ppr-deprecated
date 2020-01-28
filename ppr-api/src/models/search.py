@@ -20,8 +20,10 @@ class SearchResult(BaseORM):
     __tablename__ = 'search_result'
 
     search_id = sqlalchemy.Column(sqlalchemy.BigInteger, sqlalchemy.ForeignKey('search.id'), primary_key=True)
-    registration_number = sqlalchemy.Column(sqlalchemy.String(length=7), primary_key=True)
+    registration_number = sqlalchemy.Column(sqlalchemy.String(length=7),
+                                            sqlalchemy.ForeignKey('registration.reg_number'), primary_key=True)
     exact = sqlalchemy.Column(sqlalchemy.BOOLEAN)
     selected = sqlalchemy.Column(sqlalchemy.BOOLEAN)
 
     search = sqlalchemy.orm.relationship('Search', back_populates='results')
+    financing_statement_event = sqlalchemy.orm.relationship('FinancingStatementEvent')
