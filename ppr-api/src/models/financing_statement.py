@@ -14,7 +14,7 @@ class FinancingStatement(BaseORM):
     life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
     expiry_date = sqlalchemy.Column(sqlalchemy.Date)
     discharged = sqlalchemy.Column(sqlalchemy.BOOLEAN)
-    last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime)
+    last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, onupdate=sqlalchemy.func.now())
     user_id = sqlalchemy.Column(sqlalchemy.String(length=8))
 
     events = sqlalchemy.orm.relationship('FinancingStatementEvent', back_populates='base_registration')
@@ -27,8 +27,7 @@ class FinancingStatementEvent(BaseORM):
     base_registration_number = sqlalchemy.Column('base_reg_number', sqlalchemy.String(length=10),
                                                  sqlalchemy.ForeignKey('financing_statement.reg_number'))
     change_type_code = sqlalchemy.Column('change_type_cd', sqlalchemy.CHAR(length=2))
-    registration_date = sqlalchemy.Column('reg_date', sqlalchemy.DateTime)
-    life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
+    registration_date = sqlalchemy.Column('reg_date', sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
     description = sqlalchemy.Column(postgresql.TEXT)
     document_number = sqlalchemy.Column(sqlalchemy.String(length=8))
 

@@ -2,7 +2,9 @@ from starlette.testclient import TestClient
 
 import main
 import models.database
+import models.financing_statement
 import models.search
+import schemas.financing_statement
 
 client = TestClient(main.app)
 
@@ -39,7 +41,8 @@ def test_create_registration_number_search():
 
 
 def test_create_search_with_exact_match():
-    search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': '987654Z'}}
+    search_value = create_test_financing_statement().registration_number
+    search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': search_value}}
 
     rv = client.post('/searches', json=search_input)
 
@@ -49,7 +52,7 @@ def test_create_search_with_exact_match():
     search_results = retrieve_search_result_records(search_id)
     assert len(search_results) == 1
     search_result = search_results[0]
-    assert search_result.registration_number == '987654Z'
+    assert search_result.registration_number == search_value
     assert search_result.exact
     assert search_result.selected
 
@@ -78,5 +81,24 @@ def retrieve_search_result_records(search_id: int):
     db = models.database.SessionLocal()
     try:
         return db.query(models.search.SearchResult).filter(models.search.SearchResult.search_id == search_id).all()
+    finally:
+        db.close()
+
+
+def create_test_financing_statement():
+    db = models.database.SessionLocal()
+    try:
+        reg_num = str(db.execute("SELECT nextval('reg_number_seq')").first()[0])
+        fin_stmt = models.financing_statement.FinancingStatement(
+            registration_number=reg_num, status='A', life_in_years=-1, user_id=-1,
+            registration_type_code=schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value
+        )
+        event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num)
+        fin_stmt.events.append(event)
+
+        db.add(fin_stmt)
+        db.commit()
+        db.refresh(fin_stmt)
+        return fin_stmt
     finally:
         db.close()
