@@ -1,6 +1,5 @@
 """ Define the endpoints for searching. """
 
-import datetime
 import json
 import typing
 
@@ -12,6 +11,7 @@ import config
 import models.search
 import schemas.financing_statement
 import schemas.search
+import repository.financing_statement_repository
 import repository.search_repository
 
 router = fastapi.APIRouter()
@@ -51,13 +51,16 @@ def read_search(search_id: int, search_repository: repository.search_repository.
 
 @router.post('/searches', response_model=schemas.search.Search, response_model_by_alias=False)
 def create_search(response: responses.Response, search_input: schemas.search.SearchBase,
-                  search_repository: repository.search_repository.SearchRepository = fastapi.Depends()):
+                  search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
+                  fs_repo: repository.financing_statement_repository.FinancingStatementRepository = fastapi.Depends()):
     exact_matches = []
     similar_matches = []
-    # TODO execute the search query and create search_result records. See https://github.com/bcgov/ppr/issues/222
-    # The financing statements are not yet available to search, so create an exact match for now
+    criteria_value = search_input.criteria['value'].strip() if 'value' in search_input.criteria else None
+
     if search_input.type == schemas.search.SearchType.REGISTRATION_NUMBER.value:
-        exact_matches = [search_input.criteria['value']]
+        fs_event = fs_repo.find_event_by_registration_number(criteria_value)
+        if fs_event:
+            exact_matches = [fs_event.registration_number]
 
     search_model = search_repository.create_search(search_input, exact_matches, similar_matches)
     response.status_code = status.HTTP_201_CREATED
@@ -85,11 +88,13 @@ def read_search_results(search_id: int,
 
 def map_search_result_output(search_result: models.search.SearchResult):
     # TODO Showing dummy data for the moment, complete as the data model fills out. Issue #222.
+    event = search_result.financing_statement_event
+    financing_statement = event.base_registration
     fin_stmt = schemas.financing_statement.FinancingStatement(
-        baseRegistrationNumber=search_result.registration_number, documentId='B9876543',
-        registrationDateTime=datetime.datetime.now(), registeringParty={}, securedParties=[], debtors=[],
-        vehicleCollateral=[], generalCollateral=[],
-        type=schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.name
+        baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
+        documentId=event.document_number, expiryDate=financing_statement.expiry_date,
+        registeringParty={}, securedParties=[], debtors=[], vehicleCollateral=[], generalCollateral=[],
+        type=schemas.financing_statement.RegistrationType(financing_statement.registration_type_code).name
     )
     search_result_type = schemas.search.SearchResultType(search_result.exact).name
     return schemas.search.SearchResult(type=search_result_type, financingStatement=fin_stmt)

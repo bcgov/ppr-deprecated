@@ -6,8 +6,8 @@ from pydantic import BaseModel
 
 
 class RegistrationType(enum.Enum):
-    SECURITY_AGREEMENT = 'SECURITY_AGREEMENT'
-    REPAIRERS_LIEN = 'REPAIRERS_LIEN'
+    SECURITY_AGREEMENT = 'SA'
+    REPAIRERS_LIEN = 'RL'
 
 
 class FinancingStatementBase(BaseModel):
