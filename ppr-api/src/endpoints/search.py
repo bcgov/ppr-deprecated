@@ -87,7 +87,6 @@ def read_search_results(search_id: int,
 
 
 def map_search_result_output(search_result: models.search.SearchResult):
-    # TODO Showing dummy data for the moment, complete as the data model fills out. Issue #222.
     event = search_result.financing_statement_event
     financing_statement = event.base_registration
     fin_stmt = schemas.financing_statement.FinancingStatement(

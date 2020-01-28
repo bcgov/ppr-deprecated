@@ -78,3 +78,8 @@ class SearchResult(pydantic.BaseModel):
         except KeyError:
             raise ValueError('type must be one of: {}'.format(list(map(lambda st: st.name, SearchResultType))))
         return value
+
+    class Config:
+        json_encoders = {
+            datetime.datetime: lambda dt: dt.isoformat(timespec='seconds')
+        }
