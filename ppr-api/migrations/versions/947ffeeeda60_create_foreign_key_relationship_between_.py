@@ -16,7 +16,7 @@ depends_on = None
 
 
 def upgrade():
-    # Remove orphaned search_result rows (don't not have a valid registration_number)
+    # Remove orphaned search_result rows (don't have a valid registration_number)
     op.execute('DELETE FROM search_result sr WHERE NOT EXISTS '
                '(SELECT 1 FROM registration r WHERE r.reg_number = sr.registration_number)')
 
