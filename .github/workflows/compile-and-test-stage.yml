@@ -25,15 +25,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/dev.txt
-      - name: Lint non-test Source
+          pip install .
+      - name: Lint Python Source
         working-directory: ppr-api
         run: |
           pylint -E src
-          flake8 src
+          pylint -E --disable=E1101 migrations
+          flake8 src migrations tests
       - name: Execute Unit Tests with PyTest
         working-directory: ppr-api
         run: |
-          pip install .
           pytest
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
