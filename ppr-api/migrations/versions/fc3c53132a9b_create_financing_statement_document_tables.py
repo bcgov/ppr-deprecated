@@ -49,14 +49,18 @@ def upgrade():
         sa.Column('change_type_cd', sa.CHAR(length=2), sa.ForeignKey('registration_change_type.change_type_cd'),
                   nullable=True),
         sa.Column('reg_date', sa.DateTime, server_default=sa.text('NOW()'), nullable=False),
-        sa.Column('life', sa.Integer, nullable=False),
+        sa.Column('life', sa.Integer),
         sa.Column('crown_charge_act', sa.CHAR(length=2), sa.ForeignKey('crown_charge_type.crown_charge_type_cd')),
         sa.Column('crown_charge_other', sa.String(length=70)),
         sa.Column('description', postgresql.TEXT),
-        sa.Column('document_number', sa.CHAR(length=8), nullable=False),
+        sa.Column('document_number', sa.CHAR(length=8)),
         sa.Column('ims_billing_number', sa.String(length=8)),
         sa.Column('ims_user_id', sa.String(length=32))
     )
+
+    # Resize search_result.registration_number to match registration.reg_number
+    op.alter_column('search_result', 'registration_number', existing_type=sa.String(length=7),
+                    type_=sa.String(length=10), existing_nullable=False, nullable=False)
 
 
 def downgrade():

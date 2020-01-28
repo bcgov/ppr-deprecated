@@ -42,8 +42,6 @@ class SearchBase(pydantic.BaseModel):
                 raise ValueError('"value" is required in criteria')
             if not criteria['value'].isalnum():
                 raise ValueError('"value" must be alphanumeric')
-            if len(criteria['value']) != 7:
-                raise ValueError('"value" must be 7 characters')
         return criteria
 
     class Config:

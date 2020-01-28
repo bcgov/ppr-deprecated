@@ -22,7 +22,7 @@ class FinancingStatementBase(BaseModel):
 
 class FinancingStatement(FinancingStatementBase):
     baseRegistrationNumber: str
-    documentId: str
+    documentId: str = None
     registrationDateTime: datetime.datetime
 
     class Config:
