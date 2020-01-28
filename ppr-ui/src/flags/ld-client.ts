@@ -30,8 +30,8 @@ class VueLdClient {
   private updateFlags(allFlags: LDFlagSet): void {
     const flags = FeatureFlags.Instance
     console.debug('LDFlags on change flags', allFlags)
-    flags.feature1 = allFlags['search-document-registration-number']
-    flags.feature2 = allFlags['poc-feature-2']
+    flags.feature1 = allFlags['search-registration-number']
+    flags.feature2 = allFlags['search-serial-number']
   }
 
   // changeUserContext(userKey: string) {
