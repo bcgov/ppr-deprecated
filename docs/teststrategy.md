@@ -1,3 +1,0 @@
-# Test Strategy
-
-Update test
