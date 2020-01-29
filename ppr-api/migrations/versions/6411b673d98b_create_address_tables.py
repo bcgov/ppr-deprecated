@@ -69,7 +69,7 @@ def upgrade():
         {'country_type_cd': 'CF', 'description': 'Central African Republic'},
         {'country_type_cd': 'CG', 'description': 'Congo'},
         {'country_type_cd': 'CH', 'description': 'Switzerland'},
-        {'country_type_cd': 'CI', 'description': 'Cote D''Ivoire'},
+        {'country_type_cd': 'CI', 'description': "Cote D'Ivoire"},
         {'country_type_cd': 'CK', 'description': 'Cook Islands'},
         {'country_type_cd': 'CL', 'description': 'Chile'},
         {'country_type_cd': 'CM', 'description': 'Cameroon'},
