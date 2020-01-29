@@ -26,10 +26,10 @@
             @search="doSearchSerial"
           />
           <search-input
-            :error-message="searchRegNum.errorMessage"
-            :label="searchRegNum.label"
-            :hint="searchRegNum.describeValid"
-            :rules="searchRegNum.validationRules"
+            :error-message="searcherRegNum.errorMessage"
+            :label="searcherRegNum.label"
+            :hint="searcherRegNum.describeValid"
+            :rules="searcherRegNum.validationRules"
             @search="doSearchRegNum"
           />
         </section>
@@ -55,7 +55,7 @@ export default createComponent({
     const loadIndicator = useLoadIndicator()
     const { router } = useRouter()
     const searcherSerial = useSearcherSerial()
-    const searchRegNum = useSearcherRegNum()
+    const searcherRegNum = useSearcherRegNum()
 
     function doSearch(searcher, term: string): Promise<void> {
       loadIndicator.start()
@@ -73,7 +73,7 @@ export default createComponent({
     }
 
     function doSearchRegNum(term: string) {
-      doSearch(searchRegNum, term)
+      doSearch(searcherRegNum, term)
     }
 
     function doSearchSerial(term: string) {
@@ -82,7 +82,7 @@ export default createComponent({
 
     return {
       doSearchRegNum,
-      searchRegNum,
+      searcherRegNum,
       doSearchSerial,
       searcherSerial
     }
