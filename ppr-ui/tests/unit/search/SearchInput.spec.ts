@@ -12,7 +12,7 @@ const vuetify = new Vuetify()
 
 describe('SearchInput.vue', (): void => {
   it('handles no props', (): void => {
-    const wrapper: Wrapper<SearchInput> = mount(SearchInput, { vuetify })
+    const wrapper: Wrapper<Vue> = mount(SearchInput, { vuetify })
 
     // Just need something to test: should not emit the "search" event unti the button is clicked.
     expect(wrapper.emitted().search).not.toBeDefined()
@@ -21,14 +21,14 @@ describe('SearchInput.vue', (): void => {
   describe(':props', (): void => {
     it(':errorMessage - should display the error', (): void => {
       const properties = reactive({ errorMessage: 'ERRORMESSAGE1' })
-      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
+      const wrapper: Wrapper<Vue> = mount(SearchInput, { propsData: properties, vuetify })
 
       expect(wrapper.text()).toContain('ERRORMESSAGE1')
     })
 
     it(':errorMessage - should display the changed error', async (): Promise<void> => {
       const properties = reactive({ errorMessage: 'ERRORMESSAGE1' })
-      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
+      const wrapper: Wrapper<Vue> = mount(SearchInput, { propsData: properties, vuetify })
 
       properties.errorMessage = 'ERRORMESSAGE2'
       await Vue.nextTick()
@@ -39,14 +39,14 @@ describe('SearchInput.vue', (): void => {
 
     it(':label - should display the label', (): void => {
       const properties = reactive({ label: 'LABEL1' })
-      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
+      const wrapper: Wrapper<Vue> = mount(SearchInput, { propsData: properties, vuetify })
 
       expect(wrapper.text()).toContain('LABEL1')
     })
 
     it(':label - should display the changed label', async (): Promise<void> => {
       const properties = reactive({ label: 'LABEL1' })
-      const wrapper: Wrapper<SearchInput> = mount(SearchInput, { propsData: properties, vuetify })
+      const wrapper: Wrapper<Vue> = mount(SearchInput, { propsData: properties, vuetify })
 
       properties.label = 'LABEL2'
       await Vue.nextTick()
