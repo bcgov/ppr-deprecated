@@ -99,7 +99,7 @@ export class SearcherRegNum {
   string | undefined {
     // iterate over the rules ... if any rule results in a string error message ...
     // ... then return the result of running that rule.
-    let rule = this._serialNumberRules.find((rule: VFunction): boolean => typeof rule(input) === 'string')
+    let rule = this._serialNumberRules.find((aRule: VFunction): boolean => typeof aRule(input) === 'string')
     return rule ? rule(input) as string : undefined
   }
 
