@@ -10,7 +10,7 @@ Vue.use(VueCompositionApi)
 
 // TODO find a way to test the provides and injects see https://github.com/bcgov/ppr/issues/377
 describe.skip('provide inject', (): void => {
-  it('Doc reg search module provides and injects SearcherDocReg', (): void => {
+  it('Reg search module provides and injects SearcherDocReg', (): void => {
     // can not use provide outside of setup()
     // provideSearcherDocReg('http://sample.base.url/')
     const searchDocReg = useSearcherRegNum()
@@ -18,7 +18,7 @@ describe.skip('provide inject', (): void => {
   })
 })
 
-describe('document registration number', (): void => {
+describe('Registration number', (): void => {
   let ss: SearcherRegNum
 
   beforeAll((): void => {
@@ -66,7 +66,7 @@ describe('document registration number validation', (): void => {
 })
 
 
-describe('document registration number search', (): void => {
+describe('Registration number search', (): void => {
   let ss: SearcherRegNum
   let getResults: RegNumResult[] = [
     {

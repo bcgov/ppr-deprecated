@@ -7,11 +7,11 @@ const REG_EXP = /^[0-9a-zA-Z]{1,8}$/
 
 // export text constants for use in tests
 export const SS_TEXT = {
-  errorMsg: (text: string): string => `Search document registration number error - ${text}`,
-  describeValid: `Document registration number has any combination of letters, characters, and numbers (up to ${MAX_CHAR} characters)`,
-  label: 'Document registration number',
-  required: 'Require document registration number',
-  tooLong: `Document registration number can only have ${MAX_CHAR} characters`
+  errorMsg: (text: string): string => `Error with registration number search - ${text}`,
+  describeValid: `A valid registration number has up to ${MAX_CHAR} letters and numbers`,
+  label: 'Registration number',
+  required: 'The registration number is required',
+  tooLong: `Entered registration number its too long. Maximum length is ${MAX_CHAR} characters`
 }
 
 export interface RegNumResult {
@@ -30,7 +30,7 @@ export interface RegNumResult {
   };
 }
 
-interface VFunction {
+interface Validator {
   (value: string): boolean | string;
 }
 
@@ -49,7 +49,7 @@ export class SearcherRegNum {
   private _term: string
   private _searchId: string
   private readonly _baseUrl: string
-  private readonly _serialNumberRules: VFunction[]
+  private readonly _validationRules: Validator[]
 
   public constructor(baseUrl: string) {
     this._errorMessage = ''
@@ -57,7 +57,7 @@ export class SearcherRegNum {
     this._term = ''
     this._baseUrl = baseUrl
     this._searchId = ''
-    this._serialNumberRules = [
+    this._validationRules = [
       (value): (boolean | string) => {
         return !!value || SS_TEXT.required
       },
@@ -90,16 +90,15 @@ export class SearcherRegNum {
     return SS_TEXT.describeValid
   }
 
-  public get validationRules(): VFunction[] {
-    return this._serialNumberRules
+  public get validationRules(): Validator[] {
+    return this._validationRules
   }
 
   // This is a public method is for testing the validation rules.
-  public validate(input: string):
-  string | undefined {
+  public validate(input: string): string | undefined {
     // iterate over the rules ... if any rule results in a string error message ...
     // ... then return the result of running that rule.
-    let rule = this._serialNumberRules.find((aRule: VFunction): boolean => typeof aRule(input) === 'string')
+    let rule = this._validationRules.find((aRule: Validator): boolean => typeof aRule(input) === 'string')
     return rule ? rule(input) as string : undefined
   }
 
@@ -120,32 +119,6 @@ export class SearcherRegNum {
       }
     }
     let url = `${this._baseUrl}searches`
-    /*
-    let samplePostResults = {
-      "type": "REGISTRATION_NUMBER",
-      "criteria": {
-        "value": "1234567"
-      },
-      "id": 2,
-      "searchDateTime": "2020-01-27T18:33:30+00:00"
-    }
-
-    let sampleGetResults = {
-      "type": "EXACT",
-      "financingStatement": {
-        "type": "SECURITY_AGREEMENT",
-        "registeringParty": {},
-        "securedParties": [],
-        "debtors": [],
-        "vehicleCollateral": [],
-        "generalCollateral": [],
-        "expiryDate": null,
-        "baseRegistrationNumber": "1234567",
-        "documentId": "B9876543",
-        "registrationDateTime": "2020-01-27T10:55:09.530526"
-      }
-    }
-*/
     return axiosAuth
       .post(url, data, config)
       .then((response): Promise<AxiosResponse> => {
