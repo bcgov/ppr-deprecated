@@ -19,6 +19,7 @@ import {provideFeatureFlags} from "@/flags/feature-flags"
 import {provideLoadIndicator} from '@/load-indicator'
 import {provideRouter, useRouter} from "@/router/router"
 import {provideSearcherSerial} from "@/search/search-serial"
+import {provideSearcherRegNum} from "@/search/search-regnum"
 import AppData from "@/utils/app-data"
 import { initializeVueLdClient } from '@/flags/ld-client'
 import uuid from 'uuid'
@@ -61,6 +62,7 @@ export default createComponent({
     provideFeatureFlags()
     provideLoadIndicator()
     provideSearcherSerial(AppData.config.pprApiUrl)
+    provideSearcherRegNum(AppData.config.pprApiUrl)
     provideRouter()
 
     const {router} = useRouter()

@@ -25,6 +25,13 @@
             :rules="searcherSerial.validationRules"
             @search="doSearchSerial"
           />
+          <search-input
+            :error-message="searcherRegNum.errorMessage"
+            :label="searcherRegNum.label"
+            :hint="searcherRegNum.describeValid"
+            :rules="searcherRegNum.validationRules"
+            @search="doSearchRegNum"
+          />
         </section>
       </article>
     </v-container>
@@ -38,6 +45,7 @@ import { useLoadIndicator } from '@/load-indicator'
 import { useRouter } from '@/router/router'
 import SearchInput from '@/search/SearchInput.vue'
 import { useSearcherSerial } from '@/search/search-serial'
+import { useSearcherRegNum } from '@/search/search-regnum'
 
 
 export default createComponent({
@@ -46,8 +54,8 @@ export default createComponent({
   setup(): Data {
     const loadIndicator = useLoadIndicator()
     const { router } = useRouter()
-
     const searcherSerial = useSearcherSerial()
+    const searcherRegNum = useSearcherRegNum()
 
     function doSearch(searcher, term: string): Promise<void> {
       loadIndicator.start()
@@ -64,14 +72,20 @@ export default createComponent({
         })
     }
 
+    function doSearchRegNum(term: string) {
+      doSearch(searcherRegNum, term)
+    }
+
     function doSearchSerial(term: string) {
       doSearch(searcherSerial, term)
     }
 
     return {
+      doSearchRegNum,
+      searcherRegNum,
       doSearchSerial,
       searcherSerial
     }
   }
-})   
+})
 </script>
