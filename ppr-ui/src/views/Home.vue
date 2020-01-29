@@ -82,7 +82,8 @@ export default createComponent({
     const userIsAuthed = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
 
     // Feature Flag
-    const userCanSearch = computed((): boolean => useFeatureFlags().feature1 && userIsAuthed.value)
+    const userCanSearch = computed((): boolean => (useFeatureFlags().feature1 || useFeatureFlags().feature2) &&
+      userIsAuthed.value)
 
     function goSearch(): void {
       router.push('search')
