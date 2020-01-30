@@ -6,6 +6,7 @@
           <h1>Personal Property Registry</h1>
         </header>
         <section>
+          <p>This is where text will appear about the list of financing statements that have resulted from a search</p>
           <p>
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
             ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -14,19 +15,19 @@
             deserunt mollit anim id est laborum."
           </p>
         </section>
-        <search-results-serial />
+        <search-results />
       </article>
     </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import {createComponent} from "@vue/composition-api"
-import {Data} from "@vue/composition-api/dist/ts-api/component"
-import SearchResultsSerial from '@/search/SearchResultsSerial.vue'
+import { createComponent } from '@vue/composition-api'
+import { Data } from '@vue/composition-api/dist/ts-api/component'
+import SearchResults from '@/search/SearchResults.vue'
 
 export default createComponent({
-  components: {SearchResultsSerial},
+  components: { SearchResults },
   setup(): Data {
     return {
     }
