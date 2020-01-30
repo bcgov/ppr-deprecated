@@ -33,6 +33,10 @@ $app-header-height: 70px;
 
 .app-footer {
   flex: 0 0 auto;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }
 
 .container {
