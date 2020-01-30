@@ -37,11 +37,16 @@ class SearchBase(pydantic.BaseModel):
         if 'type' not in values:
             return criteria
 
-        if values['type'] == SearchType.REGISTRATION_NUMBER.value:
-            if 'value' not in criteria:
-                raise ValueError('"value" is required in criteria')
-            if not criteria['value'].isalnum():
-                raise ValueError('"value" must be alphanumeric')
+        if values['type'] == SearchType.INDIVIDUAL_DEBTOR.value:
+            if 'debtorName' not in criteria:
+                raise ValueError('"debtorName" is required in criteria')
+            elif 'last' not in criteria['debtorName']:
+                raise ValueError('"last" is required in criteria.debtorName')
+            elif 'first' not in criteria['debtorName']:
+                raise ValueError('"first" is required in criteria.debtorName')
+        elif 'value' not in criteria:
+            raise ValueError('"value" is required in criteria')
+
         return criteria
 
     class Config:

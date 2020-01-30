@@ -12,20 +12,77 @@ def test_search_base_validate_criteria_no_value_with_regnum():
         pytest.fail('A validation error was expected since there was no value field in the criteria')
 
 
-def test_search_base_validate_criteria_when_value_not_alphanumeric_regnum():
+def test_search_base_validate_criteria_no_value_with_serial():
     try:
-        schemas.search.SearchBase(criteria={'value': '123_56A'},
-                                  type=schemas.search.SearchType.REGISTRATION_NUMBER.name)
+        schemas.search.SearchBase(criteria={}, type=schemas.search.SearchType.SERIAL_NUMBER.name)
     except ValueError:
         pass
     else:
-        pytest.fail('A validation error was expected since the registration number has an invalid format')
+        pytest.fail('A validation error was expected since there was no value field in the criteria')
+
+
+def test_search_base_validate_criteria_when_value_not_alphanumeric_regnum():
+    search = schemas.search.SearchBase(criteria={'value': '123_56A'},
+                                       type=schemas.search.SearchType.REGISTRATION_NUMBER.name)
+    assert search.criteria == {'value': '123_56A'}
 
 
 def test_search_base_validate_criteria_when_valid_with_regnum():
     search = schemas.search.SearchBase(criteria={'value': '123456A'},
                                        type=schemas.search.SearchType.REGISTRATION_NUMBER.name)
     assert search.criteria == {'value': '123456A'}
+
+
+def test_search_base_validate_criteria_when_valid_with_serial():
+    search = schemas.search.SearchBase(criteria={'value': '123456A'},
+                                       type=schemas.search.SearchType.SERIAL_NUMBER.name)
+    assert search.criteria == {'value': '123456A'}
+
+
+def test_search_base_validate_criteria_with_regnum_when_debtorname_instead_of_value():
+    try:
+        schemas.search.SearchBase(criteria={'debtorName': {'first': 'John', 'last': 'Doe'}},
+                                  type=schemas.search.SearchType.REGISTRATION_NUMBER.name)
+    except ValueError:
+        pass
+    else:
+        pytest.fail('A validation error was expected since there was no value field in the criteria')
+
+
+def test_search_base_validate_criteria_with_inddebtor_when_first_and_last_present():
+    search = schemas.search.SearchBase(criteria={'debtorName': {'first': 'John', 'last': 'Doe'}},
+                              type=schemas.search.SearchType.INDIVIDUAL_DEBTOR.name)
+    assert search.criteria == {'debtorName': {'first': 'John', 'last': 'Doe'}}
+
+
+def test_search_base_validate_criteria_with_inddebtor_when_first_name_missing():
+    try:
+        schemas.search.SearchBase(criteria={'debtorName': {'last': 'Doe'}},
+                                  type=schemas.search.SearchType.INDIVIDUAL_DEBTOR.name)
+    except ValueError:
+        pass
+    else:
+        pytest.fail('A validation error was expected since there was no first field in the debtorName')
+
+
+def test_search_base_validate_criteria_with_inddebtor_when_last_name_missing():
+    try:
+        schemas.search.SearchBase(criteria={'debtorName': {'first': 'John'}},
+                                  type=schemas.search.SearchType.INDIVIDUAL_DEBTOR.name)
+    except ValueError:
+        pass
+    else:
+        pytest.fail('A validation error was expected since there was no last field in the debtorName')
+
+
+def test_search_base_validate_criteria_with_inddebtor_when_value_instead_of_debtorname():
+    try:
+        schemas.search.SearchBase(criteria={'value': 'John Doe'},
+                                  type=schemas.search.SearchType.INDIVIDUAL_DEBTOR.name)
+    except ValueError:
+        pass
+    else:
+        pytest.fail('A validation error was expected since there was no debtorName field in the criteria')
 
 
 def test_search_base_validate_type_when_invalid():
