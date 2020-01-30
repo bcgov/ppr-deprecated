@@ -15,7 +15,7 @@
             deserunt mollit anim id est laborum."
           </p>
         </section>
-        <search-results-registration-number />
+        <search-results />
       </article>
     </v-container>
   </div>
@@ -24,10 +24,10 @@
 <script lang="ts">
 import {createComponent} from "@vue/composition-api"
 import {Data} from "@vue/composition-api/dist/ts-api/component"
-import SearchResultsRegistrationNumber from '@/search/SearchResultsRegistrationNumber.vue'
+import SearchResults from '@/search/SearchResults.vue'
 
 export default createComponent({
-  components: {SearchResultsRegistrationNumber},
+  components: {SearchResults},
   setup(): Data {
     return {
     }
