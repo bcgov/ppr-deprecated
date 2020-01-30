@@ -33,6 +33,3 @@ export default createComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-</style>
