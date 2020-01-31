@@ -7,13 +7,13 @@ def SONAR_ROUTE_NAME = 'sonarqube'
 
 // The namespace in which the SonarQube route resides.  Used to dynamically get the URL for SonarQube.
 // Leave blank if the pipeline is running in same namespace as the route.
-def SONAR_ROUTE_NAMESPACE = 'devex-von-tools'
+def SONAR_ROUTE_NAMESPACE = 'zwmtib-tools'
 
 // The name of your SonarQube project
-def SONAR_PROJECT_NAME = 'BC Registries Agent'
+def SONAR_PROJECT_NAME = 'PPR'
 
 // The project key of your SonarQube project
-def SONAR_PROJECT_KEY = 'BCRegistriesAgent'
+def SONAR_PROJECT_KEY = 'ppr'
 
 // The base directory of your project.
 // This is relative to the location of the `sonar-runner` directory within your project.
@@ -22,7 +22,7 @@ def SONAR_PROJECT_BASE_DIR = '../'
 
 // The source code directory you want to scan.
 // This is relative to the project base directory.
-def SONAR_SOURCES = './'
+def SONAR_SOURCES = 'ppr-api/src,ppr-ui/src'
 // ================================================================================================
 
 // Gets the URL associated to a named route.
@@ -62,14 +62,14 @@ String getSonarQubePwd() {
 
 // The jenkins-python3nodejs template has been purpose built for supporting SonarQube scanning.
 podTemplate(
-  label: 'jenkins-python3nodejs',
-  name: 'jenkins-python3nodejs',
+  label: 'jenkins-slave',
+  name: 'jenkins-slave',
   serviceAccount: 'jenkins',
   cloud: 'openshift',
   containers: [
     containerTemplate(
       name: 'jnlp',
-      image: '172.50.0.2:5000/openshift/jenkins-slave-python3nodejs',
+      image: 'docker-registry.default.svc:5000/zwmtib-tools/dotnet-20-jenkins-slave-rhel7',
       resourceRequestCpu: '1000m',
       resourceLimitCpu: '2000m',
       resourceRequestMemory: '2Gi',
@@ -80,7 +80,7 @@ podTemplate(
     )
   ]
 ){
-  node('jenkins-python3nodejs') {
+  node('jenkins-slave') {
 
     stage('Checkout Source') {
       echo "Checking out source code ..."
