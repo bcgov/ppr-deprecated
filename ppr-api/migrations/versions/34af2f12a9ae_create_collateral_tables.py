@@ -17,7 +17,6 @@ depends_on = None
 
 
 def upgrade():
-
     vehicle_type_table = op.create_table(
         'vehicle_type',
         sa.Column('vehicle_type_cd', sa.CHAR(length=2), primary_key=True),
@@ -36,28 +35,29 @@ def upgrade():
 
     op.create_table(
         'vehicle',
-        sa.Column('reg_number_start', sa.String(length=10), nullable=False),
-        sa.Column('reg_number_end', sa.String(length=10)),
-        sa.Column('vehicle_type_cd', sa.CHAR(length=2), sa.ForeignKey(
-            'vehicle_type.vehicle_type_cd'), nullable=False),
+        sa.Column('id', sa.BigInteger, primary_key=True),
+        sa.Column('reg_number_start', sa.String(length=10), sa.ForeignKey('registration.reg_number'), nullable=False),
+        sa.Column('reg_number_end', sa.String(length=10), sa.ForeignKey('registration.reg_number')),
+        sa.Column('vehicle_type_cd', sa.CHAR(length=2), sa.ForeignKey('vehicle_type.vehicle_type_cd'), nullable=False),
+        sa.Column('base_reg_number', sa.String(length=10), sa.ForeignKey('financing_statement.reg_number')),
         sa.Column('year', sa.BigInteger),
-        sa.Column('make', sa.String(length=25)),
-        sa.Column('model', sa.String(length=25)),
+        sa.Column('make', postgresql.TEXT),
+        sa.Column('model', postgresql.TEXT),
         sa.Column('serial_number', sa.String(length=25)),
         sa.Column('mhr_number', sa.String(length=7))
     )
 
     op.create_table(
         'general',
-        sa.Column('reg_number_start', sa.String(length=10), nullable=False),
-        sa.Column('reg_number_end', sa.String(length=10)),
+        sa.Column('id', sa.BigInteger, primary_key=True),
+        sa.Column('reg_number_start', sa.String(length=10), sa.ForeignKey('registration.reg_number'), nullable=False),
+        sa.Column('reg_number_end', sa.String(length=10), sa.ForeignKey('registration.reg_number')),
         sa.Column('description', postgresql.TEXT),
-        sa.Column('reg_number_fk', sa.String(length=10),
-                  sa.ForeignKey('financing_statement.reg_number'))
+        sa.Column('base_reg_number', sa.String(length=10), sa.ForeignKey('financing_statement.reg_number'))
     )
 
 
 def downgrade():
-    op.drop_table('vehicle_type')
     op.drop_table('vehicle')
+    op.drop_table('vehicle_type')
     op.drop_table('general')
