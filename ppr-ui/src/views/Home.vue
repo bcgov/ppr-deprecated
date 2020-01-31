@@ -39,11 +39,6 @@
                       Search
                     </router-link>
                   </li>
-                  <li v-if="userCanSearch">
-                    <router-link to="results">
-                      Results
-                    </router-link>
-                  </li>
                   <li>
                     <router-link to="about">
                       About

@@ -1,5 +1,4 @@
-import About from '@/views/Dashboard.vue'
-import Dashboard from '@/views/Dashboard.vue'
+import About from '@/views/About.vue'
 import Home from '@/views/Home.vue'
 import SearchPage from '@/views/SearchPage.vue'
 import ResultsPage from '@/views/ResultsPage.vue'
@@ -14,12 +13,6 @@ export default [
     name: 'home',
     component: Home, //() => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
     meta: {layout: 'public'}
-  },
-  {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: Dashboard,
-    meta: {requiresAuth: true, layout: 'user'}
   },
   {
     path: '/results',

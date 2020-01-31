@@ -1,10 +1,10 @@
 <template>
   <section>
     <header>
-      <h2>Results for your search of Personal Property Registry</h2>
+      <h2>Results for your search</h2>
     </header>
     <p>
-      Search terms: {{ terms }}
+      Search criteria: {{ terms }}
     </p>
     <div>
       <pre>{{ results }}</pre>
