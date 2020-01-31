@@ -1,6 +1,11 @@
 <template>
   <div>
     <v-container class="view-container">
+      <router-link to="home">
+        Home
+      </router-link>
+    </v-container>
+    <v-container class="view-container">
       <article id="mockSearchPage">
         <header>
           <h1>Personal Property Registry</h1>
@@ -18,13 +23,6 @@
           <header>
             <h2>Search the Personal Property Registry</h2>
           </header>
-          <search-input
-            :error-message="searcherSerial.errorMessage"
-            :label="searcherSerial.label"
-            :hint="searcherSerial.describeValidSerial"
-            :rules="searcherSerial.validationRules"
-            @search="doSearchSerial"
-          />
           <search-input
             :error-message="searcherRegNum.errorMessage"
             :label="searcherRegNum.label"
