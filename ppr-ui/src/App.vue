@@ -12,17 +12,16 @@
 </template>
 
 <script lang="ts">
-import {createComponent, computed, onErrorCaptured, provide, ref} from "@vue/composition-api"
-import {Data} from "@vue/composition-api/dist/component"
-import LoadIndicator from "@/load-indicator/LoadIndicator.vue"
-import {provideFeatureFlags} from "@/flags/feature-flags"
-import {provideLoadIndicator} from '@/load-indicator'
-import {provideRouter, useRouter} from "@/router/router"
-import {provideSearcherSerial} from "@/search/search-serial"
-import {provideSearcherRegNum} from "@/search/search-regnum"
-import AppData from "@/utils/app-data"
+import { createComponent, computed, onErrorCaptured, provide, ref } from '@vue/composition-api'
+import { Data } from '@vue/composition-api/dist/component'
+import LoadIndicator from '@/load-indicator/LoadIndicator.vue'
+import { provideFeatureFlags } from '@/flags/feature-flags'
+import { provideLoadIndicator } from '@/load-indicator'
+import { provideRouter, useRouter } from '@/router/router'
+import { provideSearcherSerial } from '@/search/search-serial'
+import { provideSearcherRegNum } from '@/search/search-regnum'
+import AppData from '@/utils/app-data'
 import { initializeVueLdClient } from '@/flags/ld-client'
-import uuid from 'uuid'
 import { APP_PATH } from '@/utils/config-helper'
 
 const DefaultLayout = 'public'
@@ -42,7 +41,7 @@ function authAPIURL(): string {
   NOTE: the following userKey is TEMPORARY and will disappear when we get auth set up.
   Create one user id per session.
  */
-const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('userKey') : uuid.v4()
+const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('userKey') : 'unauthenticated-user'
 sessionStorage.setItem('userKey', userKey)
 
 export default createComponent({
@@ -50,22 +49,21 @@ export default createComponent({
     LoadIndicator
   },
   setup(): Data {
-
     // Make the connection to the LD server. We could explore anonymous users if we need to.
     // For now we use a fixed per session user id.
     // Also note that this initialization will need to happen AFTER auth.
     initializeVueLdClient(AppData.config.launchDarklyClientKey, userKey)
 
-    provide("originUrl", origin())
-    provide("authApiUrl", authAPIURL())
-    provide("configuration", ref(AppData.config))
+    provide('originUrl', origin())
+    provide('authApiUrl', authAPIURL())
+    provide('configuration', ref(AppData.config))
     provideFeatureFlags()
     provideLoadIndicator()
     provideSearcherSerial(AppData.config.pprApiUrl)
     provideSearcherRegNum(AppData.config.pprApiUrl)
     provideRouter()
 
-    const {router} = useRouter()
+    const { router } = useRouter()
 
     const layout = computed((): string => (router.currentRoute.meta.layout || DefaultLayout) + '-layout')
 
@@ -84,6 +82,6 @@ export default createComponent({
 })
 
 </script>
+
 <style lang="scss">
 </style>
-

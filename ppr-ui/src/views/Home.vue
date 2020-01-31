@@ -70,20 +70,22 @@
 </template>
 
 <script lang="ts">
-import { createComponent, computed } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { Data } from '@vue/composition-api/dist/ts-api/component'
-import { useRouter } from '@/router/router'
+
 import { useFeatureFlags } from '@/flags/feature-flags'
+import { useRouter } from '@/router/router'
 
 export default createComponent({
   setup(): Data {
+    const features = useFeatureFlags()
     const { router } = useRouter()
 
     const userIsAuthed = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
 
     // Feature Flag
-    const userCanSearch = computed((): boolean => (useFeatureFlags().feature1 || useFeatureFlags().feature2) &&
-      userIsAuthed.value)
+    const userCanSearch = computed((): boolean => (features.getFlag('search-registration-number') ||
+      features.getFlag('search-serial-number')) && userIsAuthed.value)
 
     function goSearch(): void {
       router.push('search')
@@ -92,4 +94,5 @@ export default createComponent({
     return { goSearch, userCanSearch, userIsAuthed }
   }
 })
+
 </script>
