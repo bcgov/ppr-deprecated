@@ -11,6 +11,8 @@
 #
 PPR_API_IMS_API_URL=http://localhost:8888
 
+PPR_API_AUTH_API_URL=https://auth-api.hostname/api/v1
+
 # Allowed origins for cors. Provide a space separated list of urls.
 PPR_API_ALLOWED_ORIGINS=http://localhost:8080
 
