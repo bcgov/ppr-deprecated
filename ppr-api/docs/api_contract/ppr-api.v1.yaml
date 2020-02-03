@@ -31,6 +31,8 @@ paths:
               examples: {}
       operationId: get-searches
       parameters: []
+      security:
+        - JWT: []
     post:
       summary: 'Submit a new PPR search request '
       tags: []
@@ -46,7 +48,7 @@ paths:
                 Search Response:
                   value:
                     ref: /searches/95110d7f-91ce-47f2-a996-76e2dddc3cf7
-                    type: SERIAL
+                    type: SERIAL_NUMBER
                     criteria:
                       value: '1234'
                     results: /searches/95110d7f-91ce-47f2-a996-76e2dddc3cf7/results
@@ -55,6 +57,12 @@ paths:
               schema:
                 type: object
                 properties: {}
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: post-search
       requestBody:
         content:
@@ -62,12 +70,12 @@ paths:
             schema:
               $ref: '#/components/schemas/search'
             examples:
-              Search by Serial:
+              Search by Serial Number:
                 value:
-                  type: SERIAL
+                  type: SERIAL_NUMBER
                   criteria:
                     value: '1234'
-              Search by Base Registration Number:
+              Search by Registration Number:
                 value:
                   type: REGISTRATION_NUMBER
                   criteria:
@@ -78,9 +86,11 @@ paths:
                   criteria:
                     debtorName:
                       first: Homer
-                      second: J
+                      second: Jay
                       last: Simpson
       description: Initiates a new search transaction and will return a reference that can be used to review the results
+      security:
+        - JWT: []
   '/searches/{searchId}':
     get:
       summary: View the details for an individual search
@@ -92,7 +102,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/search'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-search-for-id
+      security:
+        - JWT: []
     parameters:
       - schema:
           type: string
@@ -118,6 +136,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/financing-statement'
               examples: {}
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-financing-statement-for-id
       parameters:
         - schema:
@@ -126,6 +150,8 @@ paths:
           name: version
           description: The version of the record to retrieve.  If not specified the most recent version will be retrieved.
       description: ''
+      security:
+        - JWT: []
   '/searches/{searchId}/results':
     parameters:
       - schema:
@@ -177,8 +203,16 @@ paths:
                         baseRegistrationNumber: '1000123'
                         documentId: D0000123
                         registrationDateTime: '2020-01-02T21:08:32Z'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       operationId: get-search-matches
       description: Display the financing statements that were found with the search criteria
+      security:
+        - JWT: []
 components:
   schemas:
     search:
@@ -337,4 +371,18 @@ components:
             - SIMILAR
         financingStatement:
           $ref: '#/components/schemas/financing-statement'
-  securitySchemes: {}
+    error:
+      title: error
+      type: object
+      properties:
+        code:
+          type: string
+          description: Identifier representing the type of error that occurred
+        description:
+          type: string
+          description: Description of the error
+      description: Contains details of an error that was encountered
+  securitySchemes:
+    JWT:
+      type: http
+      scheme: Bearer
