@@ -1,5 +1,9 @@
 // Vuetify Overrides
 
+.theme--light.v-application {
+  background: $gray2;
+}
+
 // Buttons
 .v-btn {
   min-width: 0;
