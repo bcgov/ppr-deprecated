@@ -1,4 +1,4 @@
-import Vue, {VNode} from 'vue'
+import Vue, { VNode } from 'vue'
 import VueCompositionApi from '@vue/composition-api'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
@@ -8,14 +8,11 @@ import router from '@/router/router'
 import store from './store'
 import layoutPublic from '@/layouts/LayoutPublic.vue'
 import layoutUser from '@/layouts/LayoutUser.vue'
-import SentryHelper from '@/sentry-helper'
-/*
-Import the global style sheet
- */
+import SentryHelper from '@/utils/sentry-helper'
 import './assets/styles/styles.scss'
-import {Config} from "@/utils/app-data"
+import { Config } from "@/utils/app-data"
 
-const opts = {iconfont: 'mdi'}
+const opts = { iconfont: 'mdi' }
 
 Vue.use(VueCompositionApi)
 Vue.use(Vuetify)
