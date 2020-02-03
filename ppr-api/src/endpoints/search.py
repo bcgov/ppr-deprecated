@@ -7,6 +7,7 @@ import fastapi
 import requests
 from starlette import responses, status
 
+import auth.authentication
 import config
 import models.search
 import schemas.financing_statement
@@ -19,7 +20,8 @@ router = fastapi.APIRouter()
 
 # TODO: read the ims-api endpoint from an environment variable.
 @router.get('/search')
-async def search(serial: str, response: responses.Response):
+async def search(serial: str, response: responses.Response,
+                 user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
     """
     Find financial statements that match the search criteria.
 
@@ -34,7 +36,8 @@ async def search(serial: str, response: responses.Response):
 
 
 @router.get('/searches/{search_id}', response_model=schemas.search.Search, response_model_by_alias=False)
-def read_search(search_id: int, search_repository: repository.search_repository.SearchRepository = fastapi.Depends()):
+def read_search(search_id: int, search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
+                user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
     """
     Get the details for a previously submitted search request
 
@@ -52,7 +55,8 @@ def read_search(search_id: int, search_repository: repository.search_repository.
 @router.post('/searches', response_model=schemas.search.Search, response_model_by_alias=False)
 def create_search(response: responses.Response, search_input: schemas.search.SearchBase,
                   search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
-                  fs_repo: repository.financing_statement_repository.FinancingStatementRepository = fastapi.Depends()):
+                  fs_repo: repository.financing_statement_repository.FinancingStatementRepository = fastapi.Depends(),
+                  user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
     exact_matches = []
     similar_matches = []
     criteria_value = search_input.criteria['value'].strip() if 'value' in search_input.criteria else None
@@ -70,7 +74,8 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
 @router.get('/searches/{search_id}/results', response_model=typing.List[schemas.search.SearchResult],
             response_model_by_alias=False)
 def read_search_results(search_id: int,
-                        search_repository: repository.search_repository.SearchRepository = fastapi.Depends()):
+                        search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
+                        user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
     """
     List the results for the provided search
 
