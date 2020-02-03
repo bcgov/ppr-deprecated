@@ -41,7 +41,7 @@ def upgrade():
         sa.Column('contact_name', postgresql.TEXT),
         sa.Column('area_code', sa.String(length=3)),
         sa.Column('phone_number', sa.String(length=7)),
-        sa.Column('email_address', postgresql.TEXT)
+        sa.Column('email_address', sa.String(length=255))
     )
 
     op.create_table(
