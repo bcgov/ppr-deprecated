@@ -14,21 +14,21 @@ import models.patroni
 router = fastapi.APIRouter()
 logger = logging.getLogger(__name__)
 
-STATUS_UP = "UP"
-STATUS_DOWN = "DOWN"
+STATUS_UP = 'UP'
+STATUS_DOWN = 'DOWN'
 
 
-@router.get("/health")
+@router.get('/health')
 def health():
     """
     Returns a health check for this service - if reachable always indicates up.
     """
     return {
-        "status": STATUS_UP
+        'status': STATUS_UP
     }
 
 
-@router.get("/database")
+@router.get('/database')
 def database(response: responses.Response,
              session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
     """
@@ -37,7 +37,7 @@ def database(response: responses.Response,
     return db_health(response, session, 'Database delegator')
 
 
-@router.get("/patroni")
+@router.get('/patroni')
 def patroni(response: responses.Response,
             session: sqlalchemy.orm.Session = fastapi.Depends(models.patroni.get_session)):
     """
@@ -46,7 +46,7 @@ def patroni(response: responses.Response,
     return db_health(response, session, 'Patroni')
 
 
-@router.get("/edb")
+@router.get('/edb')
 def edb(response: responses.Response, session: sqlalchemy.orm.Session = fastapi.Depends(models.edb.get_session)):
     """
     Returns a health check for the reachability of the EDB (or stand-in) database.
@@ -57,20 +57,20 @@ def edb(response: responses.Response, session: sqlalchemy.orm.Session = fastapi.
 def db_health(response: responses.Response, session: sqlalchemy.orm.Session, name: str):
     try:
         start: float = time.perf_counter()
-        session.execute("SELECT 1")
+        session.execute('SELECT 1')
         elapsed_time: float = time.perf_counter() - start
 
         if elapsed_time > 1:
-            logger.info("%s health check took longer than 1 second: %s", name, elapsed_time)
+            logger.info('%s health check took longer than 1 second: %s', name, elapsed_time)
 
         return {
-            "status": STATUS_UP
+            'status': STATUS_UP
         }
     except Exception as exception:
-        logger.warning("%s health check failed", name, exc_info=True)
+        logger.warning('%s health check failed', name, exc_info=True)
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
 
         return {
-            "status": STATUS_DOWN,
-            "error": str(exception)
+            'status': STATUS_DOWN,
+            'error': str(exception)
         }

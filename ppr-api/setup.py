@@ -14,6 +14,6 @@ setup(
     author='',
     author_email='',
     description='',
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest"]
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest']
 )

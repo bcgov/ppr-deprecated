@@ -15,11 +15,11 @@ app.add_middleware(
     cors.CORSMiddleware,
     allow_origins=config.CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"]
+    allow_methods=['*'],
+    allow_headers=['*']
 )
 
 # You should use uvicorn to run the app locally.  __main__ is provided to run it in a debugger. See
 # https://fastapi.tiangolo.com/tutorial/debugging/
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+if __name__ == '__main__':
+    uvicorn.run(app, host='0.0.0.0', port=8000)

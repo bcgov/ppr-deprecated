@@ -31,7 +31,7 @@ jobs:
         run: |
           pylint -E src
           pylint -E --disable=E1101 migrations
-          flake8 src migrations tests
+          flake8 src migrations tests *.py
       - name: Execute Unit Tests with PyTest
         working-directory: ppr-api
         run: |

@@ -12,7 +12,7 @@ import dotenv
 
 dotenv.load_dotenv()
 
-AUTH_API_URL = os.getenv("PPR_API_AUTH_API_URL")
+AUTH_API_URL = os.getenv('PPR_API_AUTH_API_URL')
 
 CORS_ORIGINS = os.getenv('PPR_API_ALLOWED_ORIGINS', 'http://localhost:8080 http://localhost:8081').split()
 
@@ -24,7 +24,7 @@ DB_NAME = os.getenv('PPR_API_DB_NAME')
 DB_USERNAME = os.getenv('PPR_API_DB_USERNAME')
 DB_PASSWORD = os.getenv('PPR_API_DB_PASSWORD')
 
-IMS_API_URL = os.getenv("PPR_API_IMS_API_URL")
+IMS_API_URL = os.getenv('PPR_API_IMS_API_URL')
 
-SENTRY_DSN = os.getenv("PPR_API_SENTRY_DSN")
-SENTRY_ENVIRONMENT = os.getenv("PPR_API_SENTRY_ENVIRONMENT")
+SENTRY_DSN = os.getenv('PPR_API_SENTRY_DSN')
+SENTRY_ENVIRONMENT = os.getenv('PPR_API_SENTRY_ENVIRONMENT')
