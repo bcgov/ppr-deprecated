@@ -45,7 +45,6 @@ import SearchInput from '@/search/SearchInput.vue'
 import { useSearcherSerial } from '@/search/search-serial'
 import { useSearcherRegNum } from '@/search/search-regnum'
 
-
 export default createComponent({
   components: { SearchInput },
 
@@ -62,8 +61,9 @@ export default createComponent({
         .then((): void => {
           router.push('results')
         })
-        .catch((/* errorMessage: string */): void => {
-          // TODO: log this somewhere, probably Sentry. https://github.com/bcgov/ppr/issues/244
+        .catch((errorMessage: string): void => {
+          // Note that Sentry will capture all console.error
+          console.error('In search page catch on do search.', errorMessage)
         })
         .finally(() => {
           loadIndicator.stop()
