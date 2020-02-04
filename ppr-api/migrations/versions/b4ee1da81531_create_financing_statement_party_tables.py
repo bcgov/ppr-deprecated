@@ -1,6 +1,6 @@
 """create financing statement party tables
 
-Revision ID: ebfec5aa1a13
+Revision ID: b4ee1da81531
 Revises: 34af2f12a9ae
 Create Date: 2020-01-31 14:14:31.169902
 
