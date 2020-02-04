@@ -69,6 +69,3 @@ export default createComponent({
 })
 
 </script>
-
-<style lang="scss">
-</style>

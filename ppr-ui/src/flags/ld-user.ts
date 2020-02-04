@@ -1,6 +1,6 @@
 import ip from 'ip'
-import UAParser from 'ua-parser-js'
-import {LDUser} from 'launchdarkly-js-client-sdk'
+import { UAParser } from 'ua-parser-js'
+import { LDUser } from 'launchdarkly-js-client-sdk'
 
 const userAgentParser = new UAParser()
 

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import {PositionResult, Route} from "vue-router/types/router"
+import { PositionResult, Route } from "vue-router/types/router"
 import routes from './routes'
 import authHelper from '@/utils/auth-helper'
-import {inject, provide} from "@vue/composition-api"
+import { inject, provide } from "@vue/composition-api"
 
 Vue.use(VueRouter)
 
@@ -15,7 +15,7 @@ const router = new VueRouter({
   routes,
   scrollBehavior(): PositionResult {
     // see https://router.vuejs.org/guide/advanced/scroll-behavior.html
-    return {x: 0, y: 0}
+    return { x: 0, y: 0 }
   }
 })
 
@@ -34,8 +34,8 @@ export function provideRouter(): void {
   provide(RouterSymbol, router)
 }
 
-export function useRouter(): {route: Route; router: VueRouter} {
-  const router: VueRouter = inject(RouterSymbol) as VueRouter
+export function useRouter(): { route: Route; router: VueRouter } {
+  const router = inject(RouterSymbol) as VueRouter
   if (!router) {
     throw Error("Router cannot be injected, has not been provided")
   }

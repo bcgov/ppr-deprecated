@@ -21,23 +21,17 @@
 </template>
 
 <script lang="ts">
-import {createComponent, computed} from "@vue/composition-api"
-import {Data} from "@vue/composition-api/dist/component"
-import {useLoadIndicator} from '@/load-indicator'
+import { createComponent, computed } from '@vue/composition-api'
+import { Data } from '@vue/composition-api/dist/component'
+import { useLoadIndicator } from '@/load-indicator'
 
 export default createComponent({
   setup(): Data {
-
     const loadIndicator = useLoadIndicator()
+    const isLoading = computed(() => { return loadIndicator.isLoading() })
 
-    const isLoading = computed(() => { return loadIndicator.isLoading()  })
-
-    return {isLoading}
+    return { isLoading }
   }
 })
 
 </script>
-
-<style scoped>
-
-</style>
