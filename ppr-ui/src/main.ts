@@ -11,6 +11,7 @@ import layoutUser from '@/layouts/LayoutUser.vue'
 import SentryHelper from '@/utils/sentry-helper'
 import './assets/styles/styles.scss'
 import { Config } from "@/utils/app-data"
+import { initializeVueLdClient } from '@/flags/ld-client'
 
 const opts = { iconfont: 'mdi' }
 
@@ -21,9 +22,20 @@ Vue.config.productionTip = false
 Vue.component('public-layout', layoutPublic)
 Vue.component('user-layout', layoutUser)
 
+const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('userKey') : 'unauthenticated-user'
+sessionStorage.setItem('userKey', userKey)
+let appConfig: Config
+
 configHelper.fetchConfig()
-  .then((appConfig: Config): void => {
-    SentryHelper.setup(appConfig)
+  .then((cfg: Config): void => {
+    appConfig = cfg
+    return SentryHelper.setup(appConfig)
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  }).then(() => {
+    return initializeVueLdClient(appConfig.launchDarklyClientKey, userKey)
+  })
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  .then(() => {
     new Vue({
       vuetify: new Vuetify(opts),
       router,

@@ -21,7 +21,6 @@ import { provideRouter, useRouter } from '@/router/router'
 import { provideSearcherSerial } from '@/search/search-serial'
 import { provideSearcherRegNum } from '@/search/search-regnum'
 import AppData from '@/utils/app-data'
-import { initializeVueLdClient } from '@/flags/ld-client'
 import { APP_PATH } from '@/utils/config-helper'
 
 const DefaultLayout = 'public'
@@ -37,23 +36,11 @@ function authAPIURL(): string {
 }
 
 
-/*
-  NOTE: the following userKey is TEMPORARY and will disappear when we get auth set up.
-  Create one user id per session.
- */
-const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('userKey') : 'unauthenticated-user'
-sessionStorage.setItem('userKey', userKey)
-
 export default createComponent({
   components: {
     LoadIndicator
   },
   setup(): Data {
-    // Make the connection to the LD server. We could explore anonymous users if we need to.
-    // For now we use a fixed per session user id.
-    // Also note that this initialization will need to happen AFTER auth.
-    initializeVueLdClient(AppData.config.launchDarklyClientKey, userKey)
-
     provide('originUrl', origin())
     provide('authApiUrl', authAPIURL())
     provide('configuration', ref(AppData.config))
