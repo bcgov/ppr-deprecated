@@ -114,7 +114,8 @@ def stub_financing_statement_event(reg_number: str, base_reg_number: str = None)
 
     return models.financing_statement.FinancingStatementEvent(
         registration_number=reg_number, base_registration_number=base_reg_number, document_number='A1234567',
-        registration_date=datetime.datetime.now(), base_registration=models.financing_statement.FinancingStatement(
+        registration_date=datetime.datetime.now(), user_id='user_id_stub',
+        base_registration=models.financing_statement.FinancingStatement(
             registration_number=base_reg_number, registration_type_code='SA'
         )
     )

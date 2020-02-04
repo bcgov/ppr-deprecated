@@ -21,7 +21,7 @@ def test_read_search():
     assert search['searchDateTime'] == search_rec.creation_date_time.isoformat(timespec='seconds')
 
 
-def test_create_registration_number_search():
+def test_create_registration_number_search(default_current_user):
     search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': '987654Z'}}
 
     rv = client.post('/searches', json=search_input)
@@ -37,6 +37,7 @@ def test_create_registration_number_search():
     assert stored
     assert stored.type_code == 'REGISTRATION_NUMBER'
     assert stored.criteria == {'value': '987654Z'}
+    assert stored.user_id == 'fake_user_id'  # Default user for integration tests
     assert body['searchDateTime'] == stored.creation_date_time.isoformat(timespec='seconds')
 
 

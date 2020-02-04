@@ -66,7 +66,7 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
         if fs_event:
             exact_matches = [fs_event.registration_number]
 
-    search_model = search_repository.create_search(search_input, exact_matches, similar_matches)
+    search_model = search_repository.create_search(search_input, exact_matches, similar_matches, user)
     response.status_code = status.HTTP_201_CREATED
     return search_model
 
