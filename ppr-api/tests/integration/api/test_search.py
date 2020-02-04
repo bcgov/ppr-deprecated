@@ -133,7 +133,7 @@ def create_test_financing_statement(num_of_events: int = 1):
     try:
         reg_num = next_reg_number(db)
         fin_stmt = models.financing_statement.FinancingStatement(
-            registration_number=reg_num, status='A', life_in_years=-1, user_id=-1,
+            registration_number=reg_num, status='A', life_in_years=-1,
             registration_type_code=schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value
         )
         event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num)
