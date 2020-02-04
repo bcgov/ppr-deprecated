@@ -4,14 +4,12 @@ import { FeatureFlags } from '@/flags/feature-flags'
 
 class VueLdClient {
   private ldClient: LDClient
+  private static _instance: VueLdClient
 
-  public constructor(envKey: string, user: LDUser) {
+  public constructor(ldClient) {
     try {
-      this.ldClient = initialize(envKey, user)
-
-      this.ldClient.on('ready', (): void => {
-        this.updateFlags(this.ldClient.allFlags())
-      })
+      this.ldClient = ldClient
+      this.updateFlags(this.ldClient.allFlags())
 
       this.ldClient.on('change', (): void => {
         this.updateFlags(this.ldClient.allFlags())
@@ -31,11 +29,15 @@ class VueLdClient {
   }
 }
 
-let client: VueLdClient
-
-export function initializeVueLdClient(envKey: string, userKey?: string): VueLdClient {
-  let user: LDUser = userKey ? indentifiedUser(userKey) : anonymousUser()
-  client = new VueLdClient(envKey, user)
-
-  return client
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function initializeVueLdClient(envKey: string, userKey?: string) {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  return new Promise(resolve => {
+    let user: LDUser = userKey ? indentifiedUser(userKey) : anonymousUser()
+    let ldClient = initialize(envKey, user)
+    ldClient.on('ready', (): void => {
+      const client = new VueLdClient(ldClient)
+      return resolve(client)
+    })
+  })
 }
