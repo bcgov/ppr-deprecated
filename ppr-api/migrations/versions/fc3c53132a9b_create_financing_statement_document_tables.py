@@ -1,7 +1,7 @@
 """Create financing statement document tables
 
 Revision ID: fc3c53132a9b
-Revises: 1461b03c20de
+Revises: 5f4529578e39
 Create Date: 2020-01-24 10:47:29.158143
 
 """

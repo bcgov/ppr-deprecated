@@ -1,7 +1,7 @@
 """Create foreign key relationship between search_result and registration
 
 Revision ID: 947ffeeeda60
-Revises: 1461b03c20de
+Revises: fc3c53132a9b
 Create Date: 2020-01-24 16:07:20.288676
 
 """
