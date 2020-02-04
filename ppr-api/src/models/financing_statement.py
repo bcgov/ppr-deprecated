@@ -15,7 +15,6 @@ class FinancingStatement(BaseORM):
     expiry_date = sqlalchemy.Column(sqlalchemy.Date)
     discharged = sqlalchemy.Column(sqlalchemy.BOOLEAN)
     last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, onupdate=sqlalchemy.func.now())
-    user_id = sqlalchemy.Column(sqlalchemy.String(length=8))
 
     events = sqlalchemy.orm.relationship('FinancingStatementEvent', back_populates='base_registration')
 
