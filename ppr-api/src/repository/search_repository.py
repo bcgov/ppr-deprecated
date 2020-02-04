@@ -3,6 +3,7 @@ import typing
 import fastapi
 import sqlalchemy.orm
 
+import auth.authentication
 import models.search
 import schemas.search
 
@@ -14,8 +15,8 @@ class SearchRepository:
         self.db = session
 
     def create_search(self, search_input: schemas.search.SearchBase, exact_matches: typing.List[str],
-                      similar_matches: typing.List[str]):
-        model = models.search.Search(criteria=search_input.criteria, type_code=search_input.type)
+                      similar_matches: typing.List[str], user: auth.authentication.User):
+        model = models.search.Search(criteria=search_input.criteria, type_code=search_input.type, user_id=user.user_id)
 
         for match in exact_matches:
             model.results.append(models.search.SearchResult(registration_number=match, exact=True, selected=True))

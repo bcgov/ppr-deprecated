@@ -29,5 +29,6 @@ class FinancingStatementEvent(BaseORM):
     registration_date = sqlalchemy.Column('reg_date', sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
     description = sqlalchemy.Column(postgresql.TEXT)
     document_number = sqlalchemy.Column(sqlalchemy.String(length=8))
+    user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
 
     base_registration = sqlalchemy.orm.relationship('FinancingStatement', back_populates='events')
