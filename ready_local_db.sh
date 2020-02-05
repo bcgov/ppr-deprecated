@@ -24,4 +24,5 @@ until docker container exec ppr_ppr_db_1 psql -U postgres -c 'SELECT 1' > /dev/n
   echo "PostgreSQL is unavailable - sleeping"
   sleep 1
 done
+sleep 1 # sometimes a bit of extra time is needed before it's ready for apps to connect
 echo "PostgreSQL is available"

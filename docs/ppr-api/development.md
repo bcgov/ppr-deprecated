@@ -38,7 +38,12 @@ and the service.
 
 In the root project directory, run:
 ```
-$ docker-compose up -d
+$ ./ready_local_db.sh
+```
+
+Once the database is up, run the alembic scripts:
+```
+(.venv) $ alembic upgrade head
 ```
 
 ## Start the Web Service
