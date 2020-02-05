@@ -1,6 +1,6 @@
-import {inject, provide, reactive} from '@vue/composition-api'
+import { inject, provide, reactive } from '@vue/composition-api'
 import axiosAuth from '@/utils/axios-auth'
-import {AxiosResponse} from 'axios'
+import { AxiosResponse } from 'axios'
 
 const MAX_CHAR = 8
 const REG_EXP = /^[0-9a-zA-Z]{1,8}$/
@@ -16,17 +16,17 @@ export const SS_TEXT = {
 
 export interface RegNumResult {
   type: string;
-  "financingStatement": {
-    "type": string;
-    "registeringParty": {};
-    "securedParties": [];
-    "debtors": [];
-    "vehicleCollateral": [];
-    "generalCollateral": [];
-    "expiryDate": Date | null;
-    "baseRegistrationNumber": string;
-    "documentId": string;
-    "registrationDateTime": string;
+  'financingStatement': {
+    'type': string;
+    'registeringParty': {};
+    'securedParties': [];
+    'debtors': [];
+    'vehicleCollateral': [];
+    'generalCollateral': [];
+    'expiryDate': Date | null;
+    'baseRegistrationNumber': string;
+    'documentId': string;
+    'registrationDateTime': string;
   };
 }
 
@@ -108,8 +108,8 @@ export class SearcherRegNum {
     // save the search term for reuse when displaying results or errors
     this._term = term
     const data = {
-      "type_code": "REGISTRATION_NUMBER",
-      "criteria": {"value": this._term}
+      'type_code': 'REGISTRATION_NUMBER',
+      'criteria': { 'value': this._term }
     }
     const config = {
       headers: {

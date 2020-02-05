@@ -3,7 +3,7 @@ import axiosAuth from '@/utils/axios-auth'
 
 // export text constants for use in tests
 export const SS_TEXT = {
-  errorMsg: (text): string => `Search serial number error - ${text}`,
+  errorMsg: (text: string): string => `Search serial number error - ${text}`,
   describeValidSerial: 'Serial number can have up to 25 letters or digits',
   defineValid: 'Serial number must be up to 25 letters or digits',
   label: 'Serial number',

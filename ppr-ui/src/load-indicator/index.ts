@@ -1,7 +1,6 @@
-import {inject, provide, reactive} from "@vue/composition-api"
+import { inject, provide, reactive } from '@vue/composition-api'
 
 export class LoadIndicator {
-
   private static _instance: LoadIndicator
 
   private _isLoading: boolean
@@ -40,7 +39,7 @@ export function provideLoadIndicator(): void {
 export function useLoadIndicator(): LoadIndicator {
   const loadIndicator: LoadIndicator = inject(LoadIndicatorSymbol) as LoadIndicator
   if (!loadIndicator) {
-    throw Error("LoadIndicator cannot be injected, has not been provided")
+    throw Error('LoadIndicator cannot be injected, has not been provided')
   }
   return loadIndicator
 }

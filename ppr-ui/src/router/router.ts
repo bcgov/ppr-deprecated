@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { PositionResult, Route } from "vue-router/types/router"
+import { PositionResult, Route } from 'vue-router/types/router'
 import routes from './routes'
 import authHelper from '@/utils/auth-helper'
-import { inject, provide } from "@vue/composition-api"
+import { inject, provide } from '@vue/composition-api'
 
 Vue.use(VueRouter)
 
@@ -37,7 +37,7 @@ export function provideRouter(): void {
 export function useRouter(): { route: Route; router: VueRouter } {
   const router = inject(RouterSymbol) as VueRouter
   if (!router) {
-    throw Error("Router cannot be injected, has not been provided")
+    throw Error('Router cannot be injected, has not been provided')
   }
   const route: Route = router.currentRoute
   return { route, router }
