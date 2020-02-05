@@ -25,7 +25,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements/dev.txt
-          pip install .
+          pip install -e .
       - name: Lint Python Source
         working-directory: ppr-api
         run: |
@@ -36,12 +36,6 @@ jobs:
         working-directory: ppr-api
         run: |
           pytest
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          flags: python_unittests
-          fail_ci_if_error: false
       # Run the PPR-API integration tests.  If we find this takes too long, we may consider moving these steps into a
       # separate workflow
       - name: Start a PostgreSQL database with docker-compose
@@ -51,10 +45,16 @@ jobs:
         working-directory: ppr-api
         run: |
           alembic upgrade head
-          pytest tests/integration
+          pytest --cov-append tests/integration
       - name: Shutdown docker-compose
         run: |
           docker-compose down
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          flags: python_unittests
+          fail_ci_if_error: false
 
   ims-api-build:
     runs-on: ubuntu-latest
