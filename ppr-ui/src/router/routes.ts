@@ -12,26 +12,26 @@ export default [
     path: '/',
     name: 'home',
     component: Home, //() => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
-    meta: {layout: 'public'}
+    meta: { layout: 'public' }
   },
   {
     path: '/results',
     name: 'results',
     component: ResultsPage,
-    meta: {requiresAuth: true, layout: 'user'},
+    meta: { requiresAuth: true, layout: 'user' },
     props: true
   },
   {
     path: '/search',
     name: 'search',
     component: SearchPage,
-    meta: {requiresAuth: true, layout: 'user'}
+    meta: { requiresAuth: true, layout: 'user' }
   },
   {
     path: '/about',
     name: 'about',
     component: About, //() => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    meta: {layout: 'public'}
+    meta: { layout: 'public' }
   },
   {
     // default/fallback route

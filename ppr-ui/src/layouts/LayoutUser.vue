@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import {createComponent} from "@vue/composition-api"
+import { createComponent } from '@vue/composition-api'
 import SbcHeader from 'sbc-common-components/src/components/SbcHeader.vue'
 import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
 
@@ -27,6 +27,6 @@ export default createComponent({
     SbcHeader,
     SbcFooter
   },
-  inject: ['authApiUrl', 'originUrl'],
+  inject: ['authApiUrl', 'originUrl']
 })
 </script>
