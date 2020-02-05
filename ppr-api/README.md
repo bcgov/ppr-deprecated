@@ -27,10 +27,16 @@ will need to fill in missing values.
 You can use Docker Compose to run a PostgreSQL database locally. It requires a `DB_PASSWORD` environment variable which
 can be in your `.env` file.  However, this will require you `.env` file to be in the root project directory.
 
-To prepare your local database:
-1. In the root project folder: `docker-compose up -d`
-1. In your `venv` environment: `alembic upgrade head`
+To prepare your local database, from the command line:
+1. Start `venv` in the `ppr-api` folder: `source .venv/bin/activate`
+1. In the root project folder: `./reset_database.sh`
 
+The script above will:
+- Run `docker-compose down` to bring down your database if it is running
+- Delete the database volume used by your docker-compose instance, if it exists
+- Run `docker-compose up -d` to bring up your database
+- Run alembic to create the application database schema
+- Execute a SQL script to create a small amount of test data for developer use
 
 ## Running PPR-API
 
