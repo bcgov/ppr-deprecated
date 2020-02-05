@@ -60,4 +60,3 @@ export default createComponent({
   }
 })
 </script>
-  
