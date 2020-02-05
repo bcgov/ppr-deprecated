@@ -27,17 +27,17 @@
 </template>
 
 <script lang="ts">
-import {computed, createComponent, ref} from "@vue/composition-api"
-import {Data} from "@vue/composition-api/dist/ts-api/component"
-import {useLoadIndicator} from "@/load-indicator"
-import {useRouter} from '@/router/router'
-import {useSearcherSerial} from '@/search/search-serial'
+import { computed, createComponent, ref } from '@vue/composition-api'
+import { Data } from '@vue/composition-api/dist/ts-api/component'
+import { useLoadIndicator } from '@/load-indicator'
+import { useRouter } from '@/router/router'
+import { useSearcherSerial } from '@/search/search-serial'
 
 export default createComponent({
   setup(): Data {
     const loadIndicator = useLoadIndicator()
     const searcherSerial = useSearcherSerial()
-    const {router} = useRouter()
+    const { router } = useRouter()
 
     const serialNumber = ref<string>('')
     const errorMessage = ref<string>('')
@@ -59,7 +59,7 @@ export default createComponent({
         .then((): void => {
           router.push('results')
         })
-        .catch( (eMessage): void => {
+        .catch((eMessage): void => {
           errorMessage.value = eMessage
         })
         .finally(() => {
@@ -78,6 +78,3 @@ export default createComponent({
   }
 })
 </script>
-
-<style lang="scss" scoped>
-</style>

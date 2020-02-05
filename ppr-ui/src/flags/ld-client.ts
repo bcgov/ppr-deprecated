@@ -6,9 +6,9 @@ class VueLdClient {
   private ldClient: LDClient
   private static _instance: VueLdClient
 
-  public constructor(ldClient) {
+  public constructor(ldClient: LDClient) {
+    this.ldClient = ldClient
     try {
-      this.ldClient = ldClient
       this.updateFlags(this.ldClient.allFlags())
 
       this.ldClient.on('change', (): void => {

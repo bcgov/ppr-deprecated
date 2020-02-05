@@ -13,11 +13,11 @@ export class FeatureFlags {
   }
 
   public setFlag(flagName: string, enabled: boolean): void {
-    this._flags[flagName] = enabled
+    this._flags.set(flagName, enabled)
   }
 
   public getFlag(flagName: string): boolean {
-    return !!this._flags[flagName]
+    return !!this._flags.get(flagName)
   }
 }
 
