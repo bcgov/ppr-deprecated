@@ -6,7 +6,6 @@ metadata:
     name: e2e-test-pipeline
     template: e2e-test-pipeline
   name: e2e-test-pipeline
-  namespace: d7eovc-tools
 spec:
   failedBuildsHistoryLimit: 5
   nodeSelector: {}
@@ -17,8 +16,8 @@ spec:
   source:
     contextDir: openshift/pipelines
     git:
-      ref: Test-Infastructure
-      uri: "https://github.com/rstens/ppr"
+      ref: master
+      uri: "https://github.com/bcgov/ppr"
     type: Git
   strategy:
     jenkinsPipelineStrategy:

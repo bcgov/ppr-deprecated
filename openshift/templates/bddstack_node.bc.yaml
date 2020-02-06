@@ -31,7 +31,6 @@ objects:
           name: bddstack-node:latest:1.0
       source:
         dockerfile: |
-          # https://github.com/BCDevOps/bddstack-node
           FROM registry.access.redhat.com/openshift3/jenkins-slave-base-rhel7
 
           ARG NODE_VERSION=v12.4.0
