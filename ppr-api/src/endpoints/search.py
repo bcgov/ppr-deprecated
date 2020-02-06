@@ -18,6 +18,7 @@ import schemas.financing_statement
 import schemas.party
 import schemas.payment
 import schemas.search
+import service.search_execution_service
 import services.payment_service
 import utils.datetime
 from schemas.financing_statement import RegistrationType
@@ -49,6 +50,7 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
                   search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
                   fs_repo: repository.financing_statement_repository.FinancingStatementRepository = fastapi.Depends(),
                   user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user),
+                  search_exec_service: service.search_execution_service.SearchExecutionService = fastapi.Depends(),
                   payment_service: services.payment_service.PaymentService = fastapi.Depends()):
     exact_matches = []
     similar_matches = []
@@ -58,6 +60,8 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
         fs_event = fs_repo.find_event_by_registration_number(criteria_value)
         if fs_event:
             exact_matches = [fs_event.registration_number]
+    elif search_input.type == schemas.search.SearchType.MHR_NUMBER.value:
+        exact_matches = search_exec_service.find_registrations_for_mhr_number(criteria_value)
 
     payment = payment_service.create_payment(services.payment_service.FilingCode.SEARCH)
     search_model = search_repository.create_search(search_input, exact_matches, similar_matches, user, payment)
