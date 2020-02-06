@@ -78,10 +78,7 @@ objects:
               mkdir /opt && \
               pushd /opt && \
               curl -sL https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.xz | tar -Jx && \
-              rm -f node-${NODE_VERSION}-linux-x64.tar.xz && \
-              # Obtain the installed Chrome version so that bddstack-node can load the correct driver by querying the chromeversion and chromedriver files    
-              google-chrome --version | grep -o -m 1 -E "[0-9]{2,3}[^ ^a-z^A-Z^0-9^\.]*" | sed -n 1p >  /opt/app-root/chromeversion && \
-              wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_`cat /opt/app-root/chromeversion` -O  /opt/app-root/chromedriver 
+              rm -f node-${NODE_VERSION}-linux-x64.tar.xz
 
           # Update environment variables
           ENV NODE_HOME=/opt/node-${NODE_VERSION}-linux-x64 \
