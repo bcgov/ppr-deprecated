@@ -109,7 +109,6 @@ objects:
           name: ${API_NAME}:${IMAGE_TAG}
           namespace: zwmtib-tools
       type: ImageChange
-    - type: ConfigChange
 - apiVersion: v1
   kind: Service
   metadata:
@@ -169,7 +168,7 @@ parameters:
   name: ENVIRONMENT
   required: true
   value: dev
-- description: The image tag to build from.
+- description: The image tag to deploy from.
   displayName: Image Tag
   name: IMAGE_TAG
   required: true
