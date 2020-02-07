@@ -28,8 +28,8 @@ def upgrade():
         {'vehicle_type_cd': 'MH', 'vehicle_description': 'Manufactured Home'},
         {'vehicle_type_cd': 'BO', 'vehicle_description': 'Boat'},
         {'vehicle_type_cd': 'TR', 'vehicle_description': 'Trailer'},
-        {'vehicle_type_cd': 'AC', 'vehicle_description': 'Air Craft'},
-        {'vehicle_type_cd': 'AF', 'vehicle_description': 'Air Craft Frame'},
+        {'vehicle_type_cd': 'AC', 'vehicle_description': 'Aircraft'},
+        {'vehicle_type_cd': 'AF', 'vehicle_description': 'Aircraft Frame'},
         {'vehicle_type_cd': 'EV', 'vehicle_description': 'Electric Vehicle'}
     ])
 
