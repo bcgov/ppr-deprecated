@@ -30,7 +30,6 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { Data } from '@vue/composition-api/dist/ts-api/component'
 
 export default createComponent({
   props: {
@@ -40,7 +39,7 @@ export default createComponent({
     rules: Array
   },
 
-  setup(props, { emit }): Data {
+  setup(props, { emit }) {
     const searchTerm = ref<string>('')
     const formValid = ref<boolean>()
 

@@ -41,11 +41,10 @@
 
 <script lang="ts">
 import { computed, createComponent } from '@vue/composition-api'
-import { Data } from '@vue/composition-api/dist/ts-api/component'
 import { useSearcherSerial } from '@/search/search-serial'
 
 export default createComponent({
-  setup(): Data {
+  setup() {
     const searcherSerial = useSearcherSerial()
     const terms = computed(() => {
       return searcherSerial.term
