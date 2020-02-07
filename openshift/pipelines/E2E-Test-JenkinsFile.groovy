@@ -16,7 +16,7 @@
 podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
     name: 'jnlp',
-    image: 'docker-registry.default.svc:5000/zwmtib-tools/bddstack-node',
+    image: 'docker-registry.default.svc:5000/zwmtib-tools/bddstack-node:2.0',
     resourceRequestCpu: '500m',
     resourceLimitCpu: '1000m',
     resourceRequestMemory: '1Gi',
