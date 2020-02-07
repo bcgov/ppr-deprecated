@@ -80,8 +80,6 @@ objects:
               yum remove -y $UNINSTALL_PKGS &&\
               yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
               rpm -V $INSTALL_PKGS && \
-              # Remove redhat-logos (httpd dependency) to keep image size smaller.
-              rpm -e --nodeps redhat-logos && \
               yum clean all -y && \
               # Get Google Chrome latest version
               wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
