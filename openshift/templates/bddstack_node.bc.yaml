@@ -84,6 +84,12 @@ spec:
           node -v && \
           npm -v
 
+      RUN wget https://services.gradle.org/distributions/gradle-4.2-bin.zip -P /opt
+      RUN unzip -d /opt/gradle /opt/gradle-*.zip
+
+      ENV GRADLE_HOME=/opt/gradle/gradle-4.2
+      ENV PATH=${GRADLE_HOME}/bin:${PATH}    
+
       USER 1001
     type: Dockerfile
   strategy:

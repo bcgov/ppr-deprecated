@@ -38,10 +38,9 @@ podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', clou
             checkout scm
             dir('testing/functional') {
                 try {
-                        sh './gradlew chromeHeadlessTest'
+                        sh 'gradle chromeHeadlessTest'
                 } finally {
                         archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/geb/**/*'
-                        archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
                         junit 'build/test-results/**/*.xml'
                         publishHTML (target: [
                                     allowMissing: false,
