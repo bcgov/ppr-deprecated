@@ -14,11 +14,10 @@
 
 <script lang="ts">
 import { computed, createComponent } from '@vue/composition-api'
-import { Data } from '@vue/composition-api/dist/ts-api/component'
 import { useSearcherRegNum } from '@/search/search-regnum'
 
 export default createComponent({
-  setup(): Data {
+  setup() {
     const searcher = useSearcherRegNum()
     const terms = computed(() => {
       return searcher.term

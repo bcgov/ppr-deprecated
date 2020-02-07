@@ -21,12 +21,11 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { Data } from '@vue/composition-api/dist/ts-api/component'
 import SearchResults from '@/search/SearchResults.vue'
 
 export default createComponent({
   components: { SearchResults },
-  setup(): Data {
+  setup() {
     return {
     }
   }

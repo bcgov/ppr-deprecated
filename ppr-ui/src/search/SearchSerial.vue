@@ -28,13 +28,12 @@
 
 <script lang="ts">
 import { computed, createComponent, ref } from '@vue/composition-api'
-import { Data } from '@vue/composition-api/dist/ts-api/component'
 import { useLoadIndicator } from '@/load-indicator'
 import { useRouter } from '@/router/router'
 import { useSearcherSerial } from '@/search/search-serial'
 
 export default createComponent({
-  setup(): Data {
+  setup() {
     const loadIndicator = useLoadIndicator()
     const searcherSerial = useSearcherSerial()
     const { router } = useRouter()
