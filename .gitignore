@@ -45,7 +45,6 @@ yarn-error.log*
 .classpath
 .project
 .settings/
-/ims-api/bin
 
 # Ignore Gradle project-specific cache and build directories
 /**/.gradle
