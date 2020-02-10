@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { PositionResult, Route } from 'vue-router/types/router'
 import routes from './routes'
-import authHelper from '@/utils/auth-helper'
+import { authRedirect } from '@/utils/auth-helper'
 import { inject, provide } from '@vue/composition-api'
 
 Vue.use(VueRouter)
@@ -23,7 +23,7 @@ const router = new VueRouter({
 router.afterEach((to): void => {
   try {
     if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
-      authHelper.authRedirect()
+      authRedirect()
     }
   } catch (error) {
     console.error('Router afterEach', error)
