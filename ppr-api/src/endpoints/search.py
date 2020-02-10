@@ -1,14 +1,11 @@
 """ Define the endpoints for searching. """
 
-import json
 import typing
 
 import fastapi
-import requests
 from starlette import responses, status
 
 import auth.authentication
-import config
 import models.search
 import schemas.financing_statement
 import schemas.search
@@ -16,23 +13,6 @@ import repository.financing_statement_repository
 import repository.search_repository
 
 router = fastapi.APIRouter()
-
-
-# TODO: read the ims-api endpoint from an environment variable.
-@router.get('/search')
-async def search(serial: str, response: responses.Response,
-                 user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
-    """
-    Find financial statements that match the search criteria.
-
-        Parameters:
-            serial: The serial number to search for.
-    """
-    ims_response = requests.get(config.IMS_API_URL + '/search?serial={}'.format(serial))
-
-    response.status_code = ims_response.status_code
-
-    return json.loads(ims_response.content.decode('utf-8'))
 
 
 @router.get('/searches/{search_id}', response_model=schemas.search.Search, response_model_by_alias=False)
