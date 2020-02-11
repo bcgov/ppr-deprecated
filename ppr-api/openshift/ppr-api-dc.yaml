@@ -41,6 +41,8 @@ objects:
             value: "8080"
           - name: PPR_API_ALLOWED_ORIGINS
             value: ${CORS_ORIGINS}
+          - name: PPR_API_AUTH_API_URL
+            value: ${AUTH_API_URL}
           - name: SENTRY_DSN
             valueFrom:
               secretKeyRef:
@@ -152,6 +154,11 @@ parameters:
   name: API_NAME
   required: true
   value: ppr-api
+- description: The path to the SBC Auth API.
+  displayName: Auth API URL
+  name: AUTH_API_URL
+  required: true
+  value: https://auth-api-dev.pathfinder.gov.bc.ca/api/v1
 - description: The origin urls for the web front ends that consume the API.
   displayName: Allowed origins for CORS
   name: CORS_ORIGINS
