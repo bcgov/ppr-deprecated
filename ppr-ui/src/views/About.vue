@@ -8,26 +8,22 @@
     <v-container class="view-container">
       <article>
         <header>
-          <h1>Sample About Page</h1>
+          <h1>About the Personal Property Registry</h1>
         </header>
 
         <div class="page-content">
           <div class="page-content__main">
-            <section>
-              <header>
-                <h2>Sample about page content</h2>
-              </header>
-              <div>Copy needed here to describe the PPR PPR application.</div>
-            </section>
+            <p>
+              Protect yourself from loss or legal conflict by registering your interest in personal property (cars,
+              boats, trailers or machinery) or searching for existing liens on personal property prior to purchase.
+            </p>
+            <p>
+              The Personal Property Registry records all of the encumbrances (such as liens) created against personal
+              property in B.C., whether it belongs to a business or an individual. The Registry provides personal
+              property registration and search services for lenders, sellers, garage keepers, taxing authorities,
+              government agencies, purchasers and general public.
+            </p>
           </div>
-
-          <aside class="page-content__aside">
-            <section>
-              <header>
-                <h2>Sample Aside Section</h2>
-              </header>
-            </section>
-          </aside>
         </div>
       </article>
     </v-container>
