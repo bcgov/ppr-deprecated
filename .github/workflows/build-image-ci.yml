@@ -1,0 +1,33 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  ppr-api-image-build:
+    runs-on: ubuntu-latest
+    if: github.repository == 'bcgov/ppr'
+    env:
+      IMAGE_ID: ${{ secrets.DOCKER_REGISTRY }}/${{ secrets.PPR_API_DOCKER_REPOSITORY }}/ppr-api
+      VERSION: ${{ github.run_number }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build PPR API Image
+        working-directory: ppr-api
+        run: docker image build . --tag $IMAGE_ID:$VERSION
+
+      - name: Login to Docker Registry
+        env:
+          REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+          TOKEN: ${{ secrets.DOCKER_SA_TOKEN }}
+          USER: ${{ secrets.DOCKER_SA_NAME}}
+        run: echo "$TOKEN" | docker login $REGISTRY -u $USER --password-stdin
+
+      - name: Push the Image
+        run: |
+          # The image should be pushed to the docker repository with both the new version number and as "latest"
+          docker image push $IMAGE_ID:$VERSION
+          docker image tag $IMAGE_ID:$VERSION $IMAGE_ID:latest
+          docker image push $IMAGE_ID:latest
