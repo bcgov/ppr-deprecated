@@ -9,7 +9,7 @@
         <div class="page-content">
           <div class="page-content__main">
             <p>
-              <i>Note: This web site is a work in progress.</i>
+              <em>Note: This web site is a work in progress.</em>
             </p>
             <p>
               Protect yourself from loss or legal conflict by registering your interest in personal property (cars,
