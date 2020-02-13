@@ -25,7 +25,9 @@ podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', clou
     command: '',
     args: '${computer.jnlpmac} ${computer.name}',
     envVars: [
-        envVar(key:'BASEURL', value: 'https://dev.bcregistry.ca/cooperatives/')
+        envVar(key:'BASEURL', value: 'https://dev.bcregistry.ca/cooperatives/'),
+        secretEnvVar(key: 'PPR_VIEWER_USERNAME', secretName: 'ppr-user', secretKey: 'username'),
+        secretEnvVar(key: 'PPR_PASSWORD', secretName: 'ppr-user', secretKey: 'password')
        ]
   )
 ])       

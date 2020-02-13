@@ -26,6 +26,9 @@ import pages.ValidatePage
 import spock.lang.*
 
 class StartSpec extends BaseSpec {
+    def env = System.getenv()
+    def pprUser = env['PPR_VIEWER_USERNAME']
+    def pprPw = env['PPR_PASSWORD']
 
     def "Open First page"() {
         when: "I browse to the start page"
@@ -41,17 +44,15 @@ class StartSpec extends BaseSpec {
         then: "the Test ID login page is shown"
             at LoginPage
         when: "I enter my id and click on continue"
-            cardNumber.value( Id )
+            cardNumber.value( "${pprUser}" )
             continueButton.click()
         then: "I see the password entry page"
             at PasswordPage
         when: "I enter my password and click on login"
-            passCode.value( Password )
+            passCode.value( "${pprPw}" )
             continueButton.click()
         then: "I see the validation page"
             at ValidatePage
-            assert givenNames == GivenName
-            //println "id: ${Id}, name: ${givenNames}"
          when: "I click continue"
             continueButton.click()
         then: "I see the cooperations main page"
@@ -76,8 +77,5 @@ class StartSpec extends BaseSpec {
             logoutuser()
         then: "I see the cooperatives start page"
             
-        where: "I use the following data set"
-            Id              || Password ||  GivenName  
-            "BCREG0001"     || "98901"  || "BCREGTEST Dalia"
     }
 }
