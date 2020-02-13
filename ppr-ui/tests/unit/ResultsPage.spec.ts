@@ -12,32 +12,6 @@ Vue.use(VueCompositionApi)
 
 const featureFlags = FeatureFlags.Instance
 
-/* TODO: failing due to setup, and not sure what it is testing. Fix later (https://github.com/bcgov/ppr/issues/283)
-import SearchPage from '@/views/SearchPage.vue'
-describe('SearchPage.vue', (): void => {
-  let wrapper: Wrapper<Vue>
-  let vm
-
-  beforeEach((): void => {
-    wrapper = shallowMount(SearchPage, {
-      provide: {
-        [FeatureFlagSymbol]: featureFlags,
-        [RouterSymbol]: router
-      }
-    })
-    vm = wrapper.vm
-  })
-
-  afterEach( (): void => {
-    wrapper.destroy()
-  })
-
-  it('Test the search page', (): void => {
-    expect(vm.$el.querySelector('#mockSearchPage').textContent).toContain('Personal Property Registry')
-  })
-})
-*/
-
 describe('ResultsPage.vue', (): void => {
   let wrapper: Wrapper<Vue>
   let vm
