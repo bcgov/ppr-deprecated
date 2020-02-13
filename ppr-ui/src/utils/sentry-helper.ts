@@ -1,13 +1,12 @@
 import * as Sentry from '@sentry/browser'
 import * as Integrations from '@sentry/integrations'
-import { Config } from "@/utils/app-data"
 
 export default class SentryHelper {
-  public static setup(appConfig: Config): void {
+  public static setup(dsn: string, environment: string): void {
     try {
       const options: Sentry.BrowserOptions = {
-        dsn: appConfig.sentryDSN,
-        environment: appConfig.sentryEnvironment,
+        dsn: dsn,
+        environment: environment,
         integrations: [
           /*
 
