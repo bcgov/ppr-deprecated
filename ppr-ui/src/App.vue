@@ -19,7 +19,7 @@ import { provideFeatureFlags } from '@/flags/feature-flags'
 import { provideLoadIndicator } from '@/load-indicator'
 import { provideRouter, useRouter } from '@/router/router'
 import { provideSearcherRegNum } from '@/search/search-regnum'
-import Config from '@/utils/config-helper'
+import Config from '@/utils/Config'
 
 const DefaultLayout = 'public'
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import Config from '@/utils/config-helper'
+import Config from '@/utils/Config'
 
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
