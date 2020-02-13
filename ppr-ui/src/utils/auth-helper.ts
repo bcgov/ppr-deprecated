@@ -1,10 +1,10 @@
 import JwtDecode from 'jwt-decode'
 
-import AppData from '@/utils/app-data'
+import Config from '@/utils/Config'
 
 export function authRedirect(): void {
   if (!sessionStorage.getItem('KEYCLOAK_TOKEN')) {
-    const authUrl = AppData.config.authUrl
+    const authUrl = Config.authApiUrl
     console.debug('auth redirect to authUrl', authUrl)
     window.location.href = authUrl
   }

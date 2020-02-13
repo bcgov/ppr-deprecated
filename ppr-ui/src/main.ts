@@ -3,14 +3,13 @@ import VueCompositionApi from '@vue/composition-api'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import App from '@/App.vue'
-import configHelper from '@/utils/config-helper'
 import router from '@/router/router'
 import store from './store'
 import layoutPublic from '@/layouts/LayoutPublic.vue'
 import layoutUser from '@/layouts/LayoutUser.vue'
 import SentryHelper from '@/utils/sentry-helper'
 import './assets/styles/styles.scss'
-import { Config } from "@/utils/app-data"
+import Config from '@/utils/Config'
 import { initializeVueLdClient } from '@/flags/ld-client'
 import { getJwtValue } from './utils/auth-helper'
 
@@ -23,15 +22,12 @@ Vue.config.productionTip = false
 Vue.component('public-layout', layoutPublic)
 Vue.component('user-layout', layoutUser)
 
-let appConfig: Config
-
-configHelper.fetchConfig()
-  .then((cfg: Config): void => {
-    appConfig = cfg
-    return SentryHelper.setup(appConfig)
+Config.setup()
+  .then((): void => {
+    return SentryHelper.setup(Config.sentryDSN, Config.sentryEnvironment)
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   }).then(() => {
-    return initializeVueLdClient(appConfig.launchDarklyClientKey, getJwtValue('username'))
+    return initializeVueLdClient(Config.launchDarklyClientKey, getJwtValue('username'))
   })
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   .then(() => {
