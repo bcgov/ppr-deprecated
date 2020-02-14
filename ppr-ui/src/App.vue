@@ -25,8 +25,7 @@ const DefaultLayout = 'public'
 function origin(): string {
   const root = window.location.origin || ''
   const path = process.env.BASE_URL
-
-  return `${root}/${path}`
+  return `${root}${path}`
 }
 
 export default createComponent({
