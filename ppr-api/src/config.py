@@ -13,6 +13,7 @@ import dotenv
 dotenv.load_dotenv()
 
 AUTH_API_URL = os.getenv('PPR_API_AUTH_API_URL')
+PAY_API_URL = os.getenv('PPR_API_PAY_API_URL')
 
 CORS_ORIGINS = os.getenv('PPR_API_ALLOWED_ORIGINS', 'http://localhost:8080 http://localhost:8081').split()
 

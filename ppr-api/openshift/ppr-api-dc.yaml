@@ -173,6 +173,11 @@ parameters:
   name: IMAGE_TAG
   required: true
   value: dev
+- description: The path to the Payment API.
+  displayName: Payment API URL
+  name: PAY_API_URL
+  required: true
+  value: https://pay-api-dev.pathfinder.gov.bc.ca/api/v1
 - description: The URL to use for the route.
   displayName: Route URL
   name: ROUTE_URL
