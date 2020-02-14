@@ -18,7 +18,6 @@ import LoadIndicator from '@/load-indicator/LoadIndicator.vue'
 import { provideFeatureFlags } from '@/flags/feature-flags'
 import { provideLoadIndicator } from '@/load-indicator'
 import { provideRouter, useRouter } from '@/router/router'
-import { provideSearcherRegNum } from '@/search/search-regnum'
 import Config from '@/utils/Config'
 
 const DefaultLayout = 'public'
@@ -39,7 +38,6 @@ export default createComponent({
     provide('authApiUrl', Config.authApiUrl)
     provideFeatureFlags()
     provideLoadIndicator()
-    provideSearcherRegNum(Config.apiUrl)
     provideRouter()
 
     const { router } = useRouter()
