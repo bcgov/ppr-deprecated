@@ -15,10 +15,11 @@
         </p>
         <section>
           <search-input
-            :error-message="searcherRegNum.errorMessage"
-            :label="searcherRegNum.label"
-            :hint="searcherRegNum.describeValid"
-            :rules="searcherRegNum.validationRules"
+            id="searchInput"
+            :error-message="searchRegNumUi.errorMessage"
+            :label="searchRegNumUi.label"
+            :hint="searchRegNumUi.describeValid"
+            :rules="searchRegNumUi.validationRules"
             @search="doSearchRegNum"
           />
         </section>
@@ -29,11 +30,11 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-// import { Data } from '@vue/composition-api/dist/ts-api/component'
 import { useLoadIndicator } from '@/load-indicator'
 import { useRouter } from '@/router/router'
 import SearchInput from '@/search/SearchInput.vue'
-import { useSearcherRegNum } from '@/search/search-regnum'
+import SearchRegNumUi from '@/search/search-regnum-ui'
+import SearcherRegNum from '@/search/searcher-reg-num'
 
 export default createComponent({
   components: { SearchInput },
@@ -41,14 +42,14 @@ export default createComponent({
   setup() {
     const loadIndicator = useLoadIndicator()
     const { router } = useRouter()
-    const searcherRegNum = useSearcherRegNum()
+    const searcherRegNum = new SearcherRegNum()
+    const searchRegNumUi = new SearchRegNumUi()
 
     function doSearch(searcher, term: string): Promise<void> {
       loadIndicator.start()
-
       return searcher.doSearch(term)
-        .then((): void => {
-          router.push('results')
+        .then((searchId: string): void => {
+          router.push({ name: 'results', query: { searchId: searchId } })
         })
         .catch((errorMessage: string): void => {
           // Note that Sentry will capture all console.error
@@ -65,7 +66,7 @@ export default createComponent({
 
     return {
       doSearchRegNum,
-      searcherRegNum
+      searchRegNumUi
     }
   }
 })
