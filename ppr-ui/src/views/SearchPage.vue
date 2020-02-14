@@ -11,7 +11,8 @@
           <h1>Search the Personal Property Registry</h1>
         </header>
         <p>
-          This section of the application allow searching the Personal Property Registry.
+          This page demonstrates registration number search for the new Personal Property Registry.
+          This is a functional layout only.  Future searches will include; serial, MHR, debtor, collateral, etc.
         </p>
         <section>
           <search-input
@@ -23,13 +24,23 @@
             @search="doSearchRegNum"
           />
         </section>
+        <section>
+          <p>
+            <strong>FEES</strong> Some part of this page will inform the user about the cost of the search. Here is a functional demonstration
+            showing the results of an API call to the payment system, for the current authenticated user. The payment code is from the Cooperatives
+            application. We're using it until a PPR code is available.
+          </p>
+          <p>
+            {{ fees }}
+          </p>
+        </section>
       </article>
     </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { createComponent, ref } from '@vue/composition-api'
 import { useLoadIndicator } from '@/load-indicator'
 import { useRouter } from '@/router/router'
 import SearchInput from '@/search/SearchInput.vue'
@@ -44,6 +55,9 @@ export default createComponent({
     const { router } = useRouter()
     const searcherRegNum = new SearcherRegNum()
     const searchRegNumUi = new SearchRegNumUi()
+    const fees = ref({})
+
+    searcherRegNum.getSearchFees().then((data) => fees.value = data)
 
     function doSearch(searcher, term: string): Promise<void> {
       loadIndicator.start()
@@ -65,6 +79,7 @@ export default createComponent({
     }
 
     return {
+      fees,
       doSearchRegNum,
       searchRegNumUi
     }
