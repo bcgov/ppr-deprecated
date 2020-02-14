@@ -1,6 +1,6 @@
 import axiosAuth from '@/utils/axios-auth'
 import { AxiosResponse } from 'axios'
-import AppData from '@/utils/app-data'
+import Config from '@/utils/Config'
 
 export interface RegNumResult {
   type: string;
@@ -22,7 +22,7 @@ export default class SearcherRegNum {
   private _baseUrl: string
 
   public constructor() {
-    this._baseUrl = AppData.config.pprApiUrl
+    this._baseUrl = Config.apiUrl
   }
 
   public doSearch(term: string): Promise<AxiosResponse> {
