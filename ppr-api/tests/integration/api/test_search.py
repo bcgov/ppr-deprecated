@@ -21,7 +21,7 @@ def test_read_search():
     assert search['searchDateTime'] == search_rec.creation_date_time.isoformat(timespec='seconds')
 
 
-def test_create_registration_number_search(default_current_user):
+def test_create_registration_number_search():
     search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': '987654Z'}}
 
     rv = client.post('/searches', json=search_input)
@@ -39,6 +39,20 @@ def test_create_registration_number_search(default_current_user):
     assert stored.criteria == {'value': '987654Z'}
     assert stored.user_id == 'fake_user_id'  # Default user for integration tests
     assert body['searchDateTime'] == stored.creation_date_time.isoformat(timespec='seconds')
+
+
+def test_create_search_returns_payment_info():
+    search_input = {'type': 'SERIAL_NUMBER', 'criteria': {'value': 'ABC123456'}}
+
+    rv = client.post('/searches', json=search_input)
+
+    body = rv.json()
+
+    # Ensure default payment info for integration tests is provided.  See ../conftest.py
+    assert 'payment' in body
+    assert body['payment']['id'] == 1234
+    assert body['payment']['status'] == 'CREATED'
+    assert body['payment']['method'] == 'CC'
 
 
 def test_create_search_with_exact_match():
