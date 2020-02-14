@@ -192,7 +192,7 @@ parameters:
   displayName: Route HOST
   name: ROUTE_HOST
   required: true
-  value: ppr-dev.pathfinder.gov.bc.ca
+  value: dev.bcregistry.ca
 - description: Volume name for web app config
   displayName: Web application config volume mount name
   name: APP_CONFIG
@@ -207,4 +207,4 @@ parameters:
   displayName: APP Name
   name: APP_PATH
   required: false
-  value: cooperatives/ppr
+  value: /cooperatives/ppr
