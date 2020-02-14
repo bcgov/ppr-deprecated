@@ -7,6 +7,7 @@
 : ${SOURCE_TAG:?"SOURCE_TAG environment variable is required"}
 : ${AUTH_API_URL:?"AUTH_API_URL environment variable is required"}
 : ${CORS_ORIGINS:?"CORS_ORIGINS environment variable is required"}
+: ${PAY_API_URL:?"PAY_API_URL environment variable is required"}
 : ${ROUTE_URL:?"ROUTE_URL environment variable is required"}
 
 env_namespace=${NAME_PLATE}-$ENVIRONMENT
@@ -20,6 +21,7 @@ oc process -f ppr-api-dc.yaml \
   -p CORS_ORIGINS="$CORS_ORIGINS" \
   -p ENVIRONMENT=$ENVIRONMENT \
   -p IMAGE_TAG=$ENVIRONMENT \
+  -p PAY_API_URL=$PAY_API_URL \
   -p ROUTE_URL=$ROUTE_URL \
   | oc apply -f - -n $env_namespace
 
