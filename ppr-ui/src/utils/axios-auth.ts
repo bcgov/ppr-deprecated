@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-const instance = axios.create()
+const axiosAuth = axios.create()
 
-instance.interceptors.request.use(
-  (config):  object => {
+axiosAuth.interceptors.request.use(
+  (config): object => {
     config.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('KEYCLOAK_TOKEN')}`
     return config
   },
   (error): Promise<void> => Promise.reject(error)
 )
 
-export default instance
+export default axiosAuth
