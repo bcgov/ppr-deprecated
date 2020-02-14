@@ -3,6 +3,7 @@ name: Build and Push Docker Images
 on:
   push:
     branches: [master]
+    paths: ['ppr-api/**']
 
 jobs:
   ppr-api-image-build:
