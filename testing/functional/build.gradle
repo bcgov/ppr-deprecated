@@ -65,21 +65,6 @@ drivers.each { driver ->
             }
         }
         }
-
-        /*
-        * Set versions from a .versions file, if it exists.
-        * Equals sign separated key value pairs, one per new line: SOME_KEY=some value
-        * These local environment variables take precedence over any environment variables set at the system level.
-        */
-        envFile = file('.versions')
-        if (envFile.exists()) {
-        envFile.readLines().each() {
-            def (key, value) = it.tokenize('=')
-            if (key && value) {
-            systemProperty key, value
-            }
-        }
-        }
     }
 }
 
