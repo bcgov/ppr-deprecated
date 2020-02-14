@@ -6,6 +6,11 @@ import SearchInput from '@/search/SearchInput.vue'
 import SearchPage from '@/views/SearchPage.vue'
 import { LoadIndicator, LoadIndicatorSymbol } from '@/load-indicator'
 import router, { RouterSymbol } from '@/router/router'
+import axios from 'axios'
+
+jest.mock('@/utils/Config')
+jest.mock('axios')
+const mockedAxios = axios as jest.Mocked<typeof axios>
 
 // need to register Vuetify on the main Vue and, as well, in the mount
 // Here this prevents warnings like "[Vue warn]: Unknown custom element: <v-container>"
@@ -18,6 +23,7 @@ const loadIndicator = LoadIndicator.Instance
 describe('SearchPage.vue', (): void => {
   let wrapper: Wrapper<Vue>
   beforeEach((): void => {
+    mockedAxios.get.mockResolvedValue({ data: 'somedata' })
     wrapper = mount(SearchPage, {
       router: router,
       vuetify: new Vuetify({}),
