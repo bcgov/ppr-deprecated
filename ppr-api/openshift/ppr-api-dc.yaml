@@ -43,6 +43,8 @@ objects:
             value: ${CORS_ORIGINS}
           - name: PPR_API_AUTH_API_URL
             value: ${AUTH_API_URL}
+          - name: PPR_API_PAY_API_URL
+            value: ${PAY_API_URL}
           - name: SENTRY_DSN
             valueFrom:
               secretKeyRef:
