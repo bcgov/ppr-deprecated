@@ -21,6 +21,11 @@
               property registration and search services for lenders, sellers, garage keepers, taxing authorities,
               government agencies, purchasers and general public.
             </p>
+            <p>
+              For more information please visit <a href="https://www2.gov.bc.ca/gov/content/employment-business/business/managing-a-business/permits-licences/bc-registry-services-personal-property-registry">
+                Personal Property Registry
+              </a>
+            </p>
           </div>
 
           <aside class="page-content__aside">
@@ -30,11 +35,6 @@
               </header>
               <div>
                 <ul>
-                  <li>
-                    <router-link to="home">
-                      Home
-                    </router-link>
-                  </li>
                   <li v-if="userCanSearch">
                     <router-link to="search">
                       Search
