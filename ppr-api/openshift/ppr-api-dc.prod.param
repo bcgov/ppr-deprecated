@@ -1,0 +1,14 @@
+#=========================================================
+# Template parameters for:
+# Project: ppr-api
+# Component: deploy
+# Action: build
+# Template File: ppr-api/openshift/ppr-api-dc.yaml
+# Hint: oc process -f ppr-api-dc.yaml --param-file=ppr-api-dc.prod.param | oc apply -n zwmtib-prod -f -
+#=========================================================
+AUTH_API_URL="https://auth-api.pathfinder.gov.bc.ca/api/v1"
+CORS_ORIGINS="https://www.bcregistry.ca"
+ENVIRONMENT="prod"
+IMAGE_TAG="prod"
+PAY_API_URL="https://pay-api.pathfinder.gov.bc.ca/api/v1"
+ROUTE_URL="ppr-api.pathfinder.gov.bc.ca"
