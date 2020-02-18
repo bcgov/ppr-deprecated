@@ -22,7 +22,8 @@
               government agencies, purchasers and general public.
             </p>
             <p>
-              For more information please visit <a href="https://www2.gov.bc.ca/gov/content/employment-business/business/managing-a-business/permits-licences/bc-registry-services-personal-property-registry">
+              For more information please visit
+              <a href="https://www2.gov.bc.ca/gov/content?id=568423FB83BD44A28B80B48EE85A0810">
                 Personal Property Registry
               </a>
             </p>
