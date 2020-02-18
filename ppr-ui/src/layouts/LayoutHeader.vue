@@ -1,8 +1,8 @@
 
 <template>
   <sbc-header
-    redirect-on-login-success="encoded"
-    redirect-on-logout="encode"
+    :redirect-on-login-success="originUrl"
+    :redirect-on-logout="originUrl"
   />
 </template>
 
@@ -15,10 +15,11 @@ export default createComponent({
     SbcHeader
   },
   setup() {
-    const oUrl = inject('originUrl') as string
-    const encoded = encodeURIComponent(oUrl)
+    const originUrl = inject('originUrl') as string
+    // Need this debug until auth redirects are verified to work on at least Dev if not all the way to Prod. Then can remove.
+    console.debug('send this url to header', originUrl)
     return {
-      encoded
+      originUrl
     }
   }
 })

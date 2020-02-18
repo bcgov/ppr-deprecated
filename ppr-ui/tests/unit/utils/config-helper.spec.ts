@@ -26,7 +26,7 @@ describe('Config', (): void => {
   })
 
   it('has non-empty string value for authApiUrl', (): void => {
-    mockedAxios.get.mockResolvedValueOnce({ data: '{ "AUTH_API_URL": "ABC123" }' })
+    mockedAxios.get.mockResolvedValueOnce({ data: '{ "AUTH_URL": "ABC123" }' })
 
     Config.setup().then((): void => {
       expect(Config.authApiUrl).toBe('ABC123')
