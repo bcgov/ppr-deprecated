@@ -15,7 +15,6 @@
 import { createComponent, computed, onErrorCaptured, provide } from '@vue/composition-api'
 import { Data } from '@vue/composition-api/dist/component'
 import LoadIndicator from '@/load-indicator/LoadIndicator.vue'
-import { provideFeatureFlags } from '@/flags/feature-flags'
 import { provideLoadIndicator } from '@/load-indicator'
 import { provideRouter, useRouter } from '@/router/router'
 import Config from '@/utils/Config'
@@ -35,7 +34,6 @@ export default createComponent({
   setup(): Data {
     provide('originUrl', origin())
     provide('authApiUrl', Config.authApiUrl)
-    provideFeatureFlags()
     provideLoadIndicator()
     provideRouter()
 
