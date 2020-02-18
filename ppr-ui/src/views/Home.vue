@@ -69,18 +69,18 @@
 <script lang="ts">
 import { computed, createComponent } from '@vue/composition-api'
 
-import { useFeatureFlags } from '@/flags/feature-flags'
+import { featureFlags } from '@/flags/feature-flags'
 import { useRouter } from '@/router/router'
 
 export default createComponent({
   setup() {
-    const features = useFeatureFlags()
     const { router } = useRouter()
 
     const userIsAuthed = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
 
     // Feature Flag
-    const userCanSearch = computed((): boolean => features.getFlag('search-registration-number') && userIsAuthed.value)
+    const userCanSearch = computed((): boolean => featureFlags.getFlag('search-registration-number') &&
+      userIsAuthed.value)
 
     function goSearch(): void {
       router.push('search')
