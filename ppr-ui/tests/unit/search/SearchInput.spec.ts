@@ -61,6 +61,14 @@ describe('SearchInput.vue', (): void => {
   })
 
   describe('@events', (): void => {
-    // TODO: figure out how to test the 'search' event: https://github.com/bcgov/ppr/issues/360
+    it('@search - should emit criteria on button click', async (): Promise<void> => {
+      const wrapper: Wrapper<Vue> = mount(SearchInput, { vuetify })
+
+      wrapper.get('input').setValue('ABC123')
+      await Vue.nextTick()
+      wrapper.get('.v-btn').trigger('click')
+
+      expect(wrapper.emitted().search[0][0]).toBe('ABC123')
+    })
   })
 })
