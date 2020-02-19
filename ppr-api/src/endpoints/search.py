@@ -8,6 +8,7 @@ from starlette import responses, status
 import auth.authentication
 import models.search
 import schemas.financing_statement
+import schemas.payment
 import schemas.search
 import services.payment_service
 import repository.financing_statement_repository
@@ -38,7 +39,7 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
                   search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
                   fs_repo: repository.financing_statement_repository.FinancingStatementRepository = fastapi.Depends(),
                   user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user),
-                  payment: services.payment_service.Payment = fastapi.Depends(services.payment_service.get_payment)):
+                  payment: schemas.payment.Payment = fastapi.Depends(services.payment_service.get_payment)):
     exact_matches = []
     similar_matches = []
     criteria_value = search_input.criteria['value'].strip() if 'value' in search_input.criteria else None
@@ -48,13 +49,10 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
         if fs_event:
             exact_matches = [fs_event.registration_number]
 
-    search_model = search_repository.create_search(search_input, exact_matches, similar_matches, user)
+    search_model = search_repository.create_search(search_input, exact_matches, similar_matches, user, payment)
     response.status_code = status.HTTP_201_CREATED
 
-    # TODO capture the payment detail in the database for later use
-    result = schemas.search.Search.from_orm(search_model)
-    result.payment = payment
-    return result
+    return search_model
 
 
 @router.get('/searches/{search_id}/results', response_model=typing.List[schemas.search.SearchResult],

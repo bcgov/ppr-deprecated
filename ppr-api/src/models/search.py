@@ -4,6 +4,7 @@ import sqlalchemy.orm
 
 from .database import BaseORM
 import models.financing_statement
+import models.payment
 
 
 class Search(BaseORM):
@@ -14,8 +15,10 @@ class Search(BaseORM):
     creation_date_time = sqlalchemy.Column(sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
     type_code = sqlalchemy.Column('type_long_code', sqlalchemy.String(length=40))
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
+    payment_id = sqlalchemy.Column(sqlalchemy.BigInteger, sqlalchemy.ForeignKey('payment.id'))
 
     results = sqlalchemy.orm.relationship('SearchResult', back_populates='search')
+    payment = sqlalchemy.orm.relationship(models.payment.Payment.__name__)
 
 
 class SearchResult(BaseORM):

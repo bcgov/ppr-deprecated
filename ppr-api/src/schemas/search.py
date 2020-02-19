@@ -4,7 +4,7 @@ import enum
 import pydantic
 
 import schemas.financing_statement
-import services.payment_service
+import schemas.payment
 
 
 class SearchType(enum.Enum):
@@ -61,7 +61,7 @@ class SearchBase(pydantic.BaseModel):
 class Search(SearchBase):
     id: int
     searchDateTime: datetime.datetime
-    payment: services.payment_service.Payment = None
+    payment: schemas.payment.Payment = None
 
     class Config:
         orm_mode = True
