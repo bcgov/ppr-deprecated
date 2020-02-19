@@ -58,29 +58,24 @@ objects:
     lookupPolicy:
       local: false
 parameters:
-- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
-  displayName: PPR group
-  name: PPR_GROUP
-  required: true
-  value: ppr
 - description: The name of the intermediate build image for the PPR UI
   displayName: APP Intermediate
   name: APP_INTER_NAME
   required: true
-  value: ppr-ui-inter
 - description: The tag of the intermediate build
   displayName: APP Intermediate Tag
   name: APP_INTER_TAG
   required: true
-  value: latest
 - description: The name of the appliction
   displayName: APP Name
   name: APP_NAME
   required: true
-  value: ppr-ui
 - description: The sub-path to the web application
   displayName: APP Name
   name: APP_PATH
-  required: false
-  value: /cooperatives/ppr
+  required: true
+- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+  displayName: PPR group
+  name: PPR_GROUP
+  required: true
 
