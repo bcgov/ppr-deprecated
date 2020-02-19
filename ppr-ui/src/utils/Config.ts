@@ -5,7 +5,7 @@ import axiosAuth from '@/utils/axios-auth'
  */
 interface ConfigSettings {
   API_URL: string;
-  AUTH_API_URL: string;
+  AUTH_URL: string;
   LAUNCH_DARKLY_CLIENT_KEY: string;
   PAY_API_URL: string;
   SENTRY_DSN: string;
@@ -34,11 +34,14 @@ export default class Config {
         const settings: ConfigSettings = (typeof response.data === 'string') ? JSON.parse(response.data) : response.data
 
         this.setStoreValue('API_URL', settings.API_URL)
-        this.setStoreValue('AUTH_API_URL', settings.AUTH_API_URL)
+        this.setStoreValue('AUTH_URL', settings.AUTH_URL)
         this.setStoreValue('LAUNCH_DARKLY_CLIENT_KEY', settings.LAUNCH_DARKLY_CLIENT_KEY)
         this.setStoreValue('PAY_API_URL', settings.PAY_API_URL)
         this.setStoreValue('SENTRY_DSN', settings.SENTRY_DSN)
         this.setStoreValue('SENTRY_ENVIRONMENT', settings.SENTRY_ENVIRONMENT)
+
+        // setup for the SBC common components
+        this.setStoreValue('AUTH_API_CONFIG', JSON.stringify(response.data))
       })
   }
 
@@ -53,7 +56,7 @@ export default class Config {
    * Gets the URL for the authentication API.
    */
   public static get authApiUrl(): string {
-    return this.getStoreValue('AUTH_API_URL')
+    return this.getStoreValue('AUTH_URL')
   }
 
   /**
