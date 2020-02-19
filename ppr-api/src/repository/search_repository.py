@@ -4,7 +4,9 @@ import fastapi
 import sqlalchemy.orm
 
 import auth.authentication
+import models.payment
 import models.search
+import schemas.payment
 import schemas.search
 
 
@@ -15,8 +17,10 @@ class SearchRepository:
         self.db = session
 
     def create_search(self, search_input: schemas.search.SearchBase, exact_matches: typing.List[str],
-                      similar_matches: typing.List[str], user: auth.authentication.User):
+                      similar_matches: typing.List[str], user: auth.authentication.User,
+                      payment: schemas.payment.Payment):
         model = models.search.Search(criteria=search_input.criteria, type_code=search_input.type, user_id=user.user_id)
+        model.payment = models.payment.Payment(id=payment.id, method=payment.method, status=payment.status)
 
         for match in exact_matches:
             model.results.append(models.search.SearchResult(registration_number=match, exact=True, selected=True))

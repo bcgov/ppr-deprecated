@@ -3,14 +3,15 @@ from starlette.testclient import TestClient
 import main
 import models.database
 import models.financing_statement
+import models.payment
 import models.search
 import schemas.financing_statement
 
 client = TestClient(main.app)
 
 
-def test_read_search():
-    search_rec = create_test_search_record('REGISTRATION_NUMBER', {'value': '1234567'})
+def test_read_search(mock_payment):
+    search_rec = create_test_search_record('REGISTRATION_NUMBER', {'value': '1234567'}, payment=mock_payment)
 
     rv = client.get('/searches/{}'.format(search_rec.id))
     assert rv.status_code == 200
@@ -19,6 +20,7 @@ def test_read_search():
     assert search['type'] == 'REGISTRATION_NUMBER'
     assert search['criteria'] == {'value': '1234567'}
     assert search['searchDateTime'] == search_rec.creation_date_time.isoformat(timespec='seconds')
+    assert search['payment']['id'] == search_rec.payment_id
 
 
 def test_create_registration_number_search():
@@ -50,9 +52,11 @@ def test_create_search_returns_payment_info():
 
     # Ensure default payment info for integration tests is provided.  See ../conftest.py
     assert 'payment' in body
-    assert body['payment']['id'] == 1234
     assert body['payment']['status'] == 'CREATED'
     assert body['payment']['method'] == 'CC'
+
+    stored = retrieve_search_record(body['id'])
+    assert body['payment']['id'] == stored.payment_id
 
 
 def test_create_search_with_exact_match():
@@ -90,7 +94,7 @@ def test_create_registration_number_search_matches_non_base_registration():
 def test_read_singular_search_results():
     fin_stmt = create_test_financing_statement()
     matching_reg_num = fin_stmt.registration_number
-    search_rec = create_test_search_record('REGISTRATION_NUMBER', {'value': matching_reg_num}, [matching_reg_num])
+    search_rec = create_test_search_record('REGISTRATION_NUMBER', {'value': matching_reg_num}, [matching_reg_num], None)
 
     rv = client.get('/searches/{}/results'.format(search_rec.id))
 
@@ -111,10 +115,13 @@ def test_read_singular_search_results():
     assert isinstance(body[0]['financingStatement']['generalCollateral'], list)
 
 
-def create_test_search_record(type_code: str, criteria: dict, matches: list = []):
+def create_test_search_record(type_code: str, criteria: dict, matches: list = [],
+                              payment: schemas.payment.Payment = None):
     db = models.database.SessionLocal()
     try:
         search_rec = models.search.Search(type_code=type_code, criteria=criteria)
+        if payment:
+            search_rec.payment = models.payment.Payment(id=payment.id, method=payment.method, status=payment.status)
         db.add(search_rec)
 
         for reg in matches:

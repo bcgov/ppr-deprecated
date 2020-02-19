@@ -53,6 +53,10 @@ paths:
                       value: '1234'
                     results: /searches/95110d7f-91ce-47f2-a996-76e2dddc3cf7/results
                     searchDateTime: '2020-01-02T21:57:00Z'
+                    payment:
+                      id: 1234
+                      status: CREATED
+                      method: CC
             application/xml:
               schema:
                 type: object
@@ -253,6 +257,8 @@ components:
         searchDateTime:
           type: string
           format: date-time
+        payment:
+          $ref: '#/components/schemas/payment'
       required:
         - type
         - criteria
@@ -382,6 +388,22 @@ components:
           type: string
           description: Description of the error
       description: Contains details of an error that was encountered
+    payment:
+      title: payment
+      type: object
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum:
+            - CREATED
+            - COMPLETED
+            - TRANSACTION_FAILED
+        method:
+          type: string
+          enum:
+            - CC
   securitySchemes:
     JWT:
       type: http

@@ -3,11 +3,11 @@ import logging
 
 from fastapi import Depends, HTTPException
 from fastapi.security.http import HTTPAuthorizationCredentials
-from pydantic import BaseModel
 import requests
 
 import config
 import auth.authentication
+import schemas.payment
 
 logger = logging.getLogger(__name__)
 
@@ -52,10 +52,5 @@ def create_payment_request(auth_header: HTTPAuthorizationCredentials = Depends(a
 
 
 def get_payment(api_payment: dict = Depends(create_payment_request)):
-    return Payment(id=api_payment['id'], status=api_payment['statusCode'], method=api_payment['paymentMethod'])
-
-
-class Payment(BaseModel):
-    id: int
-    status: str
-    method: str
+    return schemas.payment.Payment(id=api_payment['id'], status=api_payment['statusCode'],
+                                   method=api_payment['paymentMethod'])
