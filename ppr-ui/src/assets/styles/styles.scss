@@ -8,3 +8,9 @@ and mixins there is no CSS code bloat.
 @import 'layout';
 @import "overrides";
 
+.app-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
