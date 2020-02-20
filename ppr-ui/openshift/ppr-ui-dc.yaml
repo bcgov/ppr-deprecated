@@ -1,244 +1,244 @@
 apiVersion: template.openshift.io/v1
 kind: Template
 objects:
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
-  metadata:
-    labels:
-      app: ppr
-      deploymentconfig: ${APP_NAME}
-      pprgroup: ${PPR_GROUP}
-      role: ${APP_NAME}
-    name: ${APP_NAME}
-  spec:
-    replicas: 3
-    revisionHistoryLimit: 10
-    selector:
-      app: ppr
-      deploymentconfig: ${APP_NAME}
-      pprgroup: ${PPR_GROUP}
-      environment: ${ENVIRONMENT}
-      role: ${APP_NAME}
-    strategy:
-      activeDeadlineSeconds: 21600
-      resources: {}
-      rollingParams:
-        intervalSeconds: 1
-        maxSurge: 25%
-        maxUnavailable: 25%
-        timeoutSeconds: 600
-        updatePeriodSeconds: 1
-      type: Rolling
-    template:
-      metadata:
-        labels:
-          app: ppr
-          deploymentconfig: ${APP_NAME}
-          pprgroup: ${PPR_GROUP}
-          environment: ${ENVIRONMENT}
-          role: ${APP_NAME}
-      spec:
-        containers:
-          - args: # Start Caddy inside the Docker image
-            - /tmp/scripts/run
-            imagePullPolicy: Always
-            livenessProbe:
-              failureThreshold: 3
-              httpGet:
-                path: ${APP_PATH}
-                port: 2015
-                scheme: HTTP
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 1
-            name: ${APP_NAME}
-            ports:
-            - containerPort: 2015
-              protocol: TCP
-            readinessProbe:
-              failureThreshold: 3
-              httpGet:
-                path: ${APP_PATH}
-                port: 2015
-                scheme: HTTP
-              initialDelaySeconds: 5
-              periodSeconds: 10
-              successThreshold: 1
-              timeoutSeconds: 10
-            resources:
-              limits:
-                cpu: '1'
-                memory: 250Mi
-              requests:
-                cpu: 10m
-                memory: 100Mi
-            terminationMessagePath: /dev/termination-log
-            terminationMessagePolicy: File
-            volumeMounts:
-              - mountPath: /var/www/html${APP_PATH}/config
-                name: ${APP_CONFIG}
-                readOnly: true
-              - mountPath: /etc/Caddyfile
-                name: ${CADDY_CONFIG}
-                readOnly: true
-                subPath: Caddyfile
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        schedulerName: default-scheduler
-        securityContext: {}
-        terminationGracePeriodSeconds: 30
-        volumes:
-          - configMap:
-              defaultMode: 420
-              name: ${APP_CONFIG}
-            name: ${APP_CONFIG}
-          - configMap:
-              defaultMode: 420
-              name: ${CADDY_CONFIG}
-            name: ${CADDY_CONFIG}
-    test: false
-    triggers:
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${APP_NAME}
-        from:
-          kind: ImageStreamTag
-          name: ${APP_NAME}:${IMAGE_TAG}
-          namespace: zwmtib-tools
-      type: ImageChange
-    - type: ConfigChange
-- apiVersion: v1
-  kind: Service
-  metadata:
-    labels:
-      app: ppr
-      environment: ${ENVIRONMENT}
-      pprgroup: ${PPR_GROUP}
-      role: ${APP_NAME}
-    name: ${APP_NAME}
-  spec:
-    ports:
-    - name: 2015-tcp
-      port: 2015
-      protocol: TCP
-      targetPort: 2015
-    selector:
-      deploymentconfig: ${APP_NAME}
-    sessionAffinity: None
-    type: ClusterIP
-- apiVersion: route.openshift.io/v1
-  kind: Route
-  metadata:
-    labels:
-      app: ppr
-      pprgroup: ${PPR_GROUP}
-      environment: ${ENVIRONMENT}
-      role: ${APP_NAME}
-    name: ${APP_NAME}
-  spec:
-    host: ${ROUTE_HOST}
-    path: ${APP_PATH}
-    port:
-      targetPort: 2015-tcp
-    tls:
-      insecureEdgeTerminationPolicy: Redirect
-      termination: edge
-    to:
-      kind: Service
+  - apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        app: ppr
+        deploymentconfig: ${APP_NAME}
+        pprgroup: ${PPR_GROUP}
+        role: ${APP_NAME}
       name: ${APP_NAME}
-      weight: 100
-    wildcardPolicy: None
-- apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    labels:
-      app: ppr
-      pprgroup: ${PPR_GROUP}
-      role: ${APP_NAME}
-    name: ${CADDY_CONFIG}
-  data:
-    Caddyfile: |+
-      0.0.0.0:2015
-      root /var/www/html
-      log stdout
-      errors stdout
-      rewrite ${APP_PATH} {
-          regexp .*
-          to {path} ${APP_PATH}/
-      }
-- apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    labels:
-      app: ppr
-      pprgroup: ${PPR_GROUP}
-      role: ${APP_NAME}
-    name: ${APP_CONFIG}
-  data:
-    configuration.json: |+
-      {
-      "API_URL": "${API_URL}",
-      "AUTH_URL": "${AUTH_URL}",
-      "LAUNCH_DARKLY_CLIENT_KEY": "${LAUNCH_DARKLY_CLIENT_KEY}",
-      "PAY_API_URL": "${PAY_API_URL}",
-      "SENTRY_DSN": "https://${SENTRY_KEY}@sentry.io/1834187"
-      "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
-      }
+    spec:
+      replicas: 3
+      revisionHistoryLimit: 10
+      selector:
+        app: ppr
+        deploymentconfig: ${APP_NAME}
+        pprgroup: ${PPR_GROUP}
+        environment: ${ENVIRONMENT}
+        role: ${APP_NAME}
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ppr
+            deploymentconfig: ${APP_NAME}
+            pprgroup: ${PPR_GROUP}
+            environment: ${ENVIRONMENT}
+            role: ${APP_NAME}
+        spec:
+          containers:
+            - args: # Start Caddy inside the Docker image
+                - /tmp/scripts/run
+              imagePullPolicy: Always
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: ${APP_PATH}
+                  port: 2015
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: ${APP_NAME}
+              ports:
+                - containerPort: 2015
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: ${APP_PATH}
+                  port: 2015
+                  scheme: HTTP
+                initialDelaySeconds: 5
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 10
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 250Mi
+                requests:
+                  cpu: 10m
+                  memory: 100Mi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /var/www/html${APP_PATH}/config
+                  name: ${APP_CONFIG}
+                  readOnly: true
+                - mountPath: /etc/Caddyfile
+                  name: ${CADDY_CONFIG}
+                  readOnly: true
+                  subPath: Caddyfile
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                defaultMode: 420
+                name: ${APP_CONFIG}
+              name: ${APP_CONFIG}
+            - configMap:
+                defaultMode: 420
+                name: ${CADDY_CONFIG}
+              name: ${CADDY_CONFIG}
+      test: false
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${APP_NAME}
+            from:
+              kind: ImageStreamTag
+              name: ${APP_NAME}:${IMAGE_TAG}
+              namespace: zwmtib-tools
+          type: ImageChange
+        - type: ConfigChange
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: ppr
+        environment: ${ENVIRONMENT}
+        pprgroup: ${PPR_GROUP}
+        role: ${APP_NAME}
+      name: ${APP_NAME}
+    spec:
+      ports:
+        - name: 2015-tcp
+          port: 2015
+          protocol: TCP
+          targetPort: 2015
+      selector:
+        deploymentconfig: ${APP_NAME}
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      labels:
+        app: ppr
+        pprgroup: ${PPR_GROUP}
+        environment: ${ENVIRONMENT}
+        role: ${APP_NAME}
+      name: ${APP_NAME}
+    spec:
+      host: ${ROUTE_HOST}
+      path: ${APP_PATH}
+      port:
+        targetPort: 2015-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}
+        weight: 100
+      wildcardPolicy: None
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      labels:
+        app: ppr
+        pprgroup: ${PPR_GROUP}
+        role: ${APP_NAME}
+      name: ${CADDY_CONFIG}
+    data:
+      Caddyfile: |+
+        0.0.0.0:2015
+        root /var/www/html
+        log stdout
+        errors stdout
+        rewrite ${APP_PATH} {
+            regexp .*
+            to {path} ${APP_PATH}/
+        }
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      labels:
+        app: ppr
+        pprgroup: ${PPR_GROUP}
+        role: ${APP_NAME}
+      name: ${APP_CONFIG}
+    data:
+      configuration.json: |+
+        {
+        "API_URL": "${API_URL}",
+        "AUTH_URL": "${AUTH_URL}",
+        "LAUNCH_DARKLY_CLIENT_KEY": "${LAUNCH_DARKLY_CLIENT_KEY}",
+        "PAY_API_URL": "${PAY_API_URL}",
+        "SENTRY_DSN": "https://${SENTRY_KEY}@sentry.io/1834187"
+        "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
+        }
 parameters:
-- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
-  displayName: PPR group
-  name: PPR_GROUP
-  required: true
-- description: The name of the Web application.
-  displayName: APP Name
-  name: APP_NAME
-  required: true
-- description: The environment, such as "dev", "dev-pr13", "test", or "prod".
-  displayName: Environment
-  name: ENVIRONMENT
-  required: true
-- description: The image tag to build from.
-  displayName: Image Tag
-  name: IMAGE_TAG
-  required: true
-- description: The hostname to use for the route.
-  displayName: Route HOST
-  name: ROUTE_HOST
-  required: true
-- description: Volume name for web app config
-  displayName: Web application config volume mount name
-  name: APP_CONFIG
-  required: true
-  value: ppr-web-ui-config
-- description: Name for caddy configuration
-  displayName: Caddy config volume mount name
-  name: CADDY_CONFIG
-  required: true
-- description: The sub-path to the web application
-  displayName: APP Name
-  name: APP_PATH
-  required: true
-- description: The full url to the PPR API
-  displayName: API_URL
-  name: API_URL
-  required: true
-- description: The full url to the authentication service
-  displayName: AUTH_URL
-  name: AUTH_URL
-  required: true
-- description: The full url to the payment service
-  displayName: PAY_API_URL
-  name: PAY_API_URL
-  required: true
-- description: The API key for the launch darkly service
-  displayName: LAUNCH_DARKLY_CLIENT_KEY
-  name: LAUNCH_DARKLY_CLIENT_KEY
-  required: true
-- description: The public key to PPR sentry service
-  displayName: SENTRY_KEY
-  name: SENTRY_KEY
-  required: true
-- description: The environment tag sentry. E.g. Dev, yourName, Test, Prod etc.
-  displayName: Sentry Environment
-  name: SENTRY_ENVIRONMENT
+  - description: Volume name for web app config
+    displayName: Web application config volume mount name
+    name: APP_CONFIG
+    required: true
+    value: ppr-web-ui-config
+  - description: The name of the Web application.
+    displayName: APP name
+    name: APP_NAME
+    required: true
+  - description: The sub-path to the web application
+    displayName: APP path
+    name: APP_PATH
+    required: true
+  - description: The full url to the PPR API
+    displayName: API URL
+    name: API_URL
+    required: true
+  - description: The full url to the authentication service
+    displayName: AUTH_URL
+    name: AUTH_URL
+    required: true
+  - description: Name for caddy configuration
+    displayName: Caddy config volume mount name
+    name: CADDY_CONFIG
+    required: true
+  - description: The environment, such as "dev", "dev-pr13", "test", or "prod".
+    displayName: Environment
+    name: ENVIRONMENT
+    required: true
+  - description: The image tag to build from.
+    displayName: Image Tag
+    name: IMAGE_TAG
+    required: true
+  - description: The API key for the launch darkly service
+    displayName: LAUNCH_DARKLY_CLIENT_KEY
+    name: LAUNCH_DARKLY_CLIENT_KEY
+    required: true
+  - description: The full url to the payment service
+    displayName: PAY API URL
+    name: PAY_API_URL
+    required: true
+  - description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+    displayName: PPR group
+    name: PPR_GROUP
+    required: true
+  - description: The hostname to use for the route.
+    displayName: Route HOST
+    name: ROUTE_HOST
+    required: true
+  - description: The environment tag sentry. E.g. Dev, yourName, Test, Prod etc.
+    displayName: Sentry Environment
+    name: SENTRY_ENVIRONMENT
+  - description: The public key to PPR sentry service
+    displayName: SENTRY_KEY
+    name: SENTRY_KEY
+    required: true
