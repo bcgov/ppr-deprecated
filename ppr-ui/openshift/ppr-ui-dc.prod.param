@@ -19,4 +19,3 @@ PAY_API_URL="https://pay-api.pathfinder.gov.bc.ca/api/v1"
 PPR_GROUP="ppr-ui-prod"
 ROUTE_HOST="bcregistry.ca"
 SENTRY_ENVIRONMENT="Prod"
-    

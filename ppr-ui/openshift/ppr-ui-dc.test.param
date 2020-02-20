@@ -18,4 +18,3 @@ PAY_API_URL="https://pay-api-test.pathfinder.gov.bc.ca/api/v1"
 PPR_GROUP="ppr-ui-test"
 ROUTE_HOST="test.bcregistry.ca"
 SENTRY_ENVIRONMENT="Test"
-    
