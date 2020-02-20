@@ -4,7 +4,7 @@
 # Component: deploy
 # Action: build
 # Template File: ppr-ui/openshift/ppr-ui-dc.yaml
-# Hint: oc process -f ppr-ui-dc.yaml --param-file=ppr-ui-dc.test.param | oc apply -n 1rdehl-test -f -
+# oc process -f ppr-ui-dc.yaml -p LAUNCH_DARKLY_CLIENT_KEY=ld_key -p SENTRY_KEY=sentry_key --param-file=ppr-ui-dc.test.param | oc apply -n 1rdehl-test -f -
 #=========================================================
 API_URL="https://ppr-api-test.pathfinder.gov.bc.ca/"
 APP_CONFIG="ppr-web-ui-config"
@@ -14,10 +14,8 @@ AUTH_URL="https://test.bcregistry.ca/cooperatives/auth/"
 CADDY_CONFIG="ppr-ui-caddy-config"
 ENVIRONMENT="test"
 IMAGE_TAG="test"
-LAUNCH_DARKLY_CLIENT_KEY="5ddc04ca5933410824ecf593"
 PAY_API_URL="https://pay-api-test.pathfinder.gov.bc.ca/api/v1"
 PPR_GROUP="ppr-ui-test"
 ROUTE_HOST="test.bcregistry.ca"
-SENTRY_DSN="https://c0eaad46fd3c490882ef1402713c7e6a@sentry.io/1834187"
 SENTRY_ENVIRONMENT="Test"
     
