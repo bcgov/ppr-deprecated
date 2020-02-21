@@ -8,6 +8,6 @@
 #=========================================================
 APP_NAME="ppr-ui-inter"
 APP_PATH="/cooperatives/ppr"
-PPR_GROUP="ppr-ui"
-GIT_URI="https://github.com/bcgov/ppr"
 GIT_REF="master"    
+GIT_URI="https://github.com/bcgov/ppr"
+PPR_GROUP="ppr-ui"
