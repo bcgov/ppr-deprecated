@@ -41,6 +41,11 @@
                       Search
                     </router-link>
                   </li>
+                  <li v-if="userCanSearch">
+                    <router-link to="financing">
+                      Financing Statement
+                    </router-link>
+                  </li>
                   <li>
                     <router-link to="about">
                       About
