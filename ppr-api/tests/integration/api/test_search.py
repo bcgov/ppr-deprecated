@@ -1,17 +1,14 @@
 from starlette.testclient import TestClient
 
 import main
-import models.database
-import models.financing_statement
-import models.payment
-import models.search
-import schemas.financing_statement
+from ..utilities import sample_data_utility
 
 client = TestClient(main.app)
 
 
 def test_read_search(mock_payment):
-    search_rec = create_test_search_record('REGISTRATION_NUMBER', {'value': '1234567'}, payment=mock_payment)
+    search_rec = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER', {'value': '1234567'},
+                                                               payment=mock_payment)
 
     rv = client.get('/searches/{}'.format(search_rec.id))
     assert rv.status_code == 200
@@ -35,7 +32,7 @@ def test_create_registration_number_search():
     result_id = body['id']
     assert result_id > 0
 
-    stored = retrieve_search_record(result_id)
+    stored = sample_data_utility.retrieve_search_record(result_id)
     assert stored
     assert stored.type_code == 'REGISTRATION_NUMBER'
     assert stored.criteria == {'value': '987654Z'}
@@ -55,12 +52,12 @@ def test_create_search_returns_payment_info():
     assert body['payment']['status'] == 'CREATED'
     assert body['payment']['method'] == 'CC'
 
-    stored = retrieve_search_record(body['id'])
+    stored = sample_data_utility.retrieve_search_record(body['id'])
     assert body['payment']['id'] == stored.payment_id
 
 
 def test_create_search_with_exact_match():
-    search_value = create_test_financing_statement().registration_number
+    search_value = sample_data_utility.create_test_financing_statement().registration_number
     search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': search_value}}
 
     rv = client.post('/searches', json=search_input)
@@ -68,7 +65,7 @@ def test_create_search_with_exact_match():
     body = rv.json()
     search_id = body['id']
 
-    search_results = retrieve_search_result_records(search_id)
+    search_results = sample_data_utility.retrieve_search_result_records(search_id)
     assert len(search_results) == 1
     search_result = search_results[0]
     assert search_result.registration_number == search_value
@@ -77,7 +74,7 @@ def test_create_search_with_exact_match():
 
 
 def test_create_registration_number_search_matches_non_base_registration():
-    search_value = create_test_financing_statement(2).events[1].registration_number
+    search_value = sample_data_utility.create_test_financing_statement(num_of_events=2).events[1].registration_number
     search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': search_value}}
 
     rv = client.post('/searches', json=search_input)
@@ -85,16 +82,17 @@ def test_create_registration_number_search_matches_non_base_registration():
     body = rv.json()
     search_id = body['id']
 
-    search_results = retrieve_search_result_records(search_id)
+    search_results = sample_data_utility.retrieve_search_result_records(search_id)
     assert len(search_results) == 1
     search_result = search_results[0]
     assert search_result.registration_number == search_value
 
 
 def test_read_singular_search_results():
-    fin_stmt = create_test_financing_statement()
+    fin_stmt = sample_data_utility.create_test_financing_statement()
     matching_reg_num = fin_stmt.registration_number
-    search_rec = create_test_search_record('REGISTRATION_NUMBER', {'value': matching_reg_num}, [matching_reg_num], None)
+    search_rec = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER', {'value': matching_reg_num},
+                                                               [matching_reg_num], None)
 
     rv = client.get('/searches/{}/results'.format(search_rec.id))
 
@@ -113,68 +111,3 @@ def test_read_singular_search_results():
     assert isinstance(body[0]['financingStatement']['debtors'], list)
     assert isinstance(body[0]['financingStatement']['vehicleCollateral'], list)
     assert isinstance(body[0]['financingStatement']['generalCollateral'], list)
-
-
-def create_test_search_record(type_code: str, criteria: dict, matches: list = [],
-                              payment: schemas.payment.Payment = None):
-    db = models.database.SessionLocal()
-    try:
-        search_rec = models.search.Search(type_code=type_code, criteria=criteria)
-        if payment:
-            search_rec.payment = models.payment.Payment(id=payment.id, method=payment.method, status=payment.status)
-        db.add(search_rec)
-
-        for reg in matches:
-            search_rec.results.append(models.search.SearchResult(registration_number=reg, exact=True, selected=True))
-
-        db.commit()
-        db.refresh(search_rec)
-        return search_rec
-    finally:
-        db.close()
-
-
-def retrieve_search_record(search_id: int):
-    db = models.database.SessionLocal()
-    try:
-        return db.query(models.search.Search).get(search_id)
-    finally:
-        db.close()
-
-
-def retrieve_search_result_records(search_id: int):
-    db = models.database.SessionLocal()
-    try:
-        return db.query(models.search.SearchResult).filter(models.search.SearchResult.search_id == search_id).all()
-    finally:
-        db.close()
-
-
-def create_test_financing_statement(num_of_events: int = 1):
-    db = models.database.SessionLocal()
-    try:
-        reg_num = next_reg_number(db)
-        fin_stmt = models.financing_statement.FinancingStatement(
-            registration_number=reg_num, status='A', life_in_years=-1,
-            registration_type_code=schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value
-        )
-        event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num)
-        fin_stmt.events.append(event)
-
-        # Add additional events if needed
-        for n in range(1, num_of_events):
-            fin_stmt.events.append(
-                models.financing_statement.FinancingStatementEvent(registration_number=next_reg_number(db))
-            )
-
-        db.add(fin_stmt)
-        db.commit()
-        db.refresh(fin_stmt)
-        fin_stmt.events  # Explicitly lazy load the events before closing the session
-        return fin_stmt
-    finally:
-        db.close()
-
-
-def next_reg_number(db):
-    return str(db.execute("SELECT nextval('reg_number_seq')").first()[0])

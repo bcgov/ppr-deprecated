@@ -9,6 +9,7 @@ import main
 # search.payment_id has a unique constraint, so tests increment it on each use.  Get the max value as a start point.
 db = models.database.SessionLocal()
 last_payment_id = db.execute('SELECT COALESCE(MAX(id), 0) FROM payment').first()[0]
+db.close()
 
 
 @pytest.fixture(autouse=True)
