@@ -182,7 +182,7 @@ objects:
         "AUTH_URL": "${AUTH_URL}",
         "LAUNCH_DARKLY_CLIENT_KEY": "${LAUNCH_DARKLY_CLIENT_KEY}",
         "PAY_API_URL": "${PAY_API_URL}",
-        "SENTRY_DSN": "https://${SENTRY_KEY}@sentry.io/1834187",
+        "SENTRY_DSN": "${SENTRY_URL}",
         "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
         }
 parameters:
@@ -238,7 +238,7 @@ parameters:
   - description: The environment tag sentry. E.g. Dev, yourName, Test, Prod etc.
     displayName: Sentry Environment
     name: SENTRY_ENVIRONMENT
-  - description: The public key to PPR sentry service
-    displayName: SENTRY_KEY
-    name: SENTRY_KEY
+  - description: The url to PPR sentry service
+    displayName: SENTRY_URL
+    name: SENTRY_URL
     required: true
