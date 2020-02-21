@@ -167,24 +167,24 @@ objects:
           regexp .*
           to {path} ${APP_PATH}/
       }
-  - apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      labels:
-        app: ppr
-        pprgroup: ${PPR_GROUP}
-        role: ${APP_NAME}
-      name: ${APP_CONFIG}
-    data:
-      configuration.json: |+
-        {
-        "API_URL": "${API_URL}",
-        "AUTH_URL": "${AUTH_URL}",
-        "LAUNCH_DARKLY_CLIENT_KEY": "${LAUNCH_DARKLY_CLIENT_KEY}",
-        "PAY_API_URL": "${PAY_API_URL}",
-        "SENTRY_DSN": "${SENTRY_URL}",
-        "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
-        }
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: ppr
+      pprgroup: ${PPR_GROUP}
+      role: ${APP_NAME}
+    name: ${APP_CONFIG}
+  data:
+    configuration.json: |+
+      {
+      "API_URL": "${API_URL}",
+      "AUTH_URL": "${AUTH_URL}",
+      "LAUNCH_DARKLY_CLIENT_KEY": "${LAUNCH_DARKLY_CLIENT_KEY}",
+      "PAY_API_URL": "${PAY_API_URL}",
+      "SENTRY_DSN": "${SENTRY_URL}",
+      "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
+      }
 parameters:
 - description: Volume name for web app config
   displayName: Web application config volume mount name
