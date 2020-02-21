@@ -217,6 +217,81 @@ paths:
       description: Display the financing statements that were found with the search criteria
       security:
         - JWT: []
+  /financing-statements:
+    post:
+      summary: Create a financing statement
+      tags: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/financing-statement'
+              examples:
+                New Financing Statement:
+                  value:
+                    type: SECURITY_AGREEMENT
+                    registeringParty:
+                      name:
+                        first: Homer
+                        last: Simpson
+                        middle: Jay
+                      address: 742 Evergreen Terrace
+                      city: Springfield
+                      province: BC
+                      postalCode: A1A 1A1
+                    securedParties:
+                      - code: string
+                        name: string
+                        address: string
+                        city: string
+                        province: string
+                        postalCode: string
+                    debtors:
+                      - name: string
+                    vehicleCollateral:
+                      - type: MOTOR_VEHICLE
+                        serial: string
+                        year: 1000
+                        model: string
+                        manufacturedHomeRegNumber: string
+                    generalCollateral:
+                      - description: string
+                    expiryDate: '2020-02-21'
+                    baseRegistrationNumber: string
+                    documentId: string
+                    registrationDateTime: '2020-02-21T18:38:20Z'
+                    years: 1
+        '422':
+          description: Unprocessable Entity
+      operationId: post-financing-statements
+      description: Create a new financing statement record
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/financing-statement'
+            examples:
+              Register Financing Statement:
+                value:
+                  type: SECURITY_AGREEMENT
+                  registeringParty:
+                    name:
+                      first: Homer
+                      last: Simpson
+                      middle: Jay
+                    address: 742 Evergreen Terrace
+                    city: Springfield
+                    province: BC
+                    postalCode: A1A 1A1
+                  securedParties: []
+                  debtors: []
+                  vehicleCollateral: []
+                  generalCollateral: []
+                  years: 5
 components:
   schemas:
     search:
@@ -268,9 +343,6 @@ components:
       description: ''
       x-examples: {}
       properties:
-        ref:
-          type: string
-          format: uri
         type:
           type: string
           enum:
@@ -282,7 +354,7 @@ components:
             code:
               type: string
             name:
-              type: string
+              $ref: '#/components/schemas/individual-name'
             address:
               type: string
             city:
@@ -358,15 +430,19 @@ components:
           format: date
         baseRegistrationNumber:
           type: string
-        documentId:
-          type: string
         registrationDateTime:
           type: string
           format: date-time
+        years:
+          type: integer
+          minimum: 1
+          maximum: 25
+          description: Length of the registration in years. Must be a value from 1 to 25.
       required:
         - type
         - securedParties
         - debtors
+        - years
     search-result:
       type: object
       properties:
@@ -404,6 +480,19 @@ components:
           type: string
           enum:
             - CC
+    individual-name:
+      title: individual-name
+      type: object
+      properties:
+        first:
+          type: string
+        last:
+          type: string
+        middle:
+          type: string
+      required:
+        - first
+        - last
   securitySchemes:
     JWT:
       type: http
