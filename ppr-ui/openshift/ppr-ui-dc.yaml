@@ -195,13 +195,13 @@ parameters:
   displayName: APP name
   name: APP_NAME
   required: true
-- description: The sub-path to the web application
-  displayName: APP path
-  name: APP_PATH
-  required: true
 - description: The full url to the PPR API
   displayName: API URL
   name: API_URL
+  required: true
+- description: The sub-path to the web application
+  displayName: APP path
+  name: APP_PATH
   required: true
 - description: The full url to the authentication service
   displayName: AUTH_URL
