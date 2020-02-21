@@ -182,7 +182,7 @@ objects:
         "AUTH_URL": "${AUTH_URL}",
         "LAUNCH_DARKLY_CLIENT_KEY": "${LAUNCH_DARKLY_CLIENT_KEY}",
         "PAY_API_URL": "${PAY_API_URL}",
-        "SENTRY_DSN": "https://${SENTRY_KEY}@sentry.io/1834187"
+        "SENTRY_DSN": "https://${SENTRY_KEY}@sentry.io/1834187",
         "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
         }
 parameters:
