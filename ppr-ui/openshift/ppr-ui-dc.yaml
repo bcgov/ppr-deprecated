@@ -40,7 +40,7 @@ objects:
       spec:
         containers:
           - args: # Start Caddy inside the Docker image
-              - /tmp/scripts/run
+            - /tmp/scripts/run
             imagePullPolicy: Always
             livenessProbe:
               failureThreshold: 3
@@ -53,8 +53,8 @@ objects:
               timeoutSeconds: 1
             name: ${APP_NAME}
             ports:
-              - containerPort: 2015
-                protocol: TCP
+            - containerPort: 2015
+              protocol: TCP
             readinessProbe:
               failureThreshold: 3
               httpGet:
@@ -67,7 +67,7 @@ objects:
               timeoutSeconds: 10
             resources:
               limits:
-                cpu: "1"
+                cpu: '1'
                 memory: 250Mi
               requests:
                 cpu: 10m
@@ -98,16 +98,16 @@ objects:
             name: ${CADDY_CONFIG}
     test: false
     triggers:
-      - imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${APP_NAME}
-          from:
-            kind: ImageStreamTag
-            name: ${APP_NAME}:${IMAGE_TAG}
-            namespace: zwmtib-tools
-        type: ImageChange
-      - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APP_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APP_NAME}:${IMAGE_TAG}
+          namespace: zwmtib-tools
+      type: ImageChange
+    - type: ConfigChange
 - apiVersion: v1
   kind: Service
   metadata:
@@ -119,10 +119,10 @@ objects:
     name: ${APP_NAME}
   spec:
     ports:
-      - name: 2015-tcp
-        port: 2015
-        protocol: TCP
-        targetPort: 2015
+    - name: 2015-tcp
+      port: 2015
+      protocol: TCP
+      targetPort: 2015
     selector:
       deploymentconfig: ${APP_NAME}
     sessionAffinity: None
@@ -186,59 +186,59 @@ objects:
       "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
       }
 parameters:
-- description: Volume name for web app config
-  displayName: Web application config volume mount name
-  name: APP_CONFIG
-  required: true
-  value: ppr-web-ui-config
-- description: The name of the Web application.
-  displayName: APP name
-  name: APP_NAME
-  required: true
-- description: The sub-path to the web application
-  displayName: APP path
-  name: APP_PATH
-  required: true
-- description: The full url to the PPR API
-  displayName: API URL
-  name: API_URL
-  required: true
-- description: The full url to the authentication service
-  displayName: AUTH_URL
-  name: AUTH_URL
-  required: true
-- description: Name for caddy configuration
-  displayName: Caddy config volume mount name
-  name: CADDY_CONFIG
-  required: true
-- description: The environment, such as "dev", "dev-pr13", "test", or "prod".
-  displayName: Environment
-  name: ENVIRONMENT
-  required: true
-- description: The image tag to build from.
-  displayName: Image Tag
-  name: IMAGE_TAG
-  required: true
-- description: The API key for the launch darkly service
-  displayName: LAUNCH_DARKLY_CLIENT_KEY
-  name: LAUNCH_DARKLY_CLIENT_KEY
-  required: true
-- description: The full url to the payment service
-  displayName: PAY API URL
-  name: PAY_API_URL
-  required: true
-- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
-  displayName: PPR group
-  name: PPR_GROUP
-  required: true
-- description: The hostname to use for the route.
-  displayName: Route HOST
-  name: ROUTE_HOST
-  required: true
-- description: The environment tag sentry. E.g. Dev, yourName, Test, Prod etc.
-  displayName: Sentry Environment
-  name: SENTRY_ENVIRONMENT
-- description: The url to PPR sentry service
-  displayName: SENTRY_URL
-  name: SENTRY_URL
-  required: true
+  - description: Volume name for web app config
+    displayName: Web application config volume mount name
+    name: APP_CONFIG
+    required: true
+    value: ppr-web-ui-config
+  - description: The name of the Web application.
+    displayName: APP name
+    name: APP_NAME
+    required: true
+  - description: The sub-path to the web application
+    displayName: APP path
+    name: APP_PATH
+    required: true
+  - description: The full url to the PPR API
+    displayName: API URL
+    name: API_URL
+    required: true
+  - description: The full url to the authentication service
+    displayName: AUTH_URL
+    name: AUTH_URL
+    required: true
+  - description: Name for caddy configuration
+    displayName: Caddy config volume mount name
+    name: CADDY_CONFIG
+    required: true
+  - description: The environment, such as "dev", "dev-pr13", "test", or "prod".
+    displayName: Environment
+    name: ENVIRONMENT
+    required: true
+  - description: The image tag to build from.
+    displayName: Image Tag
+    name: IMAGE_TAG
+    required: true
+  - description: The API key for the launch darkly service
+    displayName: LAUNCH_DARKLY_CLIENT_KEY
+    name: LAUNCH_DARKLY_CLIENT_KEY
+    required: true
+  - description: The full url to the payment service
+    displayName: PAY API URL
+    name: PAY_API_URL
+    required: true
+  - description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+    displayName: PPR group
+    name: PPR_GROUP
+    required: true
+  - description: The hostname to use for the route.
+    displayName: Route HOST
+    name: ROUTE_HOST
+    required: true
+  - description: The environment tag sentry. E.g. Dev, yourName, Test, Prod etc.
+    displayName: Sentry Environment
+    name: SENTRY_ENVIRONMENT
+  - description: The url to PPR sentry service
+    displayName: SENTRY_URL
+    name: SENTRY_URL
+    required: true
