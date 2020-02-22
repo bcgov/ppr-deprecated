@@ -186,6 +186,10 @@ objects:
       "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
       }
 parameters:
+- description: The full url to the PPR API
+  displayName: API URL
+  name: API_URL
+  required: true
 - description: Volume name for web app config
   displayName: Web application config volume mount name
   name: APP_CONFIG
@@ -194,10 +198,6 @@ parameters:
 - description: The name of the Web application.
   displayName: APP name
   name: APP_NAME
-  required: true
-- description: The full url to the PPR API
-  displayName: API URL
-  name: API_URL
   required: true
 - description: The sub-path to the web application
   displayName: APP path
