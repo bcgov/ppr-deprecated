@@ -14,7 +14,7 @@ describe('SearchInput.vue', (): void => {
   it('handles no props', (): void => {
     const wrapper: Wrapper<Vue> = mount(SearchInput, { vuetify })
 
-    // Just need something to test: should not emit the "search" event unti the button is clicked.
+    // Just need something to test: should not emit the "search" event until the button is clicked.
     expect(wrapper.emitted().search).not.toBeDefined()
   })
 
