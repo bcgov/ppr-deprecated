@@ -13,16 +13,17 @@ def create_test_financing_statement(**kwargs):
     options = dict({
         'type_code': schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value,
         'num_of_events': 1,
-        'years': 1
+        'years': -1
     }, **kwargs)
 
     db = models.database.SessionLocal()
     try:
         reg_num = next_reg_number(db)
-        expiry = datetime.date.today() + datedelta.datedelta(years=options['years'])
+        life = options['years']
+        expiry = datetime.date.today() + datedelta.datedelta(years=options['years']) if life > 0 else None
         fin_stmt = models.financing_statement.FinancingStatement(
             registration_type_code=options['type_code'], registration_number=reg_num, status='A',
-            life_in_years=-options['years'], expiry_date=expiry
+            life_in_years=options['years'], expiry_date=expiry
         )
         event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num)
         fin_stmt.events.append(event)
