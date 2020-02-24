@@ -41,6 +41,11 @@
                       Search
                     </router-link>
                   </li>
+                  <li v-if="userCanFinanceStatement">
+                    <router-link to="financing">
+                      Financing Statement
+                    </router-link>
+                  </li>
                   <li>
                     <router-link to="about">
                       About
@@ -82,11 +87,14 @@ export default createComponent({
     const userCanSearch = computed((): boolean => featureFlags.getFlag('search-registration-number') &&
       userIsAuthed.value)
 
+    const userCanFinanceStatement = computed((): boolean => featureFlags.getFlag('financing-statement') &&
+      userIsAuthed.value)
+
     function goSearch(): void {
       router.push('search')
     }
 
-    return { goSearch, userCanSearch, userIsAuthed }
+    return { goSearch, userCanSearch, userCanFinanceStatement, userIsAuthed }
   }
 })
 
