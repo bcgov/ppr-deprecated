@@ -3,17 +3,17 @@ import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
 
-import SubmittingParty from '@/components/SubmittingParty.vue'
+import RegisteringParty from '@/components/RegisteringParty.vue'
 import Person from '@/components/person'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
 
-describe('SubmittingParty.vue', (): void => {
+describe('RegisteringParty.vue', (): void => {
   describe('@events', (): void => {
     it('@input - first name change should be emitted', async (): Promise<void> => {
       const properties = ref({ value: new Person('Firstname', 'Middlename', 'Lastname') })
-      const wrapper: Wrapper<SubmittingParty> = mount(SubmittingParty, { propsData: properties.value })
+      const wrapper: Wrapper<RegisteringParty> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').setValue('Newfirstname')
       await Vue.nextTick()
@@ -26,7 +26,7 @@ describe('SubmittingParty.vue', (): void => {
 
     it('@input - middle name change should be emitted', async (): Promise<void> => {
       const properties = ref({ value: new Person('Firstname', 'Middlename', 'Lastname') })
-      const wrapper: Wrapper<SubmittingParty> = mount(SubmittingParty, { propsData: properties.value })
+      const wrapper: Wrapper<RegisteringParty> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.middleName"]').setValue('Newmiddlename')
       await Vue.nextTick()
@@ -39,7 +39,7 @@ describe('SubmittingParty.vue', (): void => {
 
     it('@input - last name change should be emitted', async (): Promise<void> => {
       const properties = ref({ value: new Person('Firstname', 'Middlename', 'Lastname') })
-      const wrapper: Wrapper<SubmittingParty> = mount(SubmittingParty, { propsData: properties.value })
+      const wrapper: Wrapper<RegisteringParty> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.lastName"]').setValue('Newlastname')
       await Vue.nextTick()
@@ -52,7 +52,7 @@ describe('SubmittingParty.vue', (): void => {
 
     it('@valid - no names should be false', async (): Promise<void> => {
       const properties = ref({ value: new Person('', '', '') })
-      const wrapper: Wrapper<SubmittingParty> = mount(SubmittingParty, { propsData: properties.value })
+      const wrapper: Wrapper<RegisteringParty> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')
       await Vue.nextTick()
@@ -62,7 +62,7 @@ describe('SubmittingParty.vue', (): void => {
 
     it('@valid - first and middle names should be false', async (): Promise<void> => {
       const properties = ref({ value: new Person('Firstname', 'Middlename', '') })
-      const wrapper: Wrapper<SubmittingParty> = mount(SubmittingParty, { propsData: properties.value })
+      const wrapper: Wrapper<RegisteringParty> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')
       await Vue.nextTick()
@@ -72,7 +72,7 @@ describe('SubmittingParty.vue', (): void => {
 
     it('@valid - middle and last names should be false', async (): Promise<void> => {
       const properties = ref({ value: new Person('', 'Middlename', 'Lastname') })
-      const wrapper: Wrapper<SubmittingParty> = mount(SubmittingParty, { propsData: properties.value })
+      const wrapper: Wrapper<RegisteringParty> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')
       await Vue.nextTick()
@@ -82,7 +82,7 @@ describe('SubmittingParty.vue', (): void => {
 
     it('@valid - first and last names should be true', async (): Promise<void> => {
       const properties = ref({ value: new Person('Firstname', '', 'Lastname') })
-      const wrapper: Wrapper<SubmittingParty> = mount(SubmittingParty, { propsData: properties.value })
+      const wrapper: Wrapper<RegisteringParty> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')
       await Vue.nextTick()
