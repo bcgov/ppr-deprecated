@@ -34,7 +34,10 @@ import Person from './person'
 
 export default createComponent({
   props: {
-    value: Person
+    value: {
+      type: Person,
+      required: true
+    }
   },
 
   setup(props, { emit }) {
@@ -57,23 +60,17 @@ export default createComponent({
 
     // Callback function for emitting model changes made to the first name.
     function updateFirstName(newFirstName: string): void {
-      if (props.value) {
-        emit('input', new Person(newFirstName, props.value.middleName, props.value.lastName))
-      }
-    }
-
-    // Callback function for emitting model changes made to the middle name.
-    function updateLastName(newLastName: string): void {
-      if (props.value) {
-        emit('input', new Person(props.value.firstName, props.value.middleName, newLastName))
-      }
+      emit('input', new Person(newFirstName, props.value.middleName, props.value.lastName))
     }
 
     // Callback function for emitting model changes made to the last name.
+    function updateLastName(newLastName: string): void {
+      emit('input', new Person(props.value.firstName, props.value.middleName, newLastName))
+    }
+
+    // Callback function for emitting model changes made to the middle name.
     function updateMiddleName(newMiddleName: string): void {
-      if (props.value) {
-        emit('input', new Person(props.value.firstName, newMiddleName, props.value.lastName))
-      }
+      emit('input', new Person(props.value.firstName, newMiddleName, props.value.lastName))
     }
 
     return {
