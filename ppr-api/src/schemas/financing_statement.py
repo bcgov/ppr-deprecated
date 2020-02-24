@@ -12,18 +12,19 @@ class RegistrationType(enum.Enum):
 
 class FinancingStatementBase(BaseModel):
     type: str
+    years: int = None
     registeringParty: dict
     securedParties: typing.List[dict]
     debtors: typing.List[dict]
     vehicleCollateral: typing.List[dict]
     generalCollateral: typing.List[dict]
-    expiryDate: datetime.date = None
 
 
 class FinancingStatement(FinancingStatementBase):
     baseRegistrationNumber: str
     documentId: str = None
     registrationDateTime: datetime.datetime
+    expiryDate: datetime.date = None
 
     class Config:
         json_encoders = {
