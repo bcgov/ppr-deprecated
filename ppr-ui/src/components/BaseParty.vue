@@ -1,6 +1,9 @@
 <template>
   <v-card flat>
-    <v-form @input="formValid($event)">
+    <v-form
+      v-if="editing"
+      @input="formValid($event)"
+    >
       <v-text-field
         data-test-id="BaseParty.firstName"
         label="First Name"
@@ -24,6 +27,9 @@
         @input="updateLastName($event)"
       />
     </v-form>
+    <div v-if="!editing">
+      {{ value.firstName + ' ' + value.middleName + ' ' + value.lastName }}
+    </div>
   </v-card>
 </template>
 
@@ -34,9 +40,14 @@ import Person from './person'
 
 export default createComponent({
   props: {
+    editing: {
+      default: false,
+      required: false,
+      type: Boolean
+    },
     value: {
-      type: Person,
-      required: true
+      required: true,
+      type: Person
     }
   },
 

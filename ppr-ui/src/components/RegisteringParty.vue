@@ -1,6 +1,7 @@
 <template>
   <v-card flat>
     <base-party
+      :editing="editing"
       :value="value"
       @input="emitModel($event)"
       @valid="formValid($event)"
@@ -18,7 +19,15 @@ export default createComponent({
   components: { BaseParty },
 
   props: {
-    value: Person
+    editing: {
+      default: false,
+      required: false,
+      type: Boolean
+    },
+    value: {
+      required: true,
+      type: Person
+    }
   },
 
   setup(_, { emit }) {
