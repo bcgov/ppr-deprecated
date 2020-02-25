@@ -1,6 +1,7 @@
 """ Define the endpoints for managing Financing Statements. """
 
 import fastapi
+from starlette import responses, status
 
 import auth.authentication
 import models.financing_statement
@@ -8,6 +9,19 @@ from repository.financing_statement_repository import FinancingStatementReposito
 import schemas.financing_statement
 
 router = fastapi.APIRouter()
+
+
+@router.post('/financing-statements', response_model=schemas.financing_statement.FinancingStatement,
+             response_model_by_alias=False)
+def create_financing_statement(response: responses.Response,
+                               fs_input: schemas.financing_statement.FinancingStatementBase,
+                               fs_repo: FinancingStatementRepository = fastapi.Depends(),
+                               user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
+    model = fs_repo.create_financing_statement(fs_input, user)
+
+    response.status_code = status.HTTP_201_CREATED
+
+    return map_financing_statement_model_to_schema(model)
 
 
 @router.get('/financing-statements/{base_reg_num}', response_model=schemas.financing_statement.FinancingStatement,

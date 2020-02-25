@@ -14,7 +14,8 @@ class FinancingStatement(BaseORM):
     life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
     expiry_date = sqlalchemy.Column(sqlalchemy.Date)
     discharged = sqlalchemy.Column(sqlalchemy.BOOLEAN)
-    last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, onupdate=sqlalchemy.func.now())
+    last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, server_default=sqlalchemy.func.now(),
+                                     onupdate=sqlalchemy.func.now())
 
     events = sqlalchemy.orm.relationship('FinancingStatementEvent', back_populates='base_registration')
 
