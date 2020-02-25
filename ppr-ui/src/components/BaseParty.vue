@@ -36,7 +36,7 @@
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import Person from './person'
+import { PersonModel } from './person-model'
 
 export default createComponent({
   props: {
@@ -47,7 +47,7 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: Person
+      type: PersonModel
     }
   },
 
@@ -71,17 +71,17 @@ export default createComponent({
 
     // Callback function for emitting model changes made to the first name.
     function updateFirstName(newFirstName: string): void {
-      emit('input', new Person(newFirstName, props.value.middleName, props.value.lastName))
+      emit('input', new PersonModel(newFirstName, props.value.middleName, props.value.lastName))
     }
 
     // Callback function for emitting model changes made to the last name.
     function updateLastName(newLastName: string): void {
-      emit('input', new Person(props.value.firstName, props.value.middleName, newLastName))
+      emit('input', new PersonModel(props.value.firstName, props.value.middleName, newLastName))
     }
 
     // Callback function for emitting model changes made to the middle name.
     function updateMiddleName(newMiddleName: string): void {
-      emit('input', new Person(props.value.firstName, newMiddleName, props.value.lastName))
+      emit('input', new PersonModel(props.value.firstName, newMiddleName, props.value.lastName))
     }
 
     return {

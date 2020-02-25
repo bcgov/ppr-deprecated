@@ -4,7 +4,7 @@ import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
 
 import RegisteringParty from '@/components/RegisteringParty.vue'
-import Person from '@/components/person'
+import { PersonModel } from '@/components/person-model'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
@@ -12,14 +12,14 @@ Vue.use(VueCompositionApi)
 describe('RegisteringParty.vue', (): void => {
   describe('@events', (): void => {
     it(':editing - false contains no inputs', (): void => {
-      const properties = ref({ value: new Person('', '', '') })
+      const properties = ref({ value: new PersonModel() })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       expect(wrapper.findAll('input').exists()).toBeFalsy()
     })
 
     it(':editing - false contains name components', (): void => {
-      const properties = ref({ value: new Person('Firstname', 'Middlename', 'Lastname') })
+      const properties = ref({ value: new PersonModel('Firstname', 'Middlename', 'Lastname') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       expect(wrapper.text()).toContain('Firstname')
@@ -28,7 +28,7 @@ describe('RegisteringParty.vue', (): void => {
     })
 
     it('@input - first name change should be emitted', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new Person('Firstname', 'Middlename', 'Lastname') })
+      const properties = ref({ editing: true, value: new PersonModel('Firstname', 'Middlename', 'Lastname') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').setValue('Newfirstname')
@@ -41,7 +41,7 @@ describe('RegisteringParty.vue', (): void => {
     })
 
     it('@input - middle name change should be emitted', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new Person('Firstname', 'Middlename', 'Lastname') })
+      const properties = ref({ editing: true, value: new PersonModel('Firstname', 'Middlename', 'Lastname') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.middleName"]').setValue('Newmiddlename')
@@ -54,7 +54,7 @@ describe('RegisteringParty.vue', (): void => {
     })
 
     it('@input - last name change should be emitted', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new Person('Firstname', 'Middlename', 'Lastname') })
+      const properties = ref({ editing: true, value: new PersonModel('Firstname', 'Middlename', 'Lastname') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.lastName"]').setValue('Newlastname')
@@ -67,7 +67,7 @@ describe('RegisteringParty.vue', (): void => {
     })
 
     it('@valid - no names should be false', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new Person('', '', '') })
+      const properties = ref({ editing: true, value: new PersonModel('', '', '') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')
@@ -77,7 +77,7 @@ describe('RegisteringParty.vue', (): void => {
     })
 
     it('@valid - first and middle names should be false', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new Person('Firstname', 'Middlename', '') })
+      const properties = ref({ editing: true, value: new PersonModel('Firstname', 'Middlename', '') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')
@@ -87,7 +87,7 @@ describe('RegisteringParty.vue', (): void => {
     })
 
     it('@valid - middle and last names should be false', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new Person('', 'Middlename', 'Lastname') })
+      const properties = ref({ editing: true, value: new PersonModel('', 'Middlename', 'Lastname') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')
@@ -97,7 +97,7 @@ describe('RegisteringParty.vue', (): void => {
     })
 
     it('@valid - first and last names should be true', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new Person('Firstname', '', 'Lastname') })
+      const properties = ref({ editing: true, value: new PersonModel('Firstname', '', 'Lastname') })
       const wrapper: Wrapper<Vue> = mount(RegisteringParty, { propsData: properties.value })
 
       wrapper.get('input[data-test-id="BaseParty.firstName"]').trigger('input')

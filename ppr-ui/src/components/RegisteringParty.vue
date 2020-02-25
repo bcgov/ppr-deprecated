@@ -13,7 +13,7 @@
 import { createComponent } from '@vue/composition-api'
 
 import BaseParty from '@/components/BaseParty.vue'
-import Person from '@/components/person'
+import { PersonModel } from '@/components/person-model'
 
 export default createComponent({
   components: { BaseParty },
@@ -26,13 +26,13 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: Person
+      type: PersonModel
     }
   },
 
   setup(_, { emit }) {
     // Callback function for emitting the model back to the parent.
-    function emitModel(person: Person) {
+    function emitModel(person: PersonModel) {
       emit('input', person)
     }
 
