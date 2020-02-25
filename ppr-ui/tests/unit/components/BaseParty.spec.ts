@@ -64,10 +64,13 @@ describe('BaseParty.vue', (): void => {
     })
 
     it(':value - reactivity of the first name', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new PersonModel('Firstname', 'Middlename', 'Lastname') })
+      const properties = ref<{ editing: boolean; value: PersonModel }>({
+        editing: true,
+        value: new PersonModel('Firstname', 'Middlename', 'Lastname')
+      })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value })
 
-      properties.value['value'] = new PersonModel('Newfirstname', 'Middlename', 'Lastname')
+      properties.value.value = new PersonModel('Newfirstname', 'Middlename', 'Lastname')
       await Vue.nextTick()
 
       let input = wrapper.get('input[data-test-id="BaseParty.firstName"]').element as HTMLInputElement
@@ -79,10 +82,13 @@ describe('BaseParty.vue', (): void => {
     })
 
     it(':value - reactivity of the middle name', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new PersonModel('Firstname', 'Middlename', 'Lastname') })
+      const properties = ref<{ editing: boolean; value: PersonModel }>({
+        editing: true,
+        value: new PersonModel('Firstname', 'Middlename', 'Lastname')
+      })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value })
 
-      properties.value['value'] = new PersonModel('Firstname', 'Newmiddlename', 'Lastname')
+      properties.value.value = new PersonModel('Firstname', 'Newmiddlename', 'Lastname')
       await Vue.nextTick()
 
       let input = wrapper.get('input[data-test-id="BaseParty.firstName"]').element as HTMLInputElement
@@ -94,10 +100,13 @@ describe('BaseParty.vue', (): void => {
     })
 
     it(':value - reactivity of the last name', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new PersonModel('Firstname', 'Middlename', 'Lastname') })
+      const properties = ref<{ editing: boolean; value: PersonModel }>({
+        editing: true,
+        value: new PersonModel('Firstname', 'Middlename', 'Lastname')
+      })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value })
 
-      properties.value['value'] = new PersonModel('Firstname', 'Middlename', 'Newlastname')
+      properties.value.value = new PersonModel('Firstname', 'Middlename', 'Newlastname')
       await Vue.nextTick()
 
       let input = wrapper.get('input[data-test-id="BaseParty.firstName"]').element as HTMLInputElement
