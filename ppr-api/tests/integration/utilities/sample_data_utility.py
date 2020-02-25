@@ -1,6 +1,7 @@
 import datetime
 
 import datedelta
+import sqlalchemy.orm
 
 import models.database
 import models.financing_statement
@@ -78,5 +79,14 @@ def retrieve_search_result_records(search_id: int):
     db = models.database.SessionLocal()
     try:
         return db.query(models.search.SearchResult).filter(models.search.SearchResult.search_id == search_id).all()
+    finally:
+        db.close()
+
+
+def retrieve_financing_statement_record(base_reg_number: str):
+    db = models.database.SessionLocal()
+    try:
+        query = db.query(models.financing_statement.FinancingStatement).options(sqlalchemy.orm.joinedload('events'))
+        return query.get(base_reg_number)
     finally:
         db.close()
