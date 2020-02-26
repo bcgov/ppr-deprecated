@@ -1,32 +1,29 @@
 <template>
-  <v-card
-    class="mb-12"
-    outlined
-  >
+  <v-card outlined>
     <form-section-header label="Type and duration" />
     <v-container>
       <v-form
         v-if="editing"
         @input="formValid($event)"
       >
-        <v-text-field
-          :value="value.term"
-          :rules="termRules"
-          label="Term"
-          name="termInput"
-          @input="updateTerm"
-        />
         <v-select
           :value="value.type"
-          :items="items"
+          :items="fsTypes"
           label="Type"
           name="typeInput"
           @input="updateType"
         />
+        <v-text-field
+          :value="value.life"
+          :rules="lifeRules"
+          label="Life"
+          name="lifeInput"
+          @input="updateTerm"
+        />
       </v-form>
       <div v-else>
         <div>
-          Term: {{ value.term }}
+          Life: {{ value.life }}
         </div>
         <div>
           Type: {{ value.type }}
@@ -47,7 +44,7 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import FinancingStatementModel from '@/financing-statement/financing-statement-model'
+import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementTypes, FinancingStatementTypesCodeList } from '@/financing-statement/financing-statement-types'
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
 import RegisteringParty from '@/components/RegisteringParty.vue'
@@ -61,7 +58,7 @@ export default createComponent({
   props: {
     editing: {
       default: false,
-      required: true,
+      required: false,
       type: Boolean
     },
     value: {
@@ -71,15 +68,14 @@ export default createComponent({
   },
 
   setup(props, { emit }) {
-    const items = ref<string[]>(FinancingStatementTypesCodeList)
-    const term = ref<number>(1)
-    const validTermDef = 'Term must be a number between 1 and 25'
-    const termRules = [
+    const fsTypes = ref<string[]>(FinancingStatementTypesCodeList)
+    const life = ref<number>(1)
+    const lifeRules = [
       (value): (boolean | string) => {
-        return !!value || 'Term is required'
+        return !!value || 'Life is required'
       },
       (value): (boolean | string) => {
-        return FinancingStatementModel.isValidTerm(value) ? true : validTermDef
+        return FinancingStatementModel.isValidLife(value) ? true : 'Life must be a number between 1 and 25'
       }
     ]
 
@@ -91,36 +87,32 @@ export default createComponent({
     function updateRegisteringParty(newPerson: PersonModel): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
-        props.value.term,
+        props.value.life,
         newPerson // props.value.registeringParty
       ))
     }
 
-    // Callback function for emitting model changes made to the FS term
-    function updateTerm(newTerm: number): void {
-      if (props.value) {
-        emit('input', new FinancingStatementModel(
-          props.value.type,
-          newTerm, // props.value.term,
-          props.value.registeringParty))
-      }
+    // Callback function for emitting model changes made to the FS life
+    function updateTerm(newLife: number): void {
+      emit('input', new FinancingStatementModel(
+        props.value.type,
+        newLife, // props.value.life,
+        props.value.registeringParty))
     }
 
-    // Callback function for emitting model changes made to the FS term
+    // Callback function for emitting model changes made to the FS life
     function updateType(newType: FinancingStatementTypes): void {
-      if (props.value) {
-        emit('input', new FinancingStatementModel(
-          newType, //props.value.type,
-          props.value.term,
-          props.value.registeringParty))
-      }
+      emit('input', new FinancingStatementModel(
+        newType, //props.value.type,
+        props.value.life,
+        props.value.registeringParty))
     }
 
     return {
       formValid,
-      items,
-      term,
-      termRules,
+      fsTypes,
+      life,
+      lifeRules,
       updateRegisteringParty,
       updateTerm,
       updateType

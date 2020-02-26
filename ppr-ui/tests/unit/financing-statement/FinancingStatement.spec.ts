@@ -4,7 +4,7 @@ import { mount, Wrapper } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 import FinancingStatment from '@/financing-statement/FinancingStatement.vue'
-import FinancingStatementModel from '@/financing-statement/financing-statement-model'
+import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementTypes } from '@/financing-statement/financing-statement-types'
 
 Vue.use(Vuetify)
@@ -50,23 +50,23 @@ describe('FinancingStatmentContainer.vue', (): void => {
     })
 
 
-    it('@input - term change should be emitted', async (): Promise<void> => {
+    it('@input - life change should be emitted', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatment, { propsData: properties.value, vuetify })
 
-      wrapper.get('input[name="termInput"]').setValue('22')
+      wrapper.get('input[name="lifeInput"]').setValue('22')
       await Vue.nextTick()
 
       const emitted = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emitted.term).toBe('22')
+      expect(emitted.life).toBe('22')
     })
 
 
-    it('@valid - invalid term should be false', async (): Promise<void> => {
+    it('@valid - invalid life should be false', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatment, { propsData: properties.value, vuetify })
 
-      wrapper.get('input[name="termInput"]').setValue('26')
+      wrapper.get('input[name="lifeInput"]').setValue('26')
       await Vue.nextTick()
 
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()

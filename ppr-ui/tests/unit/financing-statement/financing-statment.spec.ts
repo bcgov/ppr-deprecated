@@ -1,38 +1,43 @@
-import FinancingStatementModel from '@/financing-statement/financing-statement-model'
-import { FinancingStatementTypes, FinancingStatementTypesCodeList } from '@/financing-statement/financing-statement-types'
+import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
+import { FinancingStatementTypes } from '@/financing-statement/financing-statement-types'
 import { PersonModel } from '@/components/person-model'
 
 describe('FinancingStatementModel', (): void => {
 
-  describe('FinancingStatementModel.isValidTerm', (): void => {
+  describe('FinancingStatementModel.isValidLife', (): void => {
     function test(input, expected): void {
-      const isValid = FinancingStatementModel.isValidTerm(input)
+      const isValid = FinancingStatementModel.isValidLife(input)
       expect(isValid).toBe(expected)
     }
 
-    it('term of 1 year', (): void => {
+    it('life of 1 year', (): void => {
       test('1', true)
     })
 
-    it('term of 25 year', (): void => {
+    it('life of 25 year', (): void => {
       test('25', true)
     })
 
-    it('term of 0 is not valid', (): void => {
+    it('life of 0 is not valid', (): void => {
       test('0', false)
     })
 
-    it('term of 26 is not valid', (): void => {
+    it('life of 26 is not valid', (): void => {
       test('26', false)
     })
 
-    it('term of empty is not valid', (): void => {
+    it('life of empty is not valid', (): void => {
       test('', false)
     })
 
-    it('term of not a number input ("2b") is not valid', (): void => {
+    it('life of not a number input ("2b") is not valid', (): void => {
       test('2b', false)
     })
+
+    it('life PI is not valid', (): void => {
+      test('3.14159', false)
+    })
+
 
   })
 
@@ -42,18 +47,18 @@ describe('FinancingStatementModel', (): void => {
       const testPerson = new PersonModel()
 
       expect(fstmt.type).toEqual(FinancingStatementTypes.SECURITY_AGREEMENT)
-      expect(fstmt.term).toEqual(1)
+      expect(fstmt.life).toEqual(1)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
     })
 
-    it('construct with term', (): void => {
+    it('construct with life', (): void => {
       const fstmt = new FinancingStatementModel(undefined, 2)
       const testPerson = new PersonModel()
 
       expect(fstmt.type).toEqual(FinancingStatementTypes.SECURITY_AGREEMENT)
-      expect(fstmt.term).toEqual(2)
+      expect(fstmt.life).toEqual(2)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
@@ -64,7 +69,7 @@ describe('FinancingStatementModel', (): void => {
       const testPerson = new PersonModel()
 
       expect(fstmt.type).toEqual(FinancingStatementTypes.REPAIRERS_LIEN)
-      expect(fstmt.term).toEqual(1)
+      expect(fstmt.life).toEqual(1)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
@@ -75,7 +80,7 @@ describe('FinancingStatementModel', (): void => {
       const fstmt = new FinancingStatementModel(undefined, undefined, testPerson)
 
       expect(fstmt.type).toEqual(FinancingStatementTypes.SECURITY_AGREEMENT)
-      expect(fstmt.term).toEqual(1)
+      expect(fstmt.life).toEqual(1)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)

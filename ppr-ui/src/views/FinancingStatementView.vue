@@ -27,9 +27,8 @@
         <section>
           <p>{{ financingStatement }} </p>
           <financing-statement
+            v-model="financingStatement"
             :editing="editing"
-            :value="financingStatement"
-            @input="updateModel"
           />
         </section>
       </article>
@@ -40,7 +39,7 @@
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
-import FinancingStatementModel from '@/financing-statement/financing-statement-model'
+import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 
 export default createComponent({
   components: { FinancingStatement },
@@ -48,12 +47,6 @@ export default createComponent({
   setup() {
 
     const financingStatement = ref(new FinancingStatementModel())
-
-    // Callback function for emitting model changes made to the FS term
-    function updateModel(newModel: FinancingStatementModel): void {
-      financingStatement.value = newModel
-    }
-
 
     /*
     The display mode will be determined by the incoming URL. If the url contains a FS id then
@@ -71,8 +64,7 @@ export default createComponent({
     return {
       editing,
       financingStatement,
-      toggle,
-      updateModel
+      toggle
     }
   }
 })

@@ -14,10 +14,6 @@ import { createComponent } from '@vue/composition-api'
 export default createComponent({
   props: {
     label: String
-  },
-  setup() {
-    return {
-    }
   }
 })
 </script>
