@@ -44,11 +44,11 @@ export class PersonModel {
    * Gets the JSON string representation of the PersonModel object.
    */
   public toJson(): string {
-    return '{' +
-      '"firstName":"' + this.firstName + '",' +
-      '"middleName":"' + this.middleName + '",' +
-      '"lastName":"' + this.lastName + '"' +
-      '}'
+    return `{ ` +
+      `"firstName": "${this.firstName}", ` +
+      `"middleName": "${this.middleName}", ` +
+      `"lastName": "${this.lastName}"` +
+      ` }`
   }
 
   /*
