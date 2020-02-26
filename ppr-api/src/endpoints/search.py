@@ -81,7 +81,8 @@ def map_search_result_output(search_result: models.search.SearchResult):
     fin_stmt = schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
         documentId=event.document_number, expiryDate=financing_statement.expiry_date,
-        registeringParty={}, securedParties=[], debtors=[], vehicleCollateral=[], generalCollateral=[],
+        registeringParty=None, securedParties=[], debtors=[],
+        vehicleCollateral=[], generalCollateral=[],
         type=schemas.financing_statement.RegistrationType(financing_statement.registration_type_code).name
     )
     search_result_type = schemas.search.SearchResultType(search_result.exact).name
