@@ -1,6 +1,6 @@
 <template>
   <v-card outlined>
-    <form-section-header label="Type and duration" />
+    <form-section-header label="Type &amp; Duration" />
     <v-container>
       <v-form
         v-if="editing"
@@ -16,17 +16,17 @@
         <v-text-field
           :value="value.life"
           :rules="lifeRules"
-          label="Life"
+          label="Life in Years"
           name="lifeInput"
           @input="updateTerm"
         />
       </v-form>
       <div v-else>
         <div>
-          Life: {{ value.life }}
+          Type: {{ value.type }}
         </div>
         <div>
-          Type: {{ value.type }}
+          Life in Years: {{ value.life }}
         </div>
       </div>
     </v-container>
