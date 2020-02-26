@@ -39,4 +39,30 @@ export class PersonModel {
   public get lastName(): string {
     return this._lastName
   }
+
+  /**
+   * Gets the JSON string representation of the PersonModel object.
+   */
+  public toJson(): string {
+    return `{ ` +
+      `"firstName": "${this.firstName}", ` +
+      `"middleName": "${this.middleName}", ` +
+      `"lastName": "${this.lastName}"` +
+      ` }`
+  }
+
+  /*
+   * Class declarations
+   */
+
+  /**
+   * Gets a PersonModel object from a JSON string.
+   * 
+   * @param jsonString the string version of the object.
+   */
+  public static fromJson(jsonString: string): PersonModel {
+    const jsonObject = JSON.parse(jsonString)
+
+    return new PersonModel(jsonObject.firstName, jsonObject.middleName, jsonObject.lastName)
+  }
 }
