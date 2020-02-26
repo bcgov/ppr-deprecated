@@ -1,4 +1,4 @@
-export enum FinancingStatementTypes {
+export enum FinancingStatementType {
   SECURITY_AGREEMENT = 'SECURITY_AGREEMENT',
   REPAIRERS_LIEN = 'REPAIRERS_LIEN'
   /*
@@ -12,4 +12,4 @@ export enum FinancingStatementTypes {
   */
 }
 
-export const FinancingStatementTypesCodeList = ['SECURITY_AGREEMENT', 'REPAIRERS_LIEN']
+export const FinancingStatementTypeCodeList = ['SECURITY_AGREEMENT', 'REPAIRERS_LIEN']
