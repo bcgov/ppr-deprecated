@@ -86,7 +86,9 @@ def retrieve_search_result_records(search_id: int):
 def retrieve_financing_statement_record(base_reg_number: str):
     db = models.database.SessionLocal()
     try:
-        query = db.query(models.financing_statement.FinancingStatement).options(sqlalchemy.orm.joinedload('events'))
+        query = db.query(models.financing_statement.FinancingStatement)\
+            .options(sqlalchemy.orm.joinedload('events').joinedload('starting_parties'))\
+            .options(sqlalchemy.orm.joinedload('parties'))
         return query.get(base_reg_number)
     finally:
         db.close()

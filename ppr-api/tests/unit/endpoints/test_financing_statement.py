@@ -6,8 +6,10 @@ import pytest
 
 import endpoints.financing_statement
 import models.financing_statement
+import models.party
 import schemas.financing_statement
 from schemas.financing_statement import RegistrationType
+from schemas.party import PartyType
 
 
 def test_read_financing_statement_maps_model_to_schema():
@@ -75,16 +77,45 @@ def test_read_financing_statement_registration_date_taken_from_base_event():
     assert result.registrationDateTime == stub_fs.events[0].registration_date
 
 
-def stub_financing_statement(base_reg_number: str, years: int = -1,
+def test_read_financing_statement_registering_party_name_should_be_included():
+    base_reg_num = '123456C'
+    reg_party = models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_num,
+                                   starting_registration_number=base_reg_num, first_name='Homer', middle_name='Jay',
+                                   last_name='Simpson')
+    stub_fs = stub_financing_statement(base_reg_num, parties=[reg_party])
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    assert result.registeringParty.name.first == 'Homer'
+    assert result.registeringParty.name.middle == 'Jay'
+    assert result.registeringParty.name.last == 'Simpson'
+
+
+def test_read_financing_statement_registration_party_should_be_none_when_not_present():
+    base_reg_num = '123456C'
+    stub_fs = stub_financing_statement(base_reg_num, parties=[])
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    assert result.registeringParty is None
+
+
+def stub_financing_statement(base_reg_number: str, years: int = -1, parties: list = None,
                              reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT):
     expiry = datetime.date.today() + datedelta.datedelta(years=years) if years > 0 else None
+    parties = [models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_number,
+                                  starting_registration_number=base_reg_number, first_name='Fred',
+                                  last_name='Flintstone')] if parties is None else parties
     return models.financing_statement.FinancingStatement(
         registration_number=base_reg_number, registration_type_code=reg_type.value, status='A', discharged=False,
         life_in_years=years, expiry_date=expiry, last_updated=datetime.datetime.now(),
         events=[models.financing_statement.FinancingStatementEvent(
             registration_number=base_reg_number, base_registration_number=base_reg_number,
-            registration_date=datetime.datetime.now()
-        )]
+            registration_date=datetime.datetime.now(), starting_parties=parties
+        )],
+        parties=parties
     )
 
 

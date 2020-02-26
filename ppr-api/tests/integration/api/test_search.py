@@ -106,7 +106,7 @@ def test_read_singular_search_results():
     assert body[0]['financingStatement']['type'] == 'SECURITY_AGREEMENT'
     assert body[0]['financingStatement']['registrationDateTime'] == fin_stmt.events[0].registration_date.isoformat(
         timespec='seconds')
-    assert isinstance(body[0]['financingStatement']['registeringParty'], dict)
+    assert body[0]['financingStatement']['registeringParty'] is None
     assert isinstance(body[0]['financingStatement']['securedParties'], list)
     assert isinstance(body[0]['financingStatement']['debtors'], list)
     assert isinstance(body[0]['financingStatement']['vehicleCollateral'], list)

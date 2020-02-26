@@ -4,6 +4,8 @@ import typing
 
 from pydantic import BaseModel
 
+import schemas.party
+
 
 class RegistrationType(enum.Enum):
     SECURITY_AGREEMENT = 'SA'
@@ -13,9 +15,9 @@ class RegistrationType(enum.Enum):
 class FinancingStatementBase(BaseModel):
     type: str
     years: int = None
-    registeringParty: dict
-    securedParties: typing.List[dict]
-    debtors: typing.List[dict]
+    registeringParty: schemas.party.Party = None
+    securedParties: typing.List[schemas.party.Party]
+    debtors: typing.List[schemas.party.Party]
     vehicleCollateral: typing.List[dict]
     generalCollateral: typing.List[dict]
 

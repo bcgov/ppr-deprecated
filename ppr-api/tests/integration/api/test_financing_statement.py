@@ -35,7 +35,7 @@ def test_create_financing_statement_for_root_object_details():
     request_payload = {
         'type': 'SECURITY_AGREEMENT',
         'years': 5,
-        'registeringParty': {},
+        'registeringParty': {'name': {'first': 'Homer', 'last': 'Simpson'}},
         'securedParties': [],
         'debtors': [],
         'vehicleCollateral': [],
@@ -53,7 +53,6 @@ def test_create_financing_statement_for_root_object_details():
 
     stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
     assert stored
-    assert stored.registration_number == registration_number
     assert stored.registration_type_code == 'SA'
     assert stored.status == 'A'
     assert stored.life_in_years == 5
@@ -61,6 +60,39 @@ def test_create_financing_statement_for_root_object_details():
     assert stored.last_updated
 
     assert len(stored.events) == 1
-    assert stored.events[0].registration_number == stored.events[0].base_registration_number == registration_number
+    assert stored.events[0].registration_number == registration_number
+    assert stored.events[0].base_registration_number == registration_number
     assert stored.events[0].user_id == 'fake_user_id'  # Default user for integration tests
     assert stored.events[0].registration_date.isoformat(timespec='seconds') == body['registrationDateTime']
+
+
+def test_create_financing_statement_persists_secured_party():
+    request_payload = {
+        'type': 'SECURITY_AGREEMENT',
+        'registeringParty': {'name': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'}},
+        'securedParties': [],
+        'debtors': [],
+        'vehicleCollateral': [],
+        'generalCollateral': []
+    }
+
+    rv = client.post('/financing-statements', json=request_payload)
+
+    body = rv.json()
+    assert 'registeringParty' in body
+    assert 'name' in body['registeringParty']
+    assert body['registeringParty']['name']['first'] == 'Homer'
+    assert body['registeringParty']['name']['middle'] == 'Jay'
+    assert body['registeringParty']['name']['last'] == 'Simpson'
+
+    registration_number = body['baseRegistrationNumber']
+    stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
+    registering_parties = list(filter(lambda party: party.type_code == 'RP', stored.parties))
+
+    assert len(registering_parties) == 1
+    assert registering_parties[0].first_name == body['registeringParty']['name']['first']
+    assert registering_parties[0].middle_name == body['registeringParty']['name']['middle']
+    assert registering_parties[0].last_name == body['registeringParty']['name']['last']
+    assert registering_parties[0].base_registration_number == registration_number
+    assert registering_parties[0].starting_registration_number == registration_number
+    assert registering_parties[0].ending_registration_number is None

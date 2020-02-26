@@ -3,6 +3,7 @@ from sqlalchemy.dialects import postgresql
 import sqlalchemy.orm
 
 from .database import BaseORM
+import models.party
 
 
 class FinancingStatement(BaseORM):
@@ -18,6 +19,7 @@ class FinancingStatement(BaseORM):
                                      onupdate=sqlalchemy.func.now())
 
     events = sqlalchemy.orm.relationship('FinancingStatementEvent', back_populates='base_registration')
+    parties = sqlalchemy.orm.relationship(models.party.Party.__name__)
 
 
 class FinancingStatementEvent(BaseORM):
@@ -33,3 +35,5 @@ class FinancingStatementEvent(BaseORM):
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
 
     base_registration = sqlalchemy.orm.relationship('FinancingStatement', back_populates='events')
+    starting_parties = sqlalchemy.orm.relationship(models.party.Party.__name__,
+                                                   foreign_keys='Party.starting_registration_number')

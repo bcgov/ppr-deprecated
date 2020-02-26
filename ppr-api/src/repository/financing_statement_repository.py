@@ -5,7 +5,9 @@ import sqlalchemy.orm
 import auth.authentication
 import models.database
 import models.financing_statement
+import models.party
 import schemas.financing_statement
+import schemas.party
 import utils.datetime
 
 
@@ -25,9 +27,17 @@ class FinancingStatementRepository:
             registration_number=reg_num, status='A', life_in_years=years, expiry_date=expiry_date,
             registration_type_code=schemas.financing_statement.RegistrationType[fs_input.type].value
         )
-        model.events.append(
-            models.financing_statement.FinancingStatementEvent(registration_number=reg_num, user_id=user.user_id)
-        )
+        event_model = models.financing_statement.FinancingStatementEvent(registration_number=reg_num,
+                                                                         user_id=user.user_id)
+
+        party_schema = fs_input.registeringParty
+        party_model = models.party.Party(type_code=schemas.party.PartyType.REGISTERING.value,
+                                         first_name=party_schema.name.first, middle_name=party_schema.name.middle,
+                                         last_name=party_schema.name.last)
+
+        model.events.append(event_model)
+        model.parties.append(party_model)
+        event_model.starting_parties.append(party_model)
 
         self.db.add(model)
         self.db.flush()
