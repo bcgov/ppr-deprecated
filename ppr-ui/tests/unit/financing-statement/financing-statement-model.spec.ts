@@ -5,7 +5,7 @@ import { PersonModel } from '@/components/person-model'
 describe('FinancingStatementModel', (): void => {
 
   describe('FinancingStatementModel.isValidLife', (): void => {
-    function test(input, expected): void {
+    function test(input: string, expected: boolean): void {
       const isValid = FinancingStatementModel.isValidLife(input)
       expect(isValid).toBe(expected)
     }
@@ -37,8 +37,6 @@ describe('FinancingStatementModel', (): void => {
     it('life PI is not valid', (): void => {
       test('3.14159', false)
     })
-
-
   })
 
   describe('construction', (): void => {
@@ -85,8 +83,25 @@ describe('FinancingStatementModel', (): void => {
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
     })
-
   })
 
+  describe('json', (): void => {
+    it('converts with default values', (): void => {
+      const fstmt = new FinancingStatementModel()
 
+      const expected = FinancingStatementModel.fromJson(fstmt.toJson())
+      expect(fstmt).toEqual(expected)
+    })
+
+    it('converts with custom values', (): void => {
+      const fstmt = new FinancingStatementModel(
+        FinancingStatementTypes.REPAIRERS_LIEN,
+        23,
+        new PersonModel('Firstname', 'Middlename', 'Lastname')
+      )
+
+      const expected = FinancingStatementModel.fromJson(fstmt.toJson())
+      expect(fstmt).toEqual(expected)
+    })
+  })
 })

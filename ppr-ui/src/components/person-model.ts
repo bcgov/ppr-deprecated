@@ -63,6 +63,9 @@ export class PersonModel {
   public static fromJson(jsonString: string): PersonModel {
     const jsonObject = JSON.parse(jsonString)
 
-    return new PersonModel(jsonObject.firstName, jsonObject.middleName, jsonObject.lastName)
+    return new PersonModel(
+      jsonObject.firstName,
+      jsonObject.middleName,
+      jsonObject.lastName)
   }
 }
