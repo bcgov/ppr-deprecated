@@ -90,8 +90,8 @@ ESLinting is use for the UI Components.
 Linting requires:
 
 ```
-"eslint": "^5.16.0",
-"eslint-plugin-vue": "^5.0.0",
+"eslint": "<Target latest version>",
+"eslint-plugin-vue": "<Target latest version>",
 ```
 
 Additional configuration is kept in `.eslintrc.js`
@@ -120,7 +120,7 @@ The following testing related scripts have been set up in `package.json`:
 
 ### Code Coverage Setup
 
-Addign code coverage is simply done by adding `--coverage` to the test command resulting in:
+Adding code coverage is simply done by adding `--coverage` to the test command resulting in:
 '"test:unit:cov": "vue-cli-service test:unit --coverage"`
 
 This will generate a `coverage` directory containing the lcov-report html files and the clover.xml which gets consumed by [CodeCov](https://codecov.io/gh/bcgov/ppr).
