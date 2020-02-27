@@ -50,11 +50,11 @@ export class FinancingStatementModel {
    * Gets the JSON string representation of the FinancingStatementModel object.
    */
   public toJson(): string {
-    return `{ ` +
-      `"type": "${this.type}", ` +
-      `"life": ${this.life}, ` +
-      `"registeringParty": ${this.registeringParty.toJson()}` +
-      ` }`
+    return `{` +
+      `"type":"${this.type}",` +
+      `"life":${this.life},` +
+      `"registeringParty":${this.registeringParty.toJson()}` +
+      `}`
   }
 
   /*
