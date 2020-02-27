@@ -46,7 +46,7 @@ describe('Person', (): void => {
   })
 
   it('parses out of order JSON', (): void => {
-    const person = PersonModel.fromJson('{"lastName":"L","firstName":"F","middleName":"M"}')
+    const person = PersonModel.fromJson('{"name":{"last":"L","first":"F","middle":"M"}}')
 
     expect(person.firstName).toEqual('F')
     expect(person.middleName).toEqual('M')

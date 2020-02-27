@@ -44,11 +44,11 @@ export class PersonModel {
    * Gets the JSON string representation of the PersonModel object.
    */
   public toJson(): string {
-    return `{ ` +
-      `"firstName": "${this.firstName}", ` +
-      `"middleName": "${this.middleName}", ` +
-      `"lastName": "${this.lastName}"` +
-      ` }`
+    return `{"name":{` +
+      `"first":"${this.firstName}",` +
+      `"middle":"${this.middleName}",` +
+      `"last":"${this.lastName}"` +
+      `}}`
   }
 
   /*
@@ -64,8 +64,8 @@ export class PersonModel {
     const jsonObject = JSON.parse(jsonString)
 
     return new PersonModel(
-      jsonObject.firstName,
-      jsonObject.middleName,
-      jsonObject.lastName)
+      jsonObject.name.first,
+      jsonObject.name.middle,
+      jsonObject.name.last)
   }
 }

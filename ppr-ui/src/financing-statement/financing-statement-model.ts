@@ -90,9 +90,9 @@ export class FinancingStatementModel {
       jsonObject.type,
       jsonObject.life,
       new PersonModel(
-        jsonObject.registeringParty.firstName,
-        jsonObject.registeringParty.middleName,
-        jsonObject.registeringParty.lastName
+        jsonObject.registeringParty.name.first,
+        jsonObject.registeringParty.name.middle,
+        jsonObject.registeringParty.name.last
       ))
   }
 }
