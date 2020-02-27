@@ -45,21 +45,21 @@ describe('Person', (): void => {
     expect(person.lastName).toEqual('Last')
   })
 
-  it('produces valid JSON for default constructor', (): void => {
+  it('works with JSON for default constructor', (): void => {
     const person = new PersonModel()
 
     const expected = PersonModel.fromJson(person.toJson())
     expect(person).toEqual(expected)
   })
 
-  it('produces valid JSON', (): void => {
+  it('works with JSON', (): void => {
     const person = new PersonModel('First', 'Middle', 'Last')
 
     const expected = PersonModel.fromJson(person.toJson())
     expect(person).toEqual(expected)
   })
 
-  it('produces valid JSON with spaces and apostrophes', (): void => {
+  it('works with JSON having spaces and apostrophes', (): void => {
     const person = new PersonModel('O\'First', 'O\'Middle', 'von O\'Last')
 
     const expected = PersonModel.fromJson(person.toJson())

@@ -70,10 +70,10 @@ export default createComponent({
     const fsTypes = ref<string[]>(FinancingStatementTypeCodeList)
     const life = ref<number>(1)
     const lifeRules = [
-      (value): (boolean | string) => {
+      (value: string): (boolean | string) => {
         return !!value || 'Life is required'
       },
-      (value): (boolean | string) => {
+      (value: string): (boolean | string) => {
         return FinancingStatementModel.isValidLife(value) ? true : 'Life must be a number between 1 and 25'
       }
     ]
