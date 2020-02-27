@@ -13,19 +13,36 @@
         <p>
           <em>Note: This web site is a work in progress.</em>
         </p>
-        <v-btn
-          text
-          small
-          @click="toggle()"
-        >
-          Toogle editing {{ editing }}
-        </v-btn>
-        <p>
-          Need copy here to instruct user as to how to create a financing statement.
-          This is a development only form and view. Future development will include; debtors, collateral, and secured parties
-        </p>
-        <section>
-          <p>{{ financingStatement }} </p>
+        <section v-if="editing">
+          <div>
+            <p>
+              Need copy here to instruct user as to how to create a financing statement.
+              Future development will include; debtors, collateral, and secured parties
+            </p>
+          </div>
+          <v-form>
+            <financing-statement
+              v-model="financingStatement"
+              :editing="editing"
+              @valid="formValid = $event"
+            />
+            <v-btn
+              id="submit-btn"
+              color="primary"
+              :disabled="!formValid"
+              @click="submit"
+            >
+              Submit
+            </v-btn>
+          </v-form>
+        </section>
+        <section v-else>
+          <div>
+            <p>
+              Need copy here to tell user this is their submitted financing statement.
+              Future development will include; debtors, collateral, and secured parties
+            </p>
+          </div>
           <financing-statement
             v-model="financingStatement"
             :editing="editing"
@@ -38,33 +55,47 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
+import { useLoadIndicator } from '@/load-indicator'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
+import { PersonModel } from '@/components/person-model'
 
 export default createComponent({
   components: { FinancingStatement },
 
-  setup() {
-
-    const financingStatement = ref(new FinancingStatementModel())
-
-    /*
-    The display mode will be determined by the incoming URL. If the url contains a FS id then
-    we'll set display mode true and perform an API GET to retrieve the FS details.  Otherwise,
-    the display mode is false and we're going to build a new FS.
-
-    This toggle button functionality is a placeholder for that future logic. We need this placeholder
-    to develop and test the readonly version of the FS container and inner inputs.
-    */
+  setup(_, { root }) {
     const editing = ref(true)
-    function toggle(): void {
-      editing.value = !editing.value
+    const formValid = ref(true)
+    const financingStatement = ref(new FinancingStatementModel())
+    const loadIndicator = useLoadIndicator()
+    const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
+
+    function submit() {
+      loadIndicator.start()
+      // replace this delay with the API POST
+      setTimeout(() => {
+        loadIndicator.stop()
+        root.$router.push({ name: 'financing', query: { regNum: '123456g' } })
+      }, 2000)
+    }
+
+    if (regNum) {
+      loadIndicator.start()
+      // replace this delay with the API GET
+      setTimeout(() => {
+        financingStatement.value = new FinancingStatementModel(undefined, 25, new PersonModel('John', 'M', 'Doe'))
+        editing.value = false
+        loadIndicator.stop()
+      }, 2000)
+    } else {
+      editing.value = true
     }
 
     return {
       editing,
       financingStatement,
-      toggle
+      formValid,
+      submit
     }
   }
 })

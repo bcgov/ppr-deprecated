@@ -5,7 +5,7 @@ import Vuetify from 'vuetify'
 
 import FinancingStatment from '@/financing-statement/FinancingStatement.vue'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
-import { FinancingStatementTypes } from '@/financing-statement/financing-statement-types'
+import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
@@ -33,7 +33,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
       const properties = ref({ editing: false, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatment, { propsData: properties.value, vuetify })
 
-      expect(wrapper.text()).toContain(FinancingStatementTypes.SECURITY_AGREEMENT)
+      expect(wrapper.text()).toContain(FinancingStatementType.SECURITY_AGREEMENT)
     })
 
     // Skip until can figure out how to inject value into a vuetify select
@@ -44,9 +44,9 @@ describe('FinancingStatmentContainer.vue', (): void => {
       wrapper.get('input[name="typeInput"]').setValue('REPAIRERS_LIEN')
       await Vue.nextTick()
 
-      expect(wrapper.text()).toContain(FinancingStatementTypes.REPAIRERS_LIEN)
+      expect(wrapper.text()).toContain(FinancingStatementType.REPAIRERS_LIEN)
       // const emitted = wrapper.emitted('input').slice(-1)[0][0]
-      // expect(emitted.type).toBe(FinancingStatementTypes.REPAIRERS_LIEN)
+      // expect(emitted.type).toBe(FinancingStatementType.REPAIRERS_LIEN)
     })
 
 

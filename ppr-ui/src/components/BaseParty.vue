@@ -27,7 +27,7 @@
         @input="updateLastName($event)"
       />
     </v-form>
-    <div v-if="!editing">
+    <div v-else>
       {{ value.firstName + ' ' + value.middleName + ' ' + value.lastName }}
     </div>
   </v-card>
