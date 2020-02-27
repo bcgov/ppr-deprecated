@@ -5,14 +5,17 @@ import Config from '@/utils/Config'
 export function authRedirect(): void {
   if (!sessionStorage.getItem('KEYCLOAK_TOKEN')) {
     const authUrl = Config.authApiUrl
-    console.debug('auth redirect to authUrl', authUrl)
     window.location.href = authUrl
   }
 }
 
 export function getJwtValue(key: string): string {
   const jwt = sessionStorage.getItem('KEYCLOAK_TOKEN')
-  const json = jwt ? JwtDecode(jwt) : {}
-
-  return json[key]
+  if (jwt) {
+    interface Dict { [key: string]: string }
+    const jwtd: Dict = JwtDecode(jwt)
+    return jwtd[key]
+  }
+  return ''
 }
+

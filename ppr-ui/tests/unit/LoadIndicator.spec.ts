@@ -31,7 +31,18 @@ describe('LoadIndicator.vue', (): void => {
     wrapper.destroy()
   })
 
-  it('Test flagging feature one', (): void => {
-    expect(vm.isLoading).toEqual(false)
+  it('Test not loading content', async (): Promise<void> => {
+    loadIndicator.stop()
+    expect(loadIndicator.isLoading()).toBeFalsy()
+    // wrapper.get('input[name="lifeInput"]').setValue('26')
+    await Vue.nextTick()
+    expect(wrapper.find('.loading__content').exists()).toBe(false)
   })
+
+  it('Test loading content', async (): Promise<void> => {
+    loadIndicator.start()
+    let foo = wrapper.find('.loading__content')
+    expect(foo).toBeDefined()
+  })
+
 })

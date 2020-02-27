@@ -2,12 +2,10 @@
   <!-- Any loading action can trigger display of spinner -->
   <transition name="fade">
     <div
-      v-show="isLoading"
+      v-if="isLoading"
       class="loading-container"
     >
-      <div
-        class="loading__content"
-      >
+      <div class="loading__content">
         <v-progress-circular
           color="primary"
           size="150"
