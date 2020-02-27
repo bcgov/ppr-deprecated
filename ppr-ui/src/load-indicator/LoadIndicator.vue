@@ -6,7 +6,6 @@
       class="loading-container"
     >
       <div
-        align="center"
         class="loading__content"
       >
         <v-progress-circular
@@ -37,22 +36,21 @@ export default createComponent({
 
 <style lang="scss" scoped>
 .loading-container {
-  position: absolute;
-  // position: relative;
   background-color: rgba(0, 0, 0, 0.25);
-  top: 0;
-  left: 0;
-  width: 100%;
   height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
   z-index: 9999;
 }
 
 .loading__content {
-  // margin: 0 auto;
+  left: 50%;
   margin: 0;
   position: absolute;
+  text-align: center;
   top: 50%;
-  left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
