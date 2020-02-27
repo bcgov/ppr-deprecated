@@ -3,6 +3,7 @@ plugins {
     id "groovy"
     id "com.energizedwork.webdriver-binaries" version "1.4"
     id "com.energizedwork.idea-base" version "1.4"
+    id "io.qameta.allure" version "2.8.1"
 }
 
 apply from: "gradle/versions.gradle"
@@ -88,3 +89,17 @@ tasks.withType(GroovyCompile) {
     groovyOptions.forkOptions.memoryMaximumSize = '256m'
 }
 
+allure {
+    version = '2.8.1'
+    aspectjweaver = true
+    autoconfigure = true
+    
+    resultsDir = file('allure-results')
+    reportDir = file('allure-reports')
+    
+    useSpock {
+       version = '2.0-BETA10'
+    }
+    
+    downloadLink = 'https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.8.1/allure-2.8.1.zip'
+}
