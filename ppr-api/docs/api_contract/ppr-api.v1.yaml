@@ -356,13 +356,7 @@ components:
             name:
               $ref: '#/components/schemas/individual-name'
             address:
-              type: string
-            city:
-              type: string
-            province:
-              type: string
-            postalCode:
-              type: string
+              $ref: '#/components/schemas/address'
         securedParties:
           type: array
           items:
@@ -373,13 +367,7 @@ components:
               name:
                 type: string
               address:
-                type: string
-              city:
-                type: string
-              province:
-                type: string
-              postalCode:
-                type: string
+                $ref: '#/components/schemas/address'
         debtors:
           type: array
           items:
@@ -387,6 +375,8 @@ components:
             properties:
               name:
                 type: string
+              address:
+                $ref: '#/components/schemas/address'
         vehicleCollateral:
           type: array
           items:
@@ -493,6 +483,27 @@ components:
       required:
         - first
         - last
+    address:
+      title: address
+      type: object
+      properties:
+        street:
+          type: string
+        sreetAdditional:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        country:
+          type: string
+        postalCode:
+          type: string
+      required:
+        - street
+        - city
+        - country
+        - postalCode
   securitySchemes:
     JWT:
       type: http
