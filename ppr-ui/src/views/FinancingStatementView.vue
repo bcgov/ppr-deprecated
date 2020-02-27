@@ -55,10 +55,12 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { useLoadIndicator } from '@/load-indicator'
+
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
-import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
-import { PersonModel } from '@/components/person-model'
+import { FinancingStatementModel, FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
+import { useLoadIndicator } from '@/load-indicator'
+import axiosAuth from '@/utils/axios-auth'
+import Config from '@/utils/Config'
 
 export default createComponent({
   components: { FinancingStatement },
@@ -72,21 +74,27 @@ export default createComponent({
 
     function submit() {
       loadIndicator.start()
-      // replace this delay with the API POST
-      setTimeout(() => {
+
+      const url = Config.apiUrl + 'financing-statements'
+      axiosAuth.post(url, financingStatement.value.toJson()).then((response): void => {
         loadIndicator.stop()
-        root.$router.push({ name: 'financing', query: { regNum: '123456g' } })
-      }, 2000)
+        root.$router.push({ name: 'financing', query: { regNum: response.data.baseRegistrationNumber } })
+      }).catch(error => {
+        console.error(error)
+      })
     }
 
     if (regNum) {
       loadIndicator.start()
-      // replace this delay with the API GET
-      setTimeout(() => {
-        financingStatement.value = new FinancingStatementModel(undefined, 25, new PersonModel('John', 'M', 'Doe'))
+
+      const url = Config.apiUrl + 'financing-statements/' + regNum
+      axiosAuth.get<FinancingStatementInterface>(url).then((response): void => {
         editing.value = false
         loadIndicator.stop()
-      }, 2000)
+        financingStatement.value = FinancingStatementModel.fromJson(response.data)
+      }).catch(error => {
+        console.error(error)
+      })
     } else {
       editing.value = true
     }

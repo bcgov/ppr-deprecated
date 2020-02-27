@@ -1,3 +1,15 @@
+
+/**
+ * The interface to a person.
+ */
+export interface PersonInterface {
+  name: {
+    first: string;
+    middle: string;
+    last: string;
+  };
+}
+
 /**
  * The model for a person, such as a registering party.
  */
@@ -41,14 +53,16 @@ export class PersonModel {
   }
 
   /**
-   * Gets the JSON string representation of the PersonModel object.
+   * Gets the JSON representation of the PersonModel object.
    */
-  public toJson(): string {
-    return `{ ` +
-      `"firstName": "${this.firstName}", ` +
-      `"middleName": "${this.middleName}", ` +
-      `"lastName": "${this.lastName}"` +
-      ` }`
+  public toJson(): PersonInterface {
+    return {
+      name: {
+        first: this.firstName,
+        middle: this.middleName,
+        last: this.lastName
+      }
+    }
   }
 
   /*
@@ -58,11 +72,12 @@ export class PersonModel {
   /**
    * Gets a PersonModel object from a JSON string.
    * 
-   * @param jsonString the string version of the object.
+   * @param jsonObject the JSON version of the object.
    */
-  public static fromJson(jsonString: string): PersonModel {
-    const jsonObject = JSON.parse(jsonString)
-
-    return new PersonModel(jsonObject.firstName, jsonObject.middleName, jsonObject.lastName)
+  public static fromJson(jsonObject: PersonInterface): PersonModel {
+    return new PersonModel(
+      jsonObject.name.first,
+      jsonObject.name.middle,
+      jsonObject.name.last)
   }
 }

@@ -1,14 +1,25 @@
+import { PersonInterface, PersonModel } from '@/components/person-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { PersonModel } from '@/components/person-model'
+
+/**
+ * The interface to a financing statement.
+ */
+export interface FinancingStatementInterface {
+  securedParties: [];
+  debtors: [];
+  vehicleCollateral: [];
+  generalCollateral: [];
+  type: FinancingStatementType;
+  years: number;
+  registeringParty: PersonInterface;
+}
 
 export class FinancingStatementModel {
-
   private _type: FinancingStatementType
   private _life: number
   private _registeringParty: PersonModel
 
   /**
-   *
    * Creates a new FinancingStatementModel model instance.
    *
    * @param type the type of financing statement. A value from the FinancingStatementType enum
@@ -16,9 +27,9 @@ export class FinancingStatementModel {
    * @param registeringParty the PersonModel who registered the financing statement
    */
   public constructor(
-    type = FinancingStatementType.SECURITY_AGREEMENT,
-    life = 1,
-    registeringParty = new PersonModel()
+    type: FinancingStatementType = FinancingStatementType.SECURITY_AGREEMENT,
+    life: number = 1,
+    registeringParty: PersonModel = new PersonModel()
   ) {
     this._type = type
     this._life = life
@@ -46,10 +57,24 @@ export class FinancingStatementModel {
     return this._registeringParty
   }
 
+  /**
+   * Gets the JSON representation of the FinancingStatementModel object.
+   */
+  public toJson(): FinancingStatementInterface {
+    return {
+      securedParties: [],
+      debtors: [],
+      vehicleCollateral: [],
+      generalCollateral: [],
+      type: this.type,
+      years: this.life,
+      registeringParty: this.registeringParty.toJson()
+    }
+  }
+
   /*
    * Class declarations
    */
-
 
   /**
   * Helper function to validate the life of a financing statement given a string value from an input field.
@@ -68,4 +93,26 @@ export class FinancingStatementModel {
     return isValid
   }
 
+  /**
+   * Gets a FinancingStatementModel object from a JSON object.
+   * 
+   * @param jsonObject the JSON version of the object.
+   */
+  public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
+    let registeringParty: PersonModel | undefined
+
+    if (jsonObject.registeringParty) {
+      registeringParty = new PersonModel(
+        jsonObject.registeringParty.name.first,
+        jsonObject.registeringParty.name.middle,
+        jsonObject.registeringParty.name.last
+      )
+    }
+
+    return new FinancingStatementModel(
+      jsonObject.type,
+      jsonObject.years,
+      registeringParty
+    )
+  }
 }
