@@ -7,6 +7,7 @@ import SearchPage from '@/views/SearchPage.vue'
 import { LoadIndicator, LoadIndicatorSymbol } from '@/load-indicator'
 import router, { RouterSymbol } from '@/router/router'
 import axios from 'axios'
+import { RouterLinkStub } from '@vue/test-utils'
 
 jest.mock('@/utils/Config')
 jest.mock('axios')
@@ -30,6 +31,9 @@ describe('SearchPage.vue', (): void => {
       provide: {
         [LoadIndicatorSymbol]: loadIndicator,
         [RouterSymbol]: router
+      },
+      stubs: {
+        RouterLink: RouterLinkStub
       }
     })
   })

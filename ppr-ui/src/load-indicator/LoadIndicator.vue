@@ -5,10 +5,13 @@
       v-show="isLoading"
       class="loading-container"
     >
-      <div class="loading__content">
+      <div
+        align="center"
+        class="loading__content"
+      >
         <v-progress-circular
           color="primary"
-          size="50"
+          size="150"
           indeterminate
         />
       </div>
@@ -31,3 +34,26 @@ export default createComponent({
 })
 
 </script>
+
+<style lang="scss" scoped>
+.loading-container {
+  position: absolute;
+  // position: relative;
+  background-color: rgba(0, 0, 0, 0.25);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+
+.loading__content {
+  // margin: 0 auto;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+</style>

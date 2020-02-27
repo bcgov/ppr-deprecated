@@ -1,4 +1,5 @@
 import Vue, { VNode } from 'vue'
+import VueRouter from 'vue-router'
 import VueCompositionApi from '@vue/composition-api'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
@@ -17,6 +18,7 @@ const opts = { iconfont: 'mdi' }
 
 Vue.use(VueCompositionApi)
 Vue.use(Vuetify)
+Vue.use(VueRouter)
 
 Vue.config.productionTip = false
 Vue.component('public-layout', layoutPublic)

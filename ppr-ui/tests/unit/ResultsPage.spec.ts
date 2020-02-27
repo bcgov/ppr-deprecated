@@ -5,6 +5,7 @@ import { shallowMount, Wrapper } from '@vue/test-utils'
 import ResultsPage from '@/views/ResultsPage.vue'
 import { RouterSymbol } from '@/router/router'
 import router from '@/router/router'
+import { RouterLinkStub } from '@vue/test-utils'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
@@ -16,6 +17,9 @@ describe('ResultsPage.vue', (): void => {
     wrapper = shallowMount(ResultsPage, {
       provide: {
         [RouterSymbol]: router
+      },
+      stubs: {
+        RouterLink: RouterLinkStub
       }
     })
   })

@@ -6,7 +6,7 @@
     <load-indicator />
 
     <component :is="layout">
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </component>
   </v-app>
 </template>

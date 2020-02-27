@@ -32,12 +32,23 @@
     </v-container>
     <form-section-header label="Registering Party" />
     <v-container>
-      <registering-party
-        :value="value.registeringParty"
-        :editing="editing"
-        @input="updateRegisteringParty"
-        @valid="formValid($event)"
-      />
+      <v-form
+        v-if="editing"
+        @input="formValid($event)"
+      >
+        <registering-party
+          :value="value.registeringParty"
+          :editing="editing"
+          @input="updateRegisteringParty"
+          @valid="registeringPartyValid = $event; formValid($event)"
+        />
+      </v-form>
+      <div v-else>
+        <registering-party
+          :value="value.registeringParty"
+          :editing="false"
+        />
+      </div>
     </v-container>
   </v-card>
 </template>
@@ -45,7 +56,7 @@
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
-import { FinancingStatementTypes, FinancingStatementTypesCodeList } from '@/financing-statement/financing-statement-types'
+import { FinancingStatementType, FinancingStatementTypeCodeList } from '@/financing-statement/financing-statement-type'
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
 import RegisteringParty from '@/components/RegisteringParty.vue'
 import { PersonModel } from '@/components/person-model'
@@ -68,7 +79,7 @@ export default createComponent({
   },
 
   setup(props, { emit }) {
-    const fsTypes = ref<string[]>(FinancingStatementTypesCodeList)
+    const fsTypes = ref<string[]>(FinancingStatementTypeCodeList)
     const life = ref<number>(1)
     const lifeRules = [
       (value): (boolean | string) => {
@@ -78,10 +89,11 @@ export default createComponent({
         return FinancingStatementModel.isValidLife(value) ? true : 'Life must be a number between 1 and 25'
       }
     ]
+    const registeringPartyValid = ref(true)
 
     // Callback function for emitting form validity back to the parent.
     function formValid(valid: boolean) {
-      emit('valid', valid)
+      emit('valid', valid && registeringPartyValid.value)
     }
 
     function updateRegisteringParty(newPerson: PersonModel): void {
@@ -101,7 +113,7 @@ export default createComponent({
     }
 
     // Callback function for emitting model changes made to the FS life
-    function updateType(newType: FinancingStatementTypes): void {
+    function updateType(newType: FinancingStatementType): void {
       emit('input', new FinancingStatementModel(
         newType, //props.value.type,
         props.value.life,
@@ -113,6 +125,7 @@ export default createComponent({
       fsTypes,
       life,
       lifeRules,
+      registeringPartyValid,
       updateRegisteringParty,
       updateTerm,
       updateType

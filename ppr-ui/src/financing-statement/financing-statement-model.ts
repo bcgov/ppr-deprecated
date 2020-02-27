@@ -1,9 +1,9 @@
-import { FinancingStatementTypes } from '@/financing-statement/financing-statement-types'
+import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonModel } from '@/components/person-model'
 
 export class FinancingStatementModel {
 
-  private _type: FinancingStatementTypes
+  private _type: FinancingStatementType
   private _life: number
   private _registeringParty: PersonModel
 
@@ -11,12 +11,12 @@ export class FinancingStatementModel {
    *
    * Creates a new FinancingStatementModel model instance.
    *
-   * @param type the type of financing statement. A value from the FinancingStatementTypes enum
+   * @param type the type of financing statement. A value from the FinancingStatementType enum
    * @param life the number of years the financing statement is registered for. A value between 1 and 25.
    * @param registeringParty the PersonModel who registered the financing statement
    */
   public constructor(
-    type = FinancingStatementTypes.SECURITY_AGREEMENT,
+    type = FinancingStatementType.SECURITY_AGREEMENT,
     life = 1,
     registeringParty = new PersonModel()
   ) {
@@ -28,7 +28,7 @@ export class FinancingStatementModel {
   /**
    * Gets the type of financing statement
    */
-  public get type(): FinancingStatementTypes {
+  public get type(): FinancingStatementType {
     return this._type
   }
 

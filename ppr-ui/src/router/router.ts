@@ -1,11 +1,8 @@
-import Vue from 'vue'
 import VueRouter from 'vue-router'
 import { PositionResult, Route } from 'vue-router/types/router'
 import routes from './routes'
 import { authRedirect } from '@/utils/auth-helper'
 import { inject, provide } from '@vue/composition-api'
-
-Vue.use(VueRouter)
 
 export const RouterSymbol = Symbol()
 
