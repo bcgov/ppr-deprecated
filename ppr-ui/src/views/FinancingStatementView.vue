@@ -75,7 +75,7 @@ export default createComponent({
     function submit() {
       loadIndicator.start()
 
-      let url = Config.apiUrl + 'financing-statements'
+      const url = Config.apiUrl + 'financing-statements'
       axiosAuth.post(url, financingStatement.value.toJson()).then((response): void => {
         loadIndicator.stop()
         root.$router.push({ name: 'financing', query: { regNum: response.data.baseRegistrationNumber } })
@@ -87,7 +87,7 @@ export default createComponent({
     if (regNum) {
       loadIndicator.start()
 
-      let url = Config.apiUrl + 'financing-statements/' + regNum
+      const url = Config.apiUrl + 'financing-statements/' + regNum
       axiosAuth.get<FinancingStatementInterface>(url).then((response): void => {
         editing.value = false
         loadIndicator.stop()

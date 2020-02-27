@@ -22,7 +22,7 @@ export class FinancingStatementModel {
   /**
    * Creates a new FinancingStatementModel model instance.
    *
-   * @param type the type of financing statement. A value from the FinancingStatementTypes enum
+   * @param type the type of financing statement. A value from the FinancingStatementType enum
    * @param life the number of years the financing statement is registered for. A value between 1 and 25.
    * @param registeringParty the PersonModel who registered the financing statement
    */
