@@ -1,55 +1,43 @@
 <template>
   <v-card outlined>
-    <form-section-header label="Type &amp; Duration" />
-    <v-container>
-      <v-form
-        v-if="editing"
-        @input="formValid($event)"
-      >
-        <v-select
-          :value="value.type"
-          :items="fsTypes"
-          label="Type"
-          name="typeInput"
-          @input="updateType"
-        />
-        <v-text-field
-          :value="value.life"
-          :rules="lifeRules"
-          label="Life in Years"
-          name="lifeInput"
-          @input="updateTerm"
-        />
-      </v-form>
-      <div v-else>
-        <div>
-          Type: {{ value.type }}
+    <v-form @input="formValid($event)">
+      <form-section-header label="Type &amp; Duration" />
+      <v-container>
+        <div v-if="editing">
+          <v-select
+            :value="value.type"
+            :items="fsTypes"
+            label="Type"
+            name="typeInput"
+            @input="updateType"
+          />
+          <v-text-field
+            :value="value.life"
+            :rules="lifeRules"
+            label="Life in Years"
+            name="lifeInput"
+            @input="updateLife"
+          />
         </div>
-        <div>
-          Life in Years: {{ value.life }}
+        <div v-else>
+          <div>
+            Type: {{ value.type }}
+          </div>
+          <div>
+            Life in Years: {{ value.life }}
+          </div>
         </div>
-      </div>
-    </v-container>
-    <form-section-header label="Registering Party" />
-    <v-container>
-      <v-form
-        v-if="editing"
-        @input="formValid($event)"
-      >
+      </v-container>
+      <form-section-header label="Registering Party" />
+      <v-container>
         <registering-party
           :value="value.registeringParty"
           :editing="editing"
           @input="updateRegisteringParty"
-          @valid="registeringPartyValid = $event; formValid($event)"
+          @valid="registeringPartyValid = $event"
         />
-      </v-form>
-      <div v-else>
-        <registering-party
-          :value="value.registeringParty"
-          :editing="false"
-        />
-      </div>
-    </v-container>
+      </v-container>
+    </v-form>
   </v-card>
 </template>
 
@@ -105,7 +93,7 @@ export default createComponent({
     }
 
     // Callback function for emitting model changes made to the FS life
-    function updateTerm(newLife: number): void {
+    function updateLife(newLife: number): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
         newLife, // props.value.life,
@@ -127,7 +115,7 @@ export default createComponent({
       lifeRules,
       registeringPartyValid,
       updateRegisteringParty,
-      updateTerm,
+      updateLife,
       updateType
     }
   }
