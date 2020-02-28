@@ -1,4 +1,5 @@
 import datetime
+import time
 
 import datedelta
 import sqlalchemy.orm
@@ -9,6 +10,7 @@ import models.payment
 import models.party
 import models.search
 import schemas.financing_statement
+import schemas.payment
 
 
 def create_test_financing_statement(**kwargs):
@@ -80,6 +82,7 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
             fin_stmt.parties.append(reg_party)
             event.starting_parties.append(reg_party)
 
+        time.sleep(0.001)  # Ensure time has advanced since the previous event
         db.add(fin_stmt)
         db.commit()
 

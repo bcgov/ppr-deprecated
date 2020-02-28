@@ -6,8 +6,11 @@ import fastapi
 from starlette import responses, status
 
 import auth.authentication
+import models.financing_statement
 import models.search
 import schemas.financing_statement
+import schemas.party
+from schemas.party import PartyType
 import schemas.payment
 import schemas.search
 import services.payment_service
@@ -76,14 +79,44 @@ def read_search_results(search_id: int,
 
 
 def map_search_result_output(search_result: models.search.SearchResult):
-    event = search_result.financing_statement_event
-    financing_statement = event.base_registration
-    fin_stmt = schemas.financing_statement.FinancingStatement(
-        baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
-        documentId=event.document_number, expiryDate=financing_statement.expiry_date,
-        registeringParty=None, securedParties=[], debtors=[],
-        vehicleCollateral=[], generalCollateral=[],
-        type=schemas.financing_statement.RegistrationType(financing_statement.registration_type_code).name
-    )
     search_result_type = schemas.search.SearchResultType(search_result.exact).name
-    return schemas.search.SearchResult(type=search_result_type, financingStatement=fin_stmt)
+    event = search_result.financing_statement_event
+    financing_statement = rebuild_financing_statement_to_event(event)
+
+    return schemas.search.SearchResult(type=search_result_type, financingStatement=financing_statement)
+
+
+def rebuild_financing_statement_to_event(event: models.financing_statement.FinancingStatementEvent):
+    """
+    Given an event, provide a Financing Statement result that represents the state as once that event was applied. This
+    is done by applying events in order and ignoring events that occur after the one provided.
+
+        Parameters:
+            event: The FinancingStatementEvent for an individual search result
+        Returns:
+            schemas.financing_statement.FinancingStatement
+    """
+    fs_model = event.base_registration
+    target_events = sorted(filter(lambda e: e.registration_date <= event.registration_date, fs_model.events),
+                           key=lambda e: e.registration_date)
+
+    parties_snapshot = []
+    for applied_event in target_events:
+        # remove parties that end with the new event, and add those that were introduced
+        parties_snapshot = list(filter(lambda e: e.ending_registration_number != applied_event.registration_number,
+                                       parties_snapshot))
+        parties_snapshot.extend(applied_event.starting_parties)
+
+    reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
+    reg_party_schema = schemas.party.Party(
+        name=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
+                                          last=reg_party_model.last_name)
+    ) if reg_party_model else None
+
+    return schemas.financing_statement.FinancingStatement(
+        baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
+        documentId=event.document_number, expiryDate=fs_model.expiry_date,
+        registeringParty=reg_party_schema, securedParties=[], debtors=[],
+        vehicleCollateral=[], generalCollateral=[],
+        type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name
+    )
