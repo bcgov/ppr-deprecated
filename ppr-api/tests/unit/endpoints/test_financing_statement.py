@@ -77,6 +77,17 @@ def test_read_financing_statement_registration_date_taken_from_base_event():
     assert result.registrationDateTime == stub_fs.events[0].registration_date
 
 
+def test_read_financing_statement_registration_is_none_when_base_event_not_present():
+    base_reg_num = '123456C'
+    stub_fs = stub_financing_statement(base_reg_num)
+    stub_fs.events = []
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    assert result.registrationDateTime is None
+
+
 def test_read_financing_statement_registering_party_name_should_be_included():
     base_reg_num = '123456C'
     reg_party = models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_num,
