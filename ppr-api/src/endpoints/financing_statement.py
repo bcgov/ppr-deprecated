@@ -36,18 +36,19 @@ def read_financing_statement(base_reg_num: str, fs_repo: FinancingStatementRepos
 
 
 def map_financing_statement_model_to_schema(model: models.financing_statement.FinancingStatement):
-    base_event = next(event for event in model.events if event.registration_number == model.registration_number)
-    reg_party_in = next((p for p in model.parties if p.type_code == schemas.party.PartyType.REGISTERING.value), None)
+    base_event = model.get_base_event()
+    reg_date = base_event.registration_date if base_event else None
+    reg_party_model = model.get_registering_party()
 
-    reg_party_out = schemas.party.Party(
-        name=schemas.party.IndividualName(first=reg_party_in.first_name, middle=reg_party_in.middle_name,
-                                          last=reg_party_in.last_name)
-    ) if reg_party_in else None
+    reg_party_schema = schemas.party.Party(
+        name=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
+                                          last=reg_party_model.last_name)
+    ) if reg_party_model else None
 
     return schemas.financing_statement.FinancingStatement(
-        baseRegistrationNumber=model.registration_number, registrationDateTime=base_event.registration_date,
+        baseRegistrationNumber=model.registration_number, registrationDateTime=reg_date,
         expiryDate=model.expiry_date, years=model.life_in_years if model.life_in_years > 0 else None,
         type=schemas.financing_statement.RegistrationType(model.registration_type_code).name,
-        registeringParty=reg_party_out, securedParties=[], debtors=[],
+        registeringParty=reg_party_schema, securedParties=[], debtors=[],
         vehicleCollateral=[], generalCollateral=[]
     )

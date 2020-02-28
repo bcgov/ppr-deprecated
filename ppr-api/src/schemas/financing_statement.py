@@ -25,7 +25,7 @@ class FinancingStatementBase(BaseModel):
 class FinancingStatement(FinancingStatementBase):
     baseRegistrationNumber: str
     documentId: str = None
-    registrationDateTime: datetime.datetime
+    registrationDateTime: datetime.datetime = None
     expiryDate: datetime.date = None
 
     class Config:

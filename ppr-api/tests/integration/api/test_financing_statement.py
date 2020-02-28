@@ -31,6 +31,22 @@ def test_read_financing_statement_with_no_expiry():
     assert body['years'] is None
 
 
+def test_read_financing_statement_with_changed_registering_party_should_provide_active_record():
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        registeringParty={'first_name': 'Homer', 'last_name': 'Simpson'}
+    )
+    fin_stmt = sample_data_utility.create_test_financing_statement_event(
+        fin_stmt, registeringParty={'first_name': 'Charles', 'middle_name': 'Montgomery', 'last_name': 'Burns'}
+    )
+
+    rv = client.get('/financing-statements/{}'.format(fin_stmt.registration_number))
+    body = rv.json()
+
+    assert body['registeringParty']['name']['first'] == 'Charles'
+    assert body['registeringParty']['name']['middle'] == 'Montgomery'
+    assert body['registeringParty']['name']['last'] == 'Burns'
+
+
 def test_create_financing_statement_for_root_object_details():
     request_payload = {
         'type': 'SECURITY_AGREEMENT',

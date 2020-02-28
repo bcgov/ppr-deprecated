@@ -92,8 +92,7 @@ def test_create_financing_statement_registering_party_is_added_to_financing_stat
 
     financing_statement = repo.create_financing_statement(stub_financing_statement_input(), stub_user())
 
-    fs_reg_party = next(p for p in financing_statement.parties if p.type_code == PartyType.REGISTERING.value)
-    assert fs_reg_party
+    assert financing_statement.get_registering_party()
 
 
 @patch('sqlalchemy.orm.Session')
@@ -115,7 +114,7 @@ def test_create_financing_statement_registering_party_name_is_included(mock_sess
 
     financing_statement = repo.create_financing_statement(schema, stub_user())
 
-    reg_party = next(p for p in financing_statement.parties if p.type_code == PartyType.REGISTERING.value)
+    reg_party = financing_statement.get_registering_party()
     assert reg_party.first_name == 'Homer'
     assert reg_party.middle_name == 'Jay'
     assert reg_party.last_name == 'Simpson'

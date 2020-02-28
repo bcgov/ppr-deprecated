@@ -6,6 +6,7 @@ import sqlalchemy.orm
 import models.database
 import models.financing_statement
 import models.payment
+import models.party
 import models.search
 import schemas.financing_statement
 
@@ -14,7 +15,8 @@ def create_test_financing_statement(**kwargs):
     options = dict({
         'type_code': schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value,
         'num_of_events': 1,
-        'years': -1
+        'years': -1,
+        'registeringParty': None
     }, **kwargs)
 
     db = models.database.SessionLocal()
@@ -29,6 +31,15 @@ def create_test_financing_statement(**kwargs):
         event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num)
         fin_stmt.events.append(event)
 
+        if options['registeringParty']:
+            reg_party_input = options['registeringParty']
+            reg_party = models.party.Party(
+                type_code='RP', first_name=reg_party_input['first_name'], last_name=reg_party_input['last_name'],
+                middle_name=reg_party_input['middle_name'] if 'middle_name' in reg_party_input else None
+            )
+            fin_stmt.parties.append(reg_party)
+            event.starting_parties.append(reg_party)
+
         # Add additional events if needed
         for n in range(1, options['num_of_events']):
             fin_stmt.events.append(
@@ -37,9 +48,42 @@ def create_test_financing_statement(**kwargs):
 
         db.add(fin_stmt)
         db.commit()
-        db.refresh(fin_stmt)
-        fin_stmt.events  # Explicitly lazy load the events before closing the session
-        return fin_stmt
+
+        return retrieve_financing_statement_record(fin_stmt.registration_number)
+    finally:
+        db.close()
+
+
+def create_test_financing_statement_event(fin_stmt: models.financing_statement.FinancingStatement, **kwargs):
+    options = dict({
+        'change_type_code': None,
+        'registeringParty': None
+    }, **kwargs)
+
+    db = models.database.SessionLocal()
+    try:
+        reg_num = next_reg_number(db)
+        event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num,
+                                                                   change_type_code=options['change_type_code'])
+        fin_stmt.events.append(event)
+
+        reg_party_input = options['registeringParty']
+        if reg_party_input:
+            existing_party = fin_stmt.get_registering_party()
+            if existing_party:
+                event.ending_parties.append(existing_party)
+
+            reg_party = models.party.Party(
+                type_code='RP', first_name=reg_party_input['first_name'], last_name=reg_party_input['last_name'],
+                middle_name=reg_party_input['middle_name'] if 'middle_name' in reg_party_input else None
+            )
+            fin_stmt.parties.append(reg_party)
+            event.starting_parties.append(reg_party)
+
+        db.add(fin_stmt)
+        db.commit()
+
+        return retrieve_financing_statement_record(fin_stmt.registration_number)
     finally:
         db.close()
 
