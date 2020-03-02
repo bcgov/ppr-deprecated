@@ -17,7 +17,7 @@ import { Data } from '@vue/composition-api/dist/component'
 import LoadIndicator from '@/load-indicator/LoadIndicator.vue'
 import { provideLoadIndicator } from '@/load-indicator'
 import { provideRouter, useRouter } from '@/router/router'
-import Config from '@/utils/Config'
+import Config from '@/utils/config'
 
 const DefaultLayout = 'public'
 

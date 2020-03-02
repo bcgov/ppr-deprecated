@@ -9,7 +9,7 @@ import router, { RouterSymbol } from '@/router/router'
 import axios from 'axios'
 import { RouterLinkStub } from '@vue/test-utils'
 
-jest.mock('@/utils/Config')
+jest.mock('@/utils/config')
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
 

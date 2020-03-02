@@ -60,7 +60,7 @@ import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { FinancingStatementModel, FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
 import { useLoadIndicator } from '@/load-indicator'
 import axiosAuth from '@/utils/axios-auth'
-import Config from '@/utils/Config'
+import Config from '@/utils/config'
 
 export default createComponent({
   components: { FinancingStatement },
