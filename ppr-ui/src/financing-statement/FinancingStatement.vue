@@ -1,6 +1,6 @@
 <template>
   <v-card outlined>
-    <v-form @input="formValid($event)">
+    <v-form @input="validForm('header', $event)">
       <form-section-header label="Type &amp; Duration" />
       <v-container>
         <div v-if="editing">
@@ -34,7 +34,7 @@
           :value="value.registeringParty"
           :editing="editing"
           @input="updateRegisteringParty"
-          @valid="registeringPartyValid = $event"
+          @valid="validForm('registeringParty', $event)"
         />
       </v-container>
     </v-form>
@@ -77,11 +77,21 @@ export default createComponent({
         return FinancingStatementModel.isValidLife(value) ? true : 'Life must be a number between 1 and 25'
       }
     ]
-    const registeringPartyValid = ref(true)
 
-    // Callback function for emitting form validity back to the parent.
-    function formValid(valid: boolean) {
-      emit('valid', valid && registeringPartyValid.value)
+    /*  Create a structure to hold the validation state of the various sections of the form.
+    */
+    const validationState = {
+      header: false,
+      registeringParty: false
+    }
+
+    // Callback function for emitting form validity on the header section back to the parent.
+    function validForm(key: string, validElement: boolean) {
+      validationState[key] = validElement
+      const formValid = Object.values(validationState).reduce((accumulator, elementState) => {
+        return accumulator && elementState
+      }, true)
+      emit('valid', formValid)
     }
 
     function updateRegisteringParty(newPerson: PersonModel): void {
@@ -109,14 +119,13 @@ export default createComponent({
     }
 
     return {
-      formValid,
       fsTypes,
       life,
       lifeRules,
-      registeringPartyValid,
       updateRegisteringParty,
       updateLife,
-      updateType
+      updateType,
+      validForm,
     }
   }
 })
