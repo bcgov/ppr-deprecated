@@ -76,3 +76,31 @@ def test_get_current_user():
 
     assert user.user_id == 'dad87b8e-0c80-4c8d-815b-0967cc68d65d'
     assert user.user_name == 'bcsc/32b44e37aa6a40019de1068c4891da10'
+
+
+def test_check_auth_response_forbidden_has_no_description_field():
+    response = requests.Response()
+    response.status_code = http.HTTPStatus.FORBIDDEN
+    response._content = b'{}'
+
+    try:
+        auth.authentication.check_auth_response(response)
+    except fastapi.HTTPException as ex:
+        assert ex.status_code == http.HTTPStatus.FORBIDDEN
+        assert ex.detail == http.HTTPStatus.FORBIDDEN.phrase
+    else:
+        pytest.fail('An HTTPException was expected since the response had a forbidden result')
+
+
+def test_check_auth_response_unauthorized_json_cannot_be_parsed():
+    response = requests.Response()
+    response.status_code = http.HTTPStatus.UNAUTHORIZED
+    response._content = b'Non JSON Content - Not Found'
+
+    try:
+        auth.authentication.check_auth_response(response)
+    except fastapi.HTTPException as ex:
+        assert ex.status_code == http.HTTPStatus.UNAUTHORIZED
+        assert ex.detail == http.HTTPStatus.UNAUTHORIZED.phrase
+    else:
+        pytest.fail('An HTTPException was expected since the response had a unauthorized result')
