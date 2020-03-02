@@ -1,6 +1,6 @@
 import JwtDecode from 'jwt-decode'
 
-import Config from '@/utils/Config'
+import Config from '@/utils/config'
 
 export function authRedirect(): void {
   if (!sessionStorage.getItem('KEYCLOAK_TOKEN')) {

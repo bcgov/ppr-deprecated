@@ -1,6 +1,6 @@
 import axiosAuth from '@/utils/axios-auth'
 import { AxiosResponse } from 'axios'
-import Config from '@/utils/Config'
+import Config from '@/utils/config'
 
 export interface RegNumResult {
   type: string;

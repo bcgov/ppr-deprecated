@@ -10,7 +10,7 @@ import layoutPublic from '@/layouts/LayoutPublic.vue'
 import layoutUser from '@/layouts/LayoutUser.vue'
 import SentryHelper from '@/utils/sentry-helper'
 import './assets/styles/styles.scss'
-import Config from '@/utils/Config'
+import Config from '@/utils/config'
 import { initializeVueLdClient } from '@/flags/ld-client'
 import { getJwtValue } from './utils/auth-helper'
 

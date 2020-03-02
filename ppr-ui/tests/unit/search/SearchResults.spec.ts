@@ -6,7 +6,7 @@ import SearchResults from '@/search/SearchResults.vue'
 import { LoadIndicator, LoadIndicatorSymbol } from '@/load-indicator'
 import axios from 'axios'
 
-jest.mock('@/utils/Config')
+jest.mock('@/utils/config')
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
