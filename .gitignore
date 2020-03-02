@@ -45,6 +45,7 @@ yarn-error.log*
 .classpath
 .project
 .settings/
+.history
 
 # Ignore Gradle project-specific cache and build directories
 /**/.gradle
