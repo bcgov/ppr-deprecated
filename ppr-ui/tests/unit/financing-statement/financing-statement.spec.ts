@@ -5,7 +5,7 @@ import { PersonModel } from '@/components/person-model'
 describe('FinancingStatementModel', (): void => {
 
   describe('FinancingStatementModel.isValidLife', (): void => {
-    function test(input, expected): void {
+    function test(input: string, expected: boolean): void {
       const isValid = FinancingStatementModel.isValidLife(input)
       expect(isValid).toBe(expected)
     }
@@ -85,8 +85,36 @@ describe('FinancingStatementModel', (): void => {
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
     })
-
   })
 
+  describe('json', (): void => {
+    it('json - empty constructor defaults', (): void => {
+      const fstmt = new FinancingStatementModel()
+      const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())
 
+      expect(fstmtReceived).toEqual(fstmt)
+    })
+
+    it('json with life', (): void => {
+      const fstmt = new FinancingStatementModel(undefined, 2)
+      const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())
+
+      expect(fstmtReceived).toEqual(fstmt)
+    })
+
+    it('json with type', (): void => {
+      const fstmt = new FinancingStatementModel(FinancingStatementType.REPAIRERS_LIEN)
+      const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())
+
+      expect(fstmtReceived).toEqual(fstmt)
+    })
+
+    it('json with person', (): void => {
+      const testPerson = new PersonModel('First', 'Middle', 'Last')
+      const fstmt = new FinancingStatementModel(undefined, undefined, testPerson)
+      const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())
+
+      expect(fstmtReceived).toEqual(fstmt)
+    })
+  })
 })
