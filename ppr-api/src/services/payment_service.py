@@ -42,7 +42,13 @@ def create_payment_request(auth_header: HTTPAuthorizationCredentials = Depends(a
     pay_response = requests.post('{}/payment-requests'.format(config.PAY_API_URL), json=eval(HARDCODED_PAYLOAD),
                                  headers={'Authorization': '{} {}'.format(auth_header.scheme, auth_header.credentials)})
 
-    auth.authentication.check_auth_response(pay_response)
+    try:
+        auth.authentication.check_auth_response(pay_response)
+    except HTTPException as auth_ex:
+        logger.error('Create Payment call failed auth with status {}.  Response body: {}'.format(
+            pay_response.status_code, pay_response.text))
+        raise auth_ex
+
     if not pay_response:  # status_code is unsuccessful
         logger.error('Create Payment call failed unexpectedly with status {}.  Response body: {}'.format(
             pay_response.status_code, pay_response.text))

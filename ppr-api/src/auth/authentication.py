@@ -1,5 +1,6 @@
 import http
 import logging
+import json
 
 import fastapi
 import fastapi.security
@@ -16,9 +17,14 @@ bearer_scheme = fastapi.security.HTTPBearer()
 
 def check_auth_response(response: requests.Response):
     if response.status_code in [http.HTTPStatus.UNAUTHORIZED, http.HTTPStatus.FORBIDDEN]:
-        body = response.json()
+        try:
+            body = response.json()
+            description = body['description'] if 'description' in body else None
+        except json.decoder.JSONDecodeError:
+            description = None
+
         raise fastapi.HTTPException(
-            status_code=response.status_code, detail=body['description']
+            status_code=response.status_code, detail=description
         )
 
 
