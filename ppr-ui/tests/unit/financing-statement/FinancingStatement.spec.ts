@@ -6,6 +6,7 @@ import Vuetify from 'vuetify'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
+import { PersonModel } from '@/components/person-model'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
@@ -49,7 +50,6 @@ describe('FinancingStatmentContainer.vue', (): void => {
       // expect(emitted.type).toBe(FinancingStatementType.REPAIRERS_LIEN)
     })
 
-
     it('@input - life change should be emitted', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
@@ -58,9 +58,8 @@ describe('FinancingStatmentContainer.vue', (): void => {
       await Vue.nextTick()
 
       const emitted = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emitted.life).toBe('22')
+      expect(emitted.years).toBe('22')
     })
-
 
     it('@valid - invalid life should be false', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
@@ -71,6 +70,28 @@ describe('FinancingStatmentContainer.vue', (): void => {
 
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
     })
-  })
 
+    it('@valid - valid data to emit valid true', async (): Promise<void> => {
+      const financingStatement = new FinancingStatementModel(FinancingStatementType.SECURITY_AGREEMENT, 13,
+        new PersonModel('first', 'middle', 'last'))
+      const properties = ref({ editing: true, value: financingStatement })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+    })
+
+    it('@valid - missing registering party name to emit valid false', async (): Promise<void> => {
+      const financingStatement = new FinancingStatementModel(FinancingStatementType.SECURITY_AGREEMENT, 13,
+        new PersonModel('first', 'middle', 'last'))
+      const properties = ref({ editing: true, value: financingStatement })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
+      // Needed a double nextTick, probably due to the emits from two components.
+      wrapper.get('input[data-test-id="BaseParty.firstName"]').setValue('')
+      await Vue.nextTick()
+      await Vue.nextTick()
+
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+  })
 })
