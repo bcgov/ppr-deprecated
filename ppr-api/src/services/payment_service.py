@@ -17,7 +17,7 @@ HARDCODED_PAYLOAD = """{
         "methodOfPayment": "CC"
     },
     "businessInfo": {
-        "businessIdentifier": "CP0000019",
+        "businessIdentifier": "CP1000019",
         "corpType": "CP",
         "businessName": "ABC Corp",
         "contactInfo": {
