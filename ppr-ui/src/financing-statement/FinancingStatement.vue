@@ -12,7 +12,7 @@
             @input="updateType"
           />
           <v-text-field
-            :value="value.life"
+            :value="value.years"
             :rules="lifeRules"
             label="Life in Years"
             name="lifeInput"
@@ -21,10 +21,16 @@
         </div>
         <div v-else>
           <div>
+            Base Registration Number: {{ value.baseRegistrationNumber }}
+          </div>
+          <div>
+            Expiry Date: {{ value.expiryDate }}
+          </div>
+          <div>
             Type: {{ value.type }}
           </div>
           <div>
-            Life in Years: {{ value.life }}
+            Life in Years: {{ value.years }}
           </div>
         </div>
       </v-container>
@@ -74,7 +80,7 @@ export default createComponent({
         return !!value || 'Life is required'
       },
       (value: string): (boolean | string) => {
-        return FinancingStatementModel.isValidLife(value) ? true : 'Life must be a number between 1 and 25'
+        return FinancingStatementModel.isValidYears(value) ? true : 'Life must be a number between 1 and 25'
       }
     ]
 
@@ -97,7 +103,7 @@ export default createComponent({
     function updateRegisteringParty(newPerson: PersonModel): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
-        props.value.life,
+        props.value.years,
         newPerson // props.value.registeringParty
       ))
     }
@@ -110,11 +116,11 @@ export default createComponent({
         props.value.registeringParty))
     }
 
-    // Callback function for emitting model changes made to the FS life
+    // Callback function for emitting model changes made to the FS type
     function updateType(newType: FinancingStatementType): void {
       emit('input', new FinancingStatementModel(
         newType, //props.value.type,
-        props.value.life,
+        props.value.years,
         props.value.registeringParty))
     }
 

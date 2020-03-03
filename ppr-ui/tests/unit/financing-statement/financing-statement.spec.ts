@@ -4,9 +4,9 @@ import { PersonModel } from '@/components/person-model'
 
 describe('FinancingStatementModel', (): void => {
 
-  describe('FinancingStatementModel.isValidLife', (): void => {
+  describe('FinancingStatementModel.isValidYears', (): void => {
     function test(input: string, expected: boolean): void {
-      const isValid = FinancingStatementModel.isValidLife(input)
+      const isValid = FinancingStatementModel.isValidYears(input)
       expect(isValid).toBe(expected)
     }
 
@@ -37,8 +37,6 @@ describe('FinancingStatementModel', (): void => {
     it('life PI is not valid', (): void => {
       test('3.14159', false)
     })
-
-
   })
 
   describe('construction', (): void => {
@@ -47,7 +45,7 @@ describe('FinancingStatementModel', (): void => {
       const testPerson = new PersonModel()
 
       expect(fstmt.type).toEqual(FinancingStatementType.SECURITY_AGREEMENT)
-      expect(fstmt.life).toEqual(1)
+      expect(fstmt.years).toEqual(1)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
@@ -58,7 +56,7 @@ describe('FinancingStatementModel', (): void => {
       const testPerson = new PersonModel()
 
       expect(fstmt.type).toEqual(FinancingStatementType.SECURITY_AGREEMENT)
-      expect(fstmt.life).toEqual(2)
+      expect(fstmt.years).toEqual(2)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
@@ -69,7 +67,7 @@ describe('FinancingStatementModel', (): void => {
       const testPerson = new PersonModel()
 
       expect(fstmt.type).toEqual(FinancingStatementType.REPAIRERS_LIEN)
-      expect(fstmt.life).toEqual(1)
+      expect(fstmt.years).toEqual(1)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
@@ -80,10 +78,28 @@ describe('FinancingStatementModel', (): void => {
       const fstmt = new FinancingStatementModel(undefined, undefined, testPerson)
 
       expect(fstmt.type).toEqual(FinancingStatementType.SECURITY_AGREEMENT)
-      expect(fstmt.life).toEqual(1)
+      expect(fstmt.years).toEqual(1)
       expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
       expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
       expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
+    })
+
+    it('construct with base registration number', (): void => {
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, '123456A')
+
+      expect(fstmt.baseRegistrationNumber).toEqual('123456A')
+    })
+
+    it('construct with registration date and time', (): void => {
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, '2020-01-01T01:01:01')
+
+      expect(fstmt.registrationDateTime).toEqual('2020-01-01T01:01:01')
+    })
+
+    it('construct with expiry date', (): void => {
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, '2030-01-01')
+
+      expect(fstmt.expiryDate).toEqual('2030-01-01')
     })
   })
 
