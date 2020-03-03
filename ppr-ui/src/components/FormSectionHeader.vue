@@ -1,6 +1,5 @@
 <template>
   <v-toolbar
-    color="grey lighten-3"
     dense
     flat
   >
@@ -17,3 +16,14 @@ export default createComponent({
   }
 })
 </script>
+<style lang="scss" scoped>
+.v-toolbar {
+  padding-top: 0.5em;
+  border-top: 5px solid #003366;
+}
+
+.v-label {
+  font-weight: bold;
+  color: rgb(0, 0, 0, 0.8);
+}
+</style>
