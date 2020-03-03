@@ -20,7 +20,8 @@ class SearchRepository:
                       similar_matches: typing.List[str], user: auth.authentication.User,
                       payment: schemas.payment.Payment):
         model = models.search.Search(criteria=search_input.criteria, type_code=search_input.type, user_id=user.user_id)
-        model.payment = models.payment.Payment(id=payment.id, method=payment.method, status=payment.status)
+        if payment:
+            model.payment = models.payment.Payment(id=payment.id, method=payment.method, status=payment.status)
 
         for match in exact_matches:
             model.results.append(models.search.SearchResult(registration_number=match, exact=True, selected=True))

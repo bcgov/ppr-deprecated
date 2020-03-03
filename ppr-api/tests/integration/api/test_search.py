@@ -40,20 +40,21 @@ def test_create_registration_number_search():
     assert body['searchDateTime'] == stored.creation_date_time.isoformat(timespec='seconds')
 
 
-def test_create_search_returns_payment_info():
-    search_input = {'type': 'SERIAL_NUMBER', 'criteria': {'value': 'ABC123456'}}
-
-    rv = client.post('/searches', json=search_input)
-
-    body = rv.json()
-
-    # Ensure default payment info for integration tests is provided.  See ../conftest.py
-    assert 'payment' in body
-    assert body['payment']['status'] == 'CREATED'
-    assert body['payment']['method'] == 'CC'
-
-    stored = sample_data_utility.retrieve_search_record(body['id'])
-    assert body['payment']['id'] == stored.payment_id
+# TODO #603 Temporarily removed payment integration, as it is not currently working in dev
+# def test_create_search_returns_payment_info():
+#     search_input = {'type': 'SERIAL_NUMBER', 'criteria': {'value': 'ABC123456'}}
+#
+#     rv = client.post('/searches', json=search_input)
+#
+#     body = rv.json()
+#
+#     # Ensure default payment info for integration tests is provided.  See ../conftest.py
+#     assert 'payment' in body
+#     assert body['payment']['status'] == 'CREATED'
+#     assert body['payment']['method'] == 'CC'
+#
+#     stored = sample_data_utility.retrieve_search_record(body['id'])
+#     assert body['payment']['id'] == stored.payment_id
 
 
 def test_create_search_with_exact_match():

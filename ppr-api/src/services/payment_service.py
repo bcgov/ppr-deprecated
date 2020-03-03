@@ -7,7 +7,6 @@ import requests
 
 import config
 import auth.authentication
-import schemas.payment
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +56,9 @@ def create_payment_request(auth_header: HTTPAuthorizationCredentials = Depends(a
     return pay_response.json()
 
 
-def get_payment(api_payment: dict = Depends(create_payment_request)):
-    return schemas.payment.Payment(id=api_payment['id'], status=api_payment['statusCode'],
-                                   method=api_payment['paymentMethod'])
+# TODO #603 Temporarily removed payment integration until account base payment is supported.
+# def get_payment(api_payment: dict = Depends(create_payment_request)):
+#     return schemas.payment.Payment(id=api_payment['id'], status=api_payment['statusCode'],
+#                                    method=api_payment['paymentMethod'])
+def get_payment():
+    return None

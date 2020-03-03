@@ -52,11 +52,12 @@ def test_create_payment_request_with_unexpected_response(mock_post):
         pytest.fail('A general error was expected since the payment api returned an unexpected response')
 
 
-def test_get_current_user():
-    api_response = {'id': 1234, 'paymentMethod': 'CC', 'statusCode': 'CREATED'}
-
-    payment = services.payment_service.get_payment(api_response)
-
-    assert payment.id == 1234
-    assert payment.status == 'CREATED'
-    assert payment.method == 'CC'
+# TODO #603 Temporarily removed payment integration until account base payment is supported.
+# def test_get_current_user():
+#     api_response = {'id': 1234, 'paymentMethod': 'CC', 'statusCode': 'CREATED'}
+#
+#     payment = services.payment_service.get_current_user(api_response)
+#
+#     assert payment.id == 1234
+#     assert payment.status == 'CREATED'
+#     assert payment.method == 'CC'
