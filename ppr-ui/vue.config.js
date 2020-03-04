@@ -14,6 +14,9 @@ module.exports = {
       splitChunks: {
         minSize: 100000,
         maxSize: 2500000,
+        // automaticNameDelimiter added to workaround problem with WAM
+        // see https://github.com/bcgov/ppr/issues/270
+        automaticNameDelimiter: "-"
       }
     }
   },
