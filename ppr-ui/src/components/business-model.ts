@@ -15,7 +15,7 @@ export class BusinessModel {
   /**
    * Creates a new Business model instance.
    *
-   * @param businessName the last name of the person.
+   * @param businessName the name of the business.
    */
   public constructor(businessName: string = '') {
     this._businessName = businessName
