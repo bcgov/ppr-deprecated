@@ -5,30 +5,30 @@
       @input="formValid($event)"
     >
       <v-text-field
-        data-test-id="BaseParty.firstName"
+        data-test-id="PersonName.first"
         label="First Name"
         :rules="firstNameRules"
-        :value="value.firstName"
+        :value="value.first"
         required
-        @input="updateFirstName($event)"
+        @input="updateFirst($event)"
       />
       <v-text-field
-        data-test-id="BaseParty.middleName"
+        data-test-id="PersonName.middle"
         label="Middle Name"
-        :value="value.middleName"
-        @input="updateMiddleName($event)"
+        :value="value.middle"
+        @input="updateMiddle($event)"
       />
       <v-text-field
-        data-test-id="BaseParty.lastName"
+        data-test-id="PersonName.last"
         label="Last Name"
         :rules="lastNameRules"
-        :value="value.lastName"
+        :value="value.last"
         required
-        @input="updateLastName($event)"
+        @input="updateLast($event)"
       />
     </v-form>
     <div v-else>
-      {{ value.firstName + ' ' + value.middleName + ' ' + value.lastName }}
+      {{ value.first + ' ' + value.middle + ' ' + value.last }}
     </div>
   </v-card>
 </template>
@@ -36,7 +36,7 @@
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import { PersonModel } from './person-model'
+import { PersonNameModel } from '@/components/person-name-model'
 
 export default createComponent({
   props: {
@@ -47,7 +47,7 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: PersonModel
+      type: PersonNameModel
     }
   },
 
@@ -70,27 +70,27 @@ export default createComponent({
     }
 
     // Callback function for emitting model changes made to the first name.
-    function updateFirstName(newFirstName: string): void {
-      emit('input', new PersonModel(newFirstName, props.value.middleName, props.value.lastName))
+    function updateFirst(newFirst: string): void {
+      emit('input', new PersonNameModel(newFirst, props.value.middle, props.value.last))
     }
 
     // Callback function for emitting model changes made to the last name.
-    function updateLastName(newLastName: string): void {
-      emit('input', new PersonModel(props.value.firstName, props.value.middleName, newLastName))
+    function updateLast(newLast: string): void {
+      emit('input', new PersonNameModel(props.value.first, props.value.middle, newLast))
     }
 
     // Callback function for emitting model changes made to the middle name.
-    function updateMiddleName(newMiddleName: string): void {
-      emit('input', new PersonModel(props.value.firstName, newMiddleName, props.value.lastName))
+    function updateMiddle(newMiddle: string): void {
+      emit('input', new PersonNameModel(props.value.first, newMiddle, props.value.last))
     }
 
     return {
       firstNameRules,
       formValid,
       lastNameRules,
-      updateFirstName,
-      updateLastName,
-      updateMiddleName
+      updateFirst,
+      updateLast,
+      updateMiddle
     }
   }
 })

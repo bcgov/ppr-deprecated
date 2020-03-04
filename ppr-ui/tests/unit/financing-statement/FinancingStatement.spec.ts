@@ -6,7 +6,7 @@ import Vuetify from 'vuetify'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { PersonModel } from '@/components/person-model'
+import { PersonNameModel } from '@/components/person-name-model'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
@@ -14,7 +14,6 @@ Vue.use(VueCompositionApi)
 const vuetify = new Vuetify()
 
 describe('FinancingStatmentContainer.vue', (): void => {
-
   describe(':props', (): void => {
     it(':editing - false contains no inputs', (): void => {
       const properties = ref({ editing: false, value: new FinancingStatementModel() })
@@ -73,7 +72,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
 
     it('@valid - valid data to emit valid true', async (): Promise<void> => {
       const financingStatement = new FinancingStatementModel(FinancingStatementType.SECURITY_AGREEMENT, 13,
-        new PersonModel('first', 'middle', 'last'))
+        new PersonNameModel('first', 'middle', 'last'))
       const properties = ref({ editing: true, value: financingStatement })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
 
@@ -82,12 +81,12 @@ describe('FinancingStatmentContainer.vue', (): void => {
 
     it('@valid - missing registering party name to emit valid false', async (): Promise<void> => {
       const financingStatement = new FinancingStatementModel(FinancingStatementType.SECURITY_AGREEMENT, 13,
-        new PersonModel('first', 'middle', 'last'))
+        new PersonNameModel('first', 'middle', 'last'))
       const properties = ref({ editing: true, value: financingStatement })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
 
       // Needed a double nextTick, probably due to the emits from two components.
-      wrapper.get('input[data-test-id="BaseParty.firstName"]').setValue('')
+      wrapper.get('input[data-test-id="PersonName.first"]').setValue('')
       await Vue.nextTick()
       await Vue.nextTick()
 

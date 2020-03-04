@@ -1,6 +1,6 @@
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { PersonModel } from '@/components/person-model'
+import { PersonNameModel } from '@/components/person-name-model'
 
 describe('FinancingStatementModel', (): void => {
 
@@ -42,46 +42,46 @@ describe('FinancingStatementModel', (): void => {
   describe('construction', (): void => {
     it('empty constructor defaults', (): void => {
       const fstmt = new FinancingStatementModel()
-      const testPerson = new PersonModel()
+      const testPerson = new PersonNameModel()
 
       expect(fstmt.type).toEqual(FinancingStatementType.SECURITY_AGREEMENT)
       expect(fstmt.years).toEqual(1)
-      expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
-      expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
-      expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
+      expect(fstmt.registeringParty.first).toEqual(testPerson.first)
+      expect(fstmt.registeringParty.middle).toEqual(testPerson.middle)
+      expect(fstmt.registeringParty.last).toEqual(testPerson.last)
     })
 
     it('construct with life', (): void => {
       const fstmt = new FinancingStatementModel(undefined, 2)
-      const testPerson = new PersonModel()
+      const testPerson = new PersonNameModel()
 
       expect(fstmt.type).toEqual(FinancingStatementType.SECURITY_AGREEMENT)
       expect(fstmt.years).toEqual(2)
-      expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
-      expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
-      expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
+      expect(fstmt.registeringParty.first).toEqual(testPerson.first)
+      expect(fstmt.registeringParty.middle).toEqual(testPerson.middle)
+      expect(fstmt.registeringParty.last).toEqual(testPerson.last)
     })
 
     it('construct with type', (): void => {
       const fstmt = new FinancingStatementModel(FinancingStatementType.REPAIRERS_LIEN)
-      const testPerson = new PersonModel()
+      const testPerson = new PersonNameModel()
 
       expect(fstmt.type).toEqual(FinancingStatementType.REPAIRERS_LIEN)
       expect(fstmt.years).toEqual(1)
-      expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
-      expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
-      expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
+      expect(fstmt.registeringParty.first).toEqual(testPerson.first)
+      expect(fstmt.registeringParty.middle).toEqual(testPerson.middle)
+      expect(fstmt.registeringParty.last).toEqual(testPerson.last)
     })
 
     it('construct with person', (): void => {
-      const testPerson = new PersonModel('First', 'Middle', 'Last')
+      const testPerson = new PersonNameModel('First', 'Middle', 'Last')
       const fstmt = new FinancingStatementModel(undefined, undefined, testPerson)
 
       expect(fstmt.type).toEqual(FinancingStatementType.SECURITY_AGREEMENT)
       expect(fstmt.years).toEqual(1)
-      expect(fstmt.registeringParty.firstName).toEqual(testPerson.firstName)
-      expect(fstmt.registeringParty.middleName).toEqual(testPerson.middleName)
-      expect(fstmt.registeringParty.lastName).toEqual(testPerson.lastName)
+      expect(fstmt.registeringParty.first).toEqual(testPerson.first)
+      expect(fstmt.registeringParty.middle).toEqual(testPerson.middle)
+      expect(fstmt.registeringParty.last).toEqual(testPerson.last)
     })
 
     it('construct with base registration number', (): void => {
@@ -126,7 +126,7 @@ describe('FinancingStatementModel', (): void => {
     })
 
     it('json with person', (): void => {
-      const testPerson = new PersonModel('First', 'Middle', 'Last')
+      const testPerson = new PersonNameModel('First', 'Middle', 'Last')
       const fstmt = new FinancingStatementModel(undefined, undefined, testPerson)
       const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())
 

@@ -53,7 +53,7 @@ import { FinancingStatementModel } from '@/financing-statement/financing-stateme
 import { FinancingStatementType, FinancingStatementTypeCodeList } from '@/financing-statement/financing-statement-type'
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
 import RegisteringParty from '@/components/RegisteringParty.vue'
-import { PersonModel } from '@/components/person-model'
+import { PersonNameModel } from '@/components/person-name-model'
 
 export default createComponent({
   components: {
@@ -100,7 +100,7 @@ export default createComponent({
       emit('valid', formValid)
     }
 
-    function updateRegisteringParty(newPerson: PersonModel): void {
+    function updateRegisteringParty(newPerson: PersonNameModel): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
         props.value.years,
