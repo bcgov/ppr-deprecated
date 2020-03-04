@@ -183,24 +183,29 @@ paths:
                         ref: /financing-statements/95110d7f-91ce-47f2-a996-76e2dddc3cf7?version=1
                         type: SECURITY_AGREEMENT
                         registeringParty:
-                          name: Name of party
-                          address: 123 Fake St
-                          city: Victoria
-                          province: BC
-                          postalCode: A1A 1A1
-                        securedParties:
-                          - name: Name of party
-                            address: 123 Fake St
+                          businessName: Name of party
+                          address:
+                            street: 123 Fake St
                             city: Victoria
-                            province: BC
+                            region: BC
+                            country: CA
                             postalCode: A1A 1A1
+                        securedParties:
+                          - businessName: Name of party
+                            address:
+                              street: 123 Fake St
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
                         debtors:
-                          - name: string
+                          - businessName: Debtor Name
                         vehicleCollateral:
                           - type: MOTOR_VEHICLE
                             serial: WDBKK49F81F234840
                             year: 2001
-                            model: Mercedes-Benz SLK-Class Kompressor
+                            make: Mercedes-Benz
+                            model: SLK-Class Kompressor
                         generalCollateral:
                           - description: Detailed description of general collateral
                         expiryDate: '2021-01-02'
@@ -233,36 +238,47 @@ paths:
                   value:
                     type: SECURITY_AGREEMENT
                     registeringParty:
-                      name:
+                      personName:
                         first: Homer
                         last: Simpson
                         middle: Jay
-                      address: 742 Evergreen Terrace
-                      city: Springfield
-                      province: BC
-                      postalCode: A1A 1A1
+                      address:
+                        street: 742 Evergreen Terrace
+                        city: Springfield
+                        region: BC
+                        country: CA
+                        postalCode: A1A 1A1
                     securedParties:
-                      - code: string
-                        name: string
-                        address: string
-                        city: string
-                        province: string
-                        postalCode: string
+                      - businessName: Spacely Sprockets
+                        address:
+                          street: 123 Fake St
+                          streetAdditional: Suite 501
+                          city: Jupiter
+                          region: BC
+                          country: CA
+                          postalCode: A1A 1A1
                     debtors:
-                      - name: string
+                      - businessName: My Company Inc
+                        address:
+                          street: 721 Debtor Ave
+                          city: Victoria
+                          region: BC
+                          country: CA
+                          postalCode: A1A 1A1
+                        birthdate: '1990-06-15'
                     vehicleCollateral:
                       - type: MOTOR_VEHICLE
-                        serial: string
-                        year: 1000
-                        model: string
-                        manufacturedHomeRegNumber: string
+                        serial: WDBKK49F81F234840
+                        year: 2001
+                        make: Mercedes-Benz
+                        model: SLK-Class Kompressor
                     generalCollateral:
-                      - description: string
+                      - description: A ride on lawn mower that has a great deal of personal value
                     expiryDate: '2020-02-21'
-                    baseRegistrationNumber: string
-                    documentId: string
+                    baseRegistrationNumber: 791167G
+                    documentId: B5645289
                     registrationDateTime: '2020-02-21T18:38:20Z'
-                    years: 1
+                    years: 5
         '422':
           description: Unprocessable Entity
       operationId: post-financing-statements
@@ -279,18 +295,42 @@ paths:
                 value:
                   type: SECURITY_AGREEMENT
                   registeringParty:
-                    name:
+                    personName:
                       first: Homer
                       last: Simpson
                       middle: Jay
-                    address: 742 Evergreen Terrace
-                    city: Springfield
-                    province: BC
-                    postalCode: A1A 1A1
-                  securedParties: []
-                  debtors: []
-                  vehicleCollateral: []
-                  generalCollateral: []
+                    address:
+                      street: 742 Evergreen Terrace
+                      city: Springfield
+                      region: BC
+                      country: CA
+                      postalCode: A1A 1A1
+                  securedParties:
+                    - businessName: Spacely Sprockets
+                      address:
+                        street: 123 Fake St
+                        streetAdditional: Suite 501
+                        city: Jupiter
+                        region: BC
+                        country: CA
+                        postalCode: A1A 1A1
+                  debtors:
+                    - businessName: My Company Inc
+                      address:
+                        street: 721 Debtor Ave
+                        city: Victoria
+                        region: BC
+                        country: CA
+                        postalCode: A1A 1A1
+                      birthdate: '1990-06-15'
+                  vehicleCollateral:
+                    - type: MOTOR_VEHICLE
+                      serial: WDBKK49F81F234840
+                      year: 2001
+                      make: Mercedes-Benz
+                      model: SLK-Class Kompressor
+                  generalCollateral:
+                    - description: A ride on lawn mower that has a great deal of personal value
                   years: 5
 components:
   schemas:
@@ -353,10 +393,14 @@ components:
           properties:
             code:
               type: string
-            name:
+            personName:
               $ref: '#/components/schemas/individual-name'
+            businessName:
+              type: string
             address:
               $ref: '#/components/schemas/address'
+          required:
+            - address
         securedParties:
           type: array
           items:
@@ -364,19 +408,31 @@ components:
             properties:
               code:
                 type: string
-              name:
+              personName:
+                $ref: '#/components/schemas/individual-name'
+              businessName:
                 type: string
               address:
                 $ref: '#/components/schemas/address'
+            required:
+              - address
         debtors:
           type: array
           items:
             type: object
             properties:
-              name:
+              personName:
+                $ref: '#/components/schemas/individual-name'
+              businessName:
                 type: string
               address:
                 $ref: '#/components/schemas/address'
+              birthdate:
+                type: string
+                description: Date of birth in ISO 8601 format
+                format: date
+            required:
+              - address
         vehicleCollateral:
           type: array
           items:
@@ -398,6 +454,8 @@ components:
                 type: integer
                 minimum: 1000
                 maximum: 9999
+              make:
+                type: string
               model:
                 type: string
               manufacturedHomeRegNumber:
@@ -405,7 +463,6 @@ components:
             required:
               - type
               - serial
-              - model
         generalCollateral:
           type: array
           items:
@@ -454,6 +511,19 @@ components:
           type: string
           description: Description of the error
       description: Contains details of an error that was encountered
+    individual-name:
+      title: individual-name
+      type: object
+      properties:
+        first:
+          type: string
+        last:
+          type: string
+        middle:
+          type: string
+      required:
+        - first
+        - last
     payment:
       title: payment
       type: object
@@ -470,33 +540,26 @@ components:
           type: string
           enum:
             - CC
-    individual-name:
-      title: individual-name
-      type: object
-      properties:
-        first:
-          type: string
-        last:
-          type: string
-        middle:
-          type: string
-      required:
-        - first
-        - last
     address:
       title: address
       type: object
       properties:
         street:
           type: string
-        sreetAdditional:
+        streetAdditional:
           type: string
         city:
           type: string
         region:
           type: string
+          description: 'For Canada or USA, 2 character region code'
+          minLength: 2
+          maxLength: 2
         country:
           type: string
+          minLength: 2
+          maxLength: 2
+          description: 2 Character ISO 3166-1 Alpha-2 Country Code
         postalCode:
           type: string
       required:
