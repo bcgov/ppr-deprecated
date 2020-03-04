@@ -1,4 +1,4 @@
-import { PersonInterface, PersonModel } from '@/components/person-model'
+import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 
 /**
@@ -9,7 +9,7 @@ export interface FinancingStatementInterface {
   debtors: [];
   expiryDate: string | undefined;
   generalCollateral: [];
-  registeringParty: PersonInterface;
+  registeringParty: PersonNameInterface;
   registrationDateTime: string | undefined;
   securedParties: [];
   type: FinancingStatementType;
@@ -20,7 +20,7 @@ export interface FinancingStatementInterface {
 export class FinancingStatementModel {
   private _baseRegistrationNumber: string | undefined
   private _expiryDate: string | undefined
-  private _registeringParty: PersonModel
+  private _registeringParty: PersonNameModel
   private _registrationDateTime: string | undefined
   private _type: FinancingStatementType
   private _years: number
@@ -30,7 +30,7 @@ export class FinancingStatementModel {
    *
    * @param type the type of financing statement. A value from the FinancingStatementType enum
    * @param years the number of years the financing statement is registered for. A value between 1 and 25.
-   * @param registeringParty the PersonModel who registered the financing statement
+   * @param registeringParty the party who registered the financing statement
    * @param baseRegistrationNumber the unique registration number for the financing statement, may be undefined.
    * @param registrationDateTime the date and time that the financing statement was registered.
    * @param expiryDate the expiry date of the financing statement.
@@ -38,7 +38,7 @@ export class FinancingStatementModel {
   public constructor(
     type: FinancingStatementType = FinancingStatementType.SECURITY_AGREEMENT,
     years: number = 1,
-    registeringParty: PersonModel = new PersonModel(),
+    registeringParty: PersonNameModel = new PersonNameModel(),
     baseRegistrationNumber?: string,
     registrationDatetime?: string,
     expiryDate?: string
@@ -68,7 +68,7 @@ export class FinancingStatementModel {
   /**
    * Gets the Person who registered the financing statement
    */
-  public get registeringParty(): PersonModel {
+  public get registeringParty(): PersonNameModel {
     return this._registeringParty
   }
 
@@ -138,10 +138,10 @@ export class FinancingStatementModel {
    * @param jsonObject the JSON version of the object.
    */
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
-    let registeringParty: PersonModel | undefined
+    let registeringParty: PersonNameModel | undefined
 
     if (jsonObject.registeringParty) {
-      registeringParty = new PersonModel(
+      registeringParty = new PersonNameModel(
         jsonObject.registeringParty.name.first,
         jsonObject.registeringParty.name.middle,
         jsonObject.registeringParty.name.last

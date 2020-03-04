@@ -1,6 +1,6 @@
 <template>
   <v-card flat>
-    <base-party
+    <person-name
       :editing="editing"
       :value="value"
       @input="emitModel($event)"
@@ -12,11 +12,11 @@
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import BaseParty from '@/components/BaseParty.vue'
-import { PersonModel } from '@/components/person-model'
+import PersonName from '@/components/PersonName.vue'
+import { PersonNameModel } from '@/components/person-name-model'
 
 export default createComponent({
-  components: { BaseParty },
+  components: { PersonName },
 
   props: {
     editing: {
@@ -26,13 +26,13 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: PersonModel
+      type: PersonNameModel
     }
   },
 
   setup(_, { emit }) {
     // Callback function for emitting the model back to the parent.
-    function emitModel(person: PersonModel) {
+    function emitModel(person: PersonNameModel) {
       emit('input', person)
     }
 
