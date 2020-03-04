@@ -26,7 +26,7 @@ class SearchBase(pydantic.BaseModel):
     criteria: dict
 
     @pydantic.validator('type')
-    def type_must_match_search_type(cls, search_type):  # noqa: N805
+    def type_must_match_search_type(cls, search_type):  # pylint:disable=no-self-argument # noqa: N805
         try:
             SearchType[search_type]
         except KeyError:
@@ -34,7 +34,7 @@ class SearchBase(pydantic.BaseModel):
         return search_type
 
     @pydantic.validator('criteria')
-    def criteria_must_match_format_for_type(cls, criteria, values):  # noqa: N805
+    def criteria_must_match_format_for_type(cls, criteria, values):  # pylint:disable=no-self-argument # noqa: N805
         if 'type' not in values:
             return criteria
 
@@ -79,7 +79,7 @@ class SearchResult(pydantic.BaseModel):
     financingStatement: schemas.financing_statement.FinancingStatement = None
 
     @pydantic.validator('type')
-    def type_must_match_search_result_type(cls, value):  # noqa: N805
+    def type_must_match_search_result_type(cls, value):  # pylint:disable=no-self-argument # noqa: N805
         try:
             SearchResultType[value]
         except KeyError:
