@@ -34,8 +34,8 @@ export default createComponent({
   setup(_, { emit }) {
 
     // Callback function for emitting model changes made to the business name.
-    function updateName(newBusinesName: string): void {
-      emit('input', new BusinessModel(newBusinesName))
+    function updateName(newBusinessName: string): void {
+      emit('input', new BusinessModel(newBusinessName))
     }
     return {
       updateName
