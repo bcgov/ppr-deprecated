@@ -29,7 +29,7 @@ jobs:
       - name: Lint Python Source
         working-directory: ppr-api
         run: |
-          pylint -E --disable=E0213 src
+          pylint -E src
           pylint -E --disable=E1101 migrations
           flake8 src migrations tests *.py
       - name: Execute Unit Tests with PyTest
