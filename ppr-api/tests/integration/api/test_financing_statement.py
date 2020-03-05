@@ -42,16 +42,16 @@ def test_read_financing_statement_with_changed_registering_party_should_provide_
     rv = client.get('/financing-statements/{}'.format(fin_stmt.registration_number))
     body = rv.json()
 
-    assert body['registeringParty']['name']['first'] == 'Charles'
-    assert body['registeringParty']['name']['middle'] == 'Montgomery'
-    assert body['registeringParty']['name']['last'] == 'Burns'
+    assert body['registeringParty']['personName']['first'] == 'Charles'
+    assert body['registeringParty']['personName']['middle'] == 'Montgomery'
+    assert body['registeringParty']['personName']['last'] == 'Burns'
 
 
 def test_create_financing_statement_for_root_object_details():
     request_payload = {
         'type': 'SECURITY_AGREEMENT',
         'years': 5,
-        'registeringParty': {'name': {'first': 'Homer', 'last': 'Simpson'}},
+        'registeringParty': {'personName': {'first': 'Homer', 'last': 'Simpson'}},
         'securedParties': [],
         'debtors': [],
         'vehicleCollateral': [],
@@ -85,7 +85,7 @@ def test_create_financing_statement_for_root_object_details():
 def test_create_financing_statement_persists_secured_party():
     request_payload = {
         'type': 'SECURITY_AGREEMENT',
-        'registeringParty': {'name': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'}},
+        'registeringParty': {'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'}},
         'securedParties': [],
         'debtors': [],
         'vehicleCollateral': [],
@@ -96,19 +96,19 @@ def test_create_financing_statement_persists_secured_party():
 
     body = rv.json()
     assert 'registeringParty' in body
-    assert 'name' in body['registeringParty']
-    assert body['registeringParty']['name']['first'] == 'Homer'
-    assert body['registeringParty']['name']['middle'] == 'Jay'
-    assert body['registeringParty']['name']['last'] == 'Simpson'
+    assert 'personName' in body['registeringParty']
+    assert body['registeringParty']['personName']['first'] == 'Homer'
+    assert body['registeringParty']['personName']['middle'] == 'Jay'
+    assert body['registeringParty']['personName']['last'] == 'Simpson'
 
     registration_number = body['baseRegistrationNumber']
     stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
     registering_parties = list(filter(lambda party: party.type_code == 'RP', stored.parties))
 
     assert len(registering_parties) == 1
-    assert registering_parties[0].first_name == body['registeringParty']['name']['first']
-    assert registering_parties[0].middle_name == body['registeringParty']['name']['middle']
-    assert registering_parties[0].last_name == body['registeringParty']['name']['last']
+    assert registering_parties[0].first_name == body['registeringParty']['personName']['first']
+    assert registering_parties[0].middle_name == body['registeringParty']['personName']['middle']
+    assert registering_parties[0].last_name == body['registeringParty']['personName']['last']
     assert registering_parties[0].base_registration_number == registration_number
     assert registering_parties[0].starting_registration_number == registration_number
     assert registering_parties[0].ending_registration_number is None

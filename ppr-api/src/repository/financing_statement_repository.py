@@ -32,8 +32,9 @@ class FinancingStatementRepository:
 
         party_schema = fs_input.registeringParty
         party_model = models.party.Party(type_code=schemas.party.PartyType.REGISTERING.value,
-                                         first_name=party_schema.name.first, middle_name=party_schema.name.middle,
-                                         last_name=party_schema.name.last)
+                                         first_name=party_schema.personName.first,
+                                         middle_name=party_schema.personName.middle,
+                                         last_name=party_schema.personName.last)
 
         model.events.append(event_model)
         model.parties.append(party_model)

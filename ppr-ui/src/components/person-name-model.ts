@@ -3,7 +3,7 @@
  * The interface to a person name.
  */
 export interface PersonNameInterface {
-  name: {
+  personName: {
     first: string;
     middle: string;
     last: string;
@@ -20,7 +20,7 @@ export class PersonNameModel {
 
   /**
    * Creates a new Person Name model instance.
-   * 
+   *
    * @param first the first name of the person.
    * @param middle the middle name of the person.
    * @param last the last name of the person.
@@ -57,7 +57,7 @@ export class PersonNameModel {
    */
   public toJson(): PersonNameInterface {
     return {
-      name: {
+      personName: {
         first: this.first,
         middle: this.middle,
         last: this.last
@@ -71,13 +71,13 @@ export class PersonNameModel {
 
   /**
    * Gets a PersonNameModel object from a JSON string.
-   * 
+   *
    * @param jsonObject the JSON version of the object.
    */
   public static fromJson(jsonObject: PersonNameInterface): PersonNameModel {
     return new PersonNameModel(
-      jsonObject.name.first,
-      jsonObject.name.middle,
-      jsonObject.name.last)
+      jsonObject.personName.first,
+      jsonObject.personName.middle,
+      jsonObject.personName.last)
   }
 }

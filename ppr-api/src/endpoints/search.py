@@ -109,8 +109,8 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
 
     reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
     reg_party_schema = schemas.party.Party(
-        name=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
-                                          last=reg_party_model.last_name)
+        personName=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
+                                                last=reg_party_model.last_name)
     ) if reg_party_model else None
 
     return schemas.financing_statement.FinancingStatement(
