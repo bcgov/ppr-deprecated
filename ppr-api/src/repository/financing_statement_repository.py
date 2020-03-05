@@ -3,6 +3,7 @@ import fastapi
 import sqlalchemy.orm
 
 import auth.authentication
+import models.collateral
 import models.database
 import models.financing_statement
 import models.party
@@ -31,14 +32,19 @@ class FinancingStatementRepository:
                                                                          user_id=user.user_id)
 
         party_schema = fs_input.registeringParty
-        party_model = models.party.Party(type_code=schemas.party.PartyType.REGISTERING.value,
-                                         first_name=party_schema.personName.first,
-                                         middle_name=party_schema.personName.middle,
-                                         last_name=party_schema.personName.last)
+        reg_party_model = models.party.Party(type_code=schemas.party.PartyType.REGISTERING.value,
+                                             first_name=party_schema.personName.first,
+                                             middle_name=party_schema.personName.middle,
+                                             last_name=party_schema.personName.last)
+
+        general_collateral = list(map(lambda c: models.collateral.GeneralCollateral(description=c.description),
+                                      fs_input.generalCollateral))
 
         model.events.append(event_model)
-        model.parties.append(party_model)
-        event_model.starting_parties.append(party_model)
+        model.parties.append(reg_party_model)
+        model.general_collateral.extend(general_collateral)
+        event_model.starting_parties.append(reg_party_model)
+        event_model.starting_general_collateral.extend(general_collateral)
 
         self.db.add(model)
         self.db.flush()
