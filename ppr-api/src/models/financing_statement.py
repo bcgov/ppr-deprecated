@@ -3,6 +3,7 @@ from sqlalchemy.dialects import postgresql
 import sqlalchemy.orm
 
 from .database import BaseORM
+import models.collateral
 import models.party
 from schemas.party import PartyType
 
@@ -25,6 +26,11 @@ class FinancingStatement(BaseORM):
         primaryjoin='and_(FinancingStatement.registration_number==Party.base_registration_number, '
                     'Party.ending_registration_number==None)'
     )
+    general_collateral = sqlalchemy.orm.relationship(
+        models.collateral.GeneralCollateral.__name__,
+        primaryjoin='and_(FinancingStatement.registration_number==GeneralCollateral.base_registration_number, '
+                    'GeneralCollateral.ending_registration_number==None)'
+    )
 
     def get_base_event(self):
         return next((e for e in self.events if e.registration_number == self.registration_number), None)
@@ -46,7 +52,15 @@ class FinancingStatementEvent(BaseORM):
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
 
     base_registration = sqlalchemy.orm.relationship('FinancingStatement', back_populates='events')
-    starting_parties = sqlalchemy.orm.relationship(models.party.Party.__name__,
-                                                   foreign_keys='Party.starting_registration_number')
-    ending_parties = sqlalchemy.orm.relationship(models.party.Party.__name__,
-                                                 foreign_keys='Party.ending_registration_number')
+    starting_parties = sqlalchemy.orm.relationship(
+        models.party.Party.__name__, foreign_keys='Party.starting_registration_number'
+    )
+    ending_parties = sqlalchemy.orm.relationship(
+        models.party.Party.__name__, foreign_keys='Party.ending_registration_number'
+    )
+    starting_general_collateral = sqlalchemy.orm.relationship(
+        models.collateral.GeneralCollateral.__name__, foreign_keys='GeneralCollateral.starting_registration_number'
+    )
+    ending_general_collateral = sqlalchemy.orm.relationship(
+        models.collateral.GeneralCollateral.__name__, foreign_keys='GeneralCollateral.ending_registration_number'
+    )

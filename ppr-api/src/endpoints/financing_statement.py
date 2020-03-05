@@ -4,8 +4,10 @@ import fastapi
 from starlette import responses, status
 
 import auth.authentication
+import models.collateral
 import models.financing_statement
 from repository.financing_statement_repository import FinancingStatementRepository
+import schemas.collateral
 import schemas.financing_statement
 import schemas.party
 
@@ -44,11 +46,16 @@ def map_financing_statement_model_to_schema(model: models.financing_statement.Fi
         personName=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
                                                 last=reg_party_model.last_name)
     ) if reg_party_model else None
+    general_collateral_schema = list(map(map_general_collateral_model_to_schema, model.general_collateral))
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=model.registration_number, registrationDateTime=reg_date,
         expiryDate=model.expiry_date, years=model.life_in_years if model.life_in_years > 0 else None,
         type=schemas.financing_statement.RegistrationType(model.registration_type_code).name,
         registeringParty=reg_party_schema, securedParties=[], debtors=[],
-        vehicleCollateral=[], generalCollateral=[]
+        vehicleCollateral=[], generalCollateral=general_collateral_schema
     )
+
+
+def map_general_collateral_model_to_schema(model: models.collateral.GeneralCollateral):
+    return schemas.collateral.GeneralCollateral(description=model.description)

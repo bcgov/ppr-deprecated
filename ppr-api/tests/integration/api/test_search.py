@@ -115,10 +115,10 @@ def test_read_singular_search_results():
 
 def test_search_results_should_provide_party_at_time_of_search():
     fin_stmt = sample_data_utility.create_test_financing_statement(
-        registeringParty={'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson'}
+        registering_party={'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson'}
     )
     fin_stmt = sample_data_utility.create_test_financing_statement_event(
-        fin_stmt, registeringParty={'first_name': 'Charles', 'middle_name': 'Montgomery', 'last_name': 'Burns'}
+        fin_stmt, registering_party={'first_name': 'Charles', 'middle_name': 'Montgomery', 'last_name': 'Burns'}
     )
     search = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER',
                                                            {'value': fin_stmt.registration_number},

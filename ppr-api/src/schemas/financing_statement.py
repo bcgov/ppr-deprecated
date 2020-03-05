@@ -4,6 +4,7 @@ import typing
 
 from pydantic import BaseModel
 
+import schemas.collateral
 import schemas.party
 
 
@@ -19,7 +20,7 @@ class FinancingStatementBase(BaseModel):
     securedParties: typing.List[schemas.party.Party]
     debtors: typing.List[schemas.party.Party]
     vehicleCollateral: typing.List[dict]
-    generalCollateral: typing.List[dict]
+    generalCollateral: typing.List[schemas.collateral.GeneralCollateral]
 
 
 class FinancingStatement(FinancingStatementBase):
