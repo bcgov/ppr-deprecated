@@ -98,9 +98,9 @@ def test_read_financing_statement_registering_party_name_should_be_included():
 
     result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
 
-    assert result.registeringParty.name.first == 'Homer'
-    assert result.registeringParty.name.middle == 'Jay'
-    assert result.registeringParty.name.last == 'Simpson'
+    assert result.registeringParty.personName.first == 'Homer'
+    assert result.registeringParty.personName.middle == 'Jay'
+    assert result.registeringParty.personName.last == 'Simpson'
 
 
 def test_read_financing_statement_registration_party_should_be_none_when_not_present():

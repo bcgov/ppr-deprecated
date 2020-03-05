@@ -134,7 +134,7 @@ export class FinancingStatementModel {
 
   /**
    * Gets a FinancingStatementModel object from a JSON object.
-   * 
+   *
    * @param jsonObject the JSON version of the object.
    */
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
@@ -142,9 +142,9 @@ export class FinancingStatementModel {
 
     if (jsonObject.registeringParty) {
       registeringParty = new PersonNameModel(
-        jsonObject.registeringParty.name.first,
-        jsonObject.registeringParty.name.middle,
-        jsonObject.registeringParty.name.last
+        jsonObject.registeringParty.personName.first,
+        jsonObject.registeringParty.personName.middle,
+        jsonObject.registeringParty.personName.last
       )
     }
 

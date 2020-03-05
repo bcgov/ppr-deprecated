@@ -127,7 +127,7 @@ def test_search_results_should_provide_party_at_time_of_search():
     rv = client.get('/searches/{}/results'.format(search.id))
     body = rv.json()
 
-    reg_part_name = body[0]['financingStatement']['registeringParty']['name']
+    reg_part_name = body[0]['financingStatement']['registeringParty']['personName']
     assert reg_part_name['first'] == 'Homer'
     assert reg_part_name['middle'] == 'Jay'
     assert reg_part_name['last'] == 'Simpson'

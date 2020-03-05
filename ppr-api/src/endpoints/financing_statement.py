@@ -41,8 +41,8 @@ def map_financing_statement_model_to_schema(model: models.financing_statement.Fi
     reg_party_model = model.get_registering_party()
 
     reg_party_schema = schemas.party.Party(
-        name=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
-                                          last=reg_party_model.last_name)
+        personName=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
+                                                last=reg_party_model.last_name)
     ) if reg_party_model else None
 
     return schemas.financing_statement.FinancingStatement(

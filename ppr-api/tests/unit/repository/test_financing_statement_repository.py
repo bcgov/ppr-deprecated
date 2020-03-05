@@ -121,7 +121,7 @@ def test_create_financing_statement_registering_party_name_is_included(mock_sess
 
 
 def stub_party(first: str = 'Fred', last: str = 'Flintstone', middle: str = None):
-    return schemas.party.Party(name=schemas.party.IndividualName(first=first, last=last, middle=middle))
+    return schemas.party.Party(personName=schemas.party.IndividualName(first=first, last=last, middle=middle))
 
 
 def stub_financing_statement_input(reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT, years: int = None,

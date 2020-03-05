@@ -16,4 +16,4 @@ class IndividualName(pydantic.BaseModel):
 
 
 class Party(pydantic.BaseModel):
-    name: IndividualName
+    personName: IndividualName
