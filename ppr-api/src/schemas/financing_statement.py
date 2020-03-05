@@ -25,10 +25,10 @@ class FinancingStatementBase(pydantic.BaseModel):
     def validate_years(cls, years):  # pylint:disable=no-self-argument # noqa: N805
         if not (years is None or isinstance(years, int)):
             raise TypeError('Only integers are allowed')
-
         if type(years) is int:
             if years < 0 or years > 25:
                 raise ValueError('Years can only be between 1-25.')
+
         return years
 
 
