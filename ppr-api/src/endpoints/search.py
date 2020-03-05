@@ -8,6 +8,7 @@ from starlette import responses, status
 import auth.authentication
 import models.financing_statement
 import models.search
+import schemas.collateral
 import schemas.financing_statement
 import schemas.party
 from schemas.party import PartyType
@@ -86,6 +87,10 @@ def map_search_result_output(search_result: models.search.SearchResult):
     return schemas.search.SearchResult(type=search_result_type, financingStatement=financing_statement)
 
 
+def map_general_collateral_model_to_schema(model: models.collateral.GeneralCollateral):
+    return schemas.collateral.GeneralCollateral(description=model.description)
+
+
 def rebuild_financing_statement_to_event(event: models.financing_statement.FinancingStatementEvent):
     """
     Given an event, provide a Financing Statement result that represents the state as once that event was applied. This
@@ -101,22 +106,35 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
                            key=lambda e: e.registration_date)
 
     parties_snapshot = []
+    general_collateral_snapshot = []
     for applied_event in target_events:
-        # remove parties that end with the new event, and add those that were introduced
-        parties_snapshot = list(filter(lambda e: e.ending_registration_number != applied_event.registration_number,
-                                       parties_snapshot))
+        # remove entities that end with the new event, and add those that were introduced
+        parties_snapshot = filter_ending(applied_event.registration_number, parties_snapshot)
         parties_snapshot.extend(applied_event.starting_parties)
+        general_collateral_snapshot = filter_ending(applied_event.registration_number, general_collateral_snapshot)
+        general_collateral_snapshot.extend(applied_event.starting_general_collateral)
 
     reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
     reg_party_schema = schemas.party.Party(
         personName=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
                                                 last=reg_party_model.last_name)
     ) if reg_party_model else None
+    general_collateral_schema = list(map(map_general_collateral_model_to_schema, general_collateral_snapshot))
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
         documentId=event.document_number, expiryDate=fs_model.expiry_date,
         registeringParty=reg_party_schema, securedParties=[], debtors=[],
-        vehicleCollateral=[], generalCollateral=[],
+        vehicleCollateral=[], generalCollateral=general_collateral_schema,
         type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name
     )
+
+
+def filter_ending(registration_number: str, items: list):
+    """
+    Get a subset of the provided list that excludes items that were not removed for the specified registration number
+    :param registration_number: The registration number to filter out items for
+    :param items: A list of items to be filtered.  Must have a 'ending_registration_number' attribute
+    :return: The filtered list
+    """
+    return list(filter(lambda item: item.ending_registration_number != registration_number, items))
