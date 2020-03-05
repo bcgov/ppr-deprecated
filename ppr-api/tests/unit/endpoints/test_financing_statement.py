@@ -5,6 +5,7 @@ import fastapi
 import pytest
 
 import endpoints.financing_statement
+import models.collateral
 import models.financing_statement
 import models.party
 import schemas.financing_statement
@@ -113,12 +114,37 @@ def test_read_financing_statement_registration_party_should_be_none_when_not_pre
     assert result.registeringParty is None
 
 
-def stub_financing_statement(base_reg_number: str, years: int = -1, parties: list = None,
+def test_read_financing_statement_general_collateral_should_be_included():
+    base_reg_num = '123456D'
+    collateral1 = models.collateral.GeneralCollateral(description='collateral description')
+    collateral2 = models.collateral.GeneralCollateral(description='another description')
+    stub_fs = stub_financing_statement(base_reg_num, general_collateral=[collateral1, collateral2])
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    assert len(result.generalCollateral) == 2
+    assert any(x for x in result.generalCollateral if x.description == collateral1.description)
+    assert any(x for x in result.generalCollateral if x.description == collateral2.description)
+
+
+def test_read_financing_statement_general_collateral_when_list_is_empty():
+    base_reg_num = '123456D'
+    stub_fs = stub_financing_statement(base_reg_num, general_collateral=[])
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    assert len(result.generalCollateral) == 0
+
+
+def stub_financing_statement(base_reg_number: str, years: int = -1, parties: list = None, general_collateral=[],
                              reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT):
     expiry = datetime.date.today() + datedelta.datedelta(years=years) if years > 0 else None
     parties = [models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_number,
                                   starting_registration_number=base_reg_number, first_name='Fred',
                                   last_name='Flintstone')] if parties is None else parties
+
     return models.financing_statement.FinancingStatement(
         registration_number=base_reg_number, registration_type_code=reg_type.value, status='A', discharged=False,
         life_in_years=years, expiry_date=expiry, last_updated=datetime.datetime.now(),
@@ -126,7 +152,7 @@ def stub_financing_statement(base_reg_number: str, years: int = -1, parties: lis
             registration_number=base_reg_number, base_registration_number=base_reg_number,
             registration_date=datetime.datetime.now(), starting_parties=parties
         )],
-        parties=parties
+        parties=parties, general_collateral=general_collateral
     )
 
 

@@ -4,6 +4,7 @@ import time
 import datedelta
 import sqlalchemy.orm
 
+import models.collateral
 import models.database
 import models.financing_statement
 import models.payment
@@ -15,10 +16,11 @@ import schemas.payment
 
 def create_test_financing_statement(**kwargs):
     options = dict({
-        'type_code': schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value,
+        'type_code': schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value,  # RegistrationType value
         'num_of_events': 1,
-        'years': -1,
-        'registeringParty': None
+        'years': -1,  # An int for 1 to 25, or -1 for Infinity
+        'registering_party': None,  # a dict with keys first_name, middle_name & last_name
+        'general_collateral': []  # a list of str
     }, **kwargs)
 
     db = models.database.SessionLocal()
@@ -33,14 +35,19 @@ def create_test_financing_statement(**kwargs):
         event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num)
         fin_stmt.events.append(event)
 
-        if options['registeringParty']:
-            reg_party_input = options['registeringParty']
+        if options['registering_party']:
+            reg_party_input = options['registering_party']
             reg_party = models.party.Party(
                 type_code='RP', first_name=reg_party_input['first_name'], last_name=reg_party_input['last_name'],
                 middle_name=reg_party_input['middle_name'] if 'middle_name' in reg_party_input else None
             )
             fin_stmt.parties.append(reg_party)
             event.starting_parties.append(reg_party)
+
+        for description in options['general_collateral']:
+            collateral = models.collateral.GeneralCollateral(description=description)
+            fin_stmt.general_collateral.append(collateral)
+            event.starting_general_collateral.append(collateral)
 
         # Add additional events if needed
         for n in range(1, options['num_of_events']):
@@ -58,8 +65,9 @@ def create_test_financing_statement(**kwargs):
 
 def create_test_financing_statement_event(fin_stmt: models.financing_statement.FinancingStatement, **kwargs):
     options = dict({
-        'change_type_code': None,
-        'registeringParty': None
+        'change_type_code': None,  # A 2 character string, a RegistrationType value
+        'registering_party': None,  # a dict with keys first_name, middle_name & last_name
+        'general_collateral': None  # a list of str
     }, **kwargs)
 
     db = models.database.SessionLocal()
@@ -69,7 +77,7 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
                                                                    change_type_code=options['change_type_code'])
         fin_stmt.events.append(event)
 
-        reg_party_input = options['registeringParty']
+        reg_party_input = options['registering_party']
         if reg_party_input:
             existing_party = fin_stmt.get_registering_party()
             if existing_party:
@@ -81,6 +89,14 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
             )
             fin_stmt.parties.append(reg_party)
             event.starting_parties.append(reg_party)
+
+        if options['general_collateral'] is not None:
+            for existing_collateral in fin_stmt.general_collateral:
+                event.ending_general_collateral.append(existing_collateral)
+            for description in options['general_collateral']:
+                collateral = models.collateral.GeneralCollateral(description=description)
+                fin_stmt.general_collateral.append(collateral)
+                event.starting_general_collateral.append(collateral)
 
         time.sleep(0.001)  # Ensure time has advanced since the previous event
         db.add(fin_stmt)
@@ -135,7 +151,8 @@ def retrieve_financing_statement_record(base_reg_number: str):
     try:
         query = db.query(models.financing_statement.FinancingStatement)\
             .options(sqlalchemy.orm.joinedload('events').joinedload('starting_parties'))\
-            .options(sqlalchemy.orm.joinedload('parties'))
+            .options(sqlalchemy.orm.joinedload('parties'))\
+            .options(sqlalchemy.orm.joinedload('general_collateral'))
         return query.get(base_reg_number)
     finally:
         db.close()

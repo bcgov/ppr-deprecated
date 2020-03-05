@@ -18,3 +18,9 @@ INSERT INTO fs_party (party_type_cd, base_reg_num, reg_number_start, reg_number_
     ('SP', '123456B', '123456B', null, 'Charles', 'Montgomery', 'Burns'),
     ('RP', '123456B', '123456Z', null, 'Flintstone', null, 'Fred'),
     ('DE', '123456B', '123456Z', null, 'Rubble', null, 'Barney');
+
+INSERT INTO general (base_reg_number, reg_number_start, reg_number_end, description) VALUES
+    ('123456A', '123456A', null, 'An original description of general collateral'),
+    ('123456B', '123456B', null, 'An original continual general collateral'),
+    ('123456B', '123456B', '123456Z', 'An original general collateral that was removed on a follow-up event'),
+    ('123456B', '123456Z', null, 'A new general collateral that was added on a secondary registration')
