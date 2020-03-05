@@ -63,15 +63,8 @@ def test_read_financing_statement_with_changed_general_collateral_should_provide
 
 
 def test_create_financing_statement_for_root_object_details():
-    request_payload = {
-        'type': 'SECURITY_AGREEMENT',
-        'years': 5,
-        'registeringParty': {'personName': {'first': 'Homer', 'last': 'Simpson'}},
-        'securedParties': [],
-        'debtors': [],
-        'vehicleCollateral': [],
-        'generalCollateral': []
-    }
+    request_payload = get_minimal_payload()
+    request_payload.update(type='SECURITY_AGREEMENT', years=5)
 
     rv = client.post('/financing-statements', json=request_payload)
 
@@ -97,15 +90,9 @@ def test_create_financing_statement_for_root_object_details():
     assert stored.events[0].registration_date.isoformat(timespec='seconds') == body['registrationDateTime']
 
 
-def test_create_financing_statement_persists_secured_party():
-    request_payload = {
-        'type': 'SECURITY_AGREEMENT',
-        'registeringParty': {'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'}},
-        'securedParties': [],
-        'debtors': [],
-        'vehicleCollateral': [],
-        'generalCollateral': []
-    }
+def test_create_financing_statement_persists_registering_party():
+    request_payload = get_minimal_payload()
+    request_payload.update(registeringParty={'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'}})
 
     rv = client.post('/financing-statements', json=request_payload)
 
@@ -127,3 +114,36 @@ def test_create_financing_statement_persists_secured_party():
     assert registering_parties[0].base_registration_number == registration_number
     assert registering_parties[0].starting_registration_number == registration_number
     assert registering_parties[0].ending_registration_number is None
+
+
+def test_create_financing_statement_persists_general_collateral():
+    request_payload = get_minimal_payload()
+    request_payload.update(
+        generalCollateral=[{'description': 'general collateral 1'}, {'description': 'general collateral 2'}]
+    )
+
+    rv = client.post('/financing-statements', json=request_payload)
+
+    body = rv.json()
+    assert 'generalCollateral' in body
+    assert len(body['generalCollateral']) == 2
+    assert len([x for x in body['generalCollateral'] if x['description'] == 'general collateral 1']) == 1
+    assert len([x for x in body['generalCollateral'] if x['description'] == 'general collateral 2']) == 1
+
+    registration_number = body['baseRegistrationNumber']
+    stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
+
+    assert len(stored.general_collateral) == 2
+    assert len([x for x in stored.general_collateral if x.description == 'general collateral 1']) == 1
+    assert len([x for x in stored.general_collateral if x.description == 'general collateral 2']) == 1
+
+
+def get_minimal_payload():
+    return {
+        'type': 'SECURITY_AGREEMENT',
+        'registeringParty': {'personName': {'first': 'Homer', 'last': 'Simpson'}},
+        'securedParties': [],
+        'debtors': [],
+        'vehicleCollateral': [],
+        'generalCollateral': []
+    }
