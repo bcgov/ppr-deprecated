@@ -131,3 +131,25 @@ def test_search_results_should_provide_party_at_time_of_search():
     assert reg_part_name['first'] == 'Homer'
     assert reg_part_name['middle'] == 'Jay'
     assert reg_part_name['last'] == 'Simpson'
+
+
+def test_search_results_should_provide_general_collateral_at_time_of_search():
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        general_collateral=['original collateral']
+    )
+    fin_stmt = sample_data_utility.create_test_financing_statement_event(
+        fin_stmt, general_collateral=['time of search collateral']
+    )
+    fin_stmt = sample_data_utility.create_test_financing_statement_event(
+        fin_stmt, general_collateral=['present collateral']
+    )
+    result_reg_number = sorted(fin_stmt.events, key=lambda e: e.registration_date)[1].registration_number
+    search = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER',
+                                                           {'value': fin_stmt.registration_number}, [result_reg_number])
+
+    rv = client.get('/searches/{}/results'.format(search.id))
+    body = rv.json()
+
+    general_collateral = body[0]['financingStatement']['generalCollateral']
+    assert len(general_collateral) == 1
+    assert general_collateral[0]['description'] == 'time of search collateral'

@@ -124,8 +124,8 @@ def test_read_financing_statement_general_collateral_should_be_included():
     result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
 
     assert len(result.generalCollateral) == 2
-    assert any(x for x in result.generalCollateral if x.description == collateral1.description)
-    assert any(x for x in result.generalCollateral if x.description == collateral2.description)
+    assert next(x for x in result.generalCollateral if x.description == collateral1.description)
+    assert next(x for x in result.generalCollateral if x.description == collateral2.description)
 
 
 def test_read_financing_statement_general_collateral_when_list_is_empty():

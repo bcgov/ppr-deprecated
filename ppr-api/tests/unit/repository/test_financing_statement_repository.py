@@ -5,6 +5,7 @@ import freezegun
 
 import auth.authentication
 import repository.financing_statement_repository
+import schemas.collateral
 import schemas.financing_statement
 from schemas.financing_statement import RegistrationType
 import schemas.party
@@ -120,15 +121,32 @@ def test_create_financing_statement_registering_party_name_is_included(mock_sess
     assert reg_party.last_name == 'Simpson'
 
 
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_general_collateral_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(general_collateral=[stub_general_collateral('collateral description')])
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    collateral = financing_statement.general_collateral
+    assert len(collateral) == 1
+    assert collateral[0].description == 'collateral description'
+    assert collateral[0] in financing_statement.events[0].starting_general_collateral
+
+
 def stub_party(first: str = 'Fred', last: str = 'Flintstone', middle: str = None):
     return schemas.party.Party(personName=schemas.party.IndividualName(first=first, last=last, middle=middle))
 
 
+def stub_general_collateral(description: str):
+    return schemas.collateral.GeneralCollateral(description=description)
+
+
 def stub_financing_statement_input(reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT, years: int = None,
-                                   reg_party: schemas.party.IndividualName = stub_party()):
+                                   reg_party: schemas.party.Party = stub_party(), general_collateral=[]):
     return schemas.financing_statement.FinancingStatementBase(
         type=reg_type.name, years=years, registeringParty=reg_party,
-        securedParties=[], debtors=[], vehicleCollateral=[], generalCollateral=[]
+        securedParties=[], debtors=[], vehicleCollateral=[], generalCollateral=general_collateral
     )
 
 

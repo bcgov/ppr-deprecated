@@ -127,15 +127,15 @@ def test_create_financing_statement_persists_general_collateral():
     body = rv.json()
     assert 'generalCollateral' in body
     assert len(body['generalCollateral']) == 2
-    assert len([x for x in body['generalCollateral'] if x['description'] == 'general collateral 1']) == 1
-    assert len([x for x in body['generalCollateral'] if x['description'] == 'general collateral 2']) == 1
+    assert next(x for x in body['generalCollateral'] if x['description'] == 'general collateral 1')
+    assert next(x for x in body['generalCollateral'] if x['description'] == 'general collateral 2')
 
     registration_number = body['baseRegistrationNumber']
     stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
 
     assert len(stored.general_collateral) == 2
-    assert len([x for x in stored.general_collateral if x.description == 'general collateral 1']) == 1
-    assert len([x for x in stored.general_collateral if x.description == 'general collateral 2']) == 1
+    assert next(x for x in stored.general_collateral if x.description == 'general collateral 1')
+    assert next(x for x in stored.general_collateral if x.description == 'general collateral 2')
 
 
 def get_minimal_payload():
