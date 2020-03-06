@@ -17,7 +17,7 @@ def test_get_base_event_should_get_record_with_same_registration_number():
     assert event.registration_number == base_reg_num
 
 
-def test_get_base_event_should_is_none_when_base_event_missing():
+def test_get_base_event_is_none_when_base_event_missing():
     # A financing statement without a base event is technically in valid data, but it should not cause an error to occur
     base_reg_num = '123456A'
     model = FinancingStatement(registration_number=base_reg_num, events=[
@@ -55,3 +55,29 @@ def test_get_registering_party_is_none_when_parties_has_no_registering_type():
     ])
 
     assert model.get_registering_party() is None
+
+
+def test_get_debtors_returns_parties_with_debtor_type():
+    model = FinancingStatement(parties=[
+        models.party.Party(type_code=PartyType.DEBTOR.value, last_name='Flintstone'),
+        models.party.Party(type_code=PartyType.REGISTERING.value, last_name='Jetson'),
+        models.party.Party(type_code=PartyType.DEBTOR.value, last_name='Rubble'),
+        models.party.Party(type_code=PartyType.SECURED.value, last_name='Spacely')
+    ])
+
+    debtors = model.get_debtors()
+
+    assert len(debtors) == 2
+    assert next(d for d in debtors if d.last_name == 'Flintstone')
+    assert next(d for d in debtors if d.last_name == 'Rubble')
+
+
+def test_get_debtors_is_empty_when_no_debtors():
+    model = FinancingStatement(parties=[
+        models.party.Party(type_code=PartyType.REGISTERING.value, last_name='Jetson'),
+        models.party.Party(type_code=PartyType.SECURED.value, last_name='Spacely')
+    ])
+
+    debtors = model.get_debtors()
+
+    assert debtors == []

@@ -18,7 +18,7 @@ class FinancingStatementBase(pydantic.BaseModel):
     years: int = None
     registeringParty: schemas.party.Party = None
     securedParties: typing.List[schemas.party.Party]
-    debtors: typing.List[schemas.party.Party]
+    debtors: typing.List[schemas.party.Debtor]
     vehicleCollateral: typing.List[dict]
     generalCollateral: typing.List[schemas.collateral.GeneralCollateral]
 

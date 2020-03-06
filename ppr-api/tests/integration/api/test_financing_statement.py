@@ -1,3 +1,5 @@
+import datetime
+
 from starlette.testclient import TestClient
 
 import main
@@ -45,6 +47,33 @@ def test_read_financing_statement_with_changed_registering_party_should_provide_
     assert body['registeringParty']['personName']['first'] == 'Charles'
     assert body['registeringParty']['personName']['middle'] == 'Montgomery'
     assert body['registeringParty']['personName']['last'] == 'Burns'
+
+
+def test_read_financing_statement_registering_party_details():
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        debtors=[{
+            'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson', 'business_name': 'Mr. Plow',
+            'birthdate': datetime.date(1990, 6, 15),
+            'address': {'line1': '742 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
+                        'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}
+        }]
+    )
+
+    rv = client.get('/financing-statements/{}'.format(fin_stmt.registration_number))
+    body = rv.json()
+
+    assert len(body['debtors']) == 1
+    assert body['debtors'][0]['businessName'] == 'Mr. Plow'
+    assert body['debtors'][0]['personName']['first'] == 'Homer'
+    assert body['debtors'][0]['personName']['middle'] == 'Jay'
+    assert body['debtors'][0]['personName']['last'] == 'Simpson'
+    assert body['debtors'][0]['address']['street'] == '742 Evergreen Terrace'
+    assert body['debtors'][0]['address']['streetAdditional'] == '1st floor'
+    assert body['debtors'][0]['address']['city'] == 'Springfield'
+    assert body['debtors'][0]['address']['region'] == 'BC'
+    assert body['debtors'][0]['address']['country'] == 'CA'
+    assert body['debtors'][0]['address']['postalCode'] == 'V1A 1A1'
+    assert body['debtors'][0]['birthdate'] == '1990-06-15'
 
 
 def test_read_financing_statement_with_changed_general_collateral_should_provide_active_record():

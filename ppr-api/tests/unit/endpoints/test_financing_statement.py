@@ -99,6 +99,7 @@ def test_read_financing_statement_registering_party_name_should_be_included():
 
     result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
 
+    assert type(result.registeringParty) == schemas.party.Party
     assert result.registeringParty.personName.first == 'Homer'
     assert result.registeringParty.personName.middle == 'Jay'
     assert result.registeringParty.personName.last == 'Simpson'
@@ -112,6 +113,51 @@ def test_read_financing_statement_registration_party_should_be_none_when_not_pre
     result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
 
     assert result.registeringParty is None
+
+
+def test_read_financing_statement_debtor_should_be_mapped_to_schema():
+    base_reg_num = '123456C'
+    debtor = models.party.Party(
+        type_code=PartyType.DEBTOR.value, base_registration_number=base_reg_num,
+        starting_registration_number=base_reg_num, first_name='Homer', middle_name='Jay', last_name='Simpson',
+        business_name='Mr. Plow', birthdate=datetime.date(1990, 6, 15)
+    )
+    stub_fs = stub_financing_statement(base_reg_num, parties=[debtor])
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    assert len(result.debtors) == 1
+    debtor = result.debtors[0]
+    assert type(debtor) == schemas.party.Debtor
+    assert debtor.personName.first == 'Homer'
+    assert debtor.personName.middle == 'Jay'
+    assert debtor.personName.last == 'Simpson'
+    assert debtor.businessName == 'Mr. Plow'
+    assert debtor.birthdate == datetime.date(1990, 6, 15)
+    assert debtor.address is None
+
+
+def test_read_financing_statement_debtor_address_should_be_mapped_to_schema():
+    base_reg_num = '123456C'
+    address_model = models.party.Address(line1='123 Fake Street', line2='Suite 100', city='Victoria', region='BC',
+                                         country='CA', postal_code='V1V 1V1')
+    debtor = models.party.Party(
+        type_code=PartyType.DEBTOR.value, address=address_model, first_name='Homer', last_name='Simpson',
+        base_registration_number=base_reg_num, starting_registration_number=base_reg_num
+    )
+    stub_fs = stub_financing_statement(base_reg_num, parties=[debtor])
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    address_result = result.debtors[0].address
+    assert address_result.street == '123 Fake Street'
+    assert address_result.streetAdditional == 'Suite 100'
+    assert address_result.city == 'Victoria'
+    assert address_result.region == 'BC'
+    assert address_result.country == 'CA'
+    assert address_result.postalCode == 'V1V 1V1'
 
 
 def test_read_financing_statement_general_collateral_should_be_included():

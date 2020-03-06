@@ -1,3 +1,4 @@
+import datetime
 import enum
 
 import pydantic
@@ -15,5 +16,20 @@ class IndividualName(pydantic.BaseModel):
     last: str
 
 
+class Address(pydantic.BaseModel):
+    street: str
+    streetAdditional: str = None
+    city: str
+    region: str = None
+    country: str
+    postalCode: str
+
+
 class Party(pydantic.BaseModel):
-    personName: IndividualName
+    personName: IndividualName = None
+    businessName: str = None
+    address: Address = None
+
+
+class Debtor(Party):
+    birthdate: datetime.date = None
