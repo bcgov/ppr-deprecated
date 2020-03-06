@@ -1,0 +1,219 @@
+<template>
+  <v-card outlined>
+    <v-form @input="validForm($event)">
+      <v-container>
+        <div v-if="editing">
+          <v-select
+            data-test-id="SerialCollateral.input.type"
+            :items="serialCollateralTypes"
+            :rules="typeRules"
+            :value="value.type"
+            label="Type"
+            @input="updateType"
+          />
+          <v-text-field
+            data-test-id="SerialCollateral.input.make"
+            :rules="makeRules"
+            :value="value.make"
+            label="Make"
+            @input="updateStringProperty('make', $event)"
+          />
+          <v-text-field
+            data-test-id="SerialCollateral.input.model"
+            :rules="modelRules"
+            :value="value.model"
+            label="Model"
+            @input="updateStringProperty('model', $event)"
+          />
+          <v-text-field
+            data-test-id="SerialCollateral.input.serial"
+            :rules="serialRules"
+            :value="value.serial"
+            label="Serial"
+            @input="updateStringProperty('serial', $event)"
+          />
+          <v-text-field
+            data-test-id="SerialCollateral.input.year"
+            :rules="yearRules"
+            :value="value.year"
+            label="Year"
+            @input="updateYear"
+          />
+          <v-text-field
+            v-if="value.type == 'MANUFACTURED_HOME'"
+            data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"
+            :rules="manufacturedHomeRegNumberRules"
+            :value="value.manufacturedHomeRegNumber"
+            label="Manufactured Home Registration Number"
+            @input="updateStringProperty('manufacturedHomeRegNumber', $event)"
+          />
+        </div>
+        <div v-else>
+          <div>
+            Type:
+            <span data-test-id="SerialCollateral.display.type">
+              {{ value.type }}
+            </span>
+          </div>
+          <div>
+            Make:
+            <span data-test-id="SerialCollateral.display.make">
+              {{ value.make }}
+            </span>
+          </div>
+          <div>
+            Model:
+            <span data-test-id="SerialCollateral.display.model">
+              {{ value.model }}
+            </span>
+          </div>
+          <div>
+            Serial:
+            <span data-test-id="SerialCollateral.display.serial">
+              {{ value.serial }}
+            </span>
+          </div>
+          <div>
+            Year:
+            <span data-test-id="SerialCollateral.display.year">
+              {{ value.year }}
+            </span>
+          </div>
+          <div v-if="value.type == 'MANUFACTURED_HOME'">
+            Manufactured Home Registration Number:
+            <span data-test-id="SerialCollateral.display.manufacturedHomeRegNumber">
+              {{ value.manufacturedHomeRegNumber }}
+            </span>
+          </div>
+        </div>
+      </v-container>
+    </v-form>
+  </v-card>
+</template>
+
+<script lang="ts">
+import { createComponent, ref } from '@vue/composition-api'
+
+import { SerialCollateralModel } from '@/financing-statement/serial-collateral-model'
+import { SerialCollateralType, serialCollateralTypeCodeList } from '@/financing-statement/serial-collateral-type'
+
+export default createComponent({
+  props: {
+    editing: {
+      default: false,
+      required: false,
+      type: Boolean
+    },
+    value: {
+      required: true,
+      type: SerialCollateralModel
+    }
+  },
+
+  setup(props, { emit }) {
+    const serialCollateralTypes = ref<string[]>(serialCollateralTypeCodeList)
+
+    const makeRules = [
+      (value: string): (boolean | string) => {
+        return !!value || 'Make is required'
+      }
+    ]
+
+    const manufacturedHomeRegNumberRules = [
+      (value: string): (boolean | string) => {
+        return !!value || 'Manufactured Home Registration Number is required'
+      },
+      (value: string): (boolean | string) => {
+        return value && value.length <= 7 ? true :
+          'Manufactured Home Registration Number cannot be longer than 7 characters'
+      }
+    ]
+
+    const modelRules = [
+      (value: string): (boolean | string) => {
+        return !!value || 'Model is required'
+      }
+    ]
+
+    const serialRules = [
+      (value: string): (boolean | string) => {
+        return !!value || 'Serial is required'
+      },
+      (value: string): (boolean | string) => {
+        return value && value.length <= 25 ? true : 'Serial cannot be longer than 25 characters'
+      }
+    ]
+
+    const typeRules = [
+      (value: string): (boolean | string) => {
+        return !!value || 'Type is required'
+      }
+    ]
+
+    const yearRules = [
+      (value: string): (boolean | string) => {
+        return !!value || 'Year is required'
+      },
+      (value: string): (boolean | string) => {
+        return Number(value) >= 1000 && Number(value) <= 9999 ? true : 'Year must be a number between 1000 and 9999'
+      }
+    ]
+
+    // Callback function for emitting form validity on the header section back to the parent.
+    function validForm(formValid: boolean) {
+      emit('valid', formValid)
+    }
+
+    // Callback function for emitting model change of a string property.
+    function updateStringProperty(propertyName: string, value: string): void {
+      const newSerialCollateralModel = props.value.toJson()
+
+      // The switch statement has to do with being able to ensure that the propertyName can be checked for existence
+      // at compile/linting time.
+      switch (propertyName) {
+        case 'make':
+        case 'manufacturedHomeRegNumber':
+        case 'model':
+        case 'serial':
+          newSerialCollateralModel[propertyName] = value
+          break
+
+        default:
+          console.error(`Unknown key ${propertyName}`)
+      }
+
+      emit('input', SerialCollateralModel.fromJson(newSerialCollateralModel))
+    }
+
+    // Callback function for emitting model changes made to the Serial Collateral Type.
+    function updateType(newType: SerialCollateralType): void {
+      const newSerialCollateralModel = props.value.toJson()
+      newSerialCollateralModel.type = newType
+
+      emit('input', SerialCollateralModel.fromJson(newSerialCollateralModel))
+    }
+
+    // Callback function for emitting model changes made to the year.
+    function updateYear(newYear: number): void {
+      const newSerialCollateralModel = props.value.toJson()
+      newSerialCollateralModel.year = newYear
+
+      emit('input', SerialCollateralModel.fromJson(newSerialCollateralModel))
+    }
+
+    return {
+      makeRules,
+      manufacturedHomeRegNumberRules,
+      modelRules,
+      serialCollateralTypes,
+      serialRules,
+      typeRules,
+      updateStringProperty,
+      updateType,
+      updateYear,
+      validForm,
+      yearRules
+    }
+  }
+})
+</script>
