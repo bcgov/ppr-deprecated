@@ -11,16 +11,24 @@ INSERT INTO vehicle (base_reg_number, reg_number_start, vehicle_type_cd, mhr_num
     ('123456A', '123456A', 'MH', '123456'),
     ('123456B', '123456B', 'MH', '567890');
 
-INSERT INTO fs_party (party_type_cd, base_reg_num, reg_number_start, reg_number_end, first_name, middle_name, last_name) VALUES
-    ('RP', '123456A', '123456A', null, 'Homer', 'Jay', 'Simpson'),
-    ('RP', '123456B', '123456B', '123456Z', 'Homer', 'Jay', 'Simpson'),
-    ('DE', '123456B', '123456B', '123456Z', 'George', null, 'Jetson'),
-    ('SP', '123456B', '123456B', null, 'Charles', 'Montgomery', 'Burns'),
-    ('RP', '123456B', '123456Z', null, 'Flintstone', null, 'Fred'),
-    ('DE', '123456B', '123456Z', null, 'Rubble', null, 'Barney');
-
 INSERT INTO general (base_reg_number, reg_number_start, reg_number_end, description) VALUES
     ('123456A', '123456A', null, 'An original description of general collateral'),
     ('123456B', '123456B', null, 'An original continual general collateral'),
     ('123456B', '123456B', '123456Z', 'An original general collateral that was removed on a follow-up event'),
-    ('123456B', '123456Z', null, 'A new general collateral that was added on a secondary registration')
+    ('123456B', '123456Z', null, 'A new general collateral that was added on a secondary registration');
+
+INSERT INTO address(addr_id, addr_line_1, addr_line_2, city, province, country_type_cd, postal_cd) VALUES
+    (10000001, '123 Fake Street', 'Suite 100', 'Victoria', 'BC', 'CA', 'V1V 1V1'),
+    (10000002, '742 Evergreen Terrace', null, 'Springfield', 'CA', 'US', '54321'),
+    (10000003, '742 Evergreen Terrace', null, 'Springfield', 'CA', 'US', '54321'),
+    (10000004, '55 Cobblestone Rd', null, 'Bedrock', null, 'GB', 'A1 1AA'),
+    (10000005, '345 Cave Stone Road', 'Apt 405', 'Hollyrock', 'BC', 'CA', 'V2V 2V2'),
+    (10000006, '1000 Mammon Lane', null, 'Springfield', 'BC', 'CA', 'V3V 3V3');
+
+INSERT INTO fs_party (party_type_cd, base_reg_num, reg_number_start, reg_number_end, addr_id, first_name, middle_name, last_name, business_name, birthdate) VALUES
+    ('RP', '123456A', '123456A', null, 10000002, 'Homer', 'Jay', 'Simpson', 'Mr. Plow', null),
+    ('RP', '123456B', '123456B', '123456Z', 10000003, 'Homer', 'Jay', 'Simpson', 'Mr. Plow', null),
+    ('DE', '123456B', '123456B', '123456Z', 10000001, 'George', null, 'Jetson', null, '2000-01-01'),
+    ('SP', '123456B', '123456B', null, 10000006, 'Charles', 'Montgomery', 'Burns', null, null),
+    ('RP', '123456B', '123456Z', null, 10000004, 'Flintstone', null, 'Fred', null, null),
+    ('DE', '123456B', '123456Z', null, 10000005, 'Rubble', null, 'Barney', null, '1900-02-28');

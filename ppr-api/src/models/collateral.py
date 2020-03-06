@@ -1,5 +1,4 @@
 import sqlalchemy
-from sqlalchemy.dialects import postgresql
 
 from .database import BaseORM
 
@@ -14,4 +13,4 @@ class GeneralCollateral(BaseORM):
                                                      sqlalchemy.ForeignKey('registration.reg_number'))
     ending_registration_number = sqlalchemy.Column('reg_number_end', sqlalchemy.String(length=10),
                                                    sqlalchemy.ForeignKey('registration.reg_number'))
-    description = sqlalchemy.Column(postgresql.TEXT)
+    description = sqlalchemy.Column(sqlalchemy.String)

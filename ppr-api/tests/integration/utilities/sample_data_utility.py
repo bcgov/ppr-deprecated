@@ -19,7 +19,8 @@ def create_test_financing_statement(**kwargs):
         'type_code': schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value,  # RegistrationType value
         'num_of_events': 1,
         'years': -1,  # An int for 1 to 25, or -1 for Infinity
-        'registering_party': None,  # a dict with keys first_name, middle_name & last_name
+        'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
+        'debtors': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'general_collateral': []  # a list of str
     }, **kwargs)
 
@@ -36,13 +37,10 @@ def create_test_financing_statement(**kwargs):
         fin_stmt.events.append(event)
 
         if options['registering_party']:
-            reg_party_input = options['registering_party']
-            reg_party = models.party.Party(
-                type_code='RP', first_name=reg_party_input['first_name'], last_name=reg_party_input['last_name'],
-                middle_name=reg_party_input['middle_name'] if 'middle_name' in reg_party_input else None
-            )
-            fin_stmt.parties.append(reg_party)
-            event.starting_parties.append(reg_party)
+            add_test_party(fin_stmt, event, 'RP', **options['registering_party'])
+
+        for debtor_input in options['debtors']:
+            add_test_party(fin_stmt, event, 'DE', **debtor_input)
 
         for description in options['general_collateral']:
             collateral = models.collateral.GeneralCollateral(description=description)
@@ -66,7 +64,8 @@ def create_test_financing_statement(**kwargs):
 def create_test_financing_statement_event(fin_stmt: models.financing_statement.FinancingStatement, **kwargs):
     options = dict({
         'change_type_code': None,  # A 2 character string, a RegistrationType value
-        'registering_party': None,  # a dict with keys first_name, middle_name & last_name
+        'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
+        'debtors': None,  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'general_collateral': None  # a list of str
     }, **kwargs)
 
@@ -82,13 +81,13 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
             existing_party = fin_stmt.get_registering_party()
             if existing_party:
                 event.ending_parties.append(existing_party)
+            add_test_party(fin_stmt, event, 'RP', **reg_party_input)
 
-            reg_party = models.party.Party(
-                type_code='RP', first_name=reg_party_input['first_name'], last_name=reg_party_input['last_name'],
-                middle_name=reg_party_input['middle_name'] if 'middle_name' in reg_party_input else None
-            )
-            fin_stmt.parties.append(reg_party)
-            event.starting_parties.append(reg_party)
+        if options['debtors'] is not None:
+            for existing_debtor in fin_stmt.get_debtors():
+                event.ending_parties.append(existing_debtor)
+            for debtor_input in options['debtors']:
+                add_test_party(fin_stmt, event, 'DE', **debtor_input)
 
         if options['general_collateral'] is not None:
             for existing_collateral in fin_stmt.general_collateral:
@@ -105,6 +104,28 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
         return retrieve_financing_statement_record(fin_stmt.registration_number)
     finally:
         db.close()
+
+
+def add_test_party(fin_stmt: models.financing_statement.FinancingStatement,
+                   event: models.financing_statement.FinancingStatementEvent,
+                   type_code: str, **kwargs):
+    options = dict({
+        'first_name': None,  # str
+        'last_name': None,  # str
+        'middle_name': None,  # str
+        'business_name': None,  # str
+        'birthdate': None,  # datetime.date
+        'address': None  # dict with keys line1, line2, city, region, country, postal_code
+    }, **kwargs)
+
+    address = models.party.Address(**options['address']) if options['address'] else None
+    debtor = models.party.Party(
+        type_code=type_code, first_name=options['first_name'], last_name=options['last_name'],
+        middle_name=options['middle_name'], business_name=options['business_name'], birthdate=options['birthdate'],
+        address=address
+    )
+    fin_stmt.parties.append(debtor)
+    event.starting_parties.append(debtor)
 
 
 def next_reg_number(db):

@@ -1,5 +1,4 @@
 import sqlalchemy
-from sqlalchemy.dialects import postgresql
 import sqlalchemy.orm
 
 from .database import BaseORM
@@ -35,6 +34,9 @@ class FinancingStatement(BaseORM):
     def get_base_event(self):
         return next((e for e in self.events if e.registration_number == self.registration_number), None)
 
+    def get_debtors(self):
+        return list(filter(lambda p: p.type_code == PartyType.DEBTOR.value, self.parties))
+
     def get_registering_party(self):
         return next((p for p in self.parties if p.type_code == PartyType.REGISTERING.value), None)
 
@@ -47,7 +49,7 @@ class FinancingStatementEvent(BaseORM):
                                                  sqlalchemy.ForeignKey('financing_statement.reg_number'))
     change_type_code = sqlalchemy.Column('change_type_cd', sqlalchemy.CHAR(length=2))
     registration_date = sqlalchemy.Column('reg_date', sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
-    description = sqlalchemy.Column(postgresql.TEXT)
+    description = sqlalchemy.Column(sqlalchemy.String)
     document_number = sqlalchemy.Column(sqlalchemy.String(length=8))
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
 
