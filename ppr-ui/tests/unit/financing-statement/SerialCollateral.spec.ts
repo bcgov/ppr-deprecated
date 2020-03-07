@@ -56,24 +56,27 @@ describe('SerialCollateral.vue', (): void => {
     // Tests for the "make" field.
 
     it(':editing - true, make input exists and contains value', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, 'Kawasaki')
+      const expected = 'Kawasaki'
+      const serialCollateral = new SerialCollateralModel(undefined, expected)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.make"]').element as HTMLInputElement
-      expect(element.value).toBe('Kawasaki')
+      expect(element.value).toBe(expected)
     })
 
     it(':editing - false, make display exists and contains value', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, 'Kawasaki')
+      const expected = 'Kawasaki'
+      const serialCollateral = new SerialCollateralModel(undefined, expected)
       const properties = ref({ editing: false, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.make"]')
-      expect(element.text()).toBe('Kawasaki')
+      expect(element.text()).toBe(expected)
     })
 
     it(':value - editing true, make field reactivity test', async (): Promise<void> => {
+      const expected = 'Kawasaki'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: true,
         value: new SerialCollateralModel()
@@ -82,12 +85,13 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.make"]').element as HTMLInputElement
       expect(element.value).toBe('')
-      properties.value.value = new SerialCollateralModel(undefined, 'Kawasaki')
+      properties.value.value = new SerialCollateralModel(undefined, expected)
       await Vue.nextTick()
-      expect(element.value).toBe('Kawasaki')
+      expect(element.value).toBe(expected)
     })
 
     it(':value - editing false, make field reactivity test', async (): Promise<void> => {
+      const expected = 'Kawasaki'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: false,
         value: new SerialCollateralModel()
@@ -96,15 +100,15 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.make"]')
       expect(element.text()).toBe('')
-      properties.value.value = new SerialCollateralModel(undefined, 'Kawasaki')
+      properties.value.value = new SerialCollateralModel(undefined, expected)
       await Vue.nextTick()
-      expect(element.text()).toBe('Kawasaki')
+      expect(element.text()).toBe(expected)
     })
 
     // Tests for the "manufacturedHomeRegNumber" field.
 
     it(':editing - true, MH# input does not exist when type not MANUFACTURED HOME', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, SerialCollateralType.BOAT)
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
@@ -113,7 +117,7 @@ describe('SerialCollateral.vue', (): void => {
     })
 
     it(':editing - false, MH# display does not exist when type not MANUFACTURED HOME', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, SerialCollateralType.BOAT)
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
@@ -122,27 +126,30 @@ describe('SerialCollateral.vue', (): void => {
     })
 
     it(':editing - true, MH# input is set when type MANUFACTURED HOME', (): void => {
+      const expected = 'ABC123'
       const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined,
-        undefined, undefined, 'ABC123')
+        undefined, undefined, expected)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').element as
         HTMLInputElement
-      expect(element.value).toBe('ABC123')
+      expect(element.value).toBe(expected)
     })
 
     it(':editing - false, MH# display is set when type MANUFACTURED HOME', (): void => {
+      const expected = 'ABC123'
       const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined,
-        undefined, undefined, 'ABC123')
+        undefined, undefined, expected)
       const properties = ref({ editing: false, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]')
-      expect(element.text()).toBe('ABC123')
+      expect(element.text()).toBe(expected)
     })
 
     it(':value - editing true, manufacturedHomeRegNumber field reactivity test', async (): Promise<void> => {
+      const expected = 'MH12345'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: true,
         value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME)
@@ -153,12 +160,13 @@ describe('SerialCollateral.vue', (): void => {
         HTMLInputElement
       expect(element.value).toBe('')
       properties.value.value = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined, undefined,
-        undefined, 'MH12345')
+        undefined, expected)
       await Vue.nextTick()
-      expect(element.value).toBe('MH12345')
+      expect(element.value).toBe(expected)
     })
 
     it(':value - editing false, manufacturedHomeRegNumber field reactivity test', async (): Promise<void> => {
+      const expected = 'MH12345'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: false,
         value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME)
@@ -168,32 +176,35 @@ describe('SerialCollateral.vue', (): void => {
       const element = wrapper.get('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]')
       expect(element.text()).toBe('')
       properties.value.value = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined, undefined,
-        undefined, 'MH12345')
+        undefined, expected)
       await Vue.nextTick()
-      expect(element.text()).toBe('MH12345')
+      expect(element.text()).toBe(expected)
     })
 
     // Tests for the "model" field.
 
     it(':editing - true, contains model', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, undefined, 'KLR650')
+      const expected = 'KLR650'
+      const serialCollateral = new SerialCollateralModel(undefined, undefined, expected)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.model"]').element as HTMLInputElement
-      expect(element.value).toBe('KLR650')
+      expect(element.value).toBe(expected)
     })
 
     it(':editing - false, contains model', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, undefined, 'KLR650')
+      const expected = 'KLR650'
+      const serialCollateral = new SerialCollateralModel(undefined, undefined, expected)
       const properties = ref({ editing: false, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.model"]')
-      expect(element.text()).toBe('KLR650')
+      expect(element.text()).toBe(expected)
     })
 
     it(':value - editing true, model field reactivity test', async (): Promise<void> => {
+      const expected = 'KLR650'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: true,
         value: new SerialCollateralModel()
@@ -202,12 +213,13 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.model"]').element as HTMLInputElement
       expect(element.value).toBe('')
-      properties.value.value = new SerialCollateralModel(undefined, undefined, 'KLR650')
+      properties.value.value = new SerialCollateralModel(undefined, undefined, expected)
       await Vue.nextTick()
-      expect(element.value).toBe('KLR650')
+      expect(element.value).toBe(expected)
     })
 
     it(':value - editing false, model field reactivity test', async (): Promise<void> => {
+      const expected = 'KLR650'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: false,
         value: new SerialCollateralModel()
@@ -216,32 +228,35 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.model"]')
       expect(element.text()).toBe('')
-      properties.value.value = new SerialCollateralModel(undefined, undefined, 'KLR650')
+      properties.value.value = new SerialCollateralModel(undefined, undefined, expected)
       await Vue.nextTick()
-      expect(element.text()).toBe('KLR650')
+      expect(element.text()).toBe(expected)
     })
 
     // Tests for the "serial" field.
 
     it(':editing - true contains serial', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, undefined, undefined, 'JKAKLEE17DDA58357')
+      const expected = 'JKAKLEE17DDA58357'
+      const serialCollateral = new SerialCollateralModel(undefined, undefined, undefined, expected)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.serial"]').element as HTMLInputElement
-      expect(element.value).toBe('JKAKLEE17DDA58357')
+      expect(element.value).toBe(expected)
     })
 
     it(':editing - false contains serial', (): void => {
-      const serialCollateral = new SerialCollateralModel(undefined, undefined, undefined, 'JKAKLEE17DDA58357')
+      const expected = 'JKAKLEE17DDA58357'
+      const serialCollateral = new SerialCollateralModel(undefined, undefined, undefined, expected)
       const properties = ref({ editing: false, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.serial"]')
-      expect(element.text()).toBe('JKAKLEE17DDA58357')
+      expect(element.text()).toBe(expected)
     })
 
     it(':value - editing true, serial field reactivity test', async (): Promise<void> => {
+      const expected = 'JKAKLEE17DDA58357'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: true,
         value: new SerialCollateralModel()
@@ -250,12 +265,13 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.serial"]').element as HTMLInputElement
       expect(element.value).toBe('')
-      properties.value.value = new SerialCollateralModel(undefined, undefined, undefined, 'JKAKLEE17DDA58357')
+      properties.value.value = new SerialCollateralModel(undefined, undefined, undefined, expected)
       await Vue.nextTick()
-      expect(element.value).toBe('JKAKLEE17DDA58357')
+      expect(element.value).toBe(expected)
     })
 
     it(':value - editing false, serial field reactivity test', async (): Promise<void> => {
+      const expected = 'JKAKLEE17DDA58357'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: false,
         value: new SerialCollateralModel()
@@ -264,9 +280,9 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.serial"]')
       expect(element.text()).toBe('')
-      properties.value.value = new SerialCollateralModel(undefined, undefined, undefined, 'JKAKLEE17DDA58357')
+      properties.value.value = new SerialCollateralModel(undefined, undefined, undefined, expected)
       await Vue.nextTick()
-      expect(element.text()).toBe('JKAKLEE17DDA58357')
+      expect(element.text()).toBe(expected)
     })
 
     // Tests for the "type" field.
@@ -280,24 +296,27 @@ describe('SerialCollateral.vue', (): void => {
     })
 
     it.skip(':editing - true, contains type', (): void => {
-      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
+      const expected = SerialCollateralType.BOAT
+      const serialCollateral = new SerialCollateralModel(expected)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.type"]').element as HTMLInputElement
-      expect(element.value).toBe('BOAT')
+      expect(element.value).toBe(expected)
     })
 
     it(':editing - false, contains type', (): void => {
-      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
+      const expected = SerialCollateralType.BOAT
+      const serialCollateral = new SerialCollateralModel(expected)
       const properties = ref({ editing: false, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.type"]')
-      expect(element.text()).toContain('BOAT')
+      expect(element.text()).toContain(expected)
     })
 
     it.skip(':value - editing true, type field reactivity test', async (): Promise<void> => {
+      const expected = SerialCollateralType.BOAT
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: true,
         value: new SerialCollateralModel()
@@ -306,12 +325,13 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.type"]').element as HTMLInputElement
       expect(element.value).toBe('')
-      properties.value.value = new SerialCollateralModel(SerialCollateralType.BOAT)
+      properties.value.value = new SerialCollateralModel(expected)
       await Vue.nextTick()
-      expect(element.value).toBe('BOAT')
+      expect(element.value).toBe(expected)
     })
 
     it(':value - editing false, type field reactivity test', async (): Promise<void> => {
+      const expected = SerialCollateralType.BOAT
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: false,
         value: new SerialCollateralModel()
@@ -320,9 +340,9 @@ describe('SerialCollateral.vue', (): void => {
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.type"]')
       expect(element.text()).toBe('')
-      properties.value.value = new SerialCollateralModel(SerialCollateralType.BOAT)
+      properties.value.value = new SerialCollateralModel(expected)
       await Vue.nextTick()
-      expect(element.text()).toBe('BOAT')
+      expect(element.text()).toBe(expected)
     })
 
     // Tests for the "year" field.

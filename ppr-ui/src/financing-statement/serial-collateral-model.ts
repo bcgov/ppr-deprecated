@@ -4,7 +4,6 @@ import { SerialCollateralType } from '@/financing-statement/serial-collateral-ty
  * The interface to a piece of collateral that is identified by a serial number.
  */
 export interface SerialCollateralInterface {
-  baseRegistrationNumber: string | undefined;
   make: string | undefined;
   manufacturedHomeRegNumber: string | undefined;
   model: string | undefined;
@@ -14,7 +13,6 @@ export interface SerialCollateralInterface {
 }
 
 export class SerialCollateralModel {
-  private _baseRegistrationNumber: string | undefined
   private _make: string | undefined
   private _model: string | undefined
   private _serial: string | undefined
@@ -31,7 +29,6 @@ export class SerialCollateralModel {
    * @param serial the serial (number) of the collateral item.
    * @param manufacturedHomeRegNumber the manufactured home registration number of the collateral item.
    * @param year the year that the collateral item was built.
-   * @param baseRegistrationNumber the registration number of the financing statement that the collateral belongs to.
    */
   public constructor(
     type?: SerialCollateralType | undefined,
@@ -40,22 +37,13 @@ export class SerialCollateralModel {
     serial?: string | undefined,
     manufacturedHomeRegNumber?: string | undefined,
     year?: number | undefined,
-    baseRegistrationNumber?: string | undefined
   ) {
-    this._baseRegistrationNumber = baseRegistrationNumber
     this._type = type
     this._make = make
     this._model = model
     this._serial = serial
     this._manufacturedHomeRegNumber = manufacturedHomeRegNumber
     this._year = year
-  }
-
-  /**
-   * Gets the registration number of the financing statement that the collateral belongs to.
-   */
-  public get baseRegistrationNumber(): string | undefined {
-    return this._baseRegistrationNumber
   }
 
   /**
@@ -105,7 +93,6 @@ export class SerialCollateralModel {
    */
   public toJson(): SerialCollateralInterface {
     return {
-      baseRegistrationNumber: this.baseRegistrationNumber,
       make: this.make,
       manufacturedHomeRegNumber: this.type == SerialCollateralType.MANUFACTURED_HOME ?
         this.manufacturedHomeRegNumber : undefined,
@@ -132,8 +119,7 @@ export class SerialCollateralModel {
       jsonObject.model,
       jsonObject.serial,
       jsonObject.manufacturedHomeRegNumber,
-      jsonObject.year,
-      jsonObject.baseRegistrationNumber
+      jsonObject.year
     )
   }
 }

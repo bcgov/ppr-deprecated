@@ -40,7 +40,7 @@
             @input="updateYear"
           />
           <v-text-field
-            v-if="value.type == 'MANUFACTURED_HOME'"
+            v-if="value.type === 'MANUFACTURED_HOME'"
             data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"
             :rules="manufacturedHomeRegNumberRules"
             :value="value.manufacturedHomeRegNumber"
@@ -79,7 +79,7 @@
               {{ value.year }}
             </span>
           </div>
-          <div v-if="value.type == 'MANUFACTURED_HOME'">
+          <div v-if="value.type === 'MANUFACTURED_HOME'">
             Manufactured Home Registration Number:
             <span data-test-id="SerialCollateral.display.manufacturedHomeRegNumber">
               {{ value.manufacturedHomeRegNumber }}
@@ -159,7 +159,7 @@ export default createComponent({
       }
     ]
 
-    // Callback function for emitting form validity on the header section back to the parent.
+    // Callback function for emitting form validity back to the parent.
     function validForm(formValid: boolean) {
       emit('valid', formValid)
     }
@@ -176,10 +176,6 @@ export default createComponent({
         case 'model':
         case 'serial':
           newSerialCollateralModel[propertyName] = value
-          break
-
-        default:
-          console.error(`Unknown key ${propertyName}`)
       }
 
       emit('input', SerialCollateralModel.fromJson(newSerialCollateralModel))

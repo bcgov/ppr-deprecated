@@ -12,14 +12,13 @@ describe('serial-collateral-model.ts', (): void => {
       expect(serialCollateral.serial).not.toBeDefined()
       expect(serialCollateral.manufacturedHomeRegNumber).not.toBeDefined()
       expect(serialCollateral.type).not.toBeDefined()
-      expect(serialCollateral.baseRegistrationNumber).not.toBeDefined()
 
       expect(SerialCollateralModel.fromJson(serialCollateral.toJson())).toEqual(serialCollateral)
     })
 
     it('constructor for non-MH with all fields except MH#', (): void => {
       const serialCollateral = new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
-        'JKAKLEE17DDA58357', undefined, 2013, '123456A')
+        'JKAKLEE17DDA58357', undefined, 2013)
 
       expect(serialCollateral.type).toEqual(SerialCollateralType.MOTOR_VEHICLE)
       expect(serialCollateral.make).toEqual('Kawasaki')
@@ -27,14 +26,13 @@ describe('serial-collateral-model.ts', (): void => {
       expect(serialCollateral.serial).toEqual('JKAKLEE17DDA58357')
       expect(serialCollateral.manufacturedHomeRegNumber).not.toBeDefined()
       expect(serialCollateral.year).toEqual(2013)
-      expect(serialCollateral.baseRegistrationNumber).toEqual('123456A')
 
       expect(SerialCollateralModel.fromJson(serialCollateral.toJson())).toEqual(serialCollateral)
     })
 
     it('constructor for non-MH with all fields', (): void => {
       const serialCollateral = new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
-        'JKAKLEE17DDA58357', 'somethingbad', 2013, '123456A')
+        'JKAKLEE17DDA58357', 'somethingbad', 2013)
 
       expect(serialCollateral.manufacturedHomeRegNumber).toEqual('somethingbad')
 
@@ -44,7 +42,7 @@ describe('serial-collateral-model.ts', (): void => {
 
     it('constructor for MH with all fields', (): void => {
       const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, 'Jandel Homes',
-        'Beaufort', '16741', 'MH12345', 1971, '123456A')
+        'Beaufort', '16741', 'MH12345', 1971)
 
       expect(serialCollateral.type).toEqual(SerialCollateralType.MANUFACTURED_HOME)
 
