@@ -36,9 +36,9 @@ oc tag -n zwmtib-tools ppr-ui:latest ppr-ui:dev
 
 ```bash
 oc process -f ppr-ui-dc.yaml \
-    -p ENVIRONMENT=dev \
-    -p IMAGE_TAG=dev \
-    -p ROUTE_HOST=dev.bcregistry.ca \
+    -p LAUNCH_DARKLY_CLIENT_KEY=ld_key \
+    -p SENTRY_DSN=sentry_dsn \
+    --param-file=ppr-ui-dc.dev.param \
     | oc -n 1rdehl-dev apply -f -
 ```
 
@@ -46,9 +46,9 @@ oc process -f ppr-ui-dc.yaml \
 
 ```bash
 oc process -f ppr-ui-dc.yaml \
-    -p ENVIRONMENT=test \
-    -p IMAGE_TAG=test \
-    -p ROUTE_HOST=test.bcregistry.ca \
+    -p LAUNCH_DARKLY_CLIENT_KEY=ld_key \
+    -p SENTRY_DSN=sentry_dsn \
+    --param-file=ppr-ui-dc.test.param \
     | oc -n 1rdehl-test apply -f -
 ```
 
@@ -56,8 +56,8 @@ oc process -f ppr-ui-dc.yaml \
 
 ```bash
 oc process -f ppr-ui-dc.yaml \
-    -p ENVIRONMENT=prod \
-    -p IMAGE_TAG=prod \
-    -p ROUTE_HOST=www.bcregistry.ca \
+    -p LAUNCH_DARKLY_CLIENT_KEY=ld_key \
+    -p SENTRY_DSN=sentry_dsn \
+    --param-file=ppr-ui-dc.prod.param \
     | oc -n 1rdehl-prod apply -f -
 ```

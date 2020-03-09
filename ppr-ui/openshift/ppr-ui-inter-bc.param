@@ -1,7 +1,7 @@
 #=========================================================
 # Template parameters for:
-# Project: ppr-ui
-# Component: deploy
+# Project: ppr
+# Component: ppr-ui-inter
 # Action: build
 # Template File: ppr-ui/openshift/ppr-ui-bc-inter.yaml
 # Hint: oc process -f ppr-ui-inter-bc.yaml --param-file=ppr-ui-inter-bc.param | oc apply -n zwmtib-tools -f -
