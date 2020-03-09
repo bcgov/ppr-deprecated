@@ -1,0 +1,21 @@
+#=========================================================
+# Template parameters for:
+# Project: ppr-ui
+# Component: deploy
+# Action: build
+# Template File: ppr-ui/openshift/ppr-ui-dc.yaml
+# Hint: 
+# oc process -f ppr-ui-dc.yaml -p LAUNCH_DARKLY_CLIENT_KEY=ld_key -p SENTRY_KEY=sentry_key --param-file=ppr-ui-dc.prod.param | oc apply -n 1rdehl-prod -f -
+#=========================================================
+API_URL="https://ppr-api.pathfinder.gov.bc.ca/"
+APP_CONFIG="ppr-web-ui-config"
+APP_NAME="ppr-ui"
+APP_PATH="/cooperatives/ppr"
+AUTH_URL="https://bcregistry.ca/cooperatives/auth/"
+CADDY_CONFIG="ppr-ui-caddy-config"
+ENVIRONMENT="prod"
+IMAGE_TAG="prod"
+PAY_API_URL="https://pay-api.pathfinder.gov.bc.ca/api/v1"
+PPR_GROUP="ppr-ui-prod"
+ROUTE_HOST="www.bcregistry.ca"
+SENTRY_ENVIRONMENT="Prod"

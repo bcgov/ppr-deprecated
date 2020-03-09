@@ -55,28 +55,23 @@ objects:
     lookupPolicy:
       local: false
 parameters:
-- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
-  displayName: PPR group
-  name: PPR_GROUP
-  required: true
-  value: ppr
 - description: The name of the intermediate build image for the PPR UI
   displayName: APP Name
   name: APP_NAME
   required: true
-  value: ppr-ui-inter
-- description: The git repository URI
-  displayName: Git URI
-  name: GIT_URI
+- description: The sub-path to the web application
+  displayName: APP path
+  name: APP_PATH
   required: true
-  value: https://github.com/bcgov/ppr
 - description: The git repository ref (branch)
   displayName: Git ref (branch)
   name: GIT_REF
   required: true
-  value: master
-- description: The sub-path to the web application
-  displayName: APP Name
-  name: APP_PATH
-  required: false
-  value: cooperatives/ppr
+- description: The git repository URI
+  displayName: Git URI
+  name: GIT_URI
+  required: true
+- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+  displayName: PPR group
+  name: PPR_GROUP
+  required: true

@@ -2,7 +2,10 @@ import datetime
 import enum
 import typing
 
-from pydantic import BaseModel
+import pydantic
+
+import schemas.collateral
+import schemas.party
 
 
 class RegistrationType(enum.Enum):
@@ -10,20 +13,30 @@ class RegistrationType(enum.Enum):
     REPAIRERS_LIEN = 'RL'
 
 
-class FinancingStatementBase(BaseModel):
+class FinancingStatementBase(pydantic.BaseModel):
     type: str
-    registeringParty: dict
-    securedParties: typing.List[dict]
-    debtors: typing.List[dict]
+    years: int = None
+    registeringParty: schemas.party.Party = None
+    securedParties: typing.List[schemas.party.Party]
+    debtors: typing.List[schemas.party.Debtor]
     vehicleCollateral: typing.List[dict]
-    generalCollateral: typing.List[dict]
-    expiryDate: datetime.date = None
+    generalCollateral: typing.List[schemas.collateral.GeneralCollateral]
+
+    @pydantic.validator('years', pre=True)
+    def validate_years(cls, years):  # pylint:disable=no-self-argument # noqa: N805
+        if not type(years) is int:
+            raise TypeError('Only integers are allowed')
+        if years <= 0 or years > 25:
+            raise ValueError('Years can only be between 1-25.')
+
+        return years
 
 
 class FinancingStatement(FinancingStatementBase):
     baseRegistrationNumber: str
     documentId: str = None
-    registrationDateTime: datetime.datetime
+    registrationDateTime: datetime.datetime = None
+    expiryDate: datetime.date = None
 
     class Config:
         json_encoders = {

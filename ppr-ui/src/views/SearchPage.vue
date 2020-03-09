@@ -8,28 +8,31 @@
     <v-container class="view-container">
       <article id="mockSearchPage">
         <header>
-          <h1>Personal Property Registry</h1>
+          <h1>Search the Personal Property Registry</h1>
         </header>
+        <p>
+          This page demonstrates registration number search for the new Personal Property Registry.
+          This is a functional layout only.  Future searches will include; serial, MHR, debtor, collateral, etc.
+        </p>
         <section>
-          <p>
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-            dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-            deserunt mollit anim id est laborum."
-          </p>
-        </section>
-        <section>
-          <header>
-            <h2>Search the Personal Property Registry</h2>
-          </header>
           <search-input
-            :error-message="searcherRegNum.errorMessage"
-            :label="searcherRegNum.label"
-            :hint="searcherRegNum.describeValid"
-            :rules="searcherRegNum.validationRules"
+            id="searchInput"
+            :error-message="searchRegNumUi.errorMessage"
+            :label="searchRegNumUi.label"
+            :hint="searchRegNumUi.describeValid"
+            :rules="searchRegNumUi.validationRules"
             @search="doSearchRegNum"
           />
+        </section>
+        <section>
+          <p>
+            <strong>FEES</strong> Some part of this page will inform the user about the cost of the search. Here is a functional demonstration
+            showing the results of an API call to the payment system, for the current authenticated user. The payment code is from the Cooperatives
+            application. We're using it until a PPR code is available.
+          </p>
+          <p>
+            {{ fees }}
+          </p>
         </section>
       </article>
     </v-container>
@@ -37,12 +40,12 @@
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
-// import { Data } from '@vue/composition-api/dist/ts-api/component'
+import { createComponent, ref } from '@vue/composition-api'
 import { useLoadIndicator } from '@/load-indicator'
 import { useRouter } from '@/router/router'
 import SearchInput from '@/search/SearchInput.vue'
-import { useSearcherRegNum } from '@/search/search-regnum'
+import SearchRegNumUi from '@/search/search-regnum-ui'
+import SearcherRegNum from '@/search/searcher-reg-num'
 
 export default createComponent({
   components: { SearchInput },
@@ -50,14 +53,17 @@ export default createComponent({
   setup() {
     const loadIndicator = useLoadIndicator()
     const { router } = useRouter()
-    const searcherRegNum = useSearcherRegNum()
+    const searcherRegNum = new SearcherRegNum()
+    const searchRegNumUi = new SearchRegNumUi()
+    const fees = ref({})
+
+    searcherRegNum.getSearchFees().then((data) => fees.value = data)
 
     function doSearch(searcher, term: string): Promise<void> {
       loadIndicator.start()
-
       return searcher.doSearch(term)
-        .then((): void => {
-          router.push('results')
+        .then((searchId: string): void => {
+          router.push({ name: 'results', query: { searchId: searchId } })
         })
         .catch((errorMessage: string): void => {
           // Note that Sentry will capture all console.error
@@ -73,8 +79,9 @@ export default createComponent({
     }
 
     return {
+      fees,
       doSearchRegNum,
-      searcherRegNum
+      searchRegNumUi
     }
   }
 })

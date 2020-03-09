@@ -1,38 +1,35 @@
 import Vue, { VNode } from 'vue'
+import VueRouter from 'vue-router'
 import VueCompositionApi from '@vue/composition-api'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import App from '@/App.vue'
-import configHelper from '@/utils/config-helper'
 import router from '@/router/router'
 import store from './store'
 import layoutPublic from '@/layouts/LayoutPublic.vue'
 import layoutUser from '@/layouts/LayoutUser.vue'
 import SentryHelper from '@/utils/sentry-helper'
 import './assets/styles/styles.scss'
-import { Config } from "@/utils/app-data"
+import Config from '@/utils/config'
 import { initializeVueLdClient } from '@/flags/ld-client'
+import { getJwtValue } from './utils/auth-helper'
 
 const opts = { iconfont: 'mdi' }
 
 Vue.use(VueCompositionApi)
 Vue.use(Vuetify)
+Vue.use(VueRouter)
 
 Vue.config.productionTip = false
 Vue.component('public-layout', layoutPublic)
 Vue.component('user-layout', layoutUser)
 
-const userKey = sessionStorage.getItem('userKey') ? sessionStorage.getItem('userKey') : 'unauthenticated-user'
-sessionStorage.setItem('userKey', userKey)
-let appConfig: Config
-
-configHelper.fetchConfig()
-  .then((cfg: Config): void => {
-    appConfig = cfg
-    return SentryHelper.setup(appConfig)
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+Config.setup()
+  .then((): void => {
+    return SentryHelper.setup(Config.sentryDSN, Config.sentryEnvironment)
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   }).then(() => {
-    return initializeVueLdClient(appConfig.launchDarklyClientKey, userKey)
+    return initializeVueLdClient(Config.launchDarklyClientKey, getJwtValue('username'))
   })
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   .then(() => {

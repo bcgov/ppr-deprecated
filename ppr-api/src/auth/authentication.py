@@ -1,5 +1,6 @@
 import http
 import logging
+import json
 
 import fastapi
 import fastapi.security
@@ -14,21 +15,28 @@ logger = logging.getLogger(__name__)
 bearer_scheme = fastapi.security.HTTPBearer()
 
 
+def check_auth_response(response: requests.Response):
+    if response.status_code in [http.HTTPStatus.UNAUTHORIZED, http.HTTPStatus.FORBIDDEN]:
+        try:
+            body = response.json()
+            description = body['description'] if 'description' in body else None
+        except json.decoder.JSONDecodeError:
+            description = None
+
+        raise fastapi.HTTPException(
+            status_code=response.status_code, detail=description
+        )
+
+
 def get_user_from_auth(auth: fastapi.security.http.HTTPAuthorizationCredentials = fastapi.Depends(bearer_scheme)):
     auth_response = requests.get('{}/users/@me'.format(config.AUTH_API_URL),
                                  headers={'Authorization': '{} {}'.format(auth.scheme, auth.credentials)})
 
+    check_auth_response(auth_response)
     if not auth_response:  # status_code is unsuccessful
-        if auth_response.status_code in [http.HTTPStatus.UNAUTHORIZED, http.HTTPStatus.FORBIDDEN]:
-            body = auth_response.json()
-            raise fastapi.HTTPException(
-                status_code=auth_response.status_code, detail=body['description']
-            )
         logger.error('Get User call failed unexpectedly with status {}.  Response body: {}'.format(
             auth_response.status_code, auth_response.text))
-        raise fastapi.HTTPException(
-            status_code=http.HTTPStatus.INTERNAL_SERVER_ERROR
-        )
+        raise fastapi.HTTPException(status_code=http.HTTPStatus.INTERNAL_SERVER_ERROR)
 
     return auth_response.json()
 

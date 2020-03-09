@@ -4,6 +4,7 @@ import enum
 import pydantic
 
 import schemas.financing_statement
+import schemas.payment
 
 
 class SearchType(enum.Enum):
@@ -25,7 +26,7 @@ class SearchBase(pydantic.BaseModel):
     criteria: dict
 
     @pydantic.validator('type')
-    def type_must_match_search_type(cls, search_type):  # pylint:disable=no-self-argument
+    def type_must_match_search_type(cls, search_type):  # pylint:disable=no-self-argument # noqa: N805
         try:
             SearchType[search_type]
         except KeyError:
@@ -33,7 +34,7 @@ class SearchBase(pydantic.BaseModel):
         return search_type
 
     @pydantic.validator('criteria')
-    def criteria_must_match_format_for_type(cls, criteria, values):  # pylint:disable=no-self-argument
+    def criteria_must_match_format_for_type(cls, criteria, values):  # pylint:disable=no-self-argument # noqa: N805
         if 'type' not in values:
             return criteria
 
@@ -60,6 +61,7 @@ class SearchBase(pydantic.BaseModel):
 class Search(SearchBase):
     id: int
     searchDateTime: datetime.datetime
+    payment: schemas.payment.Payment = None
 
     class Config:
         orm_mode = True
@@ -77,7 +79,7 @@ class SearchResult(pydantic.BaseModel):
     financingStatement: schemas.financing_statement.FinancingStatement = None
 
     @pydantic.validator('type')
-    def type_must_match_search_result_type(cls, value):  # pylint:disable=no-self-argument
+    def type_must_match_search_result_type(cls, value):  # pylint:disable=no-self-argument # noqa: N805
         try:
             SearchResultType[value]
         except KeyError:

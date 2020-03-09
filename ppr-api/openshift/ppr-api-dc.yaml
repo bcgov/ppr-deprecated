@@ -41,6 +41,10 @@ objects:
             value: "8080"
           - name: PPR_API_ALLOWED_ORIGINS
             value: ${CORS_ORIGINS}
+          - name: PPR_API_AUTH_API_URL
+            value: ${AUTH_API_URL}
+          - name: PPR_API_PAY_API_URL
+            value: ${PAY_API_URL}
           - name: SENTRY_DSN
             valueFrom:
               secretKeyRef:
@@ -107,7 +111,6 @@ objects:
           name: ${API_NAME}:${IMAGE_TAG}
           namespace: zwmtib-tools
       type: ImageChange
-    - type: ConfigChange
 - apiVersion: v1
   kind: Service
   metadata:
@@ -152,6 +155,11 @@ parameters:
   name: API_NAME
   required: true
   value: ppr-api
+- description: The path to the SBC Auth API.
+  displayName: Auth API URL
+  name: AUTH_API_URL
+  required: true
+  value: https://auth-api-dev.pathfinder.gov.bc.ca/api/v1
 - description: The origin urls for the web front ends that consume the API.
   displayName: Allowed origins for CORS
   name: CORS_ORIGINS
@@ -162,11 +170,16 @@ parameters:
   name: ENVIRONMENT
   required: true
   value: dev
-- description: The image tag to build from.
+- description: The image tag to deploy from.
   displayName: Image Tag
   name: IMAGE_TAG
   required: true
   value: dev
+- description: The path to the Payment API.
+  displayName: Payment API URL
+  name: PAY_API_URL
+  required: true
+  value: https://pay-api-dev.pathfinder.gov.bc.ca/api/v1
 - description: The URL to use for the route.
   displayName: Route URL
   name: ROUTE_URL

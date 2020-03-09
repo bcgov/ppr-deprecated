@@ -2,19 +2,15 @@
   <!-- Any loading action can trigger display of spinner -->
   <transition name="fade">
     <div
-      v-show="isLoading"
+      v-if="isLoading"
       class="loading-container"
     >
       <div class="loading__content">
         <v-progress-circular
           color="primary"
-          size="50"
+          size="150"
           indeterminate
         />
-        <!-- Suppress message with spinner until we can make the message relate to the action initiated by the user -->
-        <!--<div class="loading-msg">-->
-        <!--Loading Personal Property Registry-->
-        <!--</div>-->
       </div>
     </div>
   </transition>
@@ -35,3 +31,25 @@ export default createComponent({
 })
 
 </script>
+
+<style lang="scss" scoped>
+.loading-container {
+  background-color: rgba(0, 0, 0, 0.25);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.loading__content {
+  left: 50%;
+  margin: 0;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+</style>

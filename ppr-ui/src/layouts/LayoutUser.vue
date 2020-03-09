@@ -1,10 +1,6 @@
 <template>
   <div>
-    <sbc-header
-      ref="sbcHeader"
-      :brand-link="originUrl"
-      :auth-u-r-l="authApiUrl"
-    />
+    <layout-header />
 
     <div class="app-body">
       <main>
@@ -18,13 +14,13 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import SbcHeader from 'sbc-common-components/src/components/SbcHeader.vue'
+import LayoutHeader from '@/layouts/LayoutHeader.vue'
 import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
 
 export default createComponent({
   name: 'LayoutUser',
   components: {
-    SbcHeader,
+    LayoutHeader,
     SbcFooter
   },
   inject: ['authApiUrl', 'originUrl']

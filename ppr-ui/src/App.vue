@@ -6,34 +6,26 @@
     <load-indicator />
 
     <component :is="layout">
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </component>
   </v-app>
 </template>
 
 <script lang="ts">
-import { createComponent, computed, onErrorCaptured, provide, ref } from '@vue/composition-api'
+import { createComponent, computed, onErrorCaptured, provide } from '@vue/composition-api'
 import { Data } from '@vue/composition-api/dist/component'
 import LoadIndicator from '@/load-indicator/LoadIndicator.vue'
-import { provideFeatureFlags } from '@/flags/feature-flags'
 import { provideLoadIndicator } from '@/load-indicator'
 import { provideRouter, useRouter } from '@/router/router'
-import { provideSearcherRegNum } from '@/search/search-regnum'
-import AppData from '@/utils/app-data'
-import { APP_PATH } from '@/utils/config-helper'
+import Config from '@/utils/config'
 
 const DefaultLayout = 'public'
 
 function origin(): string {
   const root = window.location.origin || ''
-  const path = APP_PATH
-  return `${root}/${path}`
+  const path = process.env.BASE_URL
+  return `${root}${path}`
 }
-
-function authAPIURL(): string {
-  return sessionStorage.getItem('AUTH_API_URL')
-}
-
 
 export default createComponent({
   components: {
@@ -41,11 +33,8 @@ export default createComponent({
   },
   setup(): Data {
     provide('originUrl', origin())
-    provide('authApiUrl', authAPIURL())
-    provide('configuration', ref(AppData.config))
-    provideFeatureFlags()
+    provide('authApiUrl', Config.authApiUrl)
     provideLoadIndicator()
-    provideSearcherRegNum(AppData.config.pprApiUrl)
     provideRouter()
 
     const { router } = useRouter()

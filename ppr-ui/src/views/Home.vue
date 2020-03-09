@@ -3,23 +3,30 @@
     <v-container class="view-container">
       <article id="dashboardArticle">
         <header>
-          <h1>PPR Sample Home Page</h1>
+          <h1>Welcome to the Personal Property Registry</h1>
         </header>
 
         <div class="page-content">
           <div class="page-content__main">
-            <section>
-              <header>
-                <h2>Sample home page content</h2>
-              </header>
-              <div>Copy needed here to welcome the user to the PPR application.</div>
-            </section>
-            <section v-if="userIsAuthed">
-              <header>
-                <h2>Title needed to welcome authorized user</h2>
-              </header>
-              <div>Copy needed here to welcome the authorized user to the PPR application.</div>
-            </section>
+            <p>
+              <em>Note: This web site is a work in progress.</em>
+            </p>
+            <p>
+              Protect yourself from loss or legal conflict by registering your interest in personal property (cars,
+              boats, trailers or machinery) or searching for existing liens on personal property prior to purchase.
+            </p>
+            <p>
+              The Personal Property Registry records all of the encumbrances (such as liens) created against personal
+              property in B.C., whether it belongs to a business or an individual. The Registry provides personal
+              property registration and search services for lenders, sellers, garage keepers, taxing authorities,
+              government agencies, purchasers and general public.
+            </p>
+            <p>
+              For more information please visit
+              <a href="https://www2.gov.bc.ca/gov/content?id=568423FB83BD44A28B80B48EE85A0810">
+                Personal Property Registry
+              </a>
+            </p>
           </div>
 
           <aside class="page-content__aside">
@@ -29,14 +36,14 @@
               </header>
               <div>
                 <ul>
-                  <li>
-                    <router-link to="home">
-                      Home
-                    </router-link>
-                  </li>
                   <li v-if="userCanSearch">
                     <router-link to="search">
                       Search
+                    </router-link>
+                  </li>
+                  <li v-if="userCanFinanceStatement">
+                    <router-link to="financing">
+                      Financing Statement
                     </router-link>
                   </li>
                   <li>
@@ -67,24 +74,27 @@
 <script lang="ts">
 import { computed, createComponent } from '@vue/composition-api'
 
-import { useFeatureFlags } from '@/flags/feature-flags'
+import { featureFlags } from '@/flags/feature-flags'
 import { useRouter } from '@/router/router'
 
 export default createComponent({
   setup() {
-    const features = useFeatureFlags()
     const { router } = useRouter()
 
     const userIsAuthed = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
 
     // Feature Flag
-    const userCanSearch = computed((): boolean => features.getFlag('search-registration-number') && userIsAuthed.value)
+    const userCanSearch = computed((): boolean => featureFlags.getFlag('search-registration-number') &&
+      userIsAuthed.value)
+
+    const userCanFinanceStatement = computed((): boolean => featureFlags.getFlag('financing-statement') &&
+      userIsAuthed.value)
 
     function goSearch(): void {
       router.push('search')
     }
 
-    return { goSearch, userCanSearch, userIsAuthed }
+    return { goSearch, userCanSearch, userCanFinanceStatement, userIsAuthed }
   }
 })
 

@@ -5,8 +5,9 @@
 
 # =====  ppr-api ======================================================================================================
 
-# The location of the SBC Auth URL
+# The locations of external APIs
 PPR_API_AUTH_API_URL=https://auth-api.hostname/api/v1
+PPR_API_PAY_API_URL=https://payment-api.hostname/api/v1
 
 # Allowed origins for cors. Provide a space separated list of urls.
 PPR_API_ALLOWED_ORIGINS=http://localhost:8080

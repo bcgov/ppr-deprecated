@@ -1,8 +1,10 @@
 import sqlalchemy
-from sqlalchemy.dialects import postgresql
 import sqlalchemy.orm
 
 from .database import BaseORM
+import models.collateral
+import models.party
+from schemas.party import PartyType
 
 
 class FinancingStatement(BaseORM):
@@ -14,9 +16,29 @@ class FinancingStatement(BaseORM):
     life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
     expiry_date = sqlalchemy.Column(sqlalchemy.Date)
     discharged = sqlalchemy.Column(sqlalchemy.BOOLEAN)
-    last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, onupdate=sqlalchemy.func.now())
+    last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, server_default=sqlalchemy.func.now(),
+                                     onupdate=sqlalchemy.func.now())
 
     events = sqlalchemy.orm.relationship('FinancingStatementEvent', back_populates='base_registration')
+    parties = sqlalchemy.orm.relationship(
+        models.party.Party.__name__,
+        primaryjoin='and_(FinancingStatement.registration_number==Party.base_registration_number, '
+                    'Party.ending_registration_number==None)'
+    )
+    general_collateral = sqlalchemy.orm.relationship(
+        models.collateral.GeneralCollateral.__name__,
+        primaryjoin='and_(FinancingStatement.registration_number==GeneralCollateral.base_registration_number, '
+                    'GeneralCollateral.ending_registration_number==None)'
+    )
+
+    def get_base_event(self):
+        return next((e for e in self.events if e.registration_number == self.registration_number), None)
+
+    def get_debtors(self):
+        return list(filter(lambda p: p.type_code == PartyType.DEBTOR.value, self.parties))
+
+    def get_registering_party(self):
+        return next((p for p in self.parties if p.type_code == PartyType.REGISTERING.value), None)
 
 
 class FinancingStatementEvent(BaseORM):
@@ -27,8 +49,20 @@ class FinancingStatementEvent(BaseORM):
                                                  sqlalchemy.ForeignKey('financing_statement.reg_number'))
     change_type_code = sqlalchemy.Column('change_type_cd', sqlalchemy.CHAR(length=2))
     registration_date = sqlalchemy.Column('reg_date', sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
-    description = sqlalchemy.Column(postgresql.TEXT)
+    description = sqlalchemy.Column(sqlalchemy.String)
     document_number = sqlalchemy.Column(sqlalchemy.String(length=8))
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
 
     base_registration = sqlalchemy.orm.relationship('FinancingStatement', back_populates='events')
+    starting_parties = sqlalchemy.orm.relationship(
+        models.party.Party.__name__, foreign_keys='Party.starting_registration_number'
+    )
+    ending_parties = sqlalchemy.orm.relationship(
+        models.party.Party.__name__, foreign_keys='Party.ending_registration_number'
+    )
+    starting_general_collateral = sqlalchemy.orm.relationship(
+        models.collateral.GeneralCollateral.__name__, foreign_keys='GeneralCollateral.starting_registration_number'
+    )
+    ending_general_collateral = sqlalchemy.orm.relationship(
+        models.collateral.GeneralCollateral.__name__, foreign_keys='GeneralCollateral.ending_registration_number'
+    )
