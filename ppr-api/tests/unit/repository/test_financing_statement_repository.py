@@ -111,7 +111,9 @@ def test_create_financing_statement_registering_party_is_added_as_starting_on_ev
 @patch('sqlalchemy.orm.Session')
 def test_create_financing_statement_registering_party_name_is_included(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
-    schema = stub_financing_statement_input(reg_party=stub_party(first='Homer', middle='Jay', last='Simpson'))
+    schema = stub_financing_statement_input(
+        reg_party=stub_party(person_name=stub_person_name(first='Homer', middle='Jay', last='Simpson'))
+    )
 
     financing_statement = repo.create_financing_statement(schema, stub_user())
 
@@ -119,6 +121,95 @@ def test_create_financing_statement_registering_party_name_is_included(mock_sess
     assert reg_party.first_name == 'Homer'
     assert reg_party.middle_name == 'Jay'
     assert reg_party.last_name == 'Simpson'
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_debtor_business_name_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(debtors=[stub_debtor(business_name='Spacely Sprockets', person_name=None)])
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    debtors = financing_statement.get_debtors()
+    assert len(debtors) == 1
+    assert debtors[0].business_name == 'Spacely Sprockets'
+    assert debtors[0].first_name is None
+    assert debtors[0].middle_name is None
+    assert debtors[0].last_name is None
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_debtor_person_name_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        debtors=[stub_debtor(person_name=stub_person_name(first='Charles', middle='Montgomery', last='Burns'))]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    debtors = financing_statement.get_debtors()
+    assert debtors[0].first_name == 'Charles'
+    assert debtors[0].middle_name == 'Montgomery'
+    assert debtors[0].last_name == 'Burns'
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_debtor_address_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        debtors=[
+            stub_debtor(
+                address=stub_address(street='123 Fake St', street_add='Apt 1', city='Vancouver', region='BC',
+                                     country='CA', postal_code='V1V 1V1')
+            )]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    debtors = financing_statement.get_debtors()
+    assert debtors[0].address.line1 == '123 Fake St'
+    assert debtors[0].address.line2 == 'Apt 1'
+    assert debtors[0].address.city == 'Vancouver'
+    assert debtors[0].address.region == 'BC'
+    assert debtors[0].address.country == 'CA'
+    assert debtors[0].address.postal_code == 'V1V 1V1'
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_debtor_address_is_none(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(debtors=[stub_debtor(address=None)])
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    debtors = financing_statement.get_debtors()
+    assert debtors[0].address is None
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_debtor_birthdate_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        debtors=[stub_debtor(birthdate=datetime.date(1955, 7, 12))]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    debtors = financing_statement.get_debtors()
+    assert debtors[0].birthdate == datetime.date(1955, 7, 12)
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_debtor_birthdate_is_none(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        debtors=[stub_debtor(birthdate=None)]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    debtors = financing_statement.get_debtors()
+    assert debtors[0].birthdate is None
 
 
 @patch('sqlalchemy.orm.Session')
@@ -134,8 +225,25 @@ def test_create_financing_statement_general_collateral_is_stored(mock_session):
     assert collateral[0] in financing_statement.events[0].starting_general_collateral
 
 
-def stub_party(first: str = 'Fred', last: str = 'Flintstone', middle: str = None):
-    return schemas.party.Party(personName=schemas.party.IndividualName(first=first, last=last, middle=middle))
+def stub_address(street: str = '123 Fake St', street_add: str = None, city: str = 'Victoria', region: str = None,
+                 country: str = 'CA', postal_code: str = 'V1V 1V1'):
+    return schemas.party.Address(street=street, streetAdditional=street_add, city=city, region=region, country=country,
+                                 postalCode=postal_code)
+
+
+def stub_person_name(first: str = 'Fred', last: str = 'Flintstone', middle: str = None):
+    return schemas.party.IndividualName(first=first, last=last, middle=middle)
+
+
+def stub_party(person_name: schemas.party.IndividualName = stub_person_name(), business_name: str = None,
+               address: schemas.party.Address = stub_address()):
+    return schemas.party.Party(personName=person_name, business_name=business_name, address=address)
+
+
+def stub_debtor(person_name: schemas.party.IndividualName = stub_person_name(), business_name: str = None,
+                birthdate: datetime.date = None, address: schemas.party.Address = stub_address()):
+    return schemas.party.Debtor(personName=person_name, businessName=business_name, birthdate=birthdate,
+                                address=address)
 
 
 def stub_general_collateral(description: str):
@@ -143,10 +251,11 @@ def stub_general_collateral(description: str):
 
 
 def stub_financing_statement_input(reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT, years: int = None,
-                                   reg_party: schemas.party.Party = stub_party(), general_collateral=[]):
+                                   reg_party: schemas.party.Party = stub_party(), debtors=[stub_debtor()],
+                                   general_collateral=[]):
     return schemas.financing_statement.FinancingStatementBase(
         type=reg_type.name, years=years, registeringParty=reg_party,
-        securedParties=[], debtors=[], vehicleCollateral=[], generalCollateral=general_collateral
+        securedParties=[], debtors=debtors, vehicleCollateral=[], generalCollateral=general_collateral
     )
 
 
