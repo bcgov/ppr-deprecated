@@ -12,6 +12,20 @@ import schemas.party
 import utils.datetime
 
 
+def map_party_schema_to_model(party_type: schemas.party.PartyType, schema: schemas.party.Party, birthdate=None):
+    address = models.party.Address(
+        line1=schema.address.street, line2=schema.address.streetAdditional, city=schema.address.city,
+        region=schema.address.region, country=schema.address.country, postal_code=schema.address.postalCode
+    ) if schema.address else None
+
+    return models.party.Party(
+        type_code=party_type.value, business_name=schema.businessName, birthdate=birthdate, address=address,
+        first_name=schema.personName.first if schema.personName else None,
+        middle_name=schema.personName.middle if schema.personName else None,
+        last_name=schema.personName.last if schema.personName else None
+    )
+
+
 class FinancingStatementRepository:
     db: sqlalchemy.orm.Session
 
@@ -31,19 +45,19 @@ class FinancingStatementRepository:
         event_model = models.financing_statement.FinancingStatementEvent(registration_number=reg_num,
                                                                          user_id=user.user_id)
 
-        party_schema = fs_input.registeringParty
-        reg_party_model = models.party.Party(type_code=schemas.party.PartyType.REGISTERING.value,
-                                             first_name=party_schema.personName.first,
-                                             middle_name=party_schema.personName.middle,
-                                             last_name=party_schema.personName.last)
+        reg_party_model = map_party_schema_to_model(schemas.party.PartyType.REGISTERING, fs_input.registeringParty)
+        debtors = list(map(lambda p: map_party_schema_to_model(schemas.party.PartyType.DEBTOR, p, p.birthdate),
+                           fs_input.debtors))
 
         general_collateral = list(map(lambda c: models.collateral.GeneralCollateral(description=c.description),
                                       fs_input.generalCollateral))
 
         model.events.append(event_model)
         model.parties.append(reg_party_model)
+        model.parties.extend(debtors)
         model.general_collateral.extend(general_collateral)
         event_model.starting_parties.append(reg_party_model)
+        event_model.starting_parties.extend(debtors)
         event_model.starting_general_collateral.extend(general_collateral)
 
         self.db.add(model)

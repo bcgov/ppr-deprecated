@@ -172,7 +172,7 @@ def retrieve_financing_statement_record(base_reg_number: str):
     try:
         query = db.query(models.financing_statement.FinancingStatement)\
             .options(sqlalchemy.orm.joinedload('events').joinedload('starting_parties'))\
-            .options(sqlalchemy.orm.joinedload('parties'))\
+            .options(sqlalchemy.orm.joinedload('parties').joinedload('address'))\
             .options(sqlalchemy.orm.joinedload('general_collateral'))
         return query.get(base_reg_number)
     finally:

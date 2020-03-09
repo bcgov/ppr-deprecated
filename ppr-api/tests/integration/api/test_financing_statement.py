@@ -121,28 +121,79 @@ def test_create_financing_statement_for_root_object_details():
 
 def test_create_financing_statement_persists_registering_party():
     request_payload = get_minimal_payload()
-    request_payload.update(registeringParty={'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'}})
+    request_payload.update(
+        registeringParty={
+            'businessName': 'Mr. Plow',
+            'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'},
+            'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor', 'city': 'Springfield',
+                        'region': 'BC', 'country': 'CA', 'postalCode': 'V1A 1A1'}
+        }
+    )
 
     rv = client.post('/financing-statements', json=request_payload)
 
     body = rv.json()
     assert 'registeringParty' in body
-    assert 'personName' in body['registeringParty']
-    assert body['registeringParty']['personName']['first'] == 'Homer'
-    assert body['registeringParty']['personName']['middle'] == 'Jay'
-    assert body['registeringParty']['personName']['last'] == 'Simpson'
+    assert body['registeringParty']['personName']
+    assert body['registeringParty']['address']
 
     registration_number = body['baseRegistrationNumber']
     stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
-    registering_parties = list(filter(lambda party: party.type_code == 'RP', stored.parties))
+    registering_party = stored.get_registering_party()
 
-    assert len(registering_parties) == 1
-    assert registering_parties[0].first_name == body['registeringParty']['personName']['first']
-    assert registering_parties[0].middle_name == body['registeringParty']['personName']['middle']
-    assert registering_parties[0].last_name == body['registeringParty']['personName']['last']
-    assert registering_parties[0].base_registration_number == registration_number
-    assert registering_parties[0].starting_registration_number == registration_number
-    assert registering_parties[0].ending_registration_number is None
+    assert registering_party
+    assert registering_party.base_registration_number == registration_number
+    assert registering_party.starting_registration_number == registration_number
+    assert registering_party.ending_registration_number is None
+    assert registering_party.first_name == 'Homer'
+    assert registering_party.middle_name == 'Jay'
+    assert registering_party.last_name == 'Simpson'
+    assert registering_party.business_name == 'Mr. Plow'
+    assert registering_party.address.line1 == '742 Evergreen Terrace'
+    assert registering_party.address.line2 == '1st floor'
+    assert registering_party.address.city == 'Springfield'
+    assert registering_party.address.region == 'BC'
+    assert registering_party.address.country == 'CA'
+    assert registering_party.address.postal_code == 'V1A 1A1'
+
+
+def test_create_financing_statement_persists_debtor():
+    request_payload = get_minimal_payload()
+    request_payload.update(
+        debtors=[{
+            'businessName': 'Mr. Plow', 'birthdate': '1990-06-15',
+            'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'},
+            'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor', 'city': 'Springfield',
+                        'region': 'BC', 'country': 'CA', 'postalCode': 'V1A 1A1'}
+        }]
+    )
+
+    rv = client.post('/financing-statements', json=request_payload)
+
+    body = rv.json()
+    assert len(body['debtors']) == 1
+    assert body['debtors'][0]['personName']
+    assert body['debtors'][0]['address']
+
+    registration_number = body['baseRegistrationNumber']
+    stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
+    debtors = stored.get_debtors()
+
+    assert len(debtors) == 1
+    assert debtors[0].base_registration_number == registration_number
+    assert debtors[0].starting_registration_number == registration_number
+    assert debtors[0].ending_registration_number is None
+    assert debtors[0].first_name == 'Homer'
+    assert debtors[0].middle_name == 'Jay'
+    assert debtors[0].last_name == 'Simpson'
+    assert debtors[0].business_name == 'Mr. Plow'
+    assert debtors[0].birthdate == datetime.date(1990, 6, 15)
+    assert debtors[0].address.line1 == '742 Evergreen Terrace'
+    assert debtors[0].address.line2 == '1st floor'
+    assert debtors[0].address.city == 'Springfield'
+    assert debtors[0].address.region == 'BC'
+    assert debtors[0].address.country == 'CA'
+    assert debtors[0].address.postal_code == 'V1A 1A1'
 
 
 def test_create_financing_statement_persists_general_collateral():
