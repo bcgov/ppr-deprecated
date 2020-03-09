@@ -1,10 +1,11 @@
 #=========================================================
 # Template parameters for:
-# Project: ppr-ui
-# Component: deploy
-# Action: build
+# Project: ppr
+# Component: ppr-ui
+# Action: deploy
 # Template File: ppr-ui/openshift/ppr-ui-dc.yaml
-# oc process -f ppr-ui-dc.yaml -p LAUNCH_DARKLY_CLIENT_KEY=ld_key -p SENTRY_KEY=sentry_key --param-file=ppr-ui-dc.test.param | oc apply -n 1rdehl-test -f -
+# Hint: oc process -f ppr-ui-dc.yaml -p LAUNCH_DARKLY_CLIENT_KEY=ld_key -p SENTRY_KEY=sentry_key \
+#     --param-file=ppr-ui-dc.test.param | oc -n 1rdehl-test apply -f -
 #=========================================================
 API_URL="https://ppr-api-test.pathfinder.gov.bc.ca/"
 APP_CONFIG="ppr-web-ui-config"
