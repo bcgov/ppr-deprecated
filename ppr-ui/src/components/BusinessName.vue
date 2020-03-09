@@ -2,13 +2,16 @@
   <v-card flat>
     <v-form v-if="editing">
       <v-text-field
-        data-test-id="BusinessName"
+        data-test-id="BusinessName.input.name"
         label="Business Name"
         :value="value.businessName"
         @input="updateName($event)"
       />
     </v-form>
-    <div v-else>
+    <div
+      v-else
+      data-test-id="BusinessName.display.name"
+    >
       {{ value.businessName }}
     </div>
   </v-card>

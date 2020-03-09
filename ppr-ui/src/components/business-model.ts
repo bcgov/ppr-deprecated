@@ -3,28 +3,28 @@
  * The interface to a business.
  */
 export interface BusinessInterface {
-  businessName: string;
+  businessName: string | undefined;
 }
 
 /**
  * The model for a business, such as a registering party, secured party, debtor
  */
 export class BusinessModel {
-  private _businessName: string
+  private _businessName: string | undefined
 
   /**
    * Creates a new Business model instance.
    *
    * @param businessName the name of the business.
    */
-  public constructor(businessName: string = '') {
+  public constructor(businessName?: string) {
     this._businessName = businessName
   }
 
   /**
    * Gets the name of the business.
    */
-  public get businessName(): string {
+  public get businessName(): string | undefined {
     return this._businessName
   }
 

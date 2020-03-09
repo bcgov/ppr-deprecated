@@ -1,13 +1,13 @@
 import { BusinessModel } from '@/components/business-model'
 
 describe('Business', (): void => {
-  it('has empty names for default constructor', (): void => {
+  it('has undefined name with default constructor', (): void => {
     const business = new BusinessModel()
 
-    expect(business.businessName).toEqual('')
+    expect(business.businessName).toBeUndefined()
   })
 
-  it('has empty first name when set to be empty', (): void => {
+  it('has empty name when set to be empty', (): void => {
     const business = new BusinessModel('')
 
     expect(business.businessName).toEqual('')
