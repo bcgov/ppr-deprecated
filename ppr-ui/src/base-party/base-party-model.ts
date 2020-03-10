@@ -1,5 +1,5 @@
 
-import { BusinessInterface, BusinessModel } from '@/components/business-model'
+import { BusinessNameInterface, BusinessModel } from '@/components/business-model'
 import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
 
 /**
@@ -7,7 +7,7 @@ import { PersonNameInterface, PersonNameModel } from '@/components/person-name-m
  */
 export interface BasePartyInterface {
   personName: PersonNameInterface;
-  businessName: BusinessInterface;
+  businessName: BusinessNameInterface;
 }
 
 /**
@@ -33,7 +33,7 @@ export class BasePartyModel {
   }
 
   /**
-   * Gets the business name of the party 
+   * Gets the business name of the party
    */
   public get businessName(): BusinessModel {
     return this._businessName

@@ -115,12 +115,14 @@ export default createComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "../assets/styles/theme.scss";
+
 .filter-button {
   border: 1px solid black;
   width: 20%;
 }
 
 .v-item--active {
-  border: 1px solid red;
+  border: 1px solid $BCgovGold5;
 }
 </style>

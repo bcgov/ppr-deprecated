@@ -2,7 +2,7 @@
 /**
  * The interface to a business.
  */
-export interface BusinessInterface {
+export interface BusinessNameInterface {
   businessName: string | undefined;
 }
 
@@ -32,7 +32,7 @@ export class BusinessModel {
   /**
    * Gets the JSON representation of the BusinessModel object.
    */
-  public toJson(): BusinessInterface {
+  public toJson(): BusinessNameInterface {
     return {
       businessName: this._businessName
     }
@@ -47,7 +47,7 @@ export class BusinessModel {
    *
    * @param jsonObject the JSON version of the object.
    */
-  public static fromJson(jsonObject: BusinessInterface): BusinessModel {
+  public static fromJson(jsonObject: BusinessNameInterface): BusinessModel {
     return new BusinessModel(jsonObject.businessName)
   }
 }
