@@ -3,7 +3,7 @@ import { BusinessInterface, BusinessModel } from '@/components/business-model'
 import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
 
 /**
- * The interface to a party name.
+ * The interface to a party that may be a person or a business.
  */
 export interface BasePartyInterface {
   personName: PersonNameInterface;
@@ -11,7 +11,7 @@ export interface BasePartyInterface {
 }
 
 /**
- * The model for a party name, such as for a registering party.
+ * The model for a that may be a person or a business, such as for a registering party.
  */
 export class BasePartyModel {
 
@@ -32,6 +32,9 @@ export class BasePartyModel {
     this._personName = personName
   }
 
+  /**
+   * Gets the business name of the party 
+   */
   public get businessName(): BusinessModel {
     return this._businessName
   }
@@ -51,7 +54,7 @@ export class BasePartyModel {
   }
 
   /*
-–   * Class declarations
+   * Class declarations
    */
 
   /**

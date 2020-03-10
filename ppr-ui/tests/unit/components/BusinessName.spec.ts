@@ -31,7 +31,7 @@ describe('BusinessName.vue', (): void => {
 
     it(':editing - false contains no inputs', (): void => {
       const properties = ref({ value: new BusinessModel() })
-      const wrapper: Wrapper<Vue> = mount(BusinessName, { propsData: properties.value })
+      const wrapper: Wrapper<Vue> = mount(BusinessName, { propsData: properties.value, vuetify })
 
       expect(wrapper.findAll('input').exists()).toBeFalsy()
     })
@@ -66,8 +66,7 @@ describe('BusinessName.vue', (): void => {
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BusinessName, { propsData: properties.value, vuetify })
 
-      const element = wrapper.get('[data-test-id="BusinessName.input.name"]').element as HTMLInputElement
-      expect(element.value).toBe(expected)
+      expect(wrapper.find('[data-test-id="BusinessName.input.name"]').exists()).toBeTruthy()
     })
 
     it(':editing - false, name display exists and contains value', (): void => {

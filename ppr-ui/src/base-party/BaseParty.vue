@@ -98,7 +98,7 @@ export default createComponent({
       }
     }
 
-    // Callback function for emitting Person validity back to the parent.
+    // Callback function for emitting Base Party validity back to the parent.
     function formValid(valid: boolean) {
       emit('valid', valid)
     }

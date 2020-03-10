@@ -28,7 +28,7 @@ describe('BasePartyModel', (): void => {
   })
 
   it('works with JSON', (): void => {
-    const aBusiness = 'a person'
+    const aBusiness = 'a business'
     const aPerson = 'a person'
     const businessName = new BusinessModel(aBusiness)
     const person = new PersonNameModel(aPerson, undefined, aPerson)

@@ -68,10 +68,8 @@ describe('BaseParty.vue', (): void => {
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
-      let element = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
-      expect(element).toBeDefined()
-      element = wrapper.get('[data-test-id="BaseParty.radio.person"]').element as HTMLInputElement
-      expect(element).toBeDefined()
+      expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeTruthy()
     })
 
     it(':editing - false, radio controls does not exists', (): void => {
@@ -90,16 +88,14 @@ describe('BaseParty.vue', (): void => {
       })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
-      let element
+      // let element
       expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeFalsy()
       expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeFalsy()
 
       properties.value.editing = true
       await Vue.nextTick()
-      element = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
-      expect(element).toBeDefined()
-      element = wrapper.get('[data-test-id="BaseParty.radio.person"]').element as HTMLInputElement
-      expect(element).toBeDefined()
+      expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeTruthy()
 
       properties.value.editing = false
       await Vue.nextTick()
@@ -112,10 +108,8 @@ describe('BaseParty.vue', (): void => {
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
-      let element = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
-      expect(element).toBeDefined()
-      element = wrapper.get('[data-test-id="BaseParty.radio.person"]').element as HTMLInputElement
-      expect(element).toBeDefined()
+      expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeTruthy()
     })
 
   })
@@ -127,8 +121,7 @@ describe('BaseParty.vue', (): void => {
       wrapper.find('[data-test-id="BaseParty.radio.business"]').trigger('click')
       await Vue.nextTick()
 
-      let component = wrapper.get('[data-test-id="BaseParty.business"]').element
-      expect(component).toBeDefined()
+      expect(wrapper.find('[data-test-id="BaseParty.business"]').isVisible()).toBeTruthy()
       expect(wrapper.find('[data-test-id="BaseParty.person"]').isVisible()).toBeFalsy()
     })
 
@@ -139,9 +132,8 @@ describe('BaseParty.vue', (): void => {
       wrapper.find('[data-test-id="BaseParty.radio.person"]').trigger('click')
       await Vue.nextTick()
 
-      let component = wrapper.get('[data-test-id="BaseParty.person"]').element
-      expect(component).toBeDefined()
       expect(wrapper.find('[data-test-id="BaseParty.business"]').isVisible()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="BaseParty.person"]').isVisible()).toBeTruthy()
     })
 
     // because we unit test the inner business components we're done
