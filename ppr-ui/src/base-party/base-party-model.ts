@@ -39,6 +39,9 @@ export class BasePartyModel {
     return this._businessName
   }
 
+  /**
+   * Gets the person name of the party
+   */
   public get personName(): PersonNameModel {
     return this._personName
   }
@@ -62,15 +65,15 @@ export class BasePartyModel {
    *
    * @param jsonObject the JSON version of the object.
    */
-  public static fromJson(jsonObject: BasePartyInterface): BasePartyModel {
+  public static fromJson(jsonObject: BasePartyInterface | undefined): BasePartyModel {
     let businessName: BusinessModel | undefined
     let personName: PersonNameModel | undefined
 
-    if (jsonObject.businessName) {
+    if (jsonObject && jsonObject.businessName) {
       businessName = BusinessModel.fromJson(jsonObject.businessName)
     }
 
-    if (jsonObject.personName) {
+    if (jsonObject && jsonObject.personName) {
       personName = PersonNameModel.fromJson(jsonObject.personName)
     }
 
