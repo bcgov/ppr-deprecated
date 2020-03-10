@@ -27,7 +27,7 @@ describe('BasePartyModel', (): void => {
     expect(model.personName.first).toEqual(name)
   })
 
-  it('works with JSON', (): void => {
+  it('can construct using JSON', (): void => {
     const aBusiness = 'a business'
     const aPerson = 'a person'
     const businessName = new BusinessModel(aBusiness)
@@ -35,6 +35,13 @@ describe('BasePartyModel', (): void => {
     const model = new BasePartyModel(businessName, person)
 
     const expected = BasePartyModel.fromJson(model.toJson())
+    expect(model).toEqual(expected)
+  })
+
+  it('can construct with undefined JSON', (): void => {
+    const model = new BasePartyModel()
+
+    const expected = BasePartyModel.fromJson(undefined)
     expect(model).toEqual(expected)
   })
 
