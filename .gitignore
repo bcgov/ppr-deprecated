@@ -50,6 +50,8 @@ yarn-error.log*
 # Ignore Gradle project-specific cache and build directories
 /**/.gradle
 /**/build
+/**/.allure
 
 #OS Files
 .DS_Store
+testing/functional/src/test/groovy/specs/StartSpec.groovy

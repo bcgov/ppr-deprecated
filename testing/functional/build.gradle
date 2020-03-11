@@ -1,5 +1,5 @@
 plugins {
-    id "idea"
+   // id "idea"
     id "groovy"
     id "com.energizedwork.webdriver-binaries" version "1.4"
     id "com.energizedwork.idea-base" version "1.4"
@@ -10,9 +10,12 @@ apply from: "gradle/versions.gradle"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
+    testCompile 'com.aoe:geb-spock-reports:0.2.5'
+
     // If using Spock, need to depend on geb-spock
     testImplementation "org.gebish:geb-spock:$gebVersion"
     testImplementation("org.spockframework:spock-core:$spockVersion") {
@@ -36,6 +39,8 @@ dependencies {
     }
     testImplementation "org.slf4j:slf4j-api:$slf4jVersion"
     testImplementation "org.slf4j:slf4j-simple:$slf4jVersion"
+
+    testImplementation "mysql:mysql-connector-java:8.0.19"
 }
 
 webdriverBinaries {
@@ -82,7 +87,8 @@ tasks.withType(Test) {
     }
     systemProperty 'com.athaydes.spockframework.report.outputDir', 'build/reports/spock'
     systemProperty 'com.athaydes.spockframework.report.internal.HtmlReportCreator.inlineCss', false
-    systemProperty 'com.athaydes.spockframework.report.projectName',"Personal Property Registry"    
+    systemProperty 'com.athaydes.spockframework.report.projectName',"Personal Property Registry" 
+    systemProperty 'com.athaydes.spockframework.report.showCodeBlocks', false //Set to true if you want to see the code in your Spock Report   
 }
 
 tasks.withType(GroovyCompile) {
@@ -90,7 +96,7 @@ tasks.withType(GroovyCompile) {
 }
 
 allure {
-    version = '2.8.1'
+    version = '2.7.0'
     aspectjweaver = true
     autoconfigure = true
     
@@ -98,8 +104,8 @@ allure {
     reportDir = file('allure-reports')
     
     useSpock {
-       version = '2.0-BETA10'
+       version = '2.0-BETA12'
     }
     
-    downloadLink = 'https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.8.1/allure-2.8.1.zip'
+    downloadLink = 'https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.7.0/allure-2.7.0.zip'
 }
