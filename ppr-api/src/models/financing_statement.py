@@ -40,6 +40,9 @@ class FinancingStatement(BaseORM):
     def get_registering_party(self):
         return next((p for p in self.parties if p.type_code == PartyType.REGISTERING.value), None)
 
+    def get_secured_parties(self):
+        return list(filter(lambda p: p.type_code == PartyType.SECURED.value, self.parties))
+
 
 class FinancingStatementEvent(BaseORM):
     __tablename__ = 'registration'
