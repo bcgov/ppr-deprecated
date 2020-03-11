@@ -29,13 +29,6 @@ describe('BusinessName.vue', (): void => {
       expect(wrapper.findAll('input').exists()).toBeFalsy()
     })
 
-    it(':editing - false contains no inputs', (): void => {
-      const properties = ref({ value: new BusinessNameModel() })
-      const wrapper: Wrapper<Vue> = mount(BusinessName, { propsData: properties.value, vuetify })
-
-      expect(wrapper.findAll('input').exists()).toBeFalsy()
-    })
-
     it(':editing - false, inputs do not exist', (): void => {
       const properties = ref({ editing: false, value: new BusinessNameModel() })
       const wrapper: Wrapper<Vue> = mount(BusinessName, { propsData: properties.value, vuetify })

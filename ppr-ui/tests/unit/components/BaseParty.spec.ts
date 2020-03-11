@@ -31,13 +31,6 @@ describe('BaseParty.vue', (): void => {
       expect(wrapper.findAll('input').exists()).toBeFalsy()
     })
 
-    it(':editing - false contains no inputs', (): void => {
-      const properties = ref({ value: new BasePartyModel() })
-      const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value })
-
-      expect(wrapper.findAll('input').exists()).toBeFalsy()
-    })
-
     it(':editing - false, inputs do not exist', (): void => {
       const properties = ref({ editing: false, value: new BasePartyModel() })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
