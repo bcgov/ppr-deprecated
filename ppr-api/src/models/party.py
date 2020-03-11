@@ -1,6 +1,7 @@
 import sqlalchemy
 import sqlalchemy.orm
 
+import schemas.party
 from .database import BaseORM
 
 
@@ -24,6 +25,20 @@ class Party(BaseORM):
 
     address = sqlalchemy.orm.relationship('Address')
 
+    def as_schema(self):
+        base_args = {
+            'businessName': self.business_name,
+            'personName': schemas.party.IndividualName(
+                first=self.first_name, middle=self.middle_name, last=self.last_name
+            ),
+            'address': self.address.as_schema() if self.address else None
+        }
+
+        if self.type_code in [schemas.party.PartyType.REGISTERING.value, schemas.party.PartyType.SECURED.value]:
+            return schemas.party.Party(**base_args)
+        else:  # self.type_code == schemas.party.PartyType.DEBTOR.value
+            return schemas.party.Debtor(birthdate=self.birthdate, **base_args)
+
 
 class Address(BaseORM):
     __tablename__ = 'address'
@@ -36,3 +51,9 @@ class Address(BaseORM):
     region = sqlalchemy.Column('province', sqlalchemy.CHAR(length=2))
     country = sqlalchemy.Column('country_type_cd', sqlalchemy.CHAR(length=2))
     postal_code = sqlalchemy.Column('postal_cd', sqlalchemy.String)
+
+    def as_schema(self):
+        return schemas.party.Address(
+            street=self.line1, streetAdditional=self.line2, city=self.city, region=self.region, country=self.country,
+            postalCode=self.postal_code
+        )

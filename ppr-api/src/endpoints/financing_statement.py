@@ -43,8 +43,8 @@ def map_financing_statement_model_to_schema(model: models.financing_statement.Fi
     reg_date = base_event.registration_date if base_event else None
     reg_party_model = model.get_registering_party()
 
-    reg_party_schema = map_party_model_to_schema(reg_party_model) if reg_party_model else None
-    debtors_schema = list(map(map_party_model_to_schema, model.get_debtors()))
+    reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
+    debtors_schema = list(map(models.party.Party.as_schema, model.get_debtors()))
     general_collateral_schema = list(map(map_general_collateral_model_to_schema, model.general_collateral))
 
     return schemas.financing_statement.FinancingStatement(
@@ -58,21 +58,3 @@ def map_financing_statement_model_to_schema(model: models.financing_statement.Fi
 
 def map_general_collateral_model_to_schema(model: models.collateral.GeneralCollateral):
     return schemas.collateral.GeneralCollateral(description=model.description)
-
-
-def map_party_model_to_schema(model: models.party.Party):
-    base_args = {
-        'businessName': model.business_name,
-        'personName': schemas.party.IndividualName(
-            first=model.first_name, middle=model.middle_name, last=model.last_name
-        ),
-        'address': schemas.party.Address(
-            street=model.address.line1, streetAdditional=model.address.line2, city=model.address.city,
-            region=model.address.region, country=model.address.country, postalCode=model.address.postal_code
-        ) if model.address else None
-    }
-
-    if model.type_code in [schemas.party.PartyType.REGISTERING.value, schemas.party.PartyType.SECURED.value]:
-        return schemas.party.Party(**base_args)
-    else:  # model.type_code == schemas.party.PartyType.DEBTOR.value
-        return schemas.party.Debtor(birthdate=model.birthdate, **base_args)
