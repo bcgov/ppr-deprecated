@@ -10,6 +10,8 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.remote.DesiredCapabilities
+import org.openqa.selenium.PageLoadStrategy
+import com.aoe.gebspockreports.GebReportingListener
 
 waiting {
 	timeout = 20
@@ -22,18 +24,29 @@ environments {
 	
 	// run via “./gradlew chromeTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
+	ChromeOptions o = new ChromeOptions()
+	o.addArguments('no-sandbox')
+	o.addArguments('disable-extensions')
+	o.addArguments('dns-prefetch-disable')
+	o.addArguments('disable-gpu')
+	o.addArguments('start-maximized')
+	o.addArguments('enable-automation')
+	o.addArguments('disable-infobars')
+	o.addArguments('disable-dev-shm-usage')
+	o.addArguments('disable-browser-side-navigation')
+	o.setPageLoadStrategy(PageLoadStrategy.NONE)
+
 	chrome {
-		driver = { new ChromeDriver() }
+		driver = { 
+			new ChromeDriver(o) 
+			}
 	}
 
 	// run via “./gradlew chromeHeadlessTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
 	chromeHeadless {
 		driver = {
-			ChromeOptions o = new ChromeOptions()
 			o.addArguments('headless')
-			o.addArguments('disable-gpu') 
-			o.addArguments('no-sandbox')
 			new ChromeDriver(o)
 		}
 	}
@@ -46,9 +59,9 @@ environments {
 		
 	firefoxHeadless {
 		driver = {
-			FirefoxOptions o = new FirefoxOptions()
-			o.addArguments("-headless")
-			new FirefoxDriver(o)
+			FirefoxOptions fo = new FirefoxOptions()
+			fo.addArguments('-headless')
+			new FirefoxDriver(fo)
 		}
 	}
 }
@@ -71,3 +84,5 @@ println "--------------------------"
 cacheDriverPerThread = true
 quitCachedDriverOnShutdown = true
 
+reportingListener = new GebReportingListener()
+reportsDir = 'build/reports/spock'
