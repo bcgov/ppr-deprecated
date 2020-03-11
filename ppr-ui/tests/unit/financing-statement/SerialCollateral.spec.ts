@@ -12,6 +12,9 @@ Vue.use(VueCompositionApi)
 
 const vuetify = new Vuetify()
 
+const DOT_NUMBER_LABEL = 'DOT Number'
+const SERIAL_NUMBER_LABEL = 'Serial Number'
+
 describe('SerialCollateral.vue', (): void => {
   describe(':props', (): void => {
     // General form tests.
@@ -53,9 +56,248 @@ describe('SerialCollateral.vue', (): void => {
       expect(wrapper.findAll('input').exists()).toBeFalsy()
     })
 
+    // Tests for field visibility given type AIRFRAME_NOT_REGISTERED_IN_CANADA.
+
+    it(':editing - true, and type AIRFRAME_NOT_REGISTERED_IN_CANADA has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.AIRFRAME_NOT_REGISTERED_IN_CANADA)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(DOT_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type AIRFRAME_NOT_REGISTERED_IN_CANADA has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.AIRFRAME_NOT_REGISTERED_IN_CANADA)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(DOT_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    // Tests for field visibility given type AIRFRAME_REGISTERED_IN_CANADA.
+
+    it(':editing - true, and type AIRFRAME_REGISTERED_IN_CANADA has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.AIRFRAME_REGISTERED_IN_CANADA)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(DOT_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type AIRFRAME_REGISTERED_IN_CANADA has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.AIRFRAME_REGISTERED_IN_CANADA)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(DOT_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    // Tests for field visibility given type BOAT.
+
+    it(':editing - true, and type BOAT has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type BOAT has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    // Tests for field visibility given type MANUFACTURED_HOME_NOT_REGISTERED.
+
+    it(':editing - true, and type MANUFACTURED_HOME_NOT_REGISTERED has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_NOT_REGISTERED)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type MANUFACTURED_HOME_NOT_REGISTERED has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_NOT_REGISTERED)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeFalsy()
+    })
+
+    // Tests for field visibility given type MANUFACTURED_HOME_REGISTERED.
+
+    it(':editing - true, and type MANUFACTURED_HOME_REGISTERED has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type MANUFACTURED_HOME_REGISTERED has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeFalsy()
+    })
+
+    // Tests for field visibility given type MOTOR_VEHICLE.
+
+    it(':editing - true, and type MOTOR_VEHICLE has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type MOTOR_VEHICLE has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    // Tests for field visibility given type OUTBOARD_MOTOR.
+
+    it(':editing - true, and type OUTBOARD_MOTOR has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.OUTBOARD_MOTOR)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type OUTBOARD_MOTOR has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.OUTBOARD_MOTOR)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    // Tests for field visibility given type TRAILER.
+
+    it(':editing - true, and type TRAILER has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.TRAILER)
+      const properties = ref({ editing: true, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, and type TRAILER has correct fields', (): void => {
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.TRAILER)
+      const properties = ref({ editing: false, value: serialCollateral })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.make"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.model"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.serial"]').exists()).toBeTruthy()
+      expect(wrapper.text()).toContain(SERIAL_NUMBER_LABEL)
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.year"]').exists()).toBeTruthy()
+
+      expect(wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]').exists()).toBeFalsy()
+    })
+
     // Tests for the "make" field.
 
-    it(':editing - true, make input exists and contains value', (): void => {
+    it(':editing - true, and make input exists and contains value', (): void => {
       const expected = 'Kawasaki'
       const serialCollateral = new SerialCollateralModel(undefined, expected)
       const properties = ref({ editing: true, value: serialCollateral })
@@ -107,27 +349,9 @@ describe('SerialCollateral.vue', (): void => {
 
     // Tests for the "manufacturedHomeRegNumber" field.
 
-    it(':editing - true, MH# input does not exist when type not MANUFACTURED HOME', (): void => {
-      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
-      const properties = ref({ editing: true, value: serialCollateral })
-      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
-
-      const element = wrapper.find('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]')
-      expect(element.exists()).toBeFalsy()
-    })
-
-    it(':editing - false, MH# display does not exist when type not MANUFACTURED HOME', (): void => {
-      const serialCollateral = new SerialCollateralModel(SerialCollateralType.BOAT)
-      const properties = ref({ editing: true, value: serialCollateral })
-      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
-
-      const element = wrapper.find('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]')
-      expect(element.exists()).toBeFalsy()
-    })
-
-    it(':editing - true, MH# input is set when type MANUFACTURED HOME', (): void => {
+    it(':editing - true, MH# input is set when type MANUFACTURED_HOME_REGISTERED', (): void => {
       const expected = 'ABC123'
-      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined,
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED, undefined,
         undefined, undefined, expected)
       const properties = ref({ editing: true, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
@@ -137,9 +361,9 @@ describe('SerialCollateral.vue', (): void => {
       expect(element.value).toBe(expected)
     })
 
-    it(':editing - false, MH# display is set when type MANUFACTURED HOME', (): void => {
+    it(':editing - false, MH# display is set when type MANUFACTURED_HOME_REGISTERED', (): void => {
       const expected = 'ABC123'
-      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined,
+      const serialCollateral = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED, undefined,
         undefined, undefined, expected)
       const properties = ref({ editing: false, value: serialCollateral })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
@@ -152,15 +376,15 @@ describe('SerialCollateral.vue', (): void => {
       const expected = 'MH12345'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: true,
-        value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME)
+        value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED)
       })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').element as
         HTMLInputElement
       expect(element.value).toBe('')
-      properties.value.value = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined, undefined,
-        undefined, expected)
+      properties.value.value = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED, undefined,
+        undefined, undefined, expected)
       await Vue.nextTick()
       expect(element.value).toBe(expected)
     })
@@ -169,14 +393,14 @@ describe('SerialCollateral.vue', (): void => {
       const expected = 'MH12345'
       const properties = ref<{ editing: boolean; value: SerialCollateralModel }>({
         editing: false,
-        value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME)
+        value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED)
       })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.manufacturedHomeRegNumber"]')
       expect(element.text()).toBe('')
-      properties.value.value = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME, undefined, undefined,
-        undefined, expected)
+      properties.value.value = new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED, undefined,
+        undefined, undefined, expected)
       await Vue.nextTick()
       expect(element.text()).toBe(expected)
     })
@@ -359,7 +583,7 @@ describe('SerialCollateral.vue', (): void => {
     it(':editing - false contains year', (): void => {
       const serialCollateral = new SerialCollateralModel(undefined, undefined, undefined, undefined, undefined, 2013)
       const properties = ref({ editing: false, value: serialCollateral })
-      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       const element = wrapper.get('[data-test-id="SerialCollateral.display.year"]')
       expect(element.text()).toBe('2013')
@@ -395,72 +619,333 @@ describe('SerialCollateral.vue', (): void => {
   })
 
   describe('@events', (): void => {
+    // "input" event.
+
     it('@input - make change should be emitted', async (): Promise<void> => {
+      const expected = 'Kawasaki'
       const properties = ref({ editing: true, value: new SerialCollateralModel() })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      wrapper.get('[data-test-id="SerialCollateral.input.make"]').setValue(expected)
+      await Vue.nextTick()
+
+      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedSerialCollateral.make).toBe(expected)
+    })
+
+    it('@input - manufacturedHomeRegNumber change should be emitted', async (): Promise<void> => {
+      const expected = 'MH12345'
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED)
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      wrapper.get('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').setValue(expected)
+      await Vue.nextTick()
+
+      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedSerialCollateral.manufacturedHomeRegNumber).toBe(expected)
+    })
+
+    it('@input - model change should be emitted', async (): Promise<void> => {
+      const expected = 'KLR650'
+      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      wrapper.get('[data-test-id="SerialCollateral.input.model"]').setValue(expected)
+      await Vue.nextTick()
+
+      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedSerialCollateral.model).toBe(expected)
+    })
+
+    it('@input - serial change should be emitted', async (): Promise<void> => {
+      const expected = 'JKAKLEE17DDA58357'
+      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      wrapper.get('[data-test-id="SerialCollateral.input.serial"]').setValue(expected)
+      await Vue.nextTick()
+
+      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedSerialCollateral.serial).toBe(expected)
+    })
+
+    it('@input - type change should be emitted', async (): Promise<void> => {
+      const expected = 'BOAT'
+      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      wrapper.get('[data-test-id="SerialCollateral.input.type"]').setValue(expected)
+      await Vue.nextTick()
+
+      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedSerialCollateral.type).toBe(expected)
+    })
+
+    it('@input - year change should be emitted', async (): Promise<void> => {
+      const expected = '2013'
+      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue(expected)
+      await Vue.nextTick()
+
+      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedSerialCollateral.year).toBe(expected)
+    })
+
+    it('@input - year change should be emitted', async (): Promise<void> => {
+      const expected = '2013'
+      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue(expected)
+      await Vue.nextTick()
+
+      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedSerialCollateral.year).toBe(expected)
+    })
+
+    // "valid" event.
+
+    it('@valid - all motor vehicle fields to emit true', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
+      })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
       wrapper.get('[data-test-id="SerialCollateral.input.make"]').setValue('Kawasaki')
       await Vue.nextTick()
 
-      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emittedSerialCollateral.make).toBe('Kawasaki')
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
     })
 
-    it('@input - manufacturedHomeRegNumber change should be emitted', async (): Promise<void> => {
+    it('@valid - missing type field to emit false', async (): Promise<void> => {
       const properties = ref({
-        editing: true, value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME)
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
       })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
-      wrapper.get('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').setValue('MH12345')
       await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
 
-      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emittedSerialCollateral.manufacturedHomeRegNumber).toBe('MH12345')
+      wrapper.get('[data-test-id="SerialCollateral.input.type"]').setValue('')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
     })
 
-    it('@input - model change should be emitted', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+    it('@valid - missing make field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
+      })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
-      wrapper.get('[data-test-id="SerialCollateral.input.model"]').setValue('KLR650')
       await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
 
-      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emittedSerialCollateral.model).toBe('KLR650')
+      wrapper.get('[data-test-id="SerialCollateral.input.make"]').setValue('')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
     })
 
-    it('@input - serial change should be emitted', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+    it('@valid - missing model field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
+      })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
-      wrapper.get('[data-test-id="SerialCollateral.input.serial"]').setValue('JKAKLEE17DDA58357')
       await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
 
-      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emittedSerialCollateral.serial).toBe('JKAKLEE17DDA58357')
+      wrapper.get('[data-test-id="SerialCollateral.input.model"]').setValue('')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
     })
 
-    it('@input - type change should be emitted', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+    it('@valid - missing serial field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
+      })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
-      wrapper.get('[data-test-id="SerialCollateral.input.type"]').setValue('BOAT')
       await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
 
-      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emittedSerialCollateral.type).toBe('BOAT')
+      wrapper.get('[data-test-id="SerialCollateral.input.serial"]').setValue('')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
     })
 
-    it('@input - year change should be emitted', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new SerialCollateralModel() })
+    it('@valid - too long serial field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          '1234567890123456789012345', undefined, 2013)
+      })
       const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
 
-      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue('2013')
       await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
 
-      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emittedSerialCollateral.year).toBe('2013')
+      wrapper.get('[data-test-id="SerialCollateral.input.serial"]').setValue('12345678901234567890123456')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
+    it('@valid - missing year field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+
+      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue('')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
+    it('@valid - string year field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+
+      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue('abcd')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
+    it('@valid - non-integer year field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 2013)
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+
+      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue('3.14')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
+    it('@valid - too small year field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 1000)
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+
+      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue('999')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
+    it('@valid - too big year field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MOTOR_VEHICLE, 'Kawasaki', 'KLR650',
+          'JKAKLEE17DDA58357', undefined, 9999)
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+
+      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue('10000')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
+    it('@valid - MANUFACTURED_HOME_NOT_REGISTERED with serial field to emit true', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_NOT_REGISTERED,
+          undefined, undefined, '1234567890123456789012345')
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+    })
+
+    it('@valid - MANUFACTURED_HOME_NOT_REGISTERED without serial field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_NOT_REGISTERED,
+          undefined, undefined, '1234567890123456789012345')
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+
+      wrapper.get('[data-test-id="SerialCollateral.input.serial"]').setValue('')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
+    it('@valid - MANUFACTURED_HOME_REGISTERED with MH# field to emit true', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED, undefined,
+          undefined, undefined, 'MH12345')
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+    })
+
+    it('@valid - MANUFACTURED_HOME_REGISTERED with no MH# field to emit false', async (): Promise<void> => {
+      const properties = ref({
+        editing: true, value: new SerialCollateralModel(SerialCollateralType.MANUFACTURED_HOME_REGISTERED, undefined,
+          undefined, undefined, 'MH12345')
+      })
+      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
+
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeTruthy()
+
+      wrapper.get('[data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"]').setValue('')
+
+      await Vue.nextTick()
+      await Vue.nextTick()
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
     })
   })
 })

@@ -89,18 +89,36 @@ export class SerialCollateralModel {
   }
 
   /**
-   * Gets the JSON representation of the SerialCollateralModel object.
+   * Gets the JSON representation of the SerialCollateralModel object. This will remove fields that are not valid for
+   * the given type of collateral.
    */
   public toJson(): SerialCollateralInterface {
-    return {
+    const jsonObject = {
       make: this.make,
-      manufacturedHomeRegNumber: this.type == SerialCollateralType.MANUFACTURED_HOME ?
-        this.manufacturedHomeRegNumber : undefined,
+      manufacturedHomeRegNumber: this.manufacturedHomeRegNumber,
       model: this.model,
       serial: this.serial,
       type: this.type,
       year: this.year
     }
+
+    // Manufactured homes don't have make, model, or year.
+    if (this.type == SerialCollateralType.MANUFACTURED_HOME_NOT_REGISTERED ||
+      this.type == SerialCollateralType.MANUFACTURED_HOME_REGISTERED) {
+      jsonObject.make = undefined
+      jsonObject.model = undefined
+      jsonObject.year = undefined
+    }
+
+    if (this.type == SerialCollateralType.MANUFACTURED_HOME_REGISTERED) {
+      // Registered manufactured homes don't have serial numbers.
+      jsonObject.serial = undefined
+    } else {
+      // All other types don't have manufactured home registration numbers.
+      jsonObject.manufacturedHomeRegNumber = undefined
+    }
+
+    return jsonObject
   }
 
   /*
