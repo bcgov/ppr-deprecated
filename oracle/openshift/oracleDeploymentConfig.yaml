@@ -1,0 +1,88 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: oradb1
+  name: oradb1
+  namespace: zwmtib-tools
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    app: oradb1
+    deploymentconfig: oradb1
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+      creationTimestamp: null
+      labels:
+        app: oradb1
+        deploymentconfig: oradb1
+    spec:
+      containers:
+        - env:
+            - name: ORACLE_PDB
+              value: oracle1
+            - name: ORACLE_SID
+              value: ORCLCDB
+          image: >-
+            docker-registry.default.svc:5000/zwmtib-tools/oradb1@sha256:5477602a1ba07a2115507c0009f694290689460c1ab990fcd131b89c8df90c2d
+          imagePullPolicy: Always
+          name: oradb1
+          ports:
+            - containerPort: 1521
+              protocol: TCP
+            - containerPort: 5500
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "2"
+              memory: 8Gi
+          securityContext:
+            runAsUser: 1005579999
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /import
+              name: dumpfile
+            - mountPath: /ORCL
+              name: orcl
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        supplementalGroups:
+          - 0
+          - 54321
+          - 54322
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: dumpfile
+          persistentVolumeClaim:
+            claimName: importoradb
+        - name: orcl
+          persistentVolumeClaim:
+            claimName: oradb
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - oradb1
+        from:
+          kind: ImageStreamTag
+          name: "oradb1:latest"
+          namespace: zwmtib-tools
+      type: ImageChange
