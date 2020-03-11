@@ -1,14 +1,21 @@
 <template>
   <v-card flat>
-    <v-form v-if="editing">
+    <v-form
+      v-if="editing"
+      @input="formValid($event)"
+    >
       <v-text-field
-        data-test-id="BusinessName"
+        data-test-id="BusinessName.input.name"
         label="Business Name"
+        :rules="nameRules"
         :value="value.businessName"
         @input="updateName($event)"
       />
     </v-form>
-    <div v-else>
+    <div
+      v-else
+      data-test-id="BusinessName.display.name"
+    >
       {{ value.businessName }}
     </div>
   </v-card>
@@ -16,7 +23,7 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { BusinessModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-model'
 
 
 export default createComponent({
@@ -28,16 +35,30 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: BusinessModel
+      type: BusinessNameModel
     }
   },
   setup(_, { emit }) {
 
+    const nameRules = [
+      (value: string): (boolean | string) => {
+        return !!value || 'The Business Name is required'
+      }
+    ]
+
+
+    // Callback function for emitting form validity back to the parent.
+    function formValid(valid: boolean) {
+      emit('valid', valid)
+    }
+
     // Callback function for emitting model changes made to the business name.
     function updateName(newBusinessName: string): void {
-      emit('input', new BusinessModel(newBusinessName))
+      emit('input', new BusinessNameModel(newBusinessName))
     }
     return {
+      formValid,
+      nameRules,
       updateName
     }
   }
