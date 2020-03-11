@@ -44,6 +44,7 @@ def map_financing_statement_model_to_schema(model: models.financing_statement.Fi
     reg_party_model = model.get_registering_party()
 
     reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
+    secured_parties_schema = list(map(models.party.Party.as_schema, model.get_secured_parties()))
     debtors_schema = list(map(models.party.Party.as_schema, model.get_debtors()))
     general_collateral_schema = list(map(map_general_collateral_model_to_schema, model.general_collateral))
 
@@ -51,7 +52,7 @@ def map_financing_statement_model_to_schema(model: models.financing_statement.Fi
         baseRegistrationNumber=model.registration_number, registrationDateTime=reg_date,
         expiryDate=model.expiry_date, years=model.life_in_years if model.life_in_years > 0 else None,
         type=schemas.financing_statement.RegistrationType(model.registration_type_code).name,
-        registeringParty=reg_party_schema, securedParties=[], debtors=debtors_schema,
+        registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
         vehicleCollateral=[], generalCollateral=general_collateral_schema
     )
 

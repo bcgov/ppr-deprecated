@@ -81,3 +81,31 @@ def test_get_debtors_is_empty_when_no_debtors():
     debtors = model.get_debtors()
 
     assert debtors == []
+
+
+def test_get_secured_parties_returns_parties_with_secured_type():
+    model = FinancingStatement(parties=[
+        models.party.Party(type_code=PartyType.DEBTOR.value, last_name='Flintstone'),
+        models.party.Party(type_code=PartyType.SECURED.value, last_name='Slate'),
+        models.party.Party(type_code=PartyType.REGISTERING.value, last_name='Jetson'),
+        models.party.Party(type_code=PartyType.DEBTOR.value, last_name='Rubble'),
+        models.party.Party(type_code=PartyType.SECURED.value, last_name='Spacely')
+    ])
+
+    secured_parties = model.get_secured_parties()
+
+    assert len(secured_parties) == 2
+    assert next(s for s in secured_parties if s.last_name == 'Slate')
+    assert next(s for s in secured_parties if s.last_name == 'Spacely')
+
+
+def test_get_secured_parties_is_empty_when_none_present():
+    model = FinancingStatement(parties=[
+        models.party.Party(type_code=PartyType.DEBTOR.value, last_name='Flintstone'),
+        models.party.Party(type_code=PartyType.REGISTERING.value, last_name='Jetson'),
+        models.party.Party(type_code=PartyType.DEBTOR.value, last_name='Rubble')
+    ])
+
+    secured_parties = model.get_secured_parties()
+
+    assert secured_parties == []

@@ -20,6 +20,7 @@ def create_test_financing_statement(**kwargs):
         'num_of_events': 1,
         'years': -1,  # An int for 1 to 25, or -1 for Infinity
         'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
+        'secured_parties': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'debtors': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'general_collateral': []  # a list of str
     }, **kwargs)
@@ -38,6 +39,9 @@ def create_test_financing_statement(**kwargs):
 
         if options['registering_party']:
             add_test_party(fin_stmt, event, 'RP', **options['registering_party'])
+
+        for secured_party_input in options['secured_parties']:
+            add_test_party(fin_stmt, event, 'SP', **secured_party_input)
 
         for debtor_input in options['debtors']:
             add_test_party(fin_stmt, event, 'DE', **debtor_input)
@@ -65,6 +69,7 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
     options = dict({
         'change_type_code': None,  # A 2 character string, a RegistrationType value
         'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
+        'secured_parties': None,  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'debtors': None,  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'general_collateral': None  # a list of str
     }, **kwargs)
@@ -82,6 +87,12 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
             if existing_party:
                 event.ending_parties.append(existing_party)
             add_test_party(fin_stmt, event, 'RP', **reg_party_input)
+
+        if options['secured_parties'] is not None:
+            for existing_secured_party in fin_stmt.get_secured_parties():
+                event.ending_parties.append(existing_secured_party)
+            for secured_party_input in options['secured_parties']:
+                add_test_party(fin_stmt, event, 'SP', **secured_party_input)
 
         if options['debtors'] is not None:
             for existing_debtor in fin_stmt.get_debtors():
