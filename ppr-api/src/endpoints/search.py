@@ -6,7 +6,9 @@ import fastapi
 from starlette import responses, status
 
 import auth.authentication
+import models.collateral
 import models.financing_statement
+import models.party
 import models.search
 import schemas.collateral
 import schemas.financing_statement
@@ -91,6 +93,24 @@ def map_general_collateral_model_to_schema(model: models.collateral.GeneralColla
     return schemas.collateral.GeneralCollateral(description=model.description)
 
 
+def map_party_model_to_schema(model: models.party.Party):
+    base_args = {
+        'businessName': model.business_name,
+        'personName': schemas.party.IndividualName(
+            first=model.first_name, middle=model.middle_name, last=model.last_name
+        ),
+        'address': schemas.party.Address(
+            street=model.address.line1, streetAdditional=model.address.line2, city=model.address.city,
+            region=model.address.region, country=model.address.country, postalCode=model.address.postal_code
+        ) if model.address else None
+    }
+
+    if model.type_code in [schemas.party.PartyType.REGISTERING.value, schemas.party.PartyType.SECURED.value]:
+        return schemas.party.Party(**base_args)
+    else:  # model.type_code == schemas.party.PartyType.DEBTOR.value
+        return schemas.party.Debtor(birthdate=model.birthdate, **base_args)
+
+
 def rebuild_financing_statement_to_event(event: models.financing_statement.FinancingStatementEvent):
     """
     Given an event, provide a Financing Statement result that represents the state as once that event was applied. This
@@ -115,16 +135,15 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
         general_collateral_snapshot.extend(applied_event.starting_general_collateral)
 
     reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
-    reg_party_schema = schemas.party.Party(
-        personName=schemas.party.IndividualName(first=reg_party_model.first_name, middle=reg_party_model.middle_name,
-                                                last=reg_party_model.last_name)
-    ) if reg_party_model else None
+    reg_party_schema = map_party_model_to_schema(reg_party_model) if reg_party_model else None
+    debtors_model = filter(lambda p: p.type_code == PartyType.DEBTOR.value, parties_snapshot)
+    debtors_schema = list(map(map_party_model_to_schema, debtors_model))
     general_collateral_schema = list(map(map_general_collateral_model_to_schema, general_collateral_snapshot))
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
         documentId=event.document_number, expiryDate=fs_model.expiry_date,
-        registeringParty=reg_party_schema, securedParties=[], debtors=[],
+        registeringParty=reg_party_schema, securedParties=[], debtors=debtors_schema,
         vehicleCollateral=[], generalCollateral=general_collateral_schema,
         type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name
     )
