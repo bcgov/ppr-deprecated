@@ -117,7 +117,7 @@ def test_read_singular_search_results():
 def test_search_results_should_provide_party_at_time_of_search():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         registering_party={'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
-                           'business_name': 'Mr. Plow', 'birthdate': datetime.date(2019, 6, 17),
+                           'business_name': 'Mr. Plow',
                            'address':  {'line1': '724 Evergreen Terrace', 'line2': 'first floor', 'city': 'Springfield',
                                         'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}
     )
