@@ -22,14 +22,26 @@ import pages.SearchPage
 import pages.SelectLoginPage
 import pages.StartPage
 import pages.ValidatePage
-
+import groovy.sql.Sql
 import spock.lang.*
+import java.lang.*
+import io.qameta.allure.Attachment
+
+@Title("This is the POC script for PPR")
+@Narrative("""
+As a user I want to search for registration.
+""")
+@See("https://github.com/bcgov/ppr")
 
 class StartSpec extends BaseSpec {
+
+    //@Shared sql = Sql.newInstance("jdbc:mysql://localhost:3306/testdata","<xxx>","<xxx>", "com.mysql.cj.jdbc.Driver")
+    
     def env = System.getenv()
     def pprUser = env['PPR_VIEWER_USERNAME']
     def pprPw = env['PPR_PASSWORD']
-
+    
+    @Attachment(value = "Page screenshot", type = "image/png")
     def "Open First page"() {
         when: "I browse to the start page"
             to StartPage
@@ -43,7 +55,7 @@ class StartSpec extends BaseSpec {
             testLogin.click()
         then: "the Test ID login page is shown"
             at LoginPage
-        when: "I enter my id and click on continue"
+         when: "I enter my id and click on continue"
             cardNumber.value( "${pprUser}" )
             continueButton.click()
         then: "I see the password entry page"
@@ -76,6 +88,8 @@ class StartSpec extends BaseSpec {
             to StartPage  
             logoutuser()
         then: "I see the cooperatives start page"
-            
+            at StartPage
+/*         where:
+            [pprUser, pprPw] << sql.rows("select f1,f2 from testdata where id='Open First page' order by seq")    */ 
     }
 }
