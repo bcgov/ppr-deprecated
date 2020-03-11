@@ -1,6 +1,8 @@
+import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/components/person-name-model'
+
 
 describe('FinancingStatementModel', (): void => {
 
@@ -84,20 +86,32 @@ describe('FinancingStatementModel', (): void => {
       expect(fstmt.registeringParty.last).toEqual(testPerson.last)
     })
 
+    it('construct with secured parties', (): void => {
+      const testPerson = new PersonNameModel('First', 'Middle', 'Last')
+      const testBaseParty = new BasePartyModel(undefined, testPerson)
+      const securedParties = [testBaseParty]
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties)
+
+      expect(fstmt.securedParties).toBeDefined()
+      expect(fstmt.securedParties.length).toBe(1)
+      expect(fstmt.securedParties[0].personName.first).toEqual(testPerson.first)
+    })
+
+
     it('construct with base registration number', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, '123456A')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, '123456A')
 
       expect(fstmt.baseRegistrationNumber).toEqual('123456A')
     })
 
     it('construct with registration date and time', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, '2020-01-01T01:01:01')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, '2020-01-01T01:01:01')
 
       expect(fstmt.registrationDateTime).toEqual('2020-01-01T01:01:01')
     })
 
     it('construct with expiry date', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, '2030-01-01')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined, '2030-01-01')
 
       expect(fstmt.expiryDate).toEqual('2030-01-01')
     })
@@ -132,5 +146,17 @@ describe('FinancingStatementModel', (): void => {
 
       expect(fstmtReceived).toEqual(fstmt)
     })
+
+    // Secured Parties
+    it('json with secured parties', (): void => {
+      const testPerson = new PersonNameModel('First', 'Middle', 'Last')
+      const testBaseParty = new BasePartyModel(undefined, testPerson)
+      const securedParties = [testBaseParty]
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties)
+      const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())
+
+      expect(fstmtReceived).toEqual(fstmt)
+    })
+
   })
 })

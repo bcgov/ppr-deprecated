@@ -1,5 +1,6 @@
 import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
+import { BasePartyModel } from '@/base-party/base-party-model'
 
 /**
  * The interface to a financing statement.
@@ -11,7 +12,7 @@ export interface FinancingStatementInterface {
   generalCollateral: [];
   registeringParty: PersonNameInterface;
   registrationDateTime: string | undefined;
-  securedParties: [];
+  securedParties: BasePartyModel[];
   type: FinancingStatementType;
   vehicleCollateral: [];
   years: number;
@@ -24,6 +25,7 @@ export class FinancingStatementModel {
   private _registrationDateTime: string | undefined
   private _type: FinancingStatementType
   private _years: number
+  private _securedParties: BasePartyModel[]
 
   /**
    * Creates a new FinancingStatementModel model instance.
@@ -31,6 +33,7 @@ export class FinancingStatementModel {
    * @param type the type of financing statement. A value from the FinancingStatementType enum
    * @param years the number of years the financing statement is registered for. A value between 1 and 25.
    * @param registeringParty the party who registered the financing statement
+   * @param securedParties the list of secured parties who own the lien
    * @param baseRegistrationNumber the unique registration number for the financing statement, may be undefined.
    * @param registrationDateTime the date and time that the financing statement was registered.
    * @param expiryDate the expiry date of the financing statement.
@@ -39,6 +42,7 @@ export class FinancingStatementModel {
     type: FinancingStatementType = FinancingStatementType.SECURITY_AGREEMENT,
     years: number = 1,
     registeringParty: PersonNameModel = new PersonNameModel(),
+    securedParties: BasePartyModel[] = [new BasePartyModel()],
     baseRegistrationNumber?: string,
     registrationDatetime?: string,
     expiryDate?: string
@@ -46,6 +50,7 @@ export class FinancingStatementModel {
     this._type = type
     this._years = years
     this._registeringParty = registeringParty
+    this._securedParties = securedParties
     this._baseRegistrationNumber = baseRegistrationNumber
     this._registrationDateTime = registrationDatetime
     this._expiryDate = expiryDate
@@ -63,6 +68,13 @@ export class FinancingStatementModel {
    */
   public get expiryDate(): string | undefined {
     return this._expiryDate
+  }
+
+  /**
+   * Gets the list of secured parties who own the lien
+   */
+  public get securedParties(): BasePartyModel[] {
+    return this._securedParties
   }
 
   /**
@@ -104,7 +116,7 @@ export class FinancingStatementModel {
       generalCollateral: [],
       registeringParty: this.registeringParty.toJson(),
       registrationDateTime: this.registrationDateTime,
-      securedParties: [],
+      securedParties: this.securedParties,
       type: this.type,
       vehicleCollateral: [],
       years: this.years
@@ -139,19 +151,23 @@ export class FinancingStatementModel {
    */
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
     let registeringParty: PersonNameModel | undefined
+    let securedParties: BasePartyModel[] | undefined
 
     if (jsonObject.registeringParty) {
-      registeringParty = new PersonNameModel(
-        jsonObject.registeringParty.personName.first,
-        jsonObject.registeringParty.personName.middle,
-        jsonObject.registeringParty.personName.last
-      )
+      registeringParty = PersonNameModel.fromJson(jsonObject.registeringParty)
     }
 
+    if (jsonObject.securedParties) {
+      securedParties = []
+      jsonObject.securedParties.forEach((sp: BasePartyModel): void => {
+        securedParties.push(BasePartyModel.fromJson(sp))
+      })
+    }
     return new FinancingStatementModel(
       jsonObject.type,
       jsonObject.years,
       registeringParty,
+      securedParties,
       jsonObject.baseRegistrationNumber,
       jsonObject.registrationDateTime,
       jsonObject.expiryDate

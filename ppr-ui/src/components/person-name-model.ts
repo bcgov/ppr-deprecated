@@ -1,22 +1,25 @@
 
+interface PersonNameInnerInterface {
+  first: string;
+  middle: string;
+  last: string;
+}
 /**
  * The interface to a person name.
  */
 export interface PersonNameInterface {
-  personName: {
-    first: string;
-    middle: string;
-    last: string;
-  };
+  personName: PersonNameInnerInterface;
 }
 
 /**
  * The model for a person name, such as for a registering party.
  */
-export class PersonNameModel {
-  private _first: string
-  private _middle: string
-  private _last: string
+export class PersonNameModel implements PersonNameInterface {
+  private _personName: PersonNameInnerInterface = {
+    first: '',
+    middle: '',
+    last: ''
+  }
 
   /**
    * Creates a new Person Name model instance.
@@ -26,30 +29,37 @@ export class PersonNameModel {
    * @param last the last name of the person.
    */
   public constructor(first: string = '', middle: string = '', last: string = '') {
-    this._first = first
-    this._middle = middle
-    this._last = last
+    this._personName.first = first
+    this._personName.middle = middle
+    this._personName.last = last
+  }
+
+  /**
+   * Gets personName
+   */
+  public get personName(): PersonNameInnerInterface {
+    return this._personName
   }
 
   /**
    * Gets the first name of the person.
    */
   public get first(): string {
-    return this._first
+    return this._personName.first
   }
 
   /**
    * Gets the middle name of the person.
    */
   public get middle(): string {
-    return this._middle
+    return this._personName.middle
   }
 
   /**
    * Gets the last name of the person.
    */
   public get last(): string {
-    return this._last
+    return this._personName.last
   }
 
   /**
