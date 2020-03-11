@@ -1,3 +1,4 @@
+import datetime
 from starlette.testclient import TestClient
 
 import main
@@ -115,7 +116,10 @@ def test_read_singular_search_results():
 
 def test_search_results_should_provide_party_at_time_of_search():
     fin_stmt = sample_data_utility.create_test_financing_statement(
-        registering_party={'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson'}
+        registering_party={'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
+                           'business_name': 'Mr. Plow', 'birthdate': datetime.date(2019, 6, 17),
+                           'address':  {'line1': '724 Evergreen Terrace', 'line2': 'first floor', 'city': 'Springfield',
+                                        'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}
     )
     fin_stmt = sample_data_utility.create_test_financing_statement_event(
         fin_stmt, registering_party={'first_name': 'Charles', 'middle_name': 'Montgomery', 'last_name': 'Burns'}
@@ -127,10 +131,18 @@ def test_search_results_should_provide_party_at_time_of_search():
     rv = client.get('/searches/{}/results'.format(search.id))
     body = rv.json()
 
-    reg_part_name = body[0]['financingStatement']['registeringParty']['personName']
-    assert reg_part_name['first'] == 'Homer'
-    assert reg_part_name['middle'] == 'Jay'
-    assert reg_part_name['last'] == 'Simpson'
+    reg_party = body[0]['financingStatement']['registeringParty']
+    assert reg_party['personName']['first'] == 'Homer'
+    assert reg_party['personName']['middle'] == 'Jay'
+    assert reg_party['personName']['last'] == 'Simpson'
+    assert reg_party['businessName'] == 'Mr. Plow'
+    assert reg_party['address']['street'] == '724 Evergreen Terrace'
+    assert reg_party['address']['streetAdditional'] == 'first floor'
+    assert reg_party['address']['city'] == 'Springfield'
+    assert reg_party['address']['region'] == 'BC'
+    assert reg_party['address']['country'] == 'CA'
+    assert reg_party['address']['postalCode'] == 'V1A 1A1'
+    assert 'birthdate' not in reg_party
 
 
 def test_search_results_should_provide_general_collateral_at_time_of_search():
@@ -153,3 +165,32 @@ def test_search_results_should_provide_general_collateral_at_time_of_search():
     general_collateral = body[0]['financingStatement']['generalCollateral']
     assert len(general_collateral) == 1
     assert general_collateral[0]['description'] == 'time of search collateral'
+
+
+def test_search_results_should_provide_debtor_details():
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        debtors=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson', 'business_name': 'Mr. Plow',
+                  'birthdate': datetime.date(2019, 6, 17),
+                  'address':  {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
+                               'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
+    )
+    search = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER',
+                                                           {'value': fin_stmt.registration_number},
+                                                           [fin_stmt.registration_number])
+
+    rv = client.get('/searches/{}/results'.format(search.id))
+    body = rv.json()
+
+    len(body[0]['financingStatement']['debtors']) == 1
+    debtor = body[0]['financingStatement']['debtors'][0]
+    assert debtor['personName']['first'] == 'Homer'
+    assert debtor['personName']['middle'] == 'Jay'
+    assert debtor['personName']['last'] == 'Simpson'
+    assert debtor['businessName'] == 'Mr. Plow'
+    assert debtor['birthdate'] == datetime.date(2019, 6, 17).isoformat()
+    assert debtor['address']['street'] == '724 Evergreen Terrace'
+    assert debtor['address']['streetAdditional'] == '1st floor'
+    assert debtor['address']['city'] == 'Springfield'
+    assert debtor['address']['region'] == 'BC'
+    assert debtor['address']['country'] == 'CA'
+    assert debtor['address']['postalCode'] == 'V1A 1A1'

@@ -4,6 +4,7 @@ import fastapi
 import pytest
 
 import endpoints.search
+import models.party
 import models.financing_statement
 import models.search
 
@@ -108,14 +109,92 @@ def test_read_search_results_provides_financing_statement_expiry_date():
     assert results[0].financingStatement.expiryDate == stub_fin_stmt_event.base_registration.expiry_date
 
 
-def stub_financing_statement_event(reg_number: str, base_reg_number: str = None):
-    if not base_reg_number:
+def test_read_search_results_provides_debtor_at_time_of_matched_registration_number():
+    now = datetime.datetime.now()
+    fin_stmt = models.financing_statement.FinancingStatement(
+        registration_number='123456A', registration_type_code='SA', status='A',
+        last_updated=now + datetime.timedelta(seconds=2)
+    )
+    base_event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    second_event = stub_financing_statement_event('123457B', financing_statement=fin_stmt)
+    second_event.registration_date = now + datetime.timedelta(seconds=1)
+    third_event = stub_financing_statement_event('123458C', financing_statement=fin_stmt)
+    third_event.registration_date = now + datetime.timedelta(seconds=2)
+    first_debtor = models.party.Party(
+        type_code='DE', last_name='Simpson', first_name='Homer', base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=base_event.registration_number,
+        ending_registration_number=second_event.registration_number
+    )
+    base_event.starting_parties = [first_debtor]
+    second_debtor = models.party.Party(
+        type_code='DE', last_name='Burns', first_name='Charles', base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=second_event.registration_number,
+        ending_registration_number=third_event.registration_number
+    )
+    second_event.starting_parties = [second_debtor]
+    second_event.ending_parties = [first_debtor]
+    third_debtor = models.party.Party(
+        type_code='DE', last_name='Wiggum', first_name='Clancy', base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=third_event.registration_number
+    )
+    third_event.starting_parties = [third_debtor]
+    third_event.ending_parties = [second_debtor]
+    fin_stmt.parties = [third_debtor]
+    fin_stmt.events = [base_event, second_event, third_event]
+    search_record = models.search.Search(results=[stub_search_result(second_event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert len(results[0].financingStatement.debtors) == 1
+    assert results[0].financingStatement.debtors[0].personName.last == second_debtor.last_name
+
+
+def test_read_search_results_provides_debtor_details():
+    fin_stmt = models.financing_statement.FinancingStatement(
+        registration_number='123456A', registration_type_code='SA', status='A', last_updated=datetime.datetime.now()
+    )
+    event = stub_financing_statement_event(fin_stmt.registration_number)
+    debtor = models.party.Party(
+        type_code='DE', first_name='Homer', middle_name='Jay', last_name='Simpson', business_name='Mr. Plow',
+        birthdate=datetime.date(1990, 6, 15), base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=event.registration_number, address=models.party.Address(
+            line1='742 Evergreen Terrace', line2='First Floor', city='Springfield', region='BC', country='CA',
+            postal_code='H0H 0H0'
+        )
+    )
+    event.starting_parties = [debtor]
+    fin_stmt.parties = [debtor]
+    fin_stmt.events = [event]
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.debtors[0].personName.first == 'Homer'
+    assert results[0].financingStatement.debtors[0].personName.middle == 'Jay'
+    assert results[0].financingStatement.debtors[0].personName.last == 'Simpson'
+    assert results[0].financingStatement.debtors[0].businessName == 'Mr. Plow'
+    assert results[0].financingStatement.debtors[0].birthdate == datetime.date(1990, 6, 15)
+    assert results[0].financingStatement.debtors[0].address.street == '742 Evergreen Terrace'
+    assert results[0].financingStatement.debtors[0].address.streetAdditional == 'First Floor'
+    assert results[0].financingStatement.debtors[0].address.city == 'Springfield'
+    assert results[0].financingStatement.debtors[0].address.region == 'BC'
+    assert results[0].financingStatement.debtors[0].address.country == 'CA'
+    assert results[0].financingStatement.debtors[0].address.postalCode == 'H0H 0H0'
+
+
+def stub_financing_statement_event(reg_number: str, base_reg_number: str = None,
+                                   financing_statement: models.financing_statement.FinancingStatement = None):
+    if financing_statement:
+        base_reg_number = financing_statement.registration_number
+    elif not base_reg_number:
         base_reg_number = reg_number
 
     return models.financing_statement.FinancingStatementEvent(
         registration_number=reg_number, base_registration_number=base_reg_number, document_number='A1234567',
         registration_date=datetime.datetime.now(), user_id='user_id_stub',
-        base_registration=models.financing_statement.FinancingStatement(
+        base_registration=financing_statement or models.financing_statement.FinancingStatement(
             registration_number=base_reg_number, registration_type_code='SA'
         )
     )
