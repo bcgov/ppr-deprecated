@@ -9,9 +9,10 @@
             :rules="typeRules"
             :value="value.type"
             label="Type"
-            @input="updateType"
+            @input="updateType($event)"
           />
           <v-text-field
+            v-if="!typeIsManufacturedHome"
             data-test-id="SerialCollateral.input.make"
             :rules="makeRules"
             :value="value.make"
@@ -19,6 +20,7 @@
             @input="updateStringProperty('make', $event)"
           />
           <v-text-field
+            v-if="!typeIsManufacturedHome"
             data-test-id="SerialCollateral.input.model"
             :rules="modelRules"
             :value="value.model"
@@ -26,21 +28,23 @@
             @input="updateStringProperty('model', $event)"
           />
           <v-text-field
+            v-if="!typeIsManufacturedHomeRegistered"
             data-test-id="SerialCollateral.input.serial"
             :rules="serialRules"
             :value="value.serial"
-            label="Serial"
+            :label="serialLabel"
             @input="updateStringProperty('serial', $event)"
           />
           <v-text-field
+            v-if="!typeIsManufacturedHome"
             data-test-id="SerialCollateral.input.year"
             :rules="yearRules"
             :value="value.year"
             label="Year"
-            @input="updateYear"
+            @input="updateYear($event)"
           />
           <v-text-field
-            v-if="value.type === 'MANUFACTURED_HOME'"
+            v-if="typeIsManufacturedHomeRegistered"
             data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"
             :rules="manufacturedHomeRegNumberRules"
             :value="value.manufacturedHomeRegNumber"
@@ -48,6 +52,7 @@
             @input="updateStringProperty('manufacturedHomeRegNumber', $event)"
           />
         </div>
+
         <div v-else>
           <div>
             Type:
@@ -55,31 +60,31 @@
               {{ value.type }}
             </span>
           </div>
-          <div>
+          <div v-if="!typeIsManufacturedHome">
             Make:
             <span data-test-id="SerialCollateral.display.make">
               {{ value.make }}
             </span>
           </div>
-          <div>
+          <div v-if="!typeIsManufacturedHome">
             Model:
             <span data-test-id="SerialCollateral.display.model">
               {{ value.model }}
             </span>
           </div>
-          <div>
-            Serial:
+          <div v-if="!typeIsManufacturedHomeRegistered">
+            {{ serialLabel }}:
             <span data-test-id="SerialCollateral.display.serial">
               {{ value.serial }}
             </span>
           </div>
-          <div>
+          <div v-if="!typeIsManufacturedHome">
             Year:
             <span data-test-id="SerialCollateral.display.year">
               {{ value.year }}
             </span>
           </div>
-          <div v-if="value.type === 'MANUFACTURED_HOME'">
+          <div v-if="typeIsManufacturedHomeRegistered">
             Manufactured Home Registration Number:
             <span data-test-id="SerialCollateral.display.manufacturedHomeRegNumber">
               {{ value.manufacturedHomeRegNumber }}
@@ -92,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { createComponent, ref } from '@vue/composition-api'
+import { computed, createComponent, ref } from '@vue/composition-api'
 
 import { SerialCollateralModel } from '@/financing-statement/serial-collateral-model'
 import { SerialCollateralType, serialCollateralTypeCodeList } from '@/financing-statement/serial-collateral-type'
@@ -159,6 +164,38 @@ export default createComponent({
       }
     ]
 
+    // Convenience computed value for the type being a manufactured home not registered in B.C.
+    const typeIsManufacturedHomeNotRegistered = computed((): boolean => {
+      return props.value.type === SerialCollateralType.MANUFACTURED_HOME_NOT_REGISTERED
+    })
+
+    // Convenience computed value for the type being a manufactured home registered in B.C.
+    const typeIsManufacturedHomeRegistered = computed((): boolean => {
+      return props.value.type === SerialCollateralType.MANUFACTURED_HOME_REGISTERED
+    })
+
+    // Convenience computed value for the type being a manufactured home, whether or not registered in B.C.
+    const typeIsManufacturedHome = computed((): boolean => {
+      return typeIsManufacturedHomeNotRegistered.value || typeIsManufacturedHomeRegistered.value
+    })
+
+    // Convenience computed value for the serial number label. It has a special value for airframes.
+    const serialLabel = computed((): string => {
+      let label: string
+
+      switch (props.value.type) {
+        case SerialCollateralType.AIRFRAME_NOT_REGISTERED_IN_CANADA:
+        case SerialCollateralType.AIRFRAME_REGISTERED_IN_CANADA:
+          label = 'DOT Number'
+          break
+
+        default:
+          label = 'Serial Number'
+      }
+
+      return label
+    })
+
     // Callback function for emitting form validity back to the parent.
     function validForm(formValid: boolean) {
       emit('valid', formValid)
@@ -202,7 +239,11 @@ export default createComponent({
       manufacturedHomeRegNumberRules,
       modelRules,
       serialCollateralTypes,
+      serialLabel,
       serialRules,
+      typeIsManufacturedHome,
+      typeIsManufacturedHomeNotRegistered,
+      typeIsManufacturedHomeRegistered,
       typeRules,
       updateStringProperty,
       updateType,
