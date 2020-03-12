@@ -124,6 +124,71 @@ def test_create_financing_statement_registering_party_name_is_included(mock_sess
 
 
 @patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_secured_party_business_name_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        secured_parties=[stub_party(business_name='Spacely Sprockets', person_name=None)]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    secured_parties = financing_statement.get_secured_parties()
+    assert len(secured_parties) == 1
+    assert secured_parties[0].business_name == 'Spacely Sprockets'
+    assert secured_parties[0].first_name is None
+    assert secured_parties[0].middle_name is None
+    assert secured_parties[0].last_name is None
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_secured_party_person_name_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        secured_parties=[stub_party(person_name=stub_person_name(first='Charles', middle='Montgomery', last='Burns'))]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    secured_parties = financing_statement.get_secured_parties()
+    assert secured_parties[0].first_name == 'Charles'
+    assert secured_parties[0].middle_name == 'Montgomery'
+    assert secured_parties[0].last_name == 'Burns'
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_secured_party_address_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        secured_parties=[
+            stub_party(
+                address=stub_address(street='123 Fake St', street_add='Apt 1', city='Vancouver', region='BC',
+                                     country='CA', postal_code='V1V 1V1')
+            )]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    secured_parties = financing_statement.get_secured_parties()
+    assert secured_parties[0].address.line1 == '123 Fake St'
+    assert secured_parties[0].address.line2 == 'Apt 1'
+    assert secured_parties[0].address.city == 'Vancouver'
+    assert secured_parties[0].address.region == 'BC'
+    assert secured_parties[0].address.country == 'CA'
+    assert secured_parties[0].address.postal_code == 'V1V 1V1'
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_secured_party_address_is_none(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(secured_parties=[stub_party(address=None)])
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    secured_parties = financing_statement.get_secured_parties()
+    assert secured_parties[0].address is None
+
+
+@patch('sqlalchemy.orm.Session')
 def test_create_financing_statement_debtor_business_name_is_stored(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
     schema = stub_financing_statement_input(debtors=[stub_debtor(business_name='Spacely Sprockets', person_name=None)])
@@ -237,7 +302,7 @@ def stub_person_name(first: str = 'Fred', last: str = 'Flintstone', middle: str 
 
 def stub_party(person_name: schemas.party.IndividualName = stub_person_name(), business_name: str = None,
                address: schemas.party.Address = stub_address()):
-    return schemas.party.Party(personName=person_name, business_name=business_name, address=address)
+    return schemas.party.Party(personName=person_name, businessName=business_name, address=address)
 
 
 def stub_debtor(person_name: schemas.party.IndividualName = stub_person_name(), business_name: str = None,
@@ -251,11 +316,11 @@ def stub_general_collateral(description: str):
 
 
 def stub_financing_statement_input(reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT, years: int = None,
-                                   reg_party: schemas.party.Party = stub_party(), debtors=[stub_debtor()],
-                                   general_collateral=[]):
+                                   reg_party: schemas.party.Party = stub_party(), secured_parties=[stub_party()],
+                                   debtors=[stub_debtor()], general_collateral=[]):
     return schemas.financing_statement.FinancingStatementBase(
-        type=reg_type.name, years=years, registeringParty=reg_party,
-        securedParties=[], debtors=debtors, vehicleCollateral=[], generalCollateral=general_collateral
+        type=reg_type.name, years=years, registeringParty=reg_party, securedParties=secured_parties, debtors=debtors,
+        vehicleCollateral=[], generalCollateral=general_collateral
     )
 
 

@@ -46,6 +46,8 @@ class FinancingStatementRepository:
                                                                          user_id=user.user_id)
 
         reg_party_model = map_party_schema_to_model(schemas.party.PartyType.REGISTERING, fs_input.registeringParty)
+        secured_parties = list(map(lambda p: map_party_schema_to_model(schemas.party.PartyType.SECURED, p),
+                                   fs_input.securedParties))
         debtors = list(map(lambda p: map_party_schema_to_model(schemas.party.PartyType.DEBTOR, p, p.birthdate),
                            fs_input.debtors))
 
@@ -54,9 +56,11 @@ class FinancingStatementRepository:
 
         model.events.append(event_model)
         model.parties.append(reg_party_model)
+        model.parties.extend(secured_parties)
         model.parties.extend(debtors)
         model.general_collateral.extend(general_collateral)
         event_model.starting_parties.append(reg_party_model)
+        event_model.starting_parties.extend(secured_parties)
         event_model.starting_parties.extend(debtors)
         event_model.starting_general_collateral.extend(general_collateral)
 
