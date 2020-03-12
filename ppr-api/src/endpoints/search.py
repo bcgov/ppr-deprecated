@@ -118,6 +118,8 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
 
     reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
     reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
+    secured_parties_model = filter(lambda p: p.type_code == PartyType.SECURED.value, parties_snapshot)
+    secured_parties_schema = list(map(models.party.Party.as_schema, secured_parties_model))
     debtors_model = filter(lambda p: p.type_code == PartyType.DEBTOR.value, parties_snapshot)
     debtors_schema = list(map(models.party.Party.as_schema, debtors_model))
     general_collateral_schema = list(map(map_general_collateral_model_to_schema, general_collateral_snapshot))
@@ -125,7 +127,7 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
         documentId=event.document_number, expiryDate=fs_model.expiry_date,
-        registeringParty=reg_party_schema, securedParties=[], debtors=debtors_schema,
+        registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
         vehicleCollateral=[], generalCollateral=general_collateral_schema,
         type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name
     )
