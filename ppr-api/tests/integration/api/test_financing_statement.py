@@ -183,6 +183,42 @@ def test_create_financing_statement_persists_registering_party():
     assert registering_party.address.postal_code == 'V1A 1A1'
 
 
+def test_create_financing_statement_persists_secured_party():
+    request_payload = get_minimal_payload()
+    request_payload.update(
+        securedParties=[{
+            'businessName': 'Mr. Plow', 'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'},
+            'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor', 'city': 'Springfield',
+                        'region': 'BC', 'country': 'CA', 'postalCode': 'V1A 1A1'}
+        }]
+    )
+
+    rv = client.post('/financing-statements', json=request_payload)
+
+    body = rv.json()
+    assert len(body['securedParties']) == 1
+
+    registration_number = body['baseRegistrationNumber']
+    stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
+    secured_parties = stored.get_secured_parties()
+
+    assert len(secured_parties) == 1
+    assert secured_parties[0].base_registration_number == registration_number
+    assert secured_parties[0].starting_registration_number == registration_number
+    assert secured_parties[0].ending_registration_number is None
+    assert secured_parties[0].first_name == 'Homer'
+    assert secured_parties[0].middle_name == 'Jay'
+    assert secured_parties[0].last_name == 'Simpson'
+    assert secured_parties[0].business_name == 'Mr. Plow'
+    assert secured_parties[0].address.line1 == '742 Evergreen Terrace'
+    assert secured_parties[0].address.line2 == '1st floor'
+    assert secured_parties[0].address.city == 'Springfield'
+    assert secured_parties[0].address.region == 'BC'
+    assert secured_parties[0].address.country == 'CA'
+    assert secured_parties[0].address.postal_code == 'V1A 1A1'
+    assert secured_parties[0].birthdate is None
+
+
 def test_create_financing_statement_persists_debtor():
     request_payload = get_minimal_payload()
     request_payload.update(
