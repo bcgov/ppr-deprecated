@@ -167,6 +167,35 @@ def test_search_results_should_provide_general_collateral_at_time_of_search():
     assert general_collateral[0]['description'] == 'time of search collateral'
 
 
+def test_search_results_should_provide_secured_parties_details():
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        secured_parties=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
+                          'business_name': 'Mr. Plow',
+                          'address':  {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
+                                       'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
+    )
+    search = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER',
+                                                           {'value': fin_stmt.registration_number},
+                                                           [fin_stmt.registration_number])
+
+    rv = client.get('/searches/{}/results'.format(search.id))
+    body = rv.json()
+
+    assert len(body[0]['financingStatement']['securedParties']) == 1
+    secured_party = body[0]['financingStatement']['securedParties'][0]
+    assert secured_party['personName']['first'] == 'Homer'
+    assert secured_party['personName']['middle'] == 'Jay'
+    assert secured_party['personName']['last'] == 'Simpson'
+    assert secured_party['businessName'] == 'Mr. Plow'
+    assert secured_party['address']['street'] == '724 Evergreen Terrace'
+    assert secured_party['address']['streetAdditional'] == '1st floor'
+    assert secured_party['address']['city'] == 'Springfield'
+    assert secured_party['address']['region'] == 'BC'
+    assert secured_party['address']['country'] == 'CA'
+    assert secured_party['address']['postalCode'] == 'V1A 1A1'
+    assert 'birthdate' not in secured_party
+
+
 def test_search_results_should_provide_debtor_details():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         debtors=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson', 'business_name': 'Mr. Plow',
@@ -181,7 +210,7 @@ def test_search_results_should_provide_debtor_details():
     rv = client.get('/searches/{}/results'.format(search.id))
     body = rv.json()
 
-    len(body[0]['financingStatement']['debtors']) == 1
+    assert len(body[0]['financingStatement']['debtors']) == 1
     debtor = body[0]['financingStatement']['debtors'][0]
     assert debtor['personName']['first'] == 'Homer'
     assert debtor['personName']['middle'] == 'Jay'
