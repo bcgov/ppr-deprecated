@@ -34,8 +34,9 @@ class Party(pydantic.BaseModel):
     def check_party_for_business_name(cls, v, values, **kwargs):  # pylint:disable=no-self-argument # noqa: N805
         if v is None:
             raise ValueError('"Party" must have an address')
-        if values['personName'] or values['businessName'] is None:
-            raise KeyError('"Party" must have personName or businessName')
+        if values['personName'] is None:
+            if values['businessName'] is None:
+                raise KeyError('"Party" must have personName or businessName')
         return v
 
 
