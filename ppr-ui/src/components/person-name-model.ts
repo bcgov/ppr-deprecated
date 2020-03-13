@@ -15,10 +15,12 @@ export interface PersonNameInterface {
  * The model for a person name, such as for a registering party.
  */
 export class PersonNameModel implements PersonNameInterface {
+  // declare property to hold the person's name and match structure of the API.  Also need to explicitly construct
+  // the object so the constructor can refer to the inner properties (first, middle, last)
   private _personName: PersonNameInnerInterface = {
-    first: '',
-    middle: '',
-    last: ''
+    first: undefined,
+    middle: undefined,
+    last: undefined
   }
 
   /**

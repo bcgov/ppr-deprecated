@@ -151,14 +151,13 @@ export class FinancingStatementModel {
    */
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
     let registeringParty: PersonNameModel | undefined
-    let securedParties: BasePartyModel[] | undefined
+    let securedParties: BasePartyModel[] = []
 
     if (jsonObject.registeringParty) {
       registeringParty = PersonNameModel.fromJson(jsonObject.registeringParty)
     }
 
     if (jsonObject.securedParties) {
-      securedParties = []
       jsonObject.securedParties.forEach((sp: BasePartyModel): void => {
         securedParties.push(BasePartyModel.fromJson(sp))
       })
@@ -167,7 +166,7 @@ export class FinancingStatementModel {
       jsonObject.type,
       jsonObject.years,
       registeringParty,
-      securedParties,
+      securedParties.length > 0 ? securedParties : undefined,
       jsonObject.baseRegistrationNumber,
       jsonObject.registrationDateTime,
       jsonObject.expiryDate
