@@ -29,6 +29,7 @@ class Party(pydantic.BaseModel):
     personName: IndividualName = None
     businessName: str = None
     address: Address = None
+    test
 
     @pydantic.validator('address', pre=None, always=True)
     def check_party_for_name(cls, v, values, **kwargs):  # pylint:disable=no-self-argument # noqa: N805
