@@ -223,3 +223,27 @@ def test_search_results_should_provide_debtor_details():
     assert debtor['address']['region'] == 'BC'
     assert debtor['address']['country'] == 'CA'
     assert debtor['address']['postalCode'] == 'V1A 1A1'
+
+
+def test_search_results_should_provide_vehicle_collateral_details():
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        vehicle_collateral=[{
+            'type_code': 'MH', 'year': 1997, 'make': 'Honda', 'model': 'Civic', 'serial_number': '1HGEJ8258VL115351',
+            'mhr_number': '7654098'
+        }]
+    )
+    search = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER',
+                                                           {'value': fin_stmt.registration_number},
+                                                           [fin_stmt.registration_number])
+
+    rv = client.get('/searches/{}/results'.format(search.id))
+    body = rv.json()
+
+    assert len(body[0]['financingStatement']['vehicleCollateral']) == 1
+    collateral = body[0]['financingStatement']['vehicleCollateral'][0]
+    assert collateral['type'] == 'MANUFACTURED_HOME'
+    assert collateral['year'] == 1997
+    assert collateral['make'] == 'Honda'
+    assert collateral['model'] == 'Civic'
+    assert collateral['serial'] == '1HGEJ8258VL115351'
+    assert collateral['manufacturedHomeRegNumber'] == '7654098'

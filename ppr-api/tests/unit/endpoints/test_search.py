@@ -4,8 +4,9 @@ import fastapi
 import pytest
 
 import endpoints.search
-import models.party
+import models.collateral
 import models.financing_statement
+import models.party
 import models.search
 
 
@@ -223,6 +224,54 @@ def test_read_search_results_provides_debtor_details():
     assert results[0].financingStatement.debtors[0].address.region == 'BC'
     assert results[0].financingStatement.debtors[0].address.country == 'CA'
     assert results[0].financingStatement.debtors[0].address.postalCode == 'H0H 0H0'
+
+
+def test_read_search_results_provides_vehicle_collateral_at_time_of_matched_registration_number():
+    now = datetime.datetime.now()
+    fin_stmt = models.financing_statement.FinancingStatement(
+        registration_number='123456A', registration_type_code='SA', status='A',
+        last_updated=now + datetime.timedelta(seconds=2)
+    )
+    base_event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    second_event = stub_financing_statement_event('123457B', financing_statement=fin_stmt)
+    second_event.registration_date = now + datetime.timedelta(seconds=1)
+    third_event = stub_financing_statement_event('123458C', financing_statement=fin_stmt)
+    third_event.registration_date = now + datetime.timedelta(seconds=2)
+    first_collateral_remains = models.collateral.VehicleCollateral(
+        type_code='MH', serial_number='1', base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=base_event.registration_number
+    )
+    first_collateral_removed = models.collateral.VehicleCollateral(
+        type_code='MH', serial_number='2', base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=base_event.registration_number,
+        ending_registration_number=second_event.registration_number
+    )
+    base_event.starting_vehicle_collateral = [first_collateral_remains, first_collateral_removed]
+    second_collateral = models.collateral.VehicleCollateral(
+        type_code='MH', serial_number='3', base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=second_event.registration_number,
+        ending_registration_number=third_event.registration_number
+    )
+    second_event.starting_vehicle_collateral = [second_collateral]
+    second_event.ending_vehicle_collateral = [first_collateral_removed]
+    third_collateral = models.collateral.VehicleCollateral(
+        type_code='MH', serial_number='4', base_registration_number=fin_stmt.registration_number,
+        starting_registration_number=third_event.registration_number
+    )
+    third_event.starting_vehicle_collateral = [third_collateral]
+    third_event.ending_vehicle_collateral = [second_collateral]
+    fin_stmt.vehicle_collateral = [first_collateral_remains, third_collateral]
+    fin_stmt.events = [base_event, second_event, third_event]
+    search_record = models.search.Search(results=[stub_search_result(second_event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    # The search result was to the second event, so ensure vehicle collateral matches expectations for that state
+    result_collateral = results[0].financingStatement.vehicleCollateral
+    assert len(result_collateral) == 2
+    assert next(c for c in result_collateral if c.serial == first_collateral_remains.serial_number)
+    assert next(c for c in result_collateral if c.serial == second_collateral.serial_number)
 
 
 def stub_financing_statement_event(reg_number: str, base_reg_number: str = None,
