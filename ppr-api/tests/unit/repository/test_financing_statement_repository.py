@@ -6,6 +6,7 @@ import freezegun
 import auth.authentication
 import repository.financing_statement_repository
 import schemas.collateral
+from schemas.collateral import VehicleType
 import schemas.financing_statement
 from schemas.financing_statement import RegistrationType
 import schemas.party
@@ -290,6 +291,30 @@ def test_create_financing_statement_general_collateral_is_stored(mock_session):
     assert collateral[0] in financing_statement.events[0].starting_general_collateral
 
 
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_vehicle_collateral_is_stored(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(
+        vehicle_collateral=[
+            stub_vehicle_collateral(vehicle_type=VehicleType.MOTOR_VEHICLE, year=1997, make='Honda', model='Civic',
+                                    serial='1HGEJ8258VL115351', mhr_number=None),
+            stub_vehicle_collateral(vehicle_type=VehicleType.MANUFACTURED_HOME, mhr_number='7654321')
+        ]
+    )
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    collateral = financing_statement.vehicle_collateral
+    assert len(collateral) == 2
+    manufactured_home = next(c for c in collateral if c.type_code == VehicleType.MANUFACTURED_HOME.value)
+    motor_vehicle = next(c for c in collateral if c.type_code == VehicleType.MOTOR_VEHICLE.value)
+    assert manufactured_home.mhr_number == '7654321'
+    assert motor_vehicle.year == 1997
+    assert motor_vehicle.make == 'Honda'
+    assert motor_vehicle.model == 'Civic'
+    assert motor_vehicle.serial_number == '1HGEJ8258VL115351'
+
+
 def stub_address(street: str = '123 Fake St', street_add: str = None, city: str = 'Victoria', region: str = None,
                  country: str = 'CA', postal_code: str = 'V1V 1V1'):
     return schemas.party.Address(street=street, streetAdditional=street_add, city=city, region=region, country=country,
@@ -315,12 +340,19 @@ def stub_general_collateral(description: str):
     return schemas.collateral.GeneralCollateral(description=description)
 
 
+def stub_vehicle_collateral(vehicle_type: VehicleType = VehicleType.MANUFACTURED_HOME, mhr_number: str = '1234567',
+                            serial: str = None, year: int = None, make: str = None, model: str = None):
+    return schemas.collateral.VehicleCollateral(
+        type=vehicle_type.name, year=year, make=make, model=model, serial=serial, manufacturedHomeRegNumber=mhr_number
+    )
+
+
 def stub_financing_statement_input(reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT, years: int = None,
                                    reg_party: schemas.party.Party = stub_party(), secured_parties=[stub_party()],
-                                   debtors=[stub_debtor()], general_collateral=[]):
+                                   debtors=[stub_debtor()], general_collateral=[], vehicle_collateral=[]):
     return schemas.financing_statement.FinancingStatementBase(
         type=reg_type.name, years=years, registeringParty=reg_party, securedParties=secured_parties, debtors=debtors,
-        vehicleCollateral=[], generalCollateral=general_collateral
+        vehicleCollateral=vehicle_collateral, generalCollateral=general_collateral
     )
 
 
