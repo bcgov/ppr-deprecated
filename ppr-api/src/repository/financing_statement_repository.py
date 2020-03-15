@@ -7,6 +7,7 @@ import models.collateral
 import models.database
 import models.financing_statement
 import models.party
+import schemas.collateral
 import schemas.financing_statement
 import schemas.party
 import utils.datetime
@@ -23,6 +24,13 @@ def map_party_schema_to_model(party_type: schemas.party.PartyType, schema: schem
         first_name=schema.personName.first if schema.personName else None,
         middle_name=schema.personName.middle if schema.personName else None,
         last_name=schema.personName.last if schema.personName else None
+    )
+
+
+def map_vehicle_collateral_schema_to_model(schema: schemas.collateral.VehicleCollateral):
+    return models.collateral.VehicleCollateral(
+        type_code=schemas.collateral.VehicleType[schema.type].value, year=schema.year, make=schema.make,
+        model=schema.model, serial_number=schema.serial, mhr_number=schema.manufacturedHomeRegNumber
     )
 
 
@@ -53,16 +61,19 @@ class FinancingStatementRepository:
 
         general_collateral = list(map(lambda c: models.collateral.GeneralCollateral(description=c.description),
                                       fs_input.generalCollateral))
+        vehicle_collateral = list(map(map_vehicle_collateral_schema_to_model, fs_input.vehicleCollateral))
 
         model.events.append(event_model)
         model.parties.append(reg_party_model)
         model.parties.extend(secured_parties)
         model.parties.extend(debtors)
         model.general_collateral.extend(general_collateral)
+        model.vehicle_collateral.extend(vehicle_collateral)
         event_model.starting_parties.append(reg_party_model)
         event_model.starting_parties.extend(secured_parties)
         event_model.starting_parties.extend(debtors)
         event_model.starting_general_collateral.extend(general_collateral)
+        event_model.starting_vehicle_collateral.extend(vehicle_collateral)
 
         self.db.add(model)
         self.db.flush()

@@ -300,6 +300,34 @@ def test_create_financing_statement_persists_general_collateral():
     assert next(x for x in stored.general_collateral if x.description == 'general collateral 2')
 
 
+def test_create_financing_statement_persists_vehicle_collateral():
+    request_payload = get_minimal_payload()
+    request_payload.update(
+        vehicleCollateral=[{
+            'type': 'MOTOR_VEHICLE', 'year': 1997, 'make': 'Honda', 'model': 'Civic', 'serial': '1HGEJ8258VL115351',
+            'manufacturedHomeRegNumber': '1234567'
+        }]
+    )
+
+    rv = client.post('/financing-statements', json=request_payload)
+
+    body = rv.json()
+    assert 'vehicleCollateral' in body
+    assert len(body['vehicleCollateral']) == 1
+
+    registration_number = body['baseRegistrationNumber']
+    stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
+    collateral = stored.vehicle_collateral
+
+    assert len(collateral) == 1
+    assert collateral[0].type_code == 'MV'
+    assert collateral[0].year == 1997
+    assert collateral[0].make == 'Honda'
+    assert collateral[0].model == 'Civic'
+    assert collateral[0].serial_number == '1HGEJ8258VL115351'
+    assert collateral[0].mhr_number == '1234567'
+
+
 def get_minimal_payload():
     return {
         'type': 'SECURITY_AGREEMENT',
