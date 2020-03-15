@@ -89,10 +89,6 @@ def map_search_result_output(search_result: models.search.SearchResult):
     return schemas.search.SearchResult(type=search_result_type, financingStatement=financing_statement)
 
 
-def map_general_collateral_model_to_schema(model: models.collateral.GeneralCollateral):
-    return schemas.collateral.GeneralCollateral(description=model.description)
-
-
 def rebuild_financing_statement_to_event(event: models.financing_statement.FinancingStatementEvent):
     """
     Given an event, provide a Financing Statement result that represents the state as once that event was applied. This
@@ -109,12 +105,15 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
 
     parties_snapshot = []
     general_collateral_snapshot = []
+    vehicle_collateral_snapshot = []
     for applied_event in target_events:
         # remove entities that end with the new event, and add those that were introduced
         parties_snapshot = filter_ending(applied_event.registration_number, parties_snapshot)
         parties_snapshot.extend(applied_event.starting_parties)
         general_collateral_snapshot = filter_ending(applied_event.registration_number, general_collateral_snapshot)
         general_collateral_snapshot.extend(applied_event.starting_general_collateral)
+        vehicle_collateral_snapshot = filter_ending(applied_event.registration_number, vehicle_collateral_snapshot)
+        vehicle_collateral_snapshot.extend(applied_event.starting_vehicle_collateral)
 
     reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
     reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
@@ -122,13 +121,14 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
     secured_parties_schema = list(map(models.party.Party.as_schema, secured_parties_model))
     debtors_model = filter(lambda p: p.type_code == PartyType.DEBTOR.value, parties_snapshot)
     debtors_schema = list(map(models.party.Party.as_schema, debtors_model))
-    general_collateral_schema = list(map(map_general_collateral_model_to_schema, general_collateral_snapshot))
+    general_collateral_schema = list(map(models.collateral.GeneralCollateral.as_schema, general_collateral_snapshot))
+    vehicle_collateral_schema = list(map(models.collateral.VehicleCollateral.as_schema, vehicle_collateral_snapshot))
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
         documentId=event.document_number, expiryDate=fs_model.expiry_date,
         registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
-        vehicleCollateral=[], generalCollateral=general_collateral_schema,
+        vehicleCollateral=vehicle_collateral_schema, generalCollateral=general_collateral_schema,
         type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name
     )
 

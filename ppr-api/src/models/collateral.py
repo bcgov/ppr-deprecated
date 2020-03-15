@@ -3,17 +3,20 @@ import sqlalchemy
 from .database import BaseORM
 import schemas.collateral
 
+FINANCING_STATEMENT_KEY = 'financing_statement.reg_number'
+REGISTRATION_KEY = 'registration.reg_number'
+
 
 class GeneralCollateral(BaseORM):
     __tablename__ = 'general'
 
     id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
     base_registration_number = sqlalchemy.Column('base_reg_number', sqlalchemy.String(length=10),
-                                                 sqlalchemy.ForeignKey('financing_statement.reg_number'))
+                                                 sqlalchemy.ForeignKey(FINANCING_STATEMENT_KEY))
     starting_registration_number = sqlalchemy.Column('reg_number_start', sqlalchemy.String(length=10),
-                                                     sqlalchemy.ForeignKey('registration.reg_number'))
+                                                     sqlalchemy.ForeignKey(REGISTRATION_KEY))
     ending_registration_number = sqlalchemy.Column('reg_number_end', sqlalchemy.String(length=10),
-                                                   sqlalchemy.ForeignKey('registration.reg_number'))
+                                                   sqlalchemy.ForeignKey(REGISTRATION_KEY))
     description = sqlalchemy.Column(sqlalchemy.String)
 
     def as_schema(self):
@@ -25,11 +28,11 @@ class VehicleCollateral(BaseORM):
 
     id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
     base_registration_number = sqlalchemy.Column('base_reg_number', sqlalchemy.String(length=10),
-                                                 sqlalchemy.ForeignKey('financing_statement.reg_number'))
+                                                 sqlalchemy.ForeignKey(FINANCING_STATEMENT_KEY))
     starting_registration_number = sqlalchemy.Column('reg_number_start', sqlalchemy.String(length=10),
-                                                     sqlalchemy.ForeignKey('registration.reg_number'))
+                                                     sqlalchemy.ForeignKey(REGISTRATION_KEY))
     ending_registration_number = sqlalchemy.Column('reg_number_end', sqlalchemy.String(length=10),
-                                                   sqlalchemy.ForeignKey('registration.reg_number'))
+                                                   sqlalchemy.ForeignKey(REGISTRATION_KEY))
     type_code = sqlalchemy.Column('vehicle_type_cd', sqlalchemy.CHAR(length=2))
     year = sqlalchemy.Column(sqlalchemy.Integer)
     make = sqlalchemy.Column(sqlalchemy.String)
