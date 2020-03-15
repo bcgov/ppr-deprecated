@@ -30,6 +30,11 @@ class FinancingStatement(BaseORM):
         primaryjoin='and_(FinancingStatement.registration_number==GeneralCollateral.base_registration_number, '
                     'GeneralCollateral.ending_registration_number==None)'
     )
+    vehicle_collateral = sqlalchemy.orm.relationship(
+        models.collateral.VehicleCollateral.__name__,
+        primaryjoin='and_(FinancingStatement.registration_number==VehicleCollateral.base_registration_number, '
+                    'VehicleCollateral.ending_registration_number==None)'
+    )
 
     def get_base_event(self):
         return next((e for e in self.events if e.registration_number == self.registration_number), None)
@@ -68,4 +73,10 @@ class FinancingStatementEvent(BaseORM):
     )
     ending_general_collateral = sqlalchemy.orm.relationship(
         models.collateral.GeneralCollateral.__name__, foreign_keys='GeneralCollateral.ending_registration_number'
+    )
+    starting_vehicle_collateral = sqlalchemy.orm.relationship(
+        models.collateral.VehicleCollateral.__name__, foreign_keys='VehicleCollateral.starting_registration_number'
+    )
+    ending_vehicle_collateral = sqlalchemy.orm.relationship(
+        models.collateral.VehicleCollateral.__name__, foreign_keys='VehicleCollateral.ending_registration_number'
     )

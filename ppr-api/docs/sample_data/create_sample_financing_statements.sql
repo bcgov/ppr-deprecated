@@ -7,9 +7,13 @@ INSERT INTO registration (reg_number, base_reg_number, change_type_cd, reg_date,
     ('123456B', '123456B', NULL, now(), null, 'A0000002'),
     ('123456Z', '123456B', 'DT', now() + interval '1 hour', null, 'A0000003');
 
-INSERT INTO vehicle (base_reg_number, reg_number_start, vehicle_type_cd, mhr_number) VALUES
-    ('123456A', '123456A', 'MH', '123456'),
-    ('123456B', '123456B', 'MH', '567890');
+INSERT INTO vehicle (base_reg_number, reg_number_start, reg_number_end, vehicle_type_cd, mhr_number, year, make, model, serial_number) VALUES
+    ('123456A', '123456A', null, 'MH', '123456', null, null, null, '67517679I8677863567654321'),
+    ('123456B', '123456B', null, 'MH', '567890', null, null, null, null),
+    ('123456A', '123456A', null, 'MV', null, 2103, 'Volkswagen', 'Tiguan', 'WVGBV7AX3DW537085'),
+    ('123456B', '123456B', null, 'MV', null, 2003, 'Jeep', 'Wrangler', '1J4FA59S53P387692'),
+    ('123456B', '123456B', '123456Z', 'MV', null, 2002, 'Toyota', 'Avalon', '4T1BF28B82U291010'),
+    ('123456B', '123456Z', null, 'MV', null, 1998, 'Pontiac', 'Grand Prix', '1G2WP1211WF243800');
 
 INSERT INTO general (base_reg_number, reg_number_start, reg_number_end, description) VALUES
     ('123456A', '123456A', null, 'An original description of general collateral'),
