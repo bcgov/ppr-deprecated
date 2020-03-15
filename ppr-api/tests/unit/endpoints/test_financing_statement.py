@@ -184,8 +184,22 @@ def test_read_financing_statement_general_collateral_when_list_is_empty():
     assert len(result.generalCollateral) == 0
 
 
+def test_read_financing_statement_vehicle_collateral_should_be_included():
+    base_reg_num = '123456E'
+    collateral1 = models.collateral.VehicleCollateral(type_code='BO', serial_number='5654768V2')
+    collateral2 = models.collateral.VehicleCollateral(type_code='MH', mhr_number='5678943')
+    stub_fs = stub_financing_statement(base_reg_num, vehicle_collateral=[collateral1, collateral2])
+    repo = MockFinancingStatementRepository(stub_fs)
+
+    result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
+
+    assert len(result.vehicleCollateral) == 2
+    assert next(x for x in result.vehicleCollateral if x.serial == '5654768V2')
+    assert next(x for x in result.vehicleCollateral if x.manufacturedHomeRegNumber == '5678943')
+
+
 def stub_financing_statement(base_reg_number: str, years: int = -1, parties: list = None, general_collateral=[],
-                             reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT):
+                             vehicle_collateral=[], reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT):
     expiry = datetime.date.today() + datedelta.datedelta(years=years) if years > 0 else None
     parties = [models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_number,
                                   starting_registration_number=base_reg_number, first_name='Fred',
@@ -198,7 +212,7 @@ def stub_financing_statement(base_reg_number: str, years: int = -1, parties: lis
             registration_number=base_reg_number, base_registration_number=base_reg_number,
             registration_date=datetime.datetime.now(), starting_parties=parties
         )],
-        parties=parties, general_collateral=general_collateral
+        parties=parties, general_collateral=general_collateral, vehicle_collateral=vehicle_collateral
     )
 
 

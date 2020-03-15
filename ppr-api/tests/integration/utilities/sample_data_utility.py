@@ -22,7 +22,8 @@ def create_test_financing_statement(**kwargs):
         'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
         'secured_parties': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'debtors': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
-        'general_collateral': []  # a list of str
+        'general_collateral': [],  # a list of str
+        'vehicle_collateral': []  # a list of dict with keys type_code, year, make, model, serial_number & mhr_number
     }, **kwargs)
 
     db = models.database.SessionLocal()
@@ -51,6 +52,11 @@ def create_test_financing_statement(**kwargs):
             fin_stmt.general_collateral.append(collateral)
             event.starting_general_collateral.append(collateral)
 
+        for vehicle in options['vehicle_collateral']:
+            collateral = models.collateral.VehicleCollateral(**vehicle)
+            fin_stmt.vehicle_collateral.append(collateral)
+            event.starting_vehicle_collateral.append(collateral)
+
         # Add additional events if needed
         for n in range(1, options['num_of_events']):
             fin_stmt.events.append(
@@ -71,7 +77,8 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
         'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
         'secured_parties': None,  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'debtors': None,  # a list of dict with keys first_name, middle_name, last_name, business_name & address
-        'general_collateral': None  # a list of str
+        'general_collateral': None,  # a list of str
+        'vehicle_collateral': None  # a list of dict with keys type_code, year, make, model, serial_number & mhr_number
     }, **kwargs)
 
     db = models.database.SessionLocal()
@@ -107,6 +114,14 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
                 collateral = models.collateral.GeneralCollateral(description=description)
                 fin_stmt.general_collateral.append(collateral)
                 event.starting_general_collateral.append(collateral)
+
+        if options['vehicle_collateral'] is not None:
+            for existing_collateral in fin_stmt.vehicle_collateral:
+                event.ending_vehicle_collateral.append(existing_collateral)
+            for vehicle in options['vehicle_collateral']:
+                collateral = models.collateral.VehicleCollateral(**vehicle)
+                fin_stmt.vehicle_collateral.append(collateral)
+                event.starting_vehicle_collateral.append(collateral)
 
         time.sleep(0.001)  # Ensure time has advanced since the previous event
         db.add(fin_stmt)
@@ -184,7 +199,8 @@ def retrieve_financing_statement_record(base_reg_number: str):
         query = db.query(models.financing_statement.FinancingStatement)\
             .options(sqlalchemy.orm.joinedload('events').joinedload('starting_parties'))\
             .options(sqlalchemy.orm.joinedload('parties').joinedload('address'))\
-            .options(sqlalchemy.orm.joinedload('general_collateral'))
+            .options(sqlalchemy.orm.joinedload('general_collateral'))\
+            .options(sqlalchemy.orm.joinedload('vehicle_collateral'))
         return query.get(base_reg_number)
     finally:
         db.close()

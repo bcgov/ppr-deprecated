@@ -117,6 +117,26 @@ def test_read_financing_statement_with_changed_general_collateral_should_provide
     assert body['generalCollateral'][0]['description'] == 'secondary registration collateral'
 
 
+def test_read_financing_statement_vehicle_collateral_details():
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        vehicle_collateral=[{
+            'type_code': 'MV', 'year': 1997, 'make': 'Honda', 'model': 'Civic', 'serial_number': '1HGEJ8258VL115351',
+            'mhr_number': '1234567'
+        }]
+    )
+
+    rv = client.get('/financing-statements/{}'.format(fin_stmt.registration_number))
+    body = rv.json()
+
+    assert len(body['vehicleCollateral']) == 1
+    assert body['vehicleCollateral'][0]['type'] == 'MOTOR_VEHICLE'
+    assert body['vehicleCollateral'][0]['year'] == 1997
+    assert body['vehicleCollateral'][0]['make'] == 'Honda'
+    assert body['vehicleCollateral'][0]['model'] == 'Civic'
+    assert body['vehicleCollateral'][0]['serial'] == '1HGEJ8258VL115351'
+    assert body['vehicleCollateral'][0]['manufacturedHomeRegNumber'] == '1234567'
+
+
 def test_create_financing_statement_for_root_object_details():
     request_payload = get_minimal_payload()
     request_payload.update(type='SECURITY_AGREEMENT', years=5)
