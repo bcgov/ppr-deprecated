@@ -13,11 +13,10 @@ logger = logging.getLogger(__name__)
 
 CORP_TYPE = 'PPR'
 SEARCH_FILING_CODE = 'SERCH'
-DEFAULT_ACCOUNT_ID = '137'  # TODO Remove the default Account-Id once we are pulling it from session storage
 
 
 def create_payment_request(auth_header: HTTPAuthorizationCredentials = Depends(auth.authentication.bearer_scheme),
-                           account_id: str = Header(DEFAULT_ACCOUNT_ID)):
+                           account_id: str = Header(None)):
     request = {
         'businessInfo': {'corpType': CORP_TYPE}, 'filingInfo': {'filingTypes': [{'filingTypeCode': SEARCH_FILING_CODE}]}
     }
