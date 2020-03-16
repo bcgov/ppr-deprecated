@@ -1,7 +1,7 @@
 import http
 import logging
 
-from fastapi import Depends, HTTPException
+from fastapi import Depends, Header, HTTPException
 from fastapi.security.http import HTTPAuthorizationCredentials
 import requests
 
@@ -11,36 +11,21 @@ import schemas.payment
 
 logger = logging.getLogger(__name__)
 
-# TODO This is a temporary payload to enable interaction with payments.  Replace with a coded solution base on the user.
-HARDCODED_PAYLOAD = """{
-    "paymentInfo": {
-        "methodOfPayment": "CC"
-    },
-    "businessInfo": {
-        "businessIdentifier": "CP1000019",
-        "corpType": "CP",
-        "businessName": "ABC Corp",
-        "contactInfo": {
-            "city": "Victoria",
-            "postalCode": "V8P2P2",
-            "province": "BC",
-            "addressLine1": "100 Douglas Street",
-            "country": "CA"
-        }
-    },
-    "filingInfo": {
-        "filingTypes": [
-            {
-                "filingTypeCode": "OTADD"
-            }
-        ]
+CORP_TYPE = 'PPR'
+SEARCH_FILING_CODE = 'SERCH'
+DEFAULT_ACCOUNT_ID = '137'  # TODO Remove the default Account-Id once we are pulling it from session storage
+
+
+def create_payment_request(auth_header: HTTPAuthorizationCredentials = Depends(auth.authentication.bearer_scheme),
+                           account_id: str = Header(DEFAULT_ACCOUNT_ID)):
+    request = {
+        'businessInfo': {'corpType': CORP_TYPE}, 'filingInfo': {'filingTypes': [{'filingTypeCode': SEARCH_FILING_CODE}]}
     }
-}"""
-
-
-def create_payment_request(auth_header: HTTPAuthorizationCredentials = Depends(auth.authentication.bearer_scheme)):
-    pay_response = requests.post('{}/payment-requests'.format(config.PAY_API_URL), json=eval(HARDCODED_PAYLOAD),
-                                 headers={'Authorization': '{} {}'.format(auth_header.scheme, auth_header.credentials)})
+    pay_response = requests.post('{}/payment-requests'.format(config.PAY_API_URL), json=request,
+                                 headers={
+                                     'Authorization': '{} {}'.format(auth_header.scheme, auth_header.credentials),
+                                     'Account-Id': account_id
+                                 })
 
     try:
         auth.authentication.check_auth_response(pay_response)
