@@ -1,8 +1,8 @@
 
 interface PersonNameInnerInterface {
-  first: string;
-  middle: string;
-  last: string;
+  first: string | undefined;
+  middle: string | undefined;
+  last: string | undefined;
 }
 /**
  * The interface to a person name.
@@ -46,21 +46,21 @@ export class PersonNameModel implements PersonNameInterface {
   /**
    * Gets the first name of the person.
    */
-  public get first(): string {
+  public get first(): string | undefined {
     return this._personName.first
   }
 
   /**
    * Gets the middle name of the person.
    */
-  public get middle(): string {
+  public get middle(): string | undefined {
     return this._personName.middle
   }
 
   /**
    * Gets the last name of the person.
    */
-  public get last(): string {
+  public get last(): string | undefined {
     return this._personName.last
   }
 

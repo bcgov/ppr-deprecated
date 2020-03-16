@@ -213,5 +213,28 @@ describe('BaseParty.vue', (): void => {
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
 
+
+  })
+  describe('radio button state', (): void => {
+    it('base party with business name should be visible and radio button set', async (): Promise<void> => {
+      const model = new BasePartyModel(new BusinessNameModel('abusiness'), undefined)
+      const properties = ref({ editing: true, value: model })
+      const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+      const radioBusiness = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
+      expect(radioBusiness.checked).toBe(true)
+      const radioPerson = wrapper.get('[data-test-id="BaseParty.radio.person"]').element as HTMLInputElement
+      expect(radioPerson.checked).toBe(false)
+    })
+
+    it('base party with person name should be visible and radio button set', async (): Promise<void> => {
+      const model = new BasePartyModel(undefined, new PersonNameModel('first',undefined,'last'))
+      const properties = ref({ editing: true, value: model })
+      const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+      const radioBusiness = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
+      expect(radioBusiness.checked).toBe(false)
+      const radioPerson = wrapper.get('[data-test-id="BaseParty.radio.person"]').element as HTMLInputElement
+      expect(radioPerson.checked).toBe(true)
+    })
+
   })
 })
