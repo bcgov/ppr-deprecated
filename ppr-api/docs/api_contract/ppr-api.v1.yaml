@@ -486,8 +486,9 @@ components:
                   - MANUFACTURED_HOME
                   - OUTBOARD_MOTOR
                   - TRAILER
-                  - AIRFRAME_REGISTERED_IN_CANADA
-                  - AIRFRAME_NOT_REGISTERED_IN_CANADA
+                  - AIRCRAFT
+                  - AIRCRAFT_FRAME
+                  - ELECTRIC_VEHICLE
               serial:
                 type: string
               year:
