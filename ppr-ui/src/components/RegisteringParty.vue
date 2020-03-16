@@ -11,9 +11,8 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-
-import PersonName from '@/components/PersonName.vue'
 import { PersonNameModel } from '@/components/person-name-model'
+import PersonName from '@/components/PersonName.vue'
 
 export default createComponent({
   components: { PersonName },
