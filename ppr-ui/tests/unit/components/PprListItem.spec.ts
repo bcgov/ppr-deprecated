@@ -14,6 +14,21 @@ describe('PprListItem.vue', (): void => {
 
     // General form tests.
 
+    it(':editing - false, header does not exist', (): void => {
+      const properties = ref({ editing: false, listLength: 1, index: 0 })
+      const wrapper: Wrapper<Vue> = mount(PprListItem, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('div[data-test-id="ListItem.header.title"]').exists()).toBeFalsy()
+    })
+
+    it(':editing - false, list of 2 does not have remove ', (): void => {
+      const properties = ref({ editing: false, listLength: 2, index: 0 })
+      const wrapper: Wrapper<Vue> = mount(PprListItem, { propsData: properties.value, vuetify })
+
+      expect(wrapper.find('button[data-test-id="ListItem.button.remove"]').exists()).toBeFalsy()
+    })
+
+
     it(':editing - true, header exist', (): void => {
       const properties = ref({ editing: true, listLength: 1, index: 0 })
       const wrapper: Wrapper<Vue> = mount(PprListItem, { propsData: properties.value, vuetify })
