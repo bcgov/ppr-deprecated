@@ -184,8 +184,8 @@ export default createComponent({
       let label: string
 
       switch (props.value.type) {
-        case SerialCollateralType.AIRFRAME_NOT_REGISTERED_IN_CANADA:
-        case SerialCollateralType.AIRFRAME_REGISTERED_IN_CANADA:
+        case SerialCollateralType.AIRCRAFT:
+        case SerialCollateralType.AIRCRAFT_FRAME:
           label = 'DOT Number'
           break
 
