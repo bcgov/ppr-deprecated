@@ -169,9 +169,8 @@ describe('CollateralItems.vue', (): void => {
 
       expect(wrapper.find('[data-test-id="CollateralItems.generalCollateral.textarea"]').exists()).toBeFalsy()
       expect(wrapper.find('[data-test-id="CollateralItems.generalCollateral.readonly"]').exists()).toBeTruthy()
-      // The following fails because the component relies on the circular v-model functionality to update the field.
-      // should we fake it by setting the property from the emitted input event?
-      // expect(wrapper.find('[data-test-id="CollateralItems.generalCollateral.readonly"]').text()).toBe('')
+      const emittedCollateralItems = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emittedCollateralItems.generalCollateral).toBe('')
     })
   })
 })

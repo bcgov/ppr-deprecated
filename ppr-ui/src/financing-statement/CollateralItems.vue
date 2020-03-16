@@ -2,7 +2,7 @@
   <v-card outlined>
     <v-form
       v-if="editing"
-      @input="emitValidity($event)"
+      @input="emitValid($event)"
     >
       <v-container>
         <v-btn
@@ -89,7 +89,7 @@ export default createComponent({
     const editingGeneralCollateral = ref<boolean>(false)
 
     // Callback function for emitting form validity back to the parent.
-    function emitValidity(formValid: boolean) {
+    function emitValid(formValid: boolean) {
       context.emit('valid', formValid)
     }
 
@@ -129,7 +129,7 @@ export default createComponent({
     return {
       clearGeneralCollateral,
       editingGeneralCollateral,
-      emitValidity,
+      emitValid,
       setEditingGeneralCollateral,
       updateGeneralCollateral,
     }

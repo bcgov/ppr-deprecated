@@ -51,7 +51,6 @@ export class CollateralItemsModel implements CollateralItemsInterface {
 
     if (this.serialCollateral) {
       this.serialCollateral.forEach((serialCollateral: SerialCollateralModel): void => {
-        console.log(serialCollateral.make)
         serialCollaterals.push(serialCollateral.toJson())
       })
     }
