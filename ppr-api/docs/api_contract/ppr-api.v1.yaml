@@ -30,7 +30,13 @@ paths:
                   $ref: '#/components/schemas/search'
               examples: {}
       operationId: get-searches
-      parameters: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The current account represented by the user
+          required: true
       security:
         - JWT: []
     post:
@@ -95,6 +101,13 @@ paths:
       description: Initiates a new search transaction and will return a reference that can be used to review the results
       security:
         - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The current account represented by the user
+          required: true
   '/searches/{searchId}':
     get:
       summary: View the details for an individual search
@@ -115,6 +128,13 @@ paths:
       operationId: get-search-for-id
       security:
         - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The current account represented by the user
+          required: true
     parameters:
       - schema:
           type: string
@@ -153,6 +173,12 @@ paths:
           in: query
           name: version
           description: The version of the record to retrieve.  If not specified the most recent version will be retrieved.
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The current account represented by the user
+          required: true
       description: ''
       security:
         - JWT: []
@@ -222,6 +248,13 @@ paths:
       description: Display the financing statements that were found with the search criteria
       security:
         - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The current account represented by the user
+          required: true
   /financing-statements:
     post:
       summary: Create a financing statement
@@ -332,6 +365,13 @@ paths:
                   generalCollateral:
                     - description: A ride on lawn mower that has a great deal of personal value
                   years: 5
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The current account represented by the user
+          required: true
 components:
   schemas:
     search:
@@ -546,8 +586,6 @@ components:
       properties:
         street:
           type: string
-        streetAdditional:
-          type: string
         city:
           type: string
         region:
@@ -561,6 +599,8 @@ components:
           maxLength: 2
           description: 2 Character ISO 3166-1 Alpha-2 Country Code
         postalCode:
+          type: string
+        streetAdditional:
           type: string
       required:
         - street
