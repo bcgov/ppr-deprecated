@@ -5,9 +5,7 @@ import { PersonNameInterface, PersonNameModel } from '@/components/person-name-m
 /**
  * The interface to a party that may be a person or a business.
  */
-export interface BasePartyInterface {
-  personName: PersonNameInterface;
-  businessName: BusinessNameInterface;
+export interface BasePartyInterface extends PersonNameInterface, BusinessNameInterface {
 }
 
 /**
@@ -55,10 +53,16 @@ export class BasePartyModel {
    * Gets the JSON representation of the BasePartyModel object.
    */
   public toJson(): BasePartyInterface {
-    return {
-      businessName: this.businessName.toJson(),
-      personName: this.personName.toJson()
+    let rval = {}
+    if (this.businessName.businessName) {
+      let bm = this.businessName.toJson()
+      rval = Object.assign(rval, bm)
     }
+    if (this.personName.first || this.personName.last) {
+      let pm = this.personName.toJson()
+      rval = Object.assign(rval, pm)
+    }
+    return rval
   }
 
   /*
@@ -75,11 +79,12 @@ export class BasePartyModel {
     let personName: PersonNameModel | undefined
 
     if (jsonObject && jsonObject.businessName) {
-      businessName = BusinessNameModel.fromJson(jsonObject.businessName)
+      businessName = new BusinessNameModel(jsonObject.businessName)
     }
 
     if (jsonObject && jsonObject.personName) {
-      personName = PersonNameModel.fromJson(jsonObject.personName)
+      const jp = jsonObject.personName
+      personName = new PersonNameModel(jp.first, jp.middle, jp.last)
     }
 
     return new BasePartyModel(businessName, personName)

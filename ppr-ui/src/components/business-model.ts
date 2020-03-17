@@ -3,7 +3,7 @@
  * The interface to a business.
  */
 export interface BusinessNameInterface {
-  businessName: string | undefined;
+  businessName?: string | undefined;
 }
 
 /**
