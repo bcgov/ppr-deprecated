@@ -91,9 +91,11 @@ def test_read_financing_statement_registration_is_none_when_base_event_not_prese
 
 def test_read_financing_statement_registering_party_name_should_be_included():
     base_reg_num = '123456C'
+    address_model = models.party.Address(line1='123 Fake Street', line2='Suite 100', city='Victoria', region='BC',
+                                         country='CA', postal_code='V1V 1V1')
     reg_party = models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_num,
                                    starting_registration_number=base_reg_num, first_name='Homer', middle_name='Jay',
-                                   last_name='Simpson')
+                                   last_name='Simpson', address=address_model)
     stub_fs = stub_financing_statement(base_reg_num, parties=[reg_party])
     repo = MockFinancingStatementRepository(stub_fs)
 
@@ -117,10 +119,12 @@ def test_read_financing_statement_registration_party_should_be_none_when_not_pre
 
 def test_read_financing_statement_debtor_should_be_mapped_to_schema():
     base_reg_num = '123456C'
+    address_model = models.party.Address(line1='123 Fake Street', line2='Suite 100', city='Victoria', region='BC',
+                                         country='CA', postal_code='V1V 1V1')
     debtor = models.party.Party(
         type_code=PartyType.DEBTOR.value, base_registration_number=base_reg_num,
         starting_registration_number=base_reg_num, first_name='Homer', middle_name='Jay', last_name='Simpson',
-        business_name='Mr. Plow', birthdate=datetime.date(1990, 6, 15)
+        business_name='Mr. Plow', address=address_model, birthdate=datetime.date(1990, 6, 15)
     )
     stub_fs = stub_financing_statement(base_reg_num, parties=[debtor])
     repo = MockFinancingStatementRepository(stub_fs)
@@ -135,7 +139,8 @@ def test_read_financing_statement_debtor_should_be_mapped_to_schema():
     assert debtor.personName.last == 'Simpson'
     assert debtor.businessName == 'Mr. Plow'
     assert debtor.birthdate == datetime.date(1990, 6, 15)
-    assert debtor.address is None
+    assert debtor.address == {'street': '123 Fake Street', 'city': 'Victoria', 'country': 'CA',
+                              'postalCode': 'V1V 1V1', 'streetAdditional': 'Suite 100', 'region': 'BC'}
 
 
 def test_read_financing_statement_debtor_address_should_be_mapped_to_schema():
@@ -201,9 +206,11 @@ def test_read_financing_statement_vehicle_collateral_should_be_included():
 def stub_financing_statement(base_reg_number: str, years: int = -1, parties: list = None, general_collateral=[],
                              vehicle_collateral=[], reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT):
     expiry = datetime.date.today() + datedelta.datedelta(years=years) if years > 0 else None
+    address_model = models.party.Address(line1='123 Fake Street', line2='Suite 100', city='Victoria', region='BC',
+                                         country='CA', postal_code='V1V 1V1')
     parties = [models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_number,
                                   starting_registration_number=base_reg_number, first_name='Fred',
-                                  last_name='Flintstone')] if parties is None else parties
+                                  last_name='Flintstone', address=address_model)] if parties is None else parties
 
     return models.financing_statement.FinancingStatement(
         registration_number=base_reg_number, registration_type_code=reg_type.value, status='A', discharged=False,
