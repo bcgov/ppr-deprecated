@@ -1,6 +1,6 @@
 import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { BasePartyModel } from '@/base-party/base-party-model'
+import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
 
 /**
  * The interface to a financing statement.
@@ -12,7 +12,7 @@ export interface FinancingStatementInterface {
   generalCollateral: [];
   registeringParty: PersonNameInterface;
   registrationDateTime: string | undefined;
-  securedParties: BasePartyModel[];
+  securedParties: BasePartyInterface[];
   type: FinancingStatementType;
   vehicleCollateral: [];
   years: number;
@@ -109,18 +109,23 @@ export class FinancingStatementModel {
    * Gets the JSON representation of the FinancingStatementModel object.
    */
   public toJson(): FinancingStatementInterface {
-    return {
+    const theSPs: BasePartyInterface[] = []
+    this.securedParties.forEach((sp: BasePartyModel): void => {
+      theSPs.push(sp.toJson())
+    })
+    const rval: FinancingStatementInterface = {
       baseRegistrationNumber: this.baseRegistrationNumber,
       debtors: [],
       expiryDate: this.expiryDate,
       generalCollateral: [],
       registeringParty: this.registeringParty.toJson(),
       registrationDateTime: this.registrationDateTime,
-      securedParties: this.securedParties,
+      securedParties: theSPs,
       type: this.type,
       vehicleCollateral: [],
       years: this.years
     }
+    return rval
   }
 
   /*
