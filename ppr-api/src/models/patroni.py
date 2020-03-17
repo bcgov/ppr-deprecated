@@ -5,6 +5,7 @@ import sqlalchemy.orm
 
 import config
 
+
 DATABASE_URI = 'postgresql://{user}:{password}@{host}:{port}/{name}'.format(
     user=config.DB_USERNAME,
     password=config.DB_PASSWORD,

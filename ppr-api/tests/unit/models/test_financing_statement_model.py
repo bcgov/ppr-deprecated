@@ -1,5 +1,5 @@
-from models.financing_statement import FinancingStatement, FinancingStatementEvent
 import models.party
+from models.financing_statement import FinancingStatement, FinancingStatementEvent
 from schemas.party import PartyType
 
 

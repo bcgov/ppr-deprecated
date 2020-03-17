@@ -6,10 +6,10 @@ import freezegun
 import auth.authentication
 import repository.financing_statement_repository
 import schemas.collateral
-from schemas.collateral import VehicleType
 import schemas.financing_statement
-from schemas.financing_statement import RegistrationType
 import schemas.party
+from schemas.collateral import VehicleType
+from schemas.financing_statement import RegistrationType
 from schemas.party import PartyType
 
 

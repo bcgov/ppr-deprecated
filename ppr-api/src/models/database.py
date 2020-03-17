@@ -7,6 +7,7 @@ import sqlalchemy.ext.declarative
 
 import models.patroni
 
+
 DATABASE_URI = models.patroni.DATABASE_URI
 
 BaseORM = sqlalchemy.ext.declarative.declarative_base()

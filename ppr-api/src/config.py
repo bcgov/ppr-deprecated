@@ -10,6 +10,7 @@ import os
 
 import dotenv
 
+
 dotenv.load_dotenv()
 
 AUTH_API_URL = os.getenv('PPR_API_AUTH_API_URL')

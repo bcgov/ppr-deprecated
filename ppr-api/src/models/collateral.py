@@ -1,7 +1,9 @@
 import sqlalchemy
 
-from .database import BaseORM
 import schemas.collateral
+
+from .database import BaseORM
+
 
 FINANCING_STATEMENT_KEY = 'financing_statement.reg_number'
 REGISTRATION_KEY = 'registration.reg_number'

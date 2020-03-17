@@ -10,15 +10,16 @@ import models.collateral
 import models.financing_statement
 import models.party
 import models.search
+import repository.financing_statement_repository
+import repository.search_repository
 import schemas.collateral
 import schemas.financing_statement
 import schemas.party
-from schemas.party import PartyType
 import schemas.payment
 import schemas.search
 import services.payment_service
-import repository.financing_statement_repository
-import repository.search_repository
+from schemas.party import PartyType
+
 
 router = fastapi.APIRouter()
 

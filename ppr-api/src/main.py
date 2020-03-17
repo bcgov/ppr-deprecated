@@ -1,11 +1,12 @@
 import fastapi
 import sentry_sdk
 import sentry_sdk.integrations.sqlalchemy
-from starlette.middleware import cors
 import uvicorn
+from starlette.middleware import cors
 
 import config
 from endpoints import api
+
 
 sentry_sdk.init(config.SENTRY_DSN, environment=config.SENTRY_ENVIRONMENT,
                 integrations=[sentry_sdk.integrations.sqlalchemy.SqlalchemyIntegration()])
