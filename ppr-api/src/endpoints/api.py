@@ -2,9 +2,7 @@
 
 import fastapi
 
-from . import financing_statement
-from . import search
-from . import healthcheck
+from . import financing_statement, healthcheck, search
 
 
 router = fastapi.APIRouter()

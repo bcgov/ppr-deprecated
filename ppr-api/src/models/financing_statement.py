@@ -1,10 +1,11 @@
 import sqlalchemy
 import sqlalchemy.orm
 
-from .database import BaseORM
 import models.collateral
 import models.party
 from schemas.party import PartyType
+
+from .database import BaseORM
 
 
 class FinancingStatement(BaseORM):

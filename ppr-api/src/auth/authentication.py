@@ -1,6 +1,6 @@
 import http
-import logging
 import json
+import logging
 
 import fastapi
 import fastapi.security
@@ -9,6 +9,7 @@ import requests
 from pydantic import BaseModel
 
 import config
+
 
 logger = logging.getLogger(__name__)
 

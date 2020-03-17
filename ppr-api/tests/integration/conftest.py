@@ -1,10 +1,11 @@
 import pytest
 
 import auth.authentication
+import main
 import models.database
 import schemas.payment
 import services.payment_service
-import main
+
 
 # search.payment_id has a unique constraint, so tests increment it on each use.  Get the max value as a start point.
 db = models.database.SessionLocal()

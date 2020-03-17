@@ -7,8 +7,8 @@ import sqlalchemy.orm
 import models.collateral
 import models.database
 import models.financing_statement
-import models.payment
 import models.party
+import models.payment
 import models.search
 import schemas.financing_statement
 import schemas.payment

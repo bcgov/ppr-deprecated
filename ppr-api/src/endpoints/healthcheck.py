@@ -11,6 +11,7 @@ import models.database
 import models.edb
 import models.patroni
 
+
 router = fastapi.APIRouter()
 logger = logging.getLogger(__name__)
 
