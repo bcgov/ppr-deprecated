@@ -163,7 +163,7 @@ export class FinancingStatementModel {
     }
 
     if (jsonObject.securedParties) {
-      jsonObject.securedParties.forEach((sp: BasePartyModel): void => {
+      jsonObject.securedParties.forEach((sp: BasePartyInterface): void => {
         securedParties.push(BasePartyModel.fromJson(sp))
       })
     }

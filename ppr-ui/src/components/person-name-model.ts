@@ -8,7 +8,7 @@ interface PersonNameInnerInterface {
  * The interface to a person name.
  */
 export interface PersonNameInterface {
-  personName: PersonNameInnerInterface;
+  personName?: PersonNameInnerInterface;
 }
 
 /**
