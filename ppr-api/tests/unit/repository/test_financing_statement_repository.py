@@ -179,17 +179,6 @@ def test_create_financing_statement_secured_party_address_is_stored(mock_session
 
 
 @patch('sqlalchemy.orm.Session')
-def test_create_financing_statement_secured_party_address_is_none(mock_session):
-    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
-    schema = stub_financing_statement_input(secured_parties=[stub_party(address=None)])
-
-    financing_statement = repo.create_financing_statement(schema, stub_user())
-
-    secured_parties = financing_statement.get_secured_parties()
-    assert secured_parties[0].address is None
-
-
-@patch('sqlalchemy.orm.Session')
 def test_create_financing_statement_debtor_business_name_is_stored(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
     schema = stub_financing_statement_input(debtors=[stub_debtor(business_name='Spacely Sprockets', person_name=None)])
@@ -239,17 +228,6 @@ def test_create_financing_statement_debtor_address_is_stored(mock_session):
     assert debtors[0].address.region == 'BC'
     assert debtors[0].address.country == 'CA'
     assert debtors[0].address.postal_code == 'V1V 1V1'
-
-
-@patch('sqlalchemy.orm.Session')
-def test_create_financing_statement_debtor_address_is_none(mock_session):
-    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
-    schema = stub_financing_statement_input(debtors=[stub_debtor(address=None)])
-
-    financing_statement = repo.create_financing_statement(schema, stub_user())
-
-    debtors = financing_statement.get_debtors()
-    assert debtors[0].address is None
 
 
 @patch('sqlalchemy.orm.Session')

@@ -122,21 +122,30 @@ def test_read_search_results_provides_secured_party_at_time_of_matched_registrat
     third_event = stub_financing_statement_event('123458C', financing_statement=fin_stmt)
     third_event.registration_date = now + datetime.timedelta(seconds=2)
     first_secured_party = models.party.Party(
-        type_code='SP', last_name='Simpson', first_name='Homer', base_registration_number=fin_stmt.registration_number,
+        type_code='SP', last_name='Simpson', first_name='Homer',  base_registration_number=fin_stmt.registration_number,
         starting_registration_number=base_event.registration_number,
-        ending_registration_number=second_event.registration_number
+        ending_registration_number=second_event.registration_number, address=models.party.Address(
+            line1='742 Evergreen Terrace', line2='First Floor', city='Springfield', region='BC', country='CA',
+            postal_code='H0H 0H0'
+        )
     )
     base_event.starting_parties = [first_secured_party]
     second_secured_party = models.party.Party(
         type_code='SP', last_name='Burns', first_name='Charles', base_registration_number=fin_stmt.registration_number,
         starting_registration_number=second_event.registration_number,
-        ending_registration_number=third_event.registration_number
+        ending_registration_number=third_event.registration_number, address=models.party.Address(
+            line1='1000 Mammon Lane', line2='Release the hounds', city='Springfield', region='BC', country='CA',
+            postal_code='H0H 0H0'
+        )
     )
     second_event.starting_parties = [second_secured_party]
     second_event.ending_parties = [first_secured_party]
     third_secured_party = models.party.Party(
         type_code='SP', last_name='Wiggum', first_name='Clancy', base_registration_number=fin_stmt.registration_number,
-        starting_registration_number=third_event.registration_number
+        starting_registration_number=third_event.registration_number, address=models.party.Address(
+            line1='123 Police Avenue', line2='201', city='Springfield', region='BC', country='CA',
+            postal_code='H0H 0H0'
+        )
     )
     third_event.starting_parties = [third_secured_party]
     third_event.ending_parties = [second_secured_party]
@@ -162,22 +171,32 @@ def test_read_search_results_provides_debtor_at_time_of_matched_registration_num
     second_event.registration_date = now + datetime.timedelta(seconds=1)
     third_event = stub_financing_statement_event('123458C', financing_statement=fin_stmt)
     third_event.registration_date = now + datetime.timedelta(seconds=2)
+
     first_debtor = models.party.Party(
         type_code='DE', last_name='Simpson', first_name='Homer', base_registration_number=fin_stmt.registration_number,
         starting_registration_number=base_event.registration_number,
-        ending_registration_number=second_event.registration_number
+        ending_registration_number=second_event.registration_number, address=models.party.Address(
+            line1='742 Evergreen Terrace', line2='First Floor', city='Springfield', region='BC', country='CA',
+            postal_code='H0H 0H0'
+        )
     )
     base_event.starting_parties = [first_debtor]
     second_debtor = models.party.Party(
         type_code='DE', last_name='Burns', first_name='Charles', base_registration_number=fin_stmt.registration_number,
         starting_registration_number=second_event.registration_number,
-        ending_registration_number=third_event.registration_number
+        ending_registration_number=third_event.registration_number, address=models.party.Address(
+            line1='1000 Mammon Lane', line2='Release the hounds', city='Springfield', region='BC', country='CA',
+            postal_code='H0H 0H0'
+        )
     )
     second_event.starting_parties = [second_debtor]
     second_event.ending_parties = [first_debtor]
     third_debtor = models.party.Party(
         type_code='DE', last_name='Wiggum', first_name='Clancy', base_registration_number=fin_stmt.registration_number,
-        starting_registration_number=third_event.registration_number
+        starting_registration_number=third_event.registration_number, address=models.party.Address(
+            line1='123 Police Avenue', line2='201', city='Springfield', region='BC', country='CA',
+            postal_code='H0H 0H0'
+        )
     )
     third_event.starting_parties = [third_debtor]
     third_event.ending_parties = [second_debtor]
