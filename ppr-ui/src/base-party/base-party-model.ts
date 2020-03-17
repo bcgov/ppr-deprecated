@@ -19,6 +19,11 @@ export class BasePartyModel {
   private _personName: PersonNameModel
 
   /**
+   * Provide a publicly accessible property that lists can use to index parties
+   */
+  public listId: number = 0
+
+  /**
    * Creates a new Base Party model instance.
    *
    * @param businessName the business name of the party.
