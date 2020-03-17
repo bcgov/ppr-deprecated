@@ -22,8 +22,9 @@
           </div>
           <v-form>
             <financing-statement
-              v-model="financingStatement"
+              :value="financingStatement"
               :editing="editing"
+              @input="updateFinancingModel"
               @valid="formValid = $event"
             />
             <v-btn
@@ -44,7 +45,7 @@
             </p>
           </div>
           <financing-statement
-            v-model="financingStatement"
+            :value="financingStatement"
             :editing="editing"
           />
         </section>
@@ -55,12 +56,13 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
+import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel, FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
 import { useLoadIndicator } from '@/load-indicator'
 import axiosAuth from '@/utils/axios-auth'
 import Config from '@/utils/config'
+
 
 export default createComponent({
   components: { FinancingStatement },
@@ -68,7 +70,13 @@ export default createComponent({
   setup(_, { root }) {
     const editing = ref(true)
     const formValid = ref(true)
-    const financingStatement = ref(new FinancingStatementModel())
+    // create FS model with defaults yet be sure secured parties has one empty party
+    const firstSecuredParty = new BasePartyModel()
+    firstSecuredParty.listId = 0
+    const securedParties = [firstSecuredParty]
+    const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties)
+    const financingStatement = ref(fstmt)
+
     const loadIndicator = useLoadIndicator()
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 
@@ -99,11 +107,16 @@ export default createComponent({
       editing.value = true
     }
 
+    function updateFinancingModel(newValue: FinancingStatementModel) {
+      financingStatement.value = newValue
+    }
+
     return {
       editing,
       financingStatement,
       formValid,
-      submit
+      submit,
+      updateFinancingModel
     }
   }
 })

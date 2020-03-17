@@ -4,10 +4,6 @@
     class="base-party-form"
     @input="emitValidity(HEADER, $event)"
   >
-    <div v-if="editing">
-      <div> {{ value }} json: businessName {{ value.businessName.toJson() }} personName {{ value.personName.toJson() }} </div>
-      {{ prompt }}
-    </div>
     <v-container class="flex-center">
       <!-- See #724 re pending styling of these radio buttons -->
       <v-radio-group
