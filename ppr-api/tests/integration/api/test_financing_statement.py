@@ -38,7 +38,12 @@ def test_read_financing_statement_with_changed_registering_party_should_provide_
         registering_party={'first_name': 'Homer', 'last_name': 'Simpson'}
     )
     fin_stmt = sample_data_utility.create_test_financing_statement_event(
-        fin_stmt, registering_party={'first_name': 'Charles', 'middle_name': 'Montgomery', 'last_name': 'Burns'}
+        fin_stmt, registering_party={'first_name': 'Charles', 'middle_name': 'Montgomery', 'last_name': 'Burns',
+                                     'address': {'line1': '742 Evergreen Terrace', 'line2': '1st floor',
+                                                 'city': 'Springfield', 'region': 'BC', 'country': 'CA',
+                                                 'postal_code': 'V1A 1A1'}
+                                     }
+
     )
 
     rv = client.get('/financing-statements/{}'.format(fin_stmt.registration_number))
@@ -245,7 +250,7 @@ def test_create_financing_statement_persists_debtor():
         debtors=[{
             'businessName': 'Mr. Plow', 'birthdate': '1990-06-15',
             'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'},
-            'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor', 'city': 'Springfield',
+            'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '2nd floor', 'city': 'Springfield',
                         'region': 'BC', 'country': 'CA', 'postalCode': 'V1A 1A1'}
         }]
     )
@@ -271,7 +276,7 @@ def test_create_financing_statement_persists_debtor():
     assert debtors[0].business_name == 'Mr. Plow'
     assert debtors[0].birthdate == datetime.date(1990, 6, 15)
     assert debtors[0].address.line1 == '742 Evergreen Terrace'
-    assert debtors[0].address.line2 == '1st floor'
+    assert debtors[0].address.line2 == '2nd floor'
     assert debtors[0].address.city == 'Springfield'
     assert debtors[0].address.region == 'BC'
     assert debtors[0].address.country == 'CA'
@@ -331,7 +336,11 @@ def test_create_financing_statement_persists_vehicle_collateral():
 def get_minimal_payload():
     return {
         'type': 'SECURITY_AGREEMENT',
-        'registeringParty': {'personName': {'first': 'Homer', 'last': 'Simpson'}},
+        'registeringParty': {'personName': {'first': 'Homer', 'last': 'Simpson'},
+                             'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor',
+                                         'city': 'Springfield', 'region': 'BC', 'country': 'CA',
+                                         'postalCode': 'V1A 1A1'}
+                             },
         'securedParties': [],
         'debtors': [],
         'vehicleCollateral': [],
