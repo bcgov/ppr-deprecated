@@ -27,11 +27,12 @@ class Party(BaseORM):
     address = sqlalchemy.orm.relationship('Address')
 
     def as_schema(self):
+        person_name = schemas.party.IndividualName(
+            first=self.first_name, middle=self.middle_name, last=self.last_name
+        ) if self.last_name else None
         base_args = {
             'businessName': self.business_name,
-            'personName': schemas.party.IndividualName(
-                first=self.first_name, middle=self.middle_name, last=self.last_name
-            ),
+            'personName': person_name,
             'address': self.address.as_schema() if self.address else None
         }
 
