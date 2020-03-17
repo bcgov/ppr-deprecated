@@ -1,12 +1,6 @@
 <template>
   <v-card outlined>
     <v-form @input="emitValid('header', $event)">
-      <secured-parties
-        :editing="editing"
-        :value="value.securedParties"
-        @input="updateSecuredParties"
-        @valid="emitValid('securedParties', $event)"
-      />
       <form-section-header label="Type &amp; Duration" />
       <v-container>
         <div v-if="editing">
@@ -40,6 +34,18 @@
           </div>
         </div>
       </v-container>
+      <secured-parties
+        :editing="editing"
+        :value="value.securedParties"
+        @input="updateSecuredParties"
+        @valid="emitValid('securedParties', $event)"
+      />
+      <debtor-parties
+        :editing="editing"
+        :value="value.debtorParties"
+        @input="updateDebtorParties"
+        @valid="emitValid('debtorParties', $event)"
+      />
       <form-section-header label="Registering Party" />
       <v-container>
         <registering-party
@@ -60,6 +66,7 @@ import { FinancingStatementModel } from '@/financing-statement/financing-stateme
 import { FinancingStatementType, FinancingStatementTypeCodeList } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/components/person-name-model'
 import BaseParty from '@/base-party/BaseParty.vue'
+import DebtorParties from '@/financing-statement/DebtorParties.vue'
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
 import RegisteringParty from '@/components/RegisteringParty.vue'
 import SecuredParties from '@/financing-statement/SecuredParties.vue'
@@ -67,6 +74,7 @@ import SecuredParties from '@/financing-statement/SecuredParties.vue'
 export default createComponent({
   components: {
     BaseParty,
+    DebtorParties,
     FormSectionHeader,
     RegisteringParty,
     SecuredParties
@@ -100,6 +108,7 @@ export default createComponent({
     */
     const validationState = {
       header: false,
+      debtorParties: false,
       registeringParty: false,
       securedParties: false
     }
@@ -119,17 +128,28 @@ export default createComponent({
         props.value.type,
         props.value.years,
         newPerson, // props.value.registeringParty
-        props.value.securedParties
+        props.value.securedParties,
+        props.value.debtorParties
       ))
     }
 
     function updateSecuredParties(newSecuredParties: BasePartyModel[]): void {
-      console.log('updateSecuredParties', newSecuredParties)
       emit('input', new FinancingStatementModel(
         props.value.type,
         props.value.years,
         props.value.registeringParty,
-        newSecuredParties
+        newSecuredParties,
+        props.value.debtorParties
+      ))
+    }
+
+    function updateDebtorParties(newDebtorParties: BasePartyModel[]): void {
+      emit('input', new FinancingStatementModel(
+        props.value.type,
+        props.value.years,
+        props.value.registeringParty,
+        props.value.securedParties,
+        newDebtorParties
       ))
     }
 
@@ -139,7 +159,8 @@ export default createComponent({
         props.value.type,
         newLife, // props.value.life,
         props.value.registeringParty,
-        props.value.securedParties
+        props.value.securedParties,
+        props.value.debtorParties
       ))
     }
 
@@ -149,7 +170,8 @@ export default createComponent({
         newType, //props.value.type,
         props.value.years,
         props.value.registeringParty,
-        props.value.securedParties
+        props.value.securedParties,
+        props.value.debtorParties
       ))
     }
 
@@ -159,6 +181,7 @@ export default createComponent({
       life,
       lifeRules,
       updateLife,
+      updateDebtorParties,
       updateRegisteringParty,
       updateSecuredParties,
       updateType,
