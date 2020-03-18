@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Personal Property Registry API
   version: '1.0'
-  description: PPR API Specs
+  description: 'The Personal Property Register (PPR) is a centralized register where legal claims to personal property can be registered, and consumers can check if there is any debt or obligation attached to goods they may wish to buy. The PPR API provides a real-time, secure, direct link between business systems and the PPR. Most PPR transactions, including searches, registrations, renewals, amendments and discharges, directly from your own software, instead of using the PPR website.'
   contact:
     name: BC Registries
 servers:
@@ -35,13 +35,15 @@ paths:
             type: string
           in: header
           name: Account-Id
-          description: The current account represented by the user
+          description: The account that the user is operating on behalf of
           required: true
       security:
         - JWT: []
+      description: The system will list previously submitted searches
     post:
       summary: 'Submit a new PPR search request '
-      tags: []
+      tags:
+        - Search
       responses:
         '201':
           description: Created
@@ -98,7 +100,7 @@ paths:
                       first: Homer
                       second: Jay
                       last: Simpson
-      description: Initiates a new search transaction and will return a reference that can be used to review the results
+      description: 'Submit a new search transaction and will return a {searchId} that can be used to review the results'
       security:
         - JWT: []
       parameters:
@@ -106,12 +108,13 @@ paths:
             type: string
           in: header
           name: Account-Id
-          description: The current account represented by the user
+          description: The account that the user is operating on behalf of
           required: true
   '/searches/{searchId}':
     get:
       summary: View the details for an individual search
-      tags: []
+      tags:
+        - Search
       responses:
         '200':
           description: OK
@@ -133,14 +136,16 @@ paths:
             type: string
           in: header
           name: Account-Id
-          description: The current account represented by the user
+          description: The account that the user is operating on behalf of
           required: true
+      description: 'To get the meta-data around your search, supply the search id you received after submitting your search criteria using POST.'
     parameters:
       - schema:
           type: string
         name: searchId
         in: path
         required: true
+        description: 'The value of the search response id value.  If an invalid searchId is submitted then [404].'
   '/financing-statements/{financingStatementId}':
     parameters:
       - schema:
@@ -148,10 +153,11 @@ paths:
         name: financingStatementId
         in: path
         required: true
-        description: ''
+        description: 'A base registration number that is valid and not expired.  If {financingStatementId} is not found, then [404]'
     get:
       summary: View a financing statement
-      tags: []
+      tags:
+        - Financing Statement
       responses:
         '200':
           description: OK
@@ -169,17 +175,12 @@ paths:
       operationId: get-financing-statement-for-id
       parameters:
         - schema:
-            type: integer
-          in: query
-          name: version
-          description: The version of the record to retrieve.  If not specified the most recent version will be retrieved.
-        - schema:
             type: string
           in: header
           name: Account-Id
-          description: The current account represented by the user
+          description: The account that the user is operating on behalf of
           required: true
-      description: ''
+      description: View a financing statement
       security:
         - JWT: []
   '/searches/{searchId}/results':
@@ -189,9 +190,11 @@ paths:
         name: searchId
         in: path
         required: true
+        description: 'The value of the search response id value.  If an invalid searchId is submitted then [404].'
     get:
       summary: List results for a search
-      tags: []
+      tags:
+        - Search
       responses:
         '200':
           description: OK
@@ -245,7 +248,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       operationId: get-search-matches
-      description: Display the financing statements that were found with the search criteria
+      description: Displays the Financing Statement records found with the search criteria referenced by searchId.
       security:
         - JWT: []
       parameters:
@@ -253,12 +256,13 @@ paths:
             type: string
           in: header
           name: Account-Id
-          description: The current account represented by the user
+          description: The account that the user is operating on behalf of
           required: true
   /financing-statements:
     post:
       summary: Create a financing statement
-      tags: []
+      tags:
+        - Financing Statement
       responses:
         '201':
           description: Created
@@ -315,7 +319,7 @@ paths:
         '422':
           description: Unprocessable Entity
       operationId: post-financing-statements
-      description: Create a new financing statement record
+      description: Create (register) a new financing statement
       security:
         - JWT: []
       requestBody:
@@ -370,7 +374,7 @@ paths:
             type: string
           in: header
           name: Account-Id
-          description: The current account represented by the user
+          description: The account that the user is operating on behalf of
           required: true
 components:
   schemas:
@@ -405,10 +409,6 @@ components:
                   type: string
                 last:
                   type: string
-        results:
-          type: string
-          format: uri
-          example: /searches/searchId/results
         searchDateTime:
           type: string
           format: date-time
@@ -620,3 +620,6 @@ components:
     JWT:
       type: http
       scheme: Bearer
+tags:
+  - name: Financing Statement
+  - name: Search
