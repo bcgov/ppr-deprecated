@@ -30,7 +30,7 @@ class Party(pydantic.BaseModel):
     businessName: str = None
     address: Address = None
 
-    @pydantic.validator('address', pre=None, always=True)
+    @pydantic.validator('address', always=True)
     def check_party_for_business_name(cls, v, values, **kwargs):  # pylint:disable=no-self-argument # noqa: N805
         if v is None:
             raise ValueError('"Party" must have an address')

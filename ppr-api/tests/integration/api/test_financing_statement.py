@@ -339,9 +339,8 @@ def get_minimal_payload():
     return {
         'type': 'SECURITY_AGREEMENT',
         'registeringParty': {'personName': {'first': 'Homer', 'last': 'Simpson'},
-                             'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor',
-                                         'city': 'Springfield', 'region': 'BC', 'country': 'CA',
-                                         'postalCode': 'V1A 1A1'}
+                             'address': {'street': '742 Evergreen Terrace', 'city': 'Springfield',
+                                         'country': 'CA', 'postalCode': 'V1A 1A1'}
                              },
         'securedParties': [],
         'debtors': [],

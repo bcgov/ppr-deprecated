@@ -122,7 +122,7 @@ def test_read_search_results_provides_secured_party_at_time_of_matched_registrat
     third_event = stub_financing_statement_event('123458C', financing_statement=fin_stmt)
     third_event.registration_date = now + datetime.timedelta(seconds=2)
     first_secured_party = models.party.Party(
-        type_code='SP', last_name='Simpson', first_name='Homer',  base_registration_number=fin_stmt.registration_number,
+        type_code='SP', last_name='Simpson', first_name='Homer', base_registration_number=fin_stmt.registration_number,
         starting_registration_number=base_event.registration_number,
         ending_registration_number=second_event.registration_number, address=models.party.Address(
             line1='742 Evergreen Terrace', line2='First Floor', city='Springfield', region='BC', country='CA',

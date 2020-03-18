@@ -1,8 +1,6 @@
-import datetime
-
-import pytest
-
 import schemas.party
+import pytest
+import datetime
 
 
 def test_person_name_invalid_no_last():
