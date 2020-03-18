@@ -4,6 +4,7 @@ import { mount, Wrapper } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
+import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/components/person-name-model'
@@ -93,4 +94,82 @@ describe('FinancingStatmentContainer.vue', (): void => {
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
     })
   })
+
+  describe('white box testing', (): void => {
+
+    function makeFS(): FinancingStatementModel {
+      let aParty
+      aParty = new BasePartyModel()
+      aParty.listId = 0
+      const securedParties = [aParty]
+      aParty = new BasePartyModel()
+      aParty.listId = 1
+      securedParties.push(aParty)
+
+      aParty = new BasePartyModel()
+      aParty.listId = 0
+      const debtorParties = [aParty]
+      aParty = new BasePartyModel()
+      aParty.listId = 1
+      debtorParties.push(aParty)
+
+      const financingStatement = new FinancingStatementModel(FinancingStatementType.SECURITY_AGREEMENT, 13,
+        new PersonNameModel('first', 'middle', 'last'), securedParties, debtorParties)
+      return financingStatement
+    }
+    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+    function addParty(list) {
+      let sp = [...list]
+      const last: BasePartyModel = list[list.length - 1] as BasePartyModel
+      const newParty = new BasePartyModel()
+      newParty.listId = last.listId + 1
+      sp.push(newParty)
+      return sp
+    }
+
+    it('update type', async (): Promise<void> => {
+      const financingStatement = makeFS()
+      const properties = ref({ editing: true, value: financingStatement })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const vm: any = wrapper.vm
+      vm.updateType(FinancingStatementType.REPAIRERS_LIEN)
+      await Vue.nextTick()
+
+      const emitted = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emitted).toBeInstanceOf(FinancingStatementModel)
+      expect(emitted.type).toEqual(FinancingStatementType.REPAIRERS_LIEN)
+    })
+
+    it('update secured parties method should emit longer party list', async (): Promise<void> => {
+      const financingStatement = makeFS()
+      const properties = ref({ editing: true, value: financingStatement })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const vm: any = wrapper.vm
+      const newList = addParty(financingStatement.securedParties)
+      vm.updateSecuredParties(newList)
+      await Vue.nextTick()
+
+      const emitted = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emitted).toBeInstanceOf(FinancingStatementModel)
+      expect(emitted.securedParties).toHaveLength(3)
+    })
+
+    it('update debtor parties method should emit longer party list', async (): Promise<void> => {
+      const financingStatement = makeFS()
+      const properties = ref({ editing: true, value: financingStatement })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const vm: any = wrapper.vm
+      const newList = addParty(financingStatement.debtorParties)
+      vm.updateDebtorParties(newList)
+      await Vue.nextTick()
+
+      const emitted = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emitted).toBeInstanceOf(FinancingStatementModel)
+      expect(emitted.debtorParties).toHaveLength(3)
+    })
+  })
+
 })
