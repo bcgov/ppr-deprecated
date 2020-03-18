@@ -1,23 +1,23 @@
 <template>
   <v-form>
-    <form-section-header label="Secured Parties" />
+    <form-section-header label="Debtors" />
     <v-container>
       <v-list>
         <ppr-list-item
-          v-for="(securedParty, index) in value"
-          :key="securedParty.listId"
+          v-for="(debtorParty, index) in value"
+          :key="debtorParty.listId"
           :editing="editing"
           :index="index"
           :list-length="value.length"
           @remove="removeElement"
         >
           <template #header>
-            Enter the contact information for this <strong>Secured Party</strong>
+            Enter the contact information for this <strong>Debtor</strong>
           </template>
           <base-party
-            :value="securedParty"
+            :value="debtorParty"
             :editing="editing"
-            prompt="How should we identify this Secured Party?"
+            prompt="How should we identify this Debtor?"
             @input="updateElement($event, index)"
             @valid="emitValidity($event, index)"
           />
@@ -29,10 +29,10 @@
       class="flex-center"
     >
       <v-btn
-        data-test-id="SecuredParties.button.add"
+        data-test-id="DebtorParties.button.add"
         @click="addElement"
       >
-        <span>Add new secured party</span>
+        <span>Add new Debtor</span>
       </v-btn>
     </v-container>
   </v-form>
@@ -83,20 +83,20 @@ export default createComponent({
 
     // Vue is not able to detect changes inside arrays so when emitting the array of parties
     // be sure to clone the array.
-    function updateElement(newSecuredParty: BasePartyModel, index: number): void {
+    function updateElement(newParty: BasePartyModel, index: number): void {
       let sp = [...props.value]
       const previous: BasePartyModel = props.value[index] as BasePartyModel
-      newSecuredParty.listId = previous.listId
-      sp[index] = newSecuredParty
+      newParty.listId = previous.listId
+      sp[index] = newParty
       emit('input', sp)
     }
 
     function addElement() {
       let sp = [...props.value]
       const last: BasePartyModel = props.value[props.value.length - 1] as BasePartyModel
-      const newSecuredParty = new BasePartyModel()
-      newSecuredParty.listId = last.listId + 1
-      sp.push(newSecuredParty)
+      const newParty = new BasePartyModel()
+      newParty.listId = last.listId + 1
+      sp.push(newParty)
       emit('input', sp)
     }
 

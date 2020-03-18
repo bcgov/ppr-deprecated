@@ -74,7 +74,10 @@ export default createComponent({
     const firstSecuredParty = new BasePartyModel()
     firstSecuredParty.listId = 0
     const securedParties = [firstSecuredParty]
-    const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties)
+    const firstDebtor = new BasePartyModel()
+    firstDebtor.listId = 0
+    const debtorParties = [firstDebtor]
+    const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties, debtorParties)
     const financingStatement = ref(fstmt)
 
     const loadIndicator = useLoadIndicator()

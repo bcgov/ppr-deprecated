@@ -99,19 +99,19 @@ describe('FinancingStatementModel', (): void => {
 
 
     it('construct with base registration number', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, '123456A')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, '123456A')
 
       expect(fstmt.baseRegistrationNumber).toEqual('123456A')
     })
 
     it('construct with registration date and time', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, '2020-01-01T01:01:01')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined, '2020-01-01T01:01:01')
 
       expect(fstmt.registrationDateTime).toEqual('2020-01-01T01:01:01')
     })
 
     it('construct with expiry date', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined, '2030-01-01')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2030-01-01')
 
       expect(fstmt.expiryDate).toEqual('2030-01-01')
     })

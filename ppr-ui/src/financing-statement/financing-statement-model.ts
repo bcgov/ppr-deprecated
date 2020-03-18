@@ -13,6 +13,7 @@ export interface FinancingStatementInterface {
   registeringParty: PersonNameInterface;
   registrationDateTime: string | undefined;
   securedParties: BasePartyInterface[];
+  debtorParties: BasePartyInterface[];
   type: FinancingStatementType;
   vehicleCollateral: [];
   years: number;
@@ -26,6 +27,7 @@ export class FinancingStatementModel {
   private _type: FinancingStatementType
   private _years: number
   private _securedParties: BasePartyModel[]
+  private _debtorParties: BasePartyModel[]
 
   /**
    * Creates a new FinancingStatementModel model instance.
@@ -34,6 +36,7 @@ export class FinancingStatementModel {
    * @param years the number of years the financing statement is registered for. A value between 1 and 25.
    * @param registeringParty the party who registered the financing statement
    * @param securedParties the list of secured parties who own the lien
+   * @param debtorParties the list of debtors who own the lien
    * @param baseRegistrationNumber the unique registration number for the financing statement, may be undefined.
    * @param registrationDateTime the date and time that the financing statement was registered.
    * @param expiryDate the expiry date of the financing statement.
@@ -43,6 +46,7 @@ export class FinancingStatementModel {
     years: number = 1,
     registeringParty: PersonNameModel = new PersonNameModel(),
     securedParties: BasePartyModel[] = [new BasePartyModel()],
+    debtorParties: BasePartyModel[] = [new BasePartyModel()],
     baseRegistrationNumber?: string,
     registrationDatetime?: string,
     expiryDate?: string
@@ -51,6 +55,7 @@ export class FinancingStatementModel {
     this._years = years
     this._registeringParty = registeringParty
     this._securedParties = securedParties
+    this._debtorParties = debtorParties
     this._baseRegistrationNumber = baseRegistrationNumber
     this._registrationDateTime = registrationDatetime
     this._expiryDate = expiryDate
@@ -75,6 +80,13 @@ export class FinancingStatementModel {
    */
   public get securedParties(): BasePartyModel[] {
     return this._securedParties
+  }
+
+  /**
+ * Gets the list of debtors who own the collateral
+ */
+  public get debtorParties(): BasePartyModel[] {
+    return this._debtorParties
   }
 
   /**
@@ -113,6 +125,10 @@ export class FinancingStatementModel {
     this.securedParties.forEach((sp: BasePartyModel): void => {
       theSPs.push(sp.toJson())
     })
+    const theDbers: BasePartyInterface[] = []
+    this.debtorParties.forEach((sp: BasePartyModel): void => {
+      theDbers.push(sp.toJson())
+    })
     const rval: FinancingStatementInterface = {
       baseRegistrationNumber: this.baseRegistrationNumber,
       debtors: [],
@@ -121,6 +137,7 @@ export class FinancingStatementModel {
       registeringParty: this.registeringParty.toJson(),
       registrationDateTime: this.registrationDateTime,
       securedParties: theSPs,
+      debtorParties: theDbers,
       type: this.type,
       vehicleCollateral: [],
       years: this.years
@@ -157,6 +174,7 @@ export class FinancingStatementModel {
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
     let registeringParty: PersonNameModel | undefined
     let securedParties: BasePartyModel[] = []
+    let debtorParties: BasePartyModel[] = []
 
     if (jsonObject.registeringParty) {
       registeringParty = PersonNameModel.fromJson(jsonObject.registeringParty)
@@ -167,11 +185,18 @@ export class FinancingStatementModel {
         securedParties.push(BasePartyModel.fromJson(sp))
       })
     }
+    if (jsonObject.debtorParties) {
+      jsonObject.debtorParties.forEach((sp: BasePartyInterface): void => {
+        debtorParties.push(BasePartyModel.fromJson(sp))
+      })
+    }
+
     return new FinancingStatementModel(
       jsonObject.type,
       jsonObject.years,
       registeringParty,
       securedParties.length > 0 ? securedParties : undefined,
+      debtorParties.length > 0 ? debtorParties : undefined,
       jsonObject.baseRegistrationNumber,
       jsonObject.registrationDateTime,
       jsonObject.expiryDate
