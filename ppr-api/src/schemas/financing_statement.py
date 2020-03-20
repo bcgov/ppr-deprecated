@@ -9,8 +9,16 @@ import schemas.party
 
 
 class RegistrationType(enum.Enum):
-    SECURITY_AGREEMENT = 'SA'
-    REPAIRERS_LIEN = 'RL'
+    SECURITY_AGREEMENT = 'SA'             # PPSA Security Agreement
+    REPAIRERS_LIEN = 'RL'                 # Repairer's Lien
+    MFD_HOME_SEPARATION_AGREEMENT = 'FR'  # Marriage/Separation Agreement affecting Mfd. Home under Family Law Act
+    MFD_HOME_LAND_TAX_DEFERMENT = 'LT'    # Land Tax Deferment Lien on a Manufactured Home
+    MFD_HOME_TAX_LIEN = 'MH'              # Tax Lien under S.27/28 of the Manufactured Home Act
+    SALE_OF_GOODS_ACT_POSSESSION = 'SG'   # Possession under S.30 of the Sale of Goods Act
+    FORESTRY_CONTRACTOR_LIEN = 'FL'       # FORESTRY - Contractor Lien
+    FORESTRY_CONTRACTOR_CHARGE = 'FA'     # FORESTRY - Contractor Charge
+    FORESTRY_SUBCONTRACTOR_CHARGE = 'FS'  # FORESTRY - Sub-contractor Charge
+    MISCELLANEOUS_REGISTRATION = 'MR'     # Miscellaneous Registration
 
 
 class FinancingStatementBase(pydantic.BaseModel):
