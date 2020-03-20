@@ -198,7 +198,7 @@ def test_read_search_results_provides_debtor_details():
     )
     event = stub_financing_statement_event(fin_stmt.registration_number)
     debtor = models.party.Party(
-        type_code='DE', first_name='Homer', middle_name='Jay', last_name='Simpson', business_name='Mr. Plow',
+        type_code='DE', first_name='Homer', middle_name='Jay', last_name='Simpson',
         birthdate=datetime.date(1990, 6, 15), base_registration_number=fin_stmt.registration_number,
         starting_registration_number=event.registration_number, address=models.party.Address(
             line1='742 Evergreen Terrace', line2='First Floor', city='Springfield', region='BC', country='CA',
@@ -216,7 +216,6 @@ def test_read_search_results_provides_debtor_details():
     assert results[0].financingStatement.debtors[0].personName.first == 'Homer'
     assert results[0].financingStatement.debtors[0].personName.middle == 'Jay'
     assert results[0].financingStatement.debtors[0].personName.last == 'Simpson'
-    assert results[0].financingStatement.debtors[0].businessName == 'Mr. Plow'
     assert results[0].financingStatement.debtors[0].birthdate == datetime.date(1990, 6, 15)
     assert results[0].financingStatement.debtors[0].address.street == '742 Evergreen Terrace'
     assert results[0].financingStatement.debtors[0].address.streetAdditional == 'First Floor'

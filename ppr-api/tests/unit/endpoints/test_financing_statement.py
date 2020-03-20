@@ -120,7 +120,7 @@ def test_read_financing_statement_debtor_should_be_mapped_to_schema():
     debtor = models.party.Party(
         type_code=PartyType.DEBTOR.value, base_registration_number=base_reg_num,
         starting_registration_number=base_reg_num, first_name='Homer', middle_name='Jay', last_name='Simpson',
-        business_name='Mr. Plow', birthdate=datetime.date(1990, 6, 15)
+        birthdate=datetime.date(1990, 6, 15)
     )
     stub_fs = stub_financing_statement(base_reg_num, parties=[debtor])
     repo = MockFinancingStatementRepository(stub_fs)
@@ -133,7 +133,6 @@ def test_read_financing_statement_debtor_should_be_mapped_to_schema():
     assert debtor.personName.first == 'Homer'
     assert debtor.personName.middle == 'Jay'
     assert debtor.personName.last == 'Simpson'
-    assert debtor.businessName == 'Mr. Plow'
     assert debtor.birthdate == datetime.date(1990, 6, 15)
     assert debtor.address is None
 
