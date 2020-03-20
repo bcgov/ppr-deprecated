@@ -83,16 +83,18 @@ describe('BaseParty.vue', (): void => {
       // let element
       expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeFalsy()
       expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="BaseParty.form"]').attributes().class).not.toContain('invalid')
 
       properties.value.editing = true
       await Vue.nextTick()
-      expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeTruthy()
       expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeTruthy()
+      expect(wrapper.find('[data-test-id="BaseParty.form"]').attributes().class).toContain('invalid')
 
       properties.value.editing = false
       await Vue.nextTick()
       expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeFalsy()
       expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeFalsy()
+      expect(wrapper.find('[data-test-id="BaseParty.form"]').attributes().class).not.toContain('invalid')
     })
 
   })
@@ -227,7 +229,7 @@ describe('BaseParty.vue', (): void => {
     })
 
     it('base party with person name should be visible and radio button set', async (): Promise<void> => {
-      const model = new BasePartyModel(undefined, new PersonNameModel('first',undefined,'last'))
+      const model = new BasePartyModel(undefined, new PersonNameModel('first', undefined, 'last'))
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
       const radioBusiness = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
