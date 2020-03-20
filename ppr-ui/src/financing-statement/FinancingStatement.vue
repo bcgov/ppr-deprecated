@@ -1,7 +1,8 @@
 <template>
   <v-card outlined>
     <v-form
-      :class="{ formInvalid: !formIsValid }"
+      :class="getFormClass()"
+      data-test-id="FinancingStatement.form"
       @input="emitValid('header', $event)"
     >
       <form-section-header label="Type &amp; Duration" />
@@ -178,11 +179,18 @@ export default createComponent({
       ))
     }
 
+    function getFormClass() {
+      return {
+        formInvalid: props.editing ? !formIsValid.value : false
+      }
+    }
+
     return {
       fsTypes,
       formIsValid,
       life,
       lifeRules,
+      getFormClass,
       updateLife,
       updateDebtorParties,
       updateRegisteringParty,
@@ -196,6 +204,6 @@ export default createComponent({
 
 <style lang="scss" scoped>
 .formInvalid {
-  border: 1px solid blanchedalmond
+  border: 1px solid blanchedalmond;
 }
 </style>
