@@ -41,7 +41,7 @@ class Party(pydantic.BaseModel):
         if values['personName'] is not None:
             raise ValueError('Cannot have "personName" and "businessName"')
         assert re.match('^[a-zA-Z-0-9\'"&:,$%.+;/ ]*$',
-                        v), '"businessName" can only contain the following special characters: & \' : , $ - ( ) % . + "  ; /'
+                        v), '"businessName" can only contain the following special characters: &\':,$-()%.+";/ '
         return v
 
 
