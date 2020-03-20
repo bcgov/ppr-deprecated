@@ -87,9 +87,19 @@ def test_person_name_valid_with_middle():
     assert name == {'first': 'John', 'middle': 'Sherman', 'last': 'Doe'}
 
 
-def test_person_name_valid_with_special():
-    name = schemas.party.IndividualName(first="J'ohn-Boy", middle="D'ean-Dre", last="D'oe-Doughington")
-    assert name == {'first': "J'ohn-Boy", 'middle': "D'ean-Dre", 'last': "D'oe-Doughington"}
+def test_person_first_name_valid_with_special():
+    name = schemas.party.IndividualName(first="J'ohn-Boy", last='Doe')
+    assert name == {'first': "J'ohn-Boy", 'middle': None, 'last': 'Doe'}
+
+
+def test_person_middle_name_valid_with_special():
+    name = schemas.party.IndividualName(first='John', middle="D'ean-Dre", last='Doe')
+    assert name == {'first': 'John', 'middle': "D'ean-Dre", 'last': 'Doe'}
+
+
+def test_person_last_name_valid_with_special():
+    name = schemas.party.IndividualName(first='John', last="D'oe-Doughington")
+    assert name == {'first': 'John', 'middle': None, 'last': "D'oe-Doughington"}
 
 
 def test_business_name_invalid_special_char():
