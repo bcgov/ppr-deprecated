@@ -30,6 +30,18 @@ describe('FinancingStatmentContainer.vue', (): void => {
       expect(wrapper.findAll('input').exists()).toBeTruthy()
     })
 
+    it(':editing - true form defaults to invalid', async (): Promise<void> => {
+      const properties = ref({ editing: true, value: new FinancingStatementModel() })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+      expect(wrapper.find('[data-test-id="FinancingStatement.form"]').attributes().class).toContain('formInvalid')
+    })
+
+    it(':editing - false form defaults to valid', async (): Promise<void> => {
+      const properties = ref({ editing: false, value: new FinancingStatementModel() })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+      expect(wrapper.find('[data-test-id="FinancingStatement.form"]').attributes().class).not.toContain('formInvalid')
+    })
+
     it(':editing - false contains default type', (): void => {
       const properties = ref({ editing: false, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })

@@ -1,7 +1,8 @@
 <template>
   <v-form
-    :class="{ invalid: !formIsValid }"
+    :class="getFormClass()"
     class="base-party-form"
+    data-test-id="BaseParty.form"
     @input="emitValidity(HEADER, $event)"
   >
     <v-container class="flex-center">
@@ -136,12 +137,19 @@ export default createComponent({
       emit('input', model)
     }
 
+    function getFormClass() {
+      return {
+        invalid: props.editing ? !formIsValid.value : false
+      }
+    }
+
     return {
       BUSINESS_NAME,
       HEADER,
       PERSON_NAME,
       changeType,
       formIsValid,
+      getFormClass,
       partyType,
       showBusinessName,
       showPersonName,

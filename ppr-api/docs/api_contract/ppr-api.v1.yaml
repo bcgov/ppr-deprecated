@@ -440,7 +440,16 @@ components:
           enum:
             - SECURITY_AGREEMENT
             - REPAIRERS_LIEN
-          description: 'Specifies the type of security agreement.  If incorrect value submitted, then [422].'
+          description: |
+            Specifies the type of security agreement.  If incorrect value submitted, then [422].
+            - MFD_HOME_SEPARATION_AGREEMENT
+            - MFD_HOME_LAND_TAX_DEFERMENT
+            - MFD_HOME_TAX_LIEN
+            - SALE_OF_GOODS_ACT_POSSESSION
+            - FORESTRY_CONTRACTOR_LIEN
+            - FORESTRY_CONTRACTOR_CHARGE
+            - FORESTRY_SUBCONTRACTOR_CHARGE
+            - MISCELLANEOUS_REGISTRATION
         registeringParty:
           type: object
           description: This object holds the registering party contact details.
