@@ -7,7 +7,7 @@ import schemas.party
 
 def test_person_name_invalid_no_last():
     try:
-        schemas.party.IndividualName(personName={'first': 'John Doe'})
+        schemas.party.IndividualName(first='John Doe')
     except ValueError:
         pass
     else:
@@ -16,7 +16,7 @@ def test_person_name_invalid_no_last():
 
 def test_person_name_invalid_no_first():
     try:
-        schemas.party.IndividualName(personName={'last': 'John Doe'})
+        schemas.party.IndividualName(last='John Doe')
     except ValueError:
         pass
     else:
@@ -25,7 +25,7 @@ def test_person_name_invalid_no_first():
 
 def test_person_name_invalid_only_middle():
     try:
-        schemas.party.IndividualName(personName={'middle': 'John Doe'})
+        schemas.party.IndividualName(middle='John Doe')
     except ValueError:
         pass
     else:
@@ -34,7 +34,7 @@ def test_person_name_invalid_only_middle():
 
 def test_person_name_invalid_first_and_middle():
     try:
-        schemas.party.IndividualName(personName={'first': 'John', 'middle': 'Doe'})
+        schemas.party.IndividualName(first='John', middle='Doe')
     except ValueError:
         pass
     else:
@@ -43,7 +43,7 @@ def test_person_name_invalid_first_and_middle():
 
 def test_person_name_invalid_last_and_middle():
     try:
-        schemas.party.IndividualName(personName={'last': 'Doe', 'middle': 'John'})
+        schemas.party.IndividualName(last='Doe', middle='John')
     except ValueError:
         pass
     else:

@@ -18,7 +18,7 @@ class IndividualName(pydantic.BaseModel):
 
     @pydantic.validator('*')
     def validate_name_fields(cls, v):  # pylint:disable=no-self-argument # noqa: N805
-        assert re.match("^[a-zA-Z-']*$", v), '"IndividualName" contains invalid character'
+        assert re.match("^[a-zA-Z- ']*$", v), '"IndividualName" contains invalid character'
         return v
 
 
@@ -40,7 +40,8 @@ class Party(pydantic.BaseModel):
     def validate_alphanum_special(cls, v, values):  # pylint:disable=no-self-argument # noqa: N805
         if values['personName'] is not None:
             raise ValueError('Cannot have "personName" and "businessName"')
-        assert re.match('^[a-zA-Z-0-9-\'"&:,$%.+;/ ]*$', v), '"businessName" contains invalid character'
+        assert re.match('^[a-zA-Z-0-9\'"&:,$%.+;/ ]*$',
+                        v), '"businessName" can only contain the following special characters: & \' : , $ - ( ) % . + "  ; /'
         return v
 
 
