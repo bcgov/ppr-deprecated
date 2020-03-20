@@ -43,7 +43,7 @@ class FinancingStatementRepository:
     def create_financing_statement(self, fs_input: schemas.financing_statement.FinancingStatementBase,
                                    user: auth.authentication.User):
         reg_num = self.next_registration_number()
-        years = fs_input.years or -1
+        years = fs_input.lifeYears or -1
         expiry_date = utils.datetime.today_pacific() + datedelta.datedelta(years=years) if years > 0 else None
 
         model = models.financing_statement.FinancingStatement(

@@ -42,7 +42,7 @@ def test_read_financing_statement_life_years_is_none_when_negative():
 
     result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
 
-    assert result.years is None
+    assert result.lifeYears is None
     assert result.expiryDate == stub_fs.expiry_date  # expiry_date is None in this case
 
 
@@ -53,7 +53,7 @@ def test_read_financing_statement_life_years_is_applied_when_positive():
 
     result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
 
-    assert result.years == 25
+    assert result.lifeYears == 25
     assert result.expiryDate == stub_fs.expiry_date
 
 

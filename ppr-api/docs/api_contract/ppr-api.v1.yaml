@@ -315,7 +315,7 @@ paths:
                     baseRegistrationNumber: 791167G
                     documentId: B5645289
                     registrationDateTime: '2020-02-21T18:38:20Z'
-                    years: 5
+                    lifeYears: 5
         '422':
           description: Unprocessable Entity
       operationId: post-financing-statements
@@ -368,7 +368,7 @@ paths:
                       model: SLK-Class Kompressor
                   generalCollateral:
                     - description: A ride on lawn mower that has a great deal of personal value.
-                  years: 5
+                  lifeYears: 5
       parameters:
         - schema:
             type: string
@@ -560,16 +560,18 @@ components:
           type: string
           format: date-time
           description: The date when the registration was successfully created.
-        years:
+        lifeYears:
           type: integer
           minimum: 1
           maximum: 25
-          description: Length of the registration in years. Must be a value from 1 to 25.
+          description: Life of the registration in years. Must be a value from 1 to 25. Cannot be set when lifeInfinite is true. Cannot be set when type is REPAIRERS_LIEN. Required for other types when lifeInfinite is not true.
+        lifeInfinite:
+          type: boolean
+          description: Set to true if the registration has an infinite life (no expiry date). Cannot be true when lifeYears has a value. Cannot be true when type is REPAIRERS_LIEN. Must be true or lifeYears must have a value for remaining types.
       required:
         - type
         - securedParties
         - debtors
-        - years
     search-result:
       type: object
       description: Provides a link to the financing statement found after a successful search.

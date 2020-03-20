@@ -15,7 +15,7 @@ export interface FinancingStatementInterface {
   debtors: BasePartyInterface[];
   type: FinancingStatementType;
   vehicleCollateral: [];
-  years: number;
+  lifeYears: number;
 }
 
 export class FinancingStatementModel {
@@ -138,7 +138,7 @@ export class FinancingStatementModel {
       debtors: theDbers,
       type: this.type,
       vehicleCollateral: [],
-      years: this.years
+      lifeYears: this.years
     }
     return rval
   }
@@ -191,7 +191,7 @@ export class FinancingStatementModel {
 
     return new FinancingStatementModel(
       jsonObject.type,
-      jsonObject.years,
+      jsonObject.lifeYears,
       registeringParty,
       securedParties.length > 0 ? securedParties : undefined,
       debtorParties.length > 0 ? debtorParties : undefined,
