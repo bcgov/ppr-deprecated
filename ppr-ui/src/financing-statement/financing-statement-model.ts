@@ -7,13 +7,12 @@ import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-mode
  */
 export interface FinancingStatementInterface {
   baseRegistrationNumber: string | undefined;
-  debtors: [];
   expiryDate: string | undefined;
   generalCollateral: [];
   registeringParty: PersonNameInterface;
   registrationDateTime: string | undefined;
   securedParties: BasePartyInterface[];
-  debtorParties: BasePartyInterface[];
+  debtors: BasePartyInterface[];
   type: FinancingStatementType;
   vehicleCollateral: [];
   years: number;
@@ -131,13 +130,12 @@ export class FinancingStatementModel {
     })
     const rval: FinancingStatementInterface = {
       baseRegistrationNumber: this.baseRegistrationNumber,
-      debtors: [],
       expiryDate: this.expiryDate,
       generalCollateral: [],
       registeringParty: this.registeringParty.toJson(),
       registrationDateTime: this.registrationDateTime,
       securedParties: theSPs,
-      debtorParties: theDbers,
+      debtors: theDbers,
       type: this.type,
       vehicleCollateral: [],
       years: this.years
@@ -185,8 +183,8 @@ export class FinancingStatementModel {
         securedParties.push(BasePartyModel.fromJson(sp))
       })
     }
-    if (jsonObject.debtorParties) {
-      jsonObject.debtorParties.forEach((sp: BasePartyInterface): void => {
+    if (jsonObject.debtors) {
+      jsonObject.debtors.forEach((sp: BasePartyInterface): void => {
         debtorParties.push(BasePartyModel.fromJson(sp))
       })
     }
