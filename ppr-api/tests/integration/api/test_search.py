@@ -120,7 +120,6 @@ def test_read_singular_search_results():
 def test_search_results_should_provide_party_at_time_of_search():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         registering_party={'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
-                           'business_name': 'Mr. Plow',
                            'address':  {'line1': '724 Evergreen Terrace', 'line2': 'first floor', 'city': 'Springfield',
                                         'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}
     )
@@ -138,7 +137,6 @@ def test_search_results_should_provide_party_at_time_of_search():
     assert reg_party['personName']['first'] == 'Homer'
     assert reg_party['personName']['middle'] == 'Jay'
     assert reg_party['personName']['last'] == 'Simpson'
-    assert reg_party['businessName'] == 'Mr. Plow'
     assert reg_party['address']['street'] == '724 Evergreen Terrace'
     assert reg_party['address']['streetAdditional'] == 'first floor'
     assert reg_party['address']['city'] == 'Springfield'
@@ -172,8 +170,7 @@ def test_search_results_should_provide_general_collateral_at_time_of_search():
 
 def test_search_results_should_provide_secured_parties_details():
     fin_stmt = sample_data_utility.create_test_financing_statement(
-        secured_parties=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
-                          'business_name': 'Mr. Plow',
+        secured_parties=[{'business_name': 'Mr. Plow',
                           'address':  {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
                                        'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
     )
@@ -186,9 +183,6 @@ def test_search_results_should_provide_secured_parties_details():
 
     assert len(body[0]['financingStatement']['securedParties']) == 1
     secured_party = body[0]['financingStatement']['securedParties'][0]
-    assert secured_party['personName']['first'] == 'Homer'
-    assert secured_party['personName']['middle'] == 'Jay'
-    assert secured_party['personName']['last'] == 'Simpson'
     assert secured_party['businessName'] == 'Mr. Plow'
     assert secured_party['address']['street'] == '724 Evergreen Terrace'
     assert secured_party['address']['streetAdditional'] == '1st floor'
@@ -201,7 +195,7 @@ def test_search_results_should_provide_secured_parties_details():
 
 def test_search_results_should_provide_debtor_details():
     fin_stmt = sample_data_utility.create_test_financing_statement(
-        debtors=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson', 'business_name': 'Mr. Plow',
+        debtors=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
                   'birthdate': datetime.date(2019, 6, 17),
                   'address':  {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
                                'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
@@ -218,7 +212,6 @@ def test_search_results_should_provide_debtor_details():
     assert debtor['personName']['first'] == 'Homer'
     assert debtor['personName']['middle'] == 'Jay'
     assert debtor['personName']['last'] == 'Simpson'
-    assert debtor['businessName'] == 'Mr. Plow'
     assert debtor['birthdate'] == datetime.date(2019, 6, 17).isoformat()
     assert debtor['address']['street'] == '724 Evergreen Terrace'
     assert debtor['address']['streetAdditional'] == '1st floor'

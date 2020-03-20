@@ -54,7 +54,7 @@ def test_read_financing_statement_with_changed_registering_party_should_provide_
 def test_read_financing_statement_debtor_details():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         debtors=[{
-            'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson', 'business_name': 'Mr. Plow',
+            'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
             'birthdate': datetime.date(1990, 6, 15),
             'address': {'line1': '742 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
                         'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}
@@ -65,7 +65,6 @@ def test_read_financing_statement_debtor_details():
     body = rv.json()
 
     assert len(body['debtors']) == 1
-    assert body['debtors'][0]['businessName'] == 'Mr. Plow'
     assert body['debtors'][0]['personName']['first'] == 'Homer'
     assert body['debtors'][0]['personName']['middle'] == 'Jay'
     assert body['debtors'][0]['personName']['last'] == 'Simpson'
@@ -81,7 +80,7 @@ def test_read_financing_statement_debtor_details():
 def test_read_financing_statement_secured_party_details():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         secured_parties=[{
-            'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson', 'business_name': 'Mr. Plow',
+            'business_name': 'Mr. Plow',
             'address': {'line1': '742 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
                         'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}
         }]
@@ -92,9 +91,6 @@ def test_read_financing_statement_secured_party_details():
 
     assert len(body['securedParties']) == 1
     assert body['securedParties'][0]['businessName'] == 'Mr. Plow'
-    assert body['securedParties'][0]['personName']['first'] == 'Homer'
-    assert body['securedParties'][0]['personName']['middle'] == 'Jay'
-    assert body['securedParties'][0]['personName']['last'] == 'Simpson'
     assert body['securedParties'][0]['address']['street'] == '742 Evergreen Terrace'
     assert body['securedParties'][0]['address']['streetAdditional'] == '1st floor'
     assert body['securedParties'][0]['address']['city'] == 'Springfield'
@@ -172,7 +168,6 @@ def test_create_financing_statement_persists_registering_party():
     request_payload.update(
         registeringParty={
             'businessName': 'Mr. Plow',
-            'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'},
             'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor', 'city': 'Springfield',
                         'region': 'BC', 'country': 'CA', 'postalCode': 'V1A 1A1'}
         }
@@ -182,7 +177,7 @@ def test_create_financing_statement_persists_registering_party():
 
     body = rv.json()
     assert 'registeringParty' in body
-    assert body['registeringParty']['personName']
+    assert body['registeringParty']['businessName']
     assert body['registeringParty']['address']
 
     registration_number = body['baseRegistrationNumber']
@@ -193,9 +188,6 @@ def test_create_financing_statement_persists_registering_party():
     assert registering_party.base_registration_number == registration_number
     assert registering_party.starting_registration_number == registration_number
     assert registering_party.ending_registration_number is None
-    assert registering_party.first_name == 'Homer'
-    assert registering_party.middle_name == 'Jay'
-    assert registering_party.last_name == 'Simpson'
     assert registering_party.business_name == 'Mr. Plow'
     assert registering_party.address.line1 == '742 Evergreen Terrace'
     assert registering_party.address.line2 == '1st floor'
@@ -209,7 +201,7 @@ def test_create_financing_statement_persists_secured_party():
     request_payload = get_minimal_payload()
     request_payload.update(
         securedParties=[{
-            'businessName': 'Mr. Plow', 'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'},
+            'businessName': 'Mr. Plow',
             'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor', 'city': 'Springfield',
                         'region': 'BC', 'country': 'CA', 'postalCode': 'V1A 1A1'}
         }]
@@ -228,9 +220,6 @@ def test_create_financing_statement_persists_secured_party():
     assert secured_parties[0].base_registration_number == registration_number
     assert secured_parties[0].starting_registration_number == registration_number
     assert secured_parties[0].ending_registration_number is None
-    assert secured_parties[0].first_name == 'Homer'
-    assert secured_parties[0].middle_name == 'Jay'
-    assert secured_parties[0].last_name == 'Simpson'
     assert secured_parties[0].business_name == 'Mr. Plow'
     assert secured_parties[0].address.line1 == '742 Evergreen Terrace'
     assert secured_parties[0].address.line2 == '1st floor'
@@ -245,7 +234,7 @@ def test_create_financing_statement_persists_debtor():
     request_payload = get_minimal_payload()
     request_payload.update(
         debtors=[{
-            'businessName': 'Mr. Plow', 'birthdate': '1990-06-15',
+            'birthdate': '1990-06-15',
             'personName': {'first': 'Homer', 'middle': 'Jay', 'last': 'Simpson'},
             'address': {'street': '742 Evergreen Terrace', 'streetAdditional': '1st floor', 'city': 'Springfield',
                         'region': 'BC', 'country': 'CA', 'postalCode': 'V1A 1A1'}
@@ -270,7 +259,6 @@ def test_create_financing_statement_persists_debtor():
     assert debtors[0].first_name == 'Homer'
     assert debtors[0].middle_name == 'Jay'
     assert debtors[0].last_name == 'Simpson'
-    assert debtors[0].business_name == 'Mr. Plow'
     assert debtors[0].birthdate == datetime.date(1990, 6, 15)
     assert debtors[0].address.line1 == '742 Evergreen Terrace'
     assert debtors[0].address.line2 == '1st floor'
