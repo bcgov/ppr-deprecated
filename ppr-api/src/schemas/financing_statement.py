@@ -23,14 +23,15 @@ class RegistrationType(enum.Enum):
 
 class FinancingStatementBase(pydantic.BaseModel):  # pylint:disable=no-member
     type: str
-    years: int = None
+    lifeYears: int = None
+    lifeInfinite: bool = None
     registeringParty: schemas.party.Party = None
     securedParties: typing.List[schemas.party.Party]
     debtors: typing.List[schemas.party.Debtor]
     vehicleCollateral: typing.List[schemas.collateral.VehicleCollateral]
     generalCollateral: typing.List[schemas.collateral.GeneralCollateral]
 
-    @pydantic.validator('years', pre=True)
+    @pydantic.validator('lifeYears', pre=True)
     def validate_years(cls, years):  # pylint:disable=no-self-argument # noqa: N805
         if years is None:
             return None

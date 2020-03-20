@@ -52,7 +52,7 @@ def map_financing_statement_model_to_schema(model: models.financing_statement.Fi
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=model.registration_number, registrationDateTime=reg_date,
-        expiryDate=model.expiry_date, years=model.life_in_years if model.life_in_years > 0 else None,
+        expiryDate=model.expiry_date, lifeYears=model.life_in_years if model.life_in_years > 0 else None,
         type=schemas.financing_statement.RegistrationType(model.registration_type_code).name,
         registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
         vehicleCollateral=vehicle_collateral_schema, generalCollateral=general_collateral_schema

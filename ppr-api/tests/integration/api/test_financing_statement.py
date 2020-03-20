@@ -20,7 +20,7 @@ def test_read_financing_statement_with_root_object_details():
     assert body['baseRegistrationNumber'] == fin_stmt.registration_number
     assert body['type'] == 'SECURITY_AGREEMENT'
     assert body['expiryDate'] == fin_stmt.expiry_date.isoformat()
-    assert body['years'] == 5
+    assert body['lifeYears'] == 5
     assert body['registrationDateTime'] == fin_stmt.events[0].registration_date.isoformat(timespec='seconds')
 
 
@@ -32,7 +32,7 @@ def test_read_financing_statement_with_no_expiry():
     body = rv.json()
 
     assert body['expiryDate'] is None
-    assert body['years'] is None
+    assert body['lifeYears'] is None
 
 
 def test_read_financing_statement_with_changed_registering_party_should_provide_active_record():
@@ -141,14 +141,14 @@ def test_read_financing_statement_vehicle_collateral_details():
 
 def test_create_financing_statement_for_root_object_details():
     request_payload = get_minimal_payload()
-    request_payload.update(type='SECURITY_AGREEMENT', years=5)
+    request_payload.update(type='SECURITY_AGREEMENT', lifeYears=5)
 
     rv = client.post('/financing-statements', json=request_payload)
 
     assert rv.status_code == 201
     body = rv.json()
     assert body['type'] == 'SECURITY_AGREEMENT'
-    assert body['years'] == 5
+    assert body['lifeYears'] == 5
 
     registration_number = body['baseRegistrationNumber']
 
