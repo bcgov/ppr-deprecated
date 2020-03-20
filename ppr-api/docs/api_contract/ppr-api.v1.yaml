@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Personal Property Registry API
   version: '1.0'
-  description: PPR API Specs
+  description: 'The Personal Property Registry (PPR) is a centralised, electronic register where details of security interests in personal property can be registered and searched. The PPR API provides a real-time, secure, direct link between your business systems and the PPR. You can conduct most PPR transactions, including searches, registrations, renewals, amendments and discharges, directly using these APIs.'
   contact:
     name: BC Registries
 servers:
@@ -39,6 +39,7 @@ paths:
           required: true
       security:
         - JWT: []
+      description: Used by a presentation layer to show previously submitted search critera.
     post:
       summary: 'Submit a new PPR search request '
       tags: []
@@ -135,6 +136,7 @@ paths:
           name: Account-Id
           description: The current account represented by the user
           required: true
+      description: Used by the presentation layer to show search criteria submitted to the system.
     parameters:
       - schema:
           type: string
@@ -179,7 +181,7 @@ paths:
           name: Account-Id
           description: The current account represented by the user
           required: true
-      description: ''
+      description: View a financing statement record.
       security:
         - JWT: []
   '/searches/{searchId}/results':
@@ -245,7 +247,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/error'
       operationId: get-search-matches
-      description: Display the financing statements that were found with the search criteria
+      description: Display the financing statements that were found after submitting search criteria to the system.
       security:
         - JWT: []
       parameters:
@@ -315,7 +317,7 @@ paths:
         '422':
           description: Unprocessable Entity
       operationId: post-financing-statements
-      description: Create a new financing statement record
+      description: Create a new financing statement record.
       security:
         - JWT: []
       requestBody:
@@ -378,10 +380,11 @@ components:
       title: search
       type: object
       x-examples: {}
-      description: ''
+      description: The Search parameters.
       properties:
         id:
           type: integer
+          description: Unique identifier for the search parameters.
         type:
           type: string
           enum:
@@ -391,27 +394,36 @@ components:
             - REGISTRATION_NUMBER
             - SERIAL_NUMBER
             - AIRCRAFT_DOT
+          description: The type of search that the critera is applied against.
         criteria:
           type: object
+          description: The criteria of the search.
           properties:
             value:
               type: string
+              description: 'The search string.  Can be the serial number, DOT number, VIN number, etc.'
             debtorName:
               type: object
+              description: Information pertaining to Debtor Name
               properties:
                 first:
                   type: string
+                  description: First name or Business name of debtor.
                 second:
                   type: string
+                  description: Second/Middle name of debtor.
                 last:
                   type: string
+                  description: Last Name of debtor.
         results:
           type: string
           format: uri
           example: /searches/searchId/results
+          description: A URI of the search parameters.
         searchDateTime:
           type: string
           format: date-time
+          description: The date-time the system successfully completed the search.
         payment:
           $ref: '#/components/schemas/payment'
       required:
@@ -420,7 +432,7 @@ components:
     financing-statement:
       title: financing-statement
       type: object
-      description: ''
+      description: 'Details of the Financing Statement on file, or to be filed.'
       x-examples: {}
       properties:
         type:
@@ -428,36 +440,44 @@ components:
           enum:
             - SECURITY_AGREEMENT
             - REPAIRERS_LIEN
+          description: 'Specifies the type of security agreement.  If incorrect value submitted, then [422].'
         registeringParty:
           type: object
+          description: This object holds the registering party contact details.
           properties:
             code:
               type: string
+              description: "Resgistering Party's PPR Client Code.  If supplied, name (person or business) and address does not need to be supplied."
             personName:
               $ref: '#/components/schemas/individual-name'
             businessName:
               type: string
+              description: Legal business name.
             address:
               $ref: '#/components/schemas/address'
           required:
             - address
         securedParties:
           type: array
+          description: This object holds one or more secured party contact details.
           items:
             type: object
             properties:
               code:
                 type: string
+                description: 'PPR Client Code of the Secured Party.  If supplied, name (person or business) and address does not need to be supplied.'
               personName:
                 $ref: '#/components/schemas/individual-name'
               businessName:
                 type: string
+                description: Legal business name.
               address:
                 $ref: '#/components/schemas/address'
             required:
               - address
         debtors:
           type: array
+          description: This object holds one or more debtor party contact details.
           items:
             type: object
             properties:
@@ -465,6 +485,7 @@ components:
                 $ref: '#/components/schemas/individual-name'
               businessName:
                 type: string
+                description: Legal business name of the debtor.
               address:
                 $ref: '#/components/schemas/address'
               birthdate:
@@ -475,6 +496,7 @@ components:
               - address
         vehicleCollateral:
           type: array
+          description: Contains information pertaining to the vehicle being used as collateral.
           items:
             type: object
             properties:
@@ -489,38 +511,49 @@ components:
                   - AIRCRAFT
                   - AIRCRAFT_FRAME
                   - ELECTRIC_VEHICLE
+                description: Specify the type of vehicle.
               serial:
                 type: string
+                description: 'Specify serial number of the vehicle (eg, VIN number, DOT number (if plane registered in Canada), Airframe number if registered outside of Canada, or designated serial number or the collateral. '
               year:
                 type: integer
                 minimum: 1000
                 maximum: 9999
+                description: Year of manufacture of the collateral (or model year of a automobile).
               make:
                 type: string
+                description: "Make of vehicle (or manufacturer's name)."
               model:
                 type: string
+                description: Model name.
               manufacturedHomeRegNumber:
                 type: string
+                description: Home registration number assigned by the Manufactured Home Registry.
             required:
               - type
               - serial
         generalCollateral:
           type: array
+          description: Contains description of collateral other than a vehicle.
           items:
             type: object
             properties:
               description:
                 type: string
+                description: 'In accordance to legislative requirements, a description of the collateral.'
             required:
               - description
         expiryDate:
           type: string
           format: date
+          description: 'The date upon which the financing statement will expire, in YYYY-MM-DD format.'
         baseRegistrationNumber:
           type: string
+          description: 'The Base Registration Number uniquely identifies a financing statement that is registered in the PPR database. The system assigns the Base Registration Number when the information submitted for registration passes all the system edits and is accepted for registration. You will need to know this number in order to register a change statement, a renewal statement, or a discharge statement. '
         registrationDateTime:
           type: string
           format: date-time
+          description: The date when the registration was successfully created.
         years:
           type: integer
           minimum: 1
@@ -533,62 +566,77 @@ components:
         - years
     search-result:
       type: object
+      description: Provides a link to the financing statement found after a successful search.
+      title: ''
       properties:
         type:
           type: string
           enum:
             - EXACT
             - SIMILAR
+          description: |-
+            Exact matches are used when searching by Serial Number, Manufactured Home Registration Number, Aircarft DOT number, or Debtor name.
+            Similar matches are used when searching by Serial Number, Manufactured Home Registration Number and Aircraft DOT number.
         financingStatement:
           $ref: '#/components/schemas/financing-statement'
     error:
       title: error
       type: object
+      description: Contains details of an error that was encountered.
       properties:
         code:
           type: string
-          description: Identifier representing the type of error that occurred
+          description: Identifier representing the type of error that occurred.
         description:
           type: string
-          description: Description of the error
-      description: Contains details of an error that was encountered
+          description: Description of the error.
     individual-name:
       title: individual-name
       type: object
+      description: "Individual's full name."
       properties:
         first:
           type: string
+          description: First name.
         last:
           type: string
+          description: Last Name.
         middle:
           type: string
+          description: Middle Name(s).
       required:
         - first
         - last
     payment:
       title: payment
       type: object
+      description: Payment information.
       properties:
         id:
           type: integer
+          description: Unique identifier of the payment transaction.
         status:
           type: string
           enum:
             - CREATED
             - COMPLETED
             - TRANSACTION_FAILED
+          description: Status of the payment.
         method:
           type: string
           enum:
             - CC
+          description: Method of Payment.
     address:
       title: address
       type: object
       properties:
         street:
           type: string
+          description: 'Street address and name. '
         city:
           type: string
+          description: 'City, Town, or Village.'
         region:
           type: string
           description: 'For Canada or USA, 2 character region code'
@@ -601,13 +649,16 @@ components:
           description: 2 Character ISO 3166-1 Alpha-2 Country Code
         postalCode:
           type: string
+          description: 'Postal Code in A1A 1A1 format for Canada, or zip code for US addresses.'
         streetAdditional:
           type: string
+          description: Additional address field.
       required:
         - street
         - city
         - country
         - postalCode
+      description: Capture address information for an entity.
   securitySchemes:
     JWT:
       type: http
