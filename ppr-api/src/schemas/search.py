@@ -21,7 +21,7 @@ class SearchResultType(enum.Enum):
     SIMILAR = False
 
 
-class SearchBase(pydantic.BaseModel):
+class SearchBase(pydantic.BaseModel):  # pylint:disable=no-member
     type: str
     criteria: dict
 
@@ -58,7 +58,7 @@ class SearchBase(pydantic.BaseModel):
         }
 
 
-class Search(SearchBase):
+class Search(SearchBase):  # pylint:disable=no-member
     id: int
     searchDateTime: datetime.datetime
     payment: schemas.payment.Payment = None
@@ -74,7 +74,7 @@ class Search(SearchBase):
         }
 
 
-class SearchResult(pydantic.BaseModel):
+class SearchResult(pydantic.BaseModel):  # pylint:disable=no-member
     type: str
     financingStatement: schemas.financing_statement.FinancingStatement = None
 

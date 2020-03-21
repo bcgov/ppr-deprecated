@@ -10,13 +10,13 @@ class PartyType(enum.Enum):
     DEBTOR = 'DE'
 
 
-class IndividualName(pydantic.BaseModel):
+class IndividualName(pydantic.BaseModel):  # pylint:disable=no-member
     first: str
     middle: str = None
     last: str
 
 
-class Address(pydantic.BaseModel):
+class Address(pydantic.BaseModel):  # pylint:disable=no-member
     street: str
     streetAdditional: str = None
     city: str
@@ -25,7 +25,7 @@ class Address(pydantic.BaseModel):
     postalCode: str
 
 
-class Party(pydantic.BaseModel):
+class Party(pydantic.BaseModel):  # pylint:disable=no-member
     personName: IndividualName = None
     businessName: str = None
     address: Address = None

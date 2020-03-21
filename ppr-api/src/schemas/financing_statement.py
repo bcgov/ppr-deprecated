@@ -21,7 +21,7 @@ class RegistrationType(enum.Enum):
     MISCELLANEOUS_REGISTRATION = 'MR'     # Miscellaneous Registration
 
 
-class FinancingStatementBase(pydantic.BaseModel):
+class FinancingStatementBase(pydantic.BaseModel):  # pylint:disable=no-member
     type: str
     years: int = None
     registeringParty: schemas.party.Party = None

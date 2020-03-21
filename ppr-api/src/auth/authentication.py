@@ -6,7 +6,7 @@ import fastapi
 import fastapi.security
 import fastapi.security.http
 import requests
-from pydantic import BaseModel
+from pydantic import BaseModel  # pylint:disable=no-name-in-module
 
 import config
 
