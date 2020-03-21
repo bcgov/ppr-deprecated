@@ -14,11 +14,11 @@ class VehicleType(enum.Enum):
     TRAILER = 'TR'
 
 
-class GeneralCollateral(pydantic.BaseModel):
+class GeneralCollateral(pydantic.BaseModel):  # pylint:disable=no-member
     description: str
 
 
-class VehicleCollateral(pydantic.BaseModel):
+class VehicleCollateral(pydantic.BaseModel):  # pylint:disable=no-member
     type: str
     serial: str = None
     year: int = None

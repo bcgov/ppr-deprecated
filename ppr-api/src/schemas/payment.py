@@ -1,7 +1,7 @@
 import pydantic
 
 
-class Payment(pydantic.BaseModel):
+class Payment(pydantic.BaseModel):  # pylint:disable=no-member
     id: int
     status: str
     method: str
