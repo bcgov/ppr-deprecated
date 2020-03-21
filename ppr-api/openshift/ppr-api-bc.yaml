@@ -18,7 +18,7 @@ objects:
     source:
       contextDir: ppr-api
       dockerfile: |
-        FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-2019-10-15
+        FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7-2020-03-01
 
         COPY ./openshift/prestart.sh /app
         COPY ./alembic.ini /app
