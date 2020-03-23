@@ -34,6 +34,14 @@ describe('base-address-model.ts', (): void => {
     expect(address.streetAdditional).toEqual('Suite 200')
   })
 
+  it('works with JSON for undefined', (): void => {
+    expect(BaseAddressModel.fromJson(undefined)).not.toBeDefined()
+  })
+
+  it('works with legacy JSON for undefined', (): void => {
+    expect(BaseAddressModel.fromLegacyJson(undefined)).not.toBeDefined()
+  })
+
   it('works with JSON for default constructor', (): void => {
     const address = new BaseAddressModel()
 
