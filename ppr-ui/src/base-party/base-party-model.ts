@@ -78,7 +78,7 @@ export class BasePartyModel {
     }
 
     if (this.address) {
-      rval = Object.assign(rval, this.address.toJson())
+      rval = Object.assign(rval, { address: this.address.toJson() })
     }
 
     return rval

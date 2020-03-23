@@ -1,6 +1,6 @@
 <template>
   <legacy-base-address
-    :address="value.toJson()"
+    :address="value.toLegacyJson()"
     :editing="editing"
     :schema="addressSchema"
     @update:address="emitUpdate($event)"
@@ -32,42 +32,36 @@ export default createComponent({
   },
 
   setup(props, { emit }) {
+    // The validation rules for the legacy address component.
     const addressSchema = {
-      streetAddress: {
-        required,
-        maxLength: maxLength(50)
-      },
-      streetAddressAdditional: {
-        maxLength: maxLength(50)
-      },
       addressCity: {
-        required,
-        maxLength: maxLength(40)
+        maxLength: maxLength(40),
+        required
       },
       addressCountry: {
-        required,
-        // FUTURE: create new validation function isCountry('CA')
-        isCanada: (val: string) => Boolean(val === 'CA')
+        required
       },
       addressRegion: {
-        maxLength: maxLength(2),
-        // FUTURE: create new validation function isRegion('BC')
-        isBC: (val: string) => Boolean(val === 'BC')
-      },
-      postalCode: {
-        required,
-        maxLength: maxLength(15)
+        maxLength: maxLength(2)
       },
       deliveryInstructions: {
         maxLength: maxLength(80)
+      },
+      postalCode: {
+        maxLength: maxLength(15),
+        required
+      },
+      streetAddress: {
+        maxLength: maxLength(50),
+        required
+      },
+      streetAddressAdditional: {
+        maxLength: maxLength(50)
       }
     }
 
     function emitUpdate(address: BaseAddressModel) {
-      console.log(address, typeof address)
-
-      emit('input', new BaseAddressModel())
-      // emit('input', BaseAddressModel.fromJson(address))
+      emit('input', BaseAddressModel.fromLegacyJson(address))
     }
 
     function emitValid(validity: boolean) {

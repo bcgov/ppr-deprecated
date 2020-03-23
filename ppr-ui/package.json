@@ -32,15 +32,16 @@
     "@vue/composition-api": "^0.3.4",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "country-list": "^2.2.0",
     "ip": "^1.1.5",
     "jwt-decode": "^2.2.0",
     "launchdarkly-js-client-sdk": "^2.16.3",
+    "provinces": "^1.11.0",
     "register-service-worker": "^1.6.2",
     "sbc-common-components": "^2.1.14",
     "ua-parser-js": "^0.7.21",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.2",
-    "vue-property-decorator": "^8.4.0",
     "vue-router": "^3.1.5",
     "vuelidate": "^0.7.4",
     "vuetify": "^2.2.11",
@@ -72,6 +73,7 @@
     "sass-loader": "^8.0.2",
     "typescript": "^3.7.5",
     "vue-plugin-helper-decorator": "^0.0.11",
+    "vue-property-decorator": "^8.4.0",
     "vue-template-compiler": "^2.6.11"
   }
 }

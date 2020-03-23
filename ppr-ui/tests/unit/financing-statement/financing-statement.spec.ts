@@ -1,4 +1,5 @@
 import { BasePartyModel } from '@/base-party/base-party-model'
+import { BaseAddressModel } from '@/components/base-address-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/components/person-name-model'
@@ -150,7 +151,8 @@ describe('FinancingStatementModel', (): void => {
     // Secured Parties
     it('json with secured parties', (): void => {
       const testPerson = new PersonNameModel('First', 'Middle', 'Last')
-      const testBaseParty = new BasePartyModel(undefined, testPerson)
+      const testAddress = new BaseAddressModel('940 Blanshard Street', 'Suite 200', 'Victoria', 'BC', 'V8W2H3', 'CA')
+      const testBaseParty = new BasePartyModel(undefined, testPerson, testAddress)
       const securedParties = [testBaseParty]
       const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties)
       const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())

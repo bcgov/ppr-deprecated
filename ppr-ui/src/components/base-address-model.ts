@@ -4,7 +4,6 @@
 export interface BaseAddressInterface {
   city?: string | undefined;
   country?: string | undefined;
-  deliveryInstructions?: string | undefined;
   postalCode?: string | undefined;
   region?: string | undefined;
   street?: string | undefined;
@@ -12,65 +11,67 @@ export interface BaseAddressInterface {
 }
 
 /**
+ * The interface to an address from the legacy component.
+ */
+export interface LegacyBaseAddressInterface {
+  addressCity?: string | undefined;
+  addressCountry?: string | undefined;
+  addressRegion?: string | undefined;
+  postalCode?: string | undefined;
+  streetAddress?: string | undefined;
+  streetAddressAdditional?: string | undefined;
+}
+
+/**
  * The model for an address.
  */
 export class BaseAddressModel {
-  private _addressCity: string | undefined
-  private _addressCountry: string | undefined
-  private _addressRegion: string | undefined
-  private _deliveryInstructions: string | undefined
+  private _city: string | undefined
+  private _country: string | undefined
   private _postalCode: string | undefined
-  private _streetAddress: string | undefined
-  private _streetAddressAdditional: string | undefined
+  private _region: string | undefined
+  private _street: string | undefined
+  private _streetAdditional: string | undefined
 
   /**
    * Creates a new BaseAddress model instance.
    *
-   * @param streetAddress the street address (i.e. address line 1) for the address.
-   * @param streetAddressAdditional the additional street address (i.e. address line 2) for the address.
-   * @param addressCity the city for the address. 
-   * @param addressRegion the region (province / state / etc) for the address.
+   * @param street the street address (i.e. address line 1) for the address.
+   * @param streetAdditional the additional street address (i.e. address line 2) for the address.
+   * @param city the city for the address. 
+   * @param region the region (province / state / etc) for the address.
    * @param postalCode the postal code (or zip code, etc) for the address.
-   * @param addressCountry the country for the address.
-   * @param deliveryInstructions the delivery instructions (e.g. "leave at back door") for the address.
+   * @param country the country for the address.
    */
-  public constructor(streetAddress?: string, streetAddressAdditional?: string, addressCity?: string,
-    addressRegion?: string, postalCode?: string, addressCountry?: string, deliveryInstructions?: string) {
-    this._streetAddress = streetAddress
-    this._streetAddressAdditional = streetAddressAdditional
-    this._addressCity = addressCity
-    this._addressRegion = addressRegion
+  public constructor(street?: string, streetAdditional?: string, city?: string, region?: string, postalCode?: string,
+    country?: string) {
+    this._street = street
+    this._streetAdditional = streetAdditional
+    this._city = city
+    this._region = region
     this._postalCode = postalCode
-    this._addressCountry = addressCountry
-    this._deliveryInstructions = deliveryInstructions
+    this._country = country
   }
 
   /**
    * Gets the city for the address.
    */
-  public get addressCity(): string | undefined {
-    return this._addressCity
+  public get city(): string | undefined {
+    return this._city
   }
 
   /**
    * Gets the country for the address.
    */
-  public get addressCountry(): string | undefined {
-    return this._addressCountry
+  public get country(): string | undefined {
+    return this._country
   }
 
   /**
    * Gets the region (province / state / etc) for the address.
    */
-  public get addressRegion(): string | undefined {
-    return this._addressRegion
-  }
-
-  /**
-   * Gets the delivery instructions (e.g. "leave at back door") for the address.
-   */
-  public get deliveryInstructions(): string | undefined {
-    return this._deliveryInstructions
+  public get region(): string | undefined {
+    return this._region
   }
 
   /**
@@ -83,15 +84,15 @@ export class BaseAddressModel {
   /**
    * Gets the street address (i.e. address line 1) for the address.
    */
-  public get streetAddress(): string | undefined {
-    return this._streetAddress
+  public get street(): string | undefined {
+    return this._street
   }
 
   /**
    * Gets the additional street address (i.e. address line 2) for the address.
    */
-  public get streetAddressAdditional(): string | undefined {
-    return this._streetAddressAdditional
+  public get streetAdditional(): string | undefined {
+    return this._streetAdditional
   }
 
   /**
@@ -99,13 +100,26 @@ export class BaseAddressModel {
    */
   public toJson(): BaseAddressInterface {
     return {
-      street: this.streetAddress,
-      streetAdditional: this.streetAddressAdditional,
-      city: this.addressCity,
-      region: this.addressRegion,
+      street: this.street,
+      streetAdditional: this.streetAdditional,
+      city: this.city,
+      region: this.region,
       postalCode: this.postalCode,
-      country: this.addressCountry,
-      deliveryInstructions: this.deliveryInstructions
+      country: this.country
+    }
+  }
+
+  /**
+   * Gets the JSON representation of the BaseAddressModel object, in the legacy component format.
+   */
+  public toLegacyJson(): LegacyBaseAddressInterface {
+    return {
+      streetAddress: this.street,
+      streetAddressAdditional: this.streetAdditional,
+      addressCity: this.city,
+      addressRegion: this.region,
+      postalCode: this.postalCode,
+      addressCountry: this.country
     }
   }
 
@@ -128,8 +142,29 @@ export class BaseAddressModel {
         jsonObject.city,
         jsonObject.region,
         jsonObject.postalCode,
-        jsonObject.country,
-        jsonObject.deliveryInstructions
+        jsonObject.country
+      )
+    }
+
+    return addressModel
+  }
+
+  /**
+   * Gets a BaseAddressModel object from a JSON object in the legacy component format.
+   *
+   * @param jsonObject the JSON version of the object, in the legacy component format.
+   */
+  public static fromLegacyJson(jsonObject: LegacyBaseAddressInterface | undefined): BaseAddressModel | undefined {
+    let addressModel: BaseAddressModel | undefined
+
+    if (jsonObject) {
+      addressModel = new BaseAddressModel(
+        jsonObject.streetAddress,
+        jsonObject.streetAddressAdditional,
+        jsonObject.addressCity,
+        jsonObject.addressRegion,
+        jsonObject.postalCode,
+        jsonObject.addressCountry
       )
     }
 
