@@ -6,7 +6,7 @@ import { PersonNameInterface, PersonNameModel } from '@/components/person-name-m
  * The interface to a party that may be a person or a business, with an address.
  */
 export interface BasePartyInterface extends PersonNameInterface, BusinessNameInterface {
-  address?: BaseAddressInterface | undefined;
+  address?: BaseAddressInterface;
 }
 
 /**
@@ -16,7 +16,7 @@ export class BasePartyModel {
 
   private _businessName: BusinessNameModel
   private _personName: PersonNameModel
-  private _address?: BaseAddressModel | undefined
+  private _address?: BaseAddressModel
 
   /**
    * Provide a publicly accessible property that lists can use to index parties

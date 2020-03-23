@@ -2,24 +2,24 @@
  * The interface to an address.
  */
 export interface BaseAddressInterface {
-  city?: string | undefined;
-  country?: string | undefined;
-  postalCode?: string | undefined;
-  region?: string | undefined;
-  street?: string | undefined;
-  streetAdditional?: string | undefined;
+  city?: string;
+  country?: string;
+  postalCode?: string;
+  region?: string;
+  street?: string;
+  streetAdditional?: string;
 }
 
 /**
  * The interface to an address from the legacy component.
  */
 export interface LegacyBaseAddressInterface {
-  addressCity?: string | undefined;
-  addressCountry?: string | undefined;
-  addressRegion?: string | undefined;
-  postalCode?: string | undefined;
-  streetAddress?: string | undefined;
-  streetAddressAdditional?: string | undefined;
+  addressCity?: string;
+  addressCountry?: string;
+  addressRegion?: string;
+  postalCode?: string;
+  streetAddress?: string;
+  streetAddressAdditional?: string;
 }
 
 /**
