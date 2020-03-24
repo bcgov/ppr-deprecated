@@ -3,7 +3,7 @@
     :class="getFormClass()"
     class="base-party-form"
     data-test-id="BaseParty.form"
-    @input="emitValidity(HEADER, $event)"
+    @input="emitValid(HEADER, $event)"
   >
     <v-container class="flex-center">
       <!-- See #724 re pending styling of these radio buttons -->
@@ -35,7 +35,7 @@
       :editing="editing"
       :value="value.businessName"
       @input="updateBusiness($event)"
-      @valid="emitValidity(BUSINESS_NAME, $event)"
+      @valid="emitValid(BUSINESS_NAME, $event)"
     />
     <person-name
       v-if="showPersonName"
@@ -43,21 +43,30 @@
       :editing="editing"
       :value="value.personName"
       @input="updatePerson($event)"
-      @valid="emitValidity(PERSON_NAME, $event)"
+      @valid="emitValid(PERSON_NAME, $event)"
+    />
+    <base-address
+      :address="value.address"
+      :editing="editing"
+      @input="updateAddress($event)"
+      @valid="emitValid(ADDRESS, $event)"
     />
   </v-form>
 </template>
 
 <script lang="ts">
 import { computed, createComponent, ref } from '@vue/composition-api'
+
+import BaseAddress from '@/components/BaseAddress.vue'
 import BusinessName from '@/components/BusinessName.vue'
 import PersonName from '@/components/PersonName.vue'
 import { BasePartyModel } from '@/base-party/base-party-model'
+import { BaseAddressModel } from '@/components/base-address-model'
 import { BusinessNameModel } from '@/components/business-model'
 import { PersonNameModel } from '@/components/person-name-model'
 
 export default createComponent({
-  components: { BusinessName, PersonName },
+  components: { BaseAddress, BusinessName, PersonName },
 
   props: {
     editing: {
@@ -78,6 +87,7 @@ export default createComponent({
 
     const formIsValid = ref<boolean>(false)
 
+    const ADDRESS = 'address'
     const BUSINESS_NAME = 'businessName'
     const HEADER = 'header'
     const PERSON_NAME = 'personName'
@@ -88,6 +98,7 @@ export default createComponent({
       [index: string]: boolean;
     }
     const validationState: StringKeyedObject = {}
+    validationState[ADDRESS] = false
     validationState[BUSINESS_NAME] = false
     validationState[HEADER] = false
     validationState[PERSON_NAME] = false
@@ -97,9 +108,9 @@ export default createComponent({
     const partyType = ref(type)
 
     // Callback function for emitting form validity on all sections back to the parent.
-    function emitValidity(key: string, validElement: boolean) {
+    function emitValid(key: string, validElement: boolean) {
       validationState[key] = validElement
-      let formValid = validationState[HEADER]
+      let formValid = validationState[ADDRESS] && validationState[HEADER]
       if (partyType.value === BUSINESS_NAME) {
         formValid = formValid && validationState[BUSINESS_NAME]
       }
@@ -113,11 +124,21 @@ export default createComponent({
     const showBusinessName = computed((): boolean => partyType.value === BUSINESS_NAME)
     const showPersonName = computed((): boolean => partyType.value === PERSON_NAME)
 
+    // Callback function for emitting the address model change back to the parent.
+    function updateAddress(newValue: BaseAddressModel): void {
+      emit('input', new BasePartyModel(
+        props.value.businessName,
+        props.value.personName,
+        newValue
+      ))
+    }
+
     // Callback function for emitting the business name model change back to the parent.
     function updateBusiness(newValue: BusinessNameModel): void {
       emit('input', new BasePartyModel(
         newValue,
-        props.value.personName
+        props.value.personName,
+        props.value.address
       ))
     }
 
@@ -125,7 +146,8 @@ export default createComponent({
     function updatePerson(newValue: PersonNameModel): void {
       emit('input', new BasePartyModel(
         props.value.businessName,
-        newValue
+        newValue,
+        props.value.address
       ))
     }
 
@@ -144,18 +166,20 @@ export default createComponent({
     }
 
     return {
+      ADDRESS,
       BUSINESS_NAME,
       HEADER,
       PERSON_NAME,
       changeType,
+      emitValid,
       formIsValid,
       getFormClass,
       partyType,
       showBusinessName,
       showPersonName,
+      updateAddress,
       updateBusiness,
-      updatePerson,
-      emitValidity
+      updatePerson
     }
   }
 })

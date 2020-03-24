@@ -1,6 +1,7 @@
 import Vue, { VNode } from 'vue'
 import VueRouter from 'vue-router'
 import VueCompositionApi from '@vue/composition-api'
+import Vuelidate from 'vuelidate'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import App from '@/App.vue'
@@ -18,6 +19,7 @@ const opts = { iconfont: 'mdi' }
 
 Vue.use(VueCompositionApi)
 Vue.use(Vuetify)
+Vue.use(Vuelidate)
 Vue.use(VueRouter)
 
 Vue.config.productionTip = false
