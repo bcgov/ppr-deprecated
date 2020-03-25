@@ -5,7 +5,7 @@ import { mount, Wrapper } from '@vue/test-utils'
 
 import BaseParty from '@/base-party/BaseParty.vue'
 import { BasePartyModel } from '@/base-party/base-party-model'
-import { BusinessNameModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-name-model'
 import { PersonNameModel } from '@/components/person-name-model'
 
 Vue.use(Vuetify)
@@ -227,7 +227,7 @@ describe('BaseParty.vue', (): void => {
     })
 
     it('base party with person name should be visible and radio button set', async (): Promise<void> => {
-      const model = new BasePartyModel(undefined, new PersonNameModel('first',undefined,'last'))
+      const model = new BasePartyModel(undefined, new PersonNameModel('first', undefined, 'last'))
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
       const radioBusiness = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
