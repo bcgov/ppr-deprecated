@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
 import { BasePartyModel } from '@/base-party/base-party-model'
-import { BusinessNameModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-name-model'
 import Vuetify from 'vuetify'
 
 import SecuredParties from '@/financing-statement/SecuredParties.vue'
