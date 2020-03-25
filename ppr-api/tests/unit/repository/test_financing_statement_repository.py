@@ -37,7 +37,7 @@ def test_create_financing_statement_event_user_is_saved(mock_session):
 @patch('sqlalchemy.orm.Session')
 def test_create_financing_statement_should_not_expire_when_years_not_set(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
-    schema = stub_financing_statement_input(life_years=None)
+    schema = stub_financing_statement_input(life_years=None, life_infinite=True)
 
     financing_statement = repo.create_financing_statement(schema, stub_user())
 
@@ -49,7 +49,7 @@ def test_create_financing_statement_should_not_expire_when_years_not_set(mock_se
 @patch('sqlalchemy.orm.Session')
 def test_create_financing_statement_leap_day_to_non_leap_year_should_expire_in_march(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
-    schema = stub_financing_statement_input(life_years=3)
+    schema = stub_financing_statement_input(life_years=3, life_infinite=False)
 
     financing_statement = repo.create_financing_statement(schema, stub_user())
 
@@ -61,7 +61,7 @@ def test_create_financing_statement_leap_day_to_non_leap_year_should_expire_in_m
 @patch('sqlalchemy.orm.Session')
 def test_create_financing_statement_leap_day_to_leap_year_should_expire_on_leap_day(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
-    schema = stub_financing_statement_input(life_years=24)
+    schema = stub_financing_statement_input(life_years=24, life_infinite=None)
 
     financing_statement = repo.create_financing_statement(schema, stub_user())
 
@@ -347,13 +347,15 @@ def stub_vehicle_collateral(vehicle_type: VehicleType = VehicleType.MANUFACTURED
     )
 
 
-def stub_financing_statement_input(reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT,
-                                   life_years: int = None, reg_party: schemas.party.Party = stub_party(),
-                                   secured_parties=[stub_party()], debtors=[stub_debtor()], general_collateral=[],
-                                   vehicle_collateral=[]):
+def stub_financing_statement_input(
+        reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT, life_years: int = None,
+        life_infinite: bool = True, reg_party: schemas.party.Party = stub_party(), secured_parties=[stub_party()],
+        debtors=[stub_debtor()], general_collateral=[], vehicle_collateral=[]
+):
     return schemas.financing_statement.FinancingStatementBase(
-        type=reg_type.name, lifeYears=life_years, registeringParty=reg_party, securedParties=secured_parties,
-        debtors=debtors, vehicleCollateral=vehicle_collateral, generalCollateral=general_collateral
+        type=reg_type.name, lifeYears=life_years, lifeInfinite=life_infinite, registeringParty=reg_party,
+        securedParties=secured_parties, debtors=debtors, vehicleCollateral=vehicle_collateral,
+        generalCollateral=general_collateral
     )
 
 

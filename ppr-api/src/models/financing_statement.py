@@ -3,6 +3,8 @@ import sqlalchemy.orm
 
 import models.collateral
 import models.party
+import schemas.financing_statement
+from schemas.financing_statement import RegistrationType
 from schemas.party import PartyType
 
 from .database import BaseORM
@@ -36,6 +38,26 @@ class FinancingStatement(BaseORM):
         primaryjoin='and_(FinancingStatement.registration_number==VehicleCollateral.base_registration_number, '
                     'VehicleCollateral.ending_registration_number==None)'
     )
+
+    def as_schema(self):
+        base_event = self.get_base_event()
+        reg_date = base_event.registration_date if base_event else None
+        reg_party_model = self.get_registering_party()
+        infinite = self.life_in_years == -1
+        years = self.life_in_years if not infinite else None
+
+        reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
+        secured_parties_schema = list(map(models.party.Party.as_schema, self.get_secured_parties()))
+        debtors_schema = list(map(models.party.Party.as_schema, self.get_debtors()))
+        general_collateral_schema = list(map(models.collateral.GeneralCollateral.as_schema, self.general_collateral))
+        vehicle_collateral_schema = list(map(models.collateral.VehicleCollateral.as_schema, self.vehicle_collateral))
+
+        return schemas.financing_statement.FinancingStatement(
+            baseRegistrationNumber=self.registration_number, registrationDateTime=reg_date, expiryDate=self.expiry_date,
+            lifeYears=years, lifeInfinite=infinite, type=RegistrationType(self.registration_type_code).name,
+            registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
+            vehicleCollateral=vehicle_collateral_schema, generalCollateral=general_collateral_schema
+        )
 
     def get_base_event(self):
         return next((e for e in self.events if e.registration_number == self.registration_number), None)

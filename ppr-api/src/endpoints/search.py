@@ -103,6 +103,8 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
     fs_model = event.base_registration
     target_events = sorted(filter(lambda e: e.registration_date <= event.registration_date, fs_model.events),
                            key=lambda e: e.registration_date)
+    infinite = fs_model.life_in_years == -1
+    years = fs_model.life_in_years if not infinite else None
 
     parties_snapshot = []
     general_collateral_snapshot = []
@@ -127,7 +129,7 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
-        documentId=event.document_number, expiryDate=fs_model.expiry_date,
+        documentId=event.document_number, expiryDate=fs_model.expiry_date, lifeYears=years, lifeInfinite=infinite,
         registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
         vehicleCollateral=vehicle_collateral_schema, generalCollateral=general_collateral_schema,
         type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name

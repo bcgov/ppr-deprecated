@@ -31,17 +31,18 @@ class FinancingStatementBase(pydantic.BaseModel):  # pylint:disable=no-member
     vehicleCollateral: typing.List[schemas.collateral.VehicleCollateral]
     generalCollateral: typing.List[schemas.collateral.GeneralCollateral]
 
-    @pydantic.validator('lifeYears', pre=True)
-    def validate_years(cls, years):  # pylint:disable=no-self-argument # noqa: N805
-        if years is None:
-            return None
+    @pydantic.root_validator
+    def validate_life(cls, values):  # pylint:disable=no-self-argument # noqa: N805
+        years = values.get('lifeYears')
+        infinite = values.get('lifeInfinite')
 
-        if not type(years) is int:
-            raise TypeError('Only integers are allowed')
-        if years <= 0 or years > 25:
-            raise ValueError('Years can only be between 1-25.')
+        if bool(infinite) != bool(years is None):
+            raise ValueError('Either lifeYears must have a value or infiniteYears must be true')
+        if not infinite:
+            if years < 1 or years > 25:
+                raise ValueError('lifeYears must be in the range 1-25')
 
-        return years
+        return values
 
 
 class FinancingStatement(FinancingStatementBase):
