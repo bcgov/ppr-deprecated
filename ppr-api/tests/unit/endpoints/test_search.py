@@ -112,10 +112,7 @@ def test_read_search_results_provides_financing_statement_expiry_date():
 
 def test_read_search_results_provides_secured_party_at_time_of_matched_registration_number():
     now = datetime.datetime.now()
-    fin_stmt = models.financing_statement.FinancingStatement(
-        registration_number='123456A', registration_type_code='SA', status='A',
-        last_updated=now + datetime.timedelta(seconds=2)
-    )
+    fin_stmt = stub_financing_statement('123456A', last_updated=now + datetime.timedelta(seconds=2))
     base_event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
     second_event = stub_financing_statement_event('123457B', financing_statement=fin_stmt)
     second_event.registration_date = now + datetime.timedelta(seconds=1)
@@ -153,10 +150,7 @@ def test_read_search_results_provides_secured_party_at_time_of_matched_registrat
 
 def test_read_search_results_provides_debtor_at_time_of_matched_registration_number():
     now = datetime.datetime.now()
-    fin_stmt = models.financing_statement.FinancingStatement(
-        registration_number='123456A', registration_type_code='SA', status='A',
-        last_updated=now + datetime.timedelta(seconds=2)
-    )
+    fin_stmt = stub_financing_statement('123456A', last_updated=now + datetime.timedelta(seconds=2))
     base_event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
     second_event = stub_financing_statement_event('123457B', financing_statement=fin_stmt)
     second_event.registration_date = now + datetime.timedelta(seconds=1)
@@ -193,9 +187,7 @@ def test_read_search_results_provides_debtor_at_time_of_matched_registration_num
 
 
 def test_read_search_results_provides_debtor_details():
-    fin_stmt = models.financing_statement.FinancingStatement(
-        registration_number='123456A', registration_type_code='SA', status='A', last_updated=datetime.datetime.now()
-    )
+    fin_stmt = stub_financing_statement('123456A')
     event = stub_financing_statement_event(fin_stmt.registration_number)
     debtor = models.party.Party(
         type_code='DE', first_name='Homer', middle_name='Jay', last_name='Simpson', business_name='Mr. Plow',
@@ -228,10 +220,7 @@ def test_read_search_results_provides_debtor_details():
 
 def test_read_search_results_provides_vehicle_collateral_at_time_of_matched_registration_number():
     now = datetime.datetime.now()
-    fin_stmt = models.financing_statement.FinancingStatement(
-        registration_number='123456A', registration_type_code='SA', status='A',
-        last_updated=now + datetime.timedelta(seconds=2)
-    )
+    fin_stmt = stub_financing_statement('123456A', last_updated=now + datetime.timedelta(seconds=2))
     base_event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
     second_event = stub_financing_statement_event('123457B', financing_statement=fin_stmt)
     second_event.registration_date = now + datetime.timedelta(seconds=1)
@@ -274,6 +263,38 @@ def test_read_search_results_provides_vehicle_collateral_at_time_of_matched_regi
     assert next(c for c in result_collateral if c.serial == second_collateral.serial_number)
 
 
+def test_read_search_results_infinite_life():
+    fin_stmt = stub_financing_statement(life=-1)
+    event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.lifeInfinite is True
+    assert results[0].financingStatement.lifeYears is None
+
+
+def test_read_search_results_life_has_years_value():
+    fin_stmt = stub_financing_statement(life=7)
+    event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.lifeYears == 7
+    assert results[0].financingStatement.lifeInfinite is False
+
+
+def stub_financing_statement(base_reg_number: str = '123456A', life: int = -1,
+                             last_updated: datetime.datetime = datetime.datetime.now()):
+    return models.financing_statement.FinancingStatement(
+        registration_number=base_reg_number, registration_type_code='SA', status='A', life_in_years=life,
+        last_updated=last_updated
+    )
+
+
 def stub_financing_statement_event(reg_number: str, base_reg_number: str = None,
                                    financing_statement: models.financing_statement.FinancingStatement = None):
     if financing_statement:
@@ -284,9 +305,7 @@ def stub_financing_statement_event(reg_number: str, base_reg_number: str = None,
     return models.financing_statement.FinancingStatementEvent(
         registration_number=reg_number, base_registration_number=base_reg_number, document_number='A1234567',
         registration_date=datetime.datetime.now(), user_id='user_id_stub',
-        base_registration=financing_statement or models.financing_statement.FinancingStatement(
-            registration_number=base_reg_number, registration_type_code='SA'
-        )
+        base_registration=financing_statement or stub_financing_statement(base_reg_number)
     )
 
 

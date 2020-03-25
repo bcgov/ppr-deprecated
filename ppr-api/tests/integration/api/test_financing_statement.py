@@ -149,6 +149,7 @@ def test_create_financing_statement_for_root_object_details():
     body = rv.json()
     assert body['type'] == 'SECURITY_AGREEMENT'
     assert body['lifeYears'] == 5
+    assert body['lifeInfinite'] is False
 
     registration_number = body['baseRegistrationNumber']
 
@@ -165,6 +166,24 @@ def test_create_financing_statement_for_root_object_details():
     assert stored.events[0].base_registration_number == registration_number
     assert stored.events[0].user_id == 'fake_user_id'  # Default user for integration tests
     assert stored.events[0].registration_date.isoformat(timespec='seconds') == body['registrationDateTime']
+
+
+def test_create_financing_statement_with_infinite_expiry():
+    request_payload = get_minimal_payload()
+    request_payload.update(type='SECURITY_AGREEMENT', lifeInfinite=True, lifeYears=None)
+
+    rv = client.post('/financing-statements', json=request_payload)
+
+    body = rv.json()
+    assert body['lifeInfinite'] is True
+    assert body['lifeYears'] is None
+    assert body['expiryDate'] is None
+
+    registration_number = body['baseRegistrationNumber']
+
+    stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
+    assert stored.life_in_years == -1
+    assert stored.expiry_date is None
 
 
 def test_create_financing_statement_persists_registering_party():
@@ -333,6 +352,7 @@ def test_create_financing_statement_persists_vehicle_collateral():
 def get_minimal_payload():
     return {
         'type': 'SECURITY_AGREEMENT',
+        'lifeYears': 5,
         'registeringParty': {'personName': {'first': 'Homer', 'last': 'Simpson'}},
         'securedParties': [],
         'debtors': [],
