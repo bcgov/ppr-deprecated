@@ -11,6 +11,7 @@
           <v-select
             :value="value.type"
             :items="fsTypes"
+            data-test-id="FinancingStatement.type.select"
             label="Type"
             name="typeInput"
             @input="updateType"
@@ -67,7 +68,7 @@
 import { createComponent, ref } from '@vue/composition-api'
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
-import { FinancingStatementType, FinancingStatementTypeCodeList } from '@/financing-statement/financing-statement-type'
+import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/components/person-name-model'
 import BaseParty from '@/base-party/BaseParty.vue'
 import DebtorParties from '@/financing-statement/DebtorParties.vue'
@@ -97,7 +98,18 @@ export default createComponent({
 
   setup(props, { emit }) {
     const formIsValid = ref<boolean>(false)
-    const fsTypes = ref<string[]>(FinancingStatementTypeCodeList)
+
+    // Create the set of text value pairs for the Type select
+    interface SelectItem {
+      text: string;
+      value: string;
+    }
+    const fsTypes: SelectItem[] = []
+    const fsTypeLabels: string[] = Object.values(FinancingStatementType)
+    Object.keys(FinancingStatementType).forEach((key: string, index: number): void => {
+      fsTypes.push({ text: fsTypeLabels[index], value: key })
+    })
+
     const life = ref<number>(1)
     const lifeRules = [
       (value: string): (boolean | string) => {
