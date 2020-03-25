@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { BusinessNameModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-name-model'
 
 
 export default createComponent({

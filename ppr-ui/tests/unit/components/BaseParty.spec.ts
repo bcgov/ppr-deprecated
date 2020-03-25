@@ -5,7 +5,7 @@ import { mount, Wrapper } from '@vue/test-utils'
 
 import BaseParty from '@/base-party/BaseParty.vue'
 import { BasePartyModel } from '@/base-party/base-party-model'
-import { BusinessNameModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-name-model'
 import { PersonNameModel } from '@/components/person-name-model'
 
 Vue.use(Vuetify)

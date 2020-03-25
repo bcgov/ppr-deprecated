@@ -53,7 +53,7 @@ import { computed, createComponent, ref } from '@vue/composition-api'
 import BusinessName from '@/components/BusinessName.vue'
 import PersonName from '@/components/PersonName.vue'
 import { BasePartyModel } from '@/base-party/base-party-model'
-import { BusinessNameModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-name-model'
 import { PersonNameModel } from '@/components/person-name-model'
 
 export default createComponent({

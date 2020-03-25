@@ -4,7 +4,7 @@ import { mount, Wrapper } from '@vue/test-utils'
 import Vuetify from 'vuetify'
 
 import BusinessName from '@/components/BusinessName.vue'
-import { BusinessNameModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-name-model'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)

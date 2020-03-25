@@ -1,6 +1,6 @@
-import { BusinessNameModel } from '@/components/business-model'
+import { BusinessNameModel } from '@/components/business-name-model'
 
-describe('Business', (): void => {
+describe('business-name-model.ts', (): void => {
   it('has undefined name with default constructor', (): void => {
     const business = new BusinessNameModel()
 

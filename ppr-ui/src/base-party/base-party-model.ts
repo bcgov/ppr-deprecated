@@ -1,5 +1,5 @@
 
-import { BusinessNameInterface, BusinessNameModel } from '@/components/business-model'
+import { BusinessNameInterface, BusinessNameModel } from '@/components/business-name-model'
 import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
 
 /**
