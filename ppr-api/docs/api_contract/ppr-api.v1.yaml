@@ -241,6 +241,11 @@ paths:
                         baseRegistrationNumber: '1000123'
                         documentId: D0000123
                         registrationDateTime: '2020-01-02T21:08:32Z'
+                        lifeYears: 5
+                        payment:
+                          id: 1234
+                          status: CREATED
+                          method: CC
         '404':
           description: Not Found
           content:
@@ -316,6 +321,10 @@ paths:
                     documentId: B5645289
                     registrationDateTime: '2020-02-21T18:38:20Z'
                     lifeYears: 5
+                    payment:
+                      id: 1234
+                      status: CREATED
+                      method: CC
         '422':
           description: Unprocessable Entity
       operationId: post-financing-statements
@@ -376,6 +385,30 @@ paths:
           name: Account-Id
           description: The account that the user is operating on behalf of.
           required: true
+    get:
+      summary: ''
+      operationId: get-financing-statements
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/financing-statement'
+      description: 'List financing statements, limited to those the user has permission to view.'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The account that the user is operating on behalf of.
+          required: true
+      tags:
+        - Financing Statement
 components:
   schemas:
     search:
@@ -568,6 +601,8 @@ components:
         lifeInfinite:
           type: boolean
           description: Set to true if the registration has an infinite life (no expiry date). Cannot be true when lifeYears has a value. Cannot be true when type is REPAIRERS_LIEN. Must be true or lifeYears must have a value for remaining types.
+        payment:
+          $ref: '#/components/schemas/payment'
       required:
         - type
         - securedParties

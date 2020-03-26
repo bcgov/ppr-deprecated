@@ -103,16 +103,60 @@ nor should it be available for any other write operation until payment is comple
   - Use the the `INFRG` fee code when the `lifeInfinite` property is `true`
   - Use the the `FSREG` fee code along with a quantity matching the `lifeYears` property when life isn't infinite
   - A Repairer's Lien may require its own fee code, though `FSREG` with a quantity of `1` may be sufficient
+  
+**Registering Party:** For the moment, registering party details are accepted by the API. There has been consideration
+that it would be preferable to use the logged in user as the registering party.  In that case, some decisions still need
+to be considered in how to implement that:
+- Can the user override address and name fields?
+- Should the address and name values be stored in the PPR database, or simply looked up through the systems that have
+  that information?
+- If we no longer store registering party details, how do we handle historical data from the legacy PPR system
+
+### List Financing Statements
+
+The intent of this endpoint is to provide users the ability to lookup existing financing statement records. Paging and
+filtering URL parameters have not yet been defined, but they can be added as needed.
+
+This capability did not exist in the legacy PPR system.  It could enable dashboards that give users the ability to find
+their references to their own Financing Statements without the need to perform a search.
+
+When implementing, consider limiting what portions of the financing statement are included in the payload.
+
+**Endpoint:** `GET /financing-statement`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should only provide records that are available to the calling user.  For public users, this
+would be records associated with the provided account id.
+
+### View a Financing Statement
+
+The function is intended as a lookup capability, where a user can lookup the current details of their financing
+statement. It may be useful in dashboard management or in viewing the details or start an amendment without the need to
+perform a search.
+
+This capability did not exist for public users in the legacy PPR system. Depending on regulations, consider placing
+limitations on when data is available through this endpoint.
+
+The _financingStatementId_ URL path variable is interchangeable with base registration number.
+
+**Endpoint:** `GET /financing-statement/{financingStatementId}`
+
+**Implementation Status:** For the most part this endpoint is operational. Still outstanding:
+- Fields specific to Repairer's Liens: [Trust Indenture](https://github.com/bcgov/ppr/issues/818),
+  [Lien amount](https://github.com/bcgov/ppr/issues/819), [Surrender Date](https://github.com/bcgov/ppr/issues/820)
+- General Collateral requires some changes to support the solution outlined in this
+  [Collateral comment](https://github.com/bcgov/ppr/issues/815#issuecomment-603935842)
+- The Payment portion is not yet included in the response payload
+
+**Data Restriction:** This should only provide records that are available to the calling user.  For public users, this
+would be records associated with the provided account id. Consider whether additional restrictions apply.
 
 ### Amendments or Change Statements
 
 ### Renewal
 
 ### Discharge
-
-### View a Financing Statement
-
-### List Financing Statements
 
 ### Historical View of a Financing Statement
 
