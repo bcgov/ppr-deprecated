@@ -61,6 +61,11 @@ As of April 7, 2020, only a subset of of the intended features have been impleme
   - The response formats have been defined in the spec, an error handler has not yet been implemented to ensure the
     response bodies match this format.  This is outlined in
     [Return appropriate error responses](https://github.com/bcgov/ppr/issues/408).
+- The [API Specification](ppr-api.v1.yaml) requires general cleanup to bring the specification in line with other
+  Registry APIs. See [Update API Specification for B2G Usage](https://github.com/bcgov/ppr/issues/766) for details.
+- **Performance Tuning** has not yet been applied to the API. As a result, very little work has gone into optimizing
+  _[lazy vs eager loading](https://docs.sqlalchemy.org/en/13/orm/loading_relationships.html)_. Additionally, there will
+  be work required to determine what indexes are needed in the data base to support the various SQL queries.
 
 Finer grained implementation details will be provided on each function described below.
 
@@ -90,7 +95,7 @@ Create a new financing statement.  The financing statement should not be availab
 nor should it be available for any other write operation until payment is completed. The user should be able to perform
 `GET` operations with the returned base registration number.
 
-**Endpoint:** `POST /financing-statement`
+**Endpoint:** `POST /financing-statements`
 
 **Implementation Status:** For the most part this endpoint is operational. Still outstanding:
 - Fields specific to Repairer's Liens: [Trust Indenture](https://github.com/bcgov/ppr/issues/818),
@@ -122,7 +127,7 @@ their references to their own Financing Statements without the need to perform a
 
 When implementing, consider limiting what portions of the financing statement are included in the payload.
 
-**Endpoint:** `GET /financing-statement`
+**Endpoint:** `GET /financing-statements`
 
 **Implementation Status:** Not implemented at all
 
@@ -140,7 +145,7 @@ limitations on when data is available through this endpoint.
 
 The _financingStatementId_ URL path variable is interchangeable with base registration number.
 
-**Endpoint:** `GET /financing-statement/{financingStatementId}`
+**Endpoint:** `GET /financing-statements/{financingStatementId}`
 
 **Implementation Status:** For the most part this endpoint is operational. Still outstanding:
 - Fields specific to Repairer's Liens: [Trust Indenture](https://github.com/bcgov/ppr/issues/818),
@@ -168,13 +173,84 @@ would be records associated with the provided account id. Consider whether addit
 
 ## Search
 
+As search is a charged operation, the API treats a single search as a CRUD entity, complete with repeatable read actions
+and persistent results.  Once a search is executed, its results will be stored and should always be the same when
+returned to the API.
+
+To support this, we reference the most recent event for matching financing statements at the time of the search. This
+gives the API to the ability to rebuild each financing statement to the state it had at the time of search. This allows
+subsequent lookups of the search results to maintain consistency into the future.
+
+**For Consideration:** The API specification does not currently define a way to get the historical view for a financing
+statement in search results. Consider extending the search results endpoint with a finer grained URL that provides a
+historical view up to the stored event.
+
+When a search execution is performed, only searchable financing statements should be eligible to be in the results:
+- Payment for the search must have been completed
+- Drafts are not eligible
+- It is TBD whether discharged or expired financing statements are eligible
+- Some discovery work is still required to clarify any other eligibility requirements
+
 ### Submit a search
 
-### View Search Results
+Create a search. This initiates a charge for the search, executes it, then stores the results before sending the
+response.
+
+**Endpoint:** `POST /searches`
+
+**Implementation Status:** A _partial_ implementation is in place:
+- Only search by Registration Number may is implemented.
+- The current implementation does not currently enforce any eligibility requirements.
+  [Update Search with Business Rules](https://github.com/bcgov/ppr/issues/726) is intended to address this.
+- There is currently very little validation on the search input. Consider what limitations should be present. 
+
+### List Searches
+
+This function is intended as a lookup for use with a potential dashboard. The intended capability is for an end user to
+obtain a list of their paid searches. Paging and filtering URL parameters have not yet been defined, but they can be
+added as needed.
+
+**Endpoint:** `GET /searches`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should only provide records that are available to the calling user.  For public users, this
+would be searches created with the provided account id.
 
 ### View Search Metadata
 
-### List Searches
+This is intended to review a previously submitted search.  The response would be the same as the `POST` response when
+the search was originally submitted. It can provide calling applications with the search criteria that was submitted,
+and when it was executed.
+
+**Endpoint:** `GET /searches/{searchId}`
+
+**Implementation Status:** Complete, but authorization is not implemented.
+
+**Data Restriction:** This should only be available to user with permission to view the record.  For public users, this
+would be searches submitted with the provided account id.
+
+### View Search Results
+
+This capability is in place to allow users to review their search results.  Results are returned with financing
+statements in their state at the time the search was executed. All details of the financing statement are returned, so
+it is the responsibility of the UI to determine how to present them to the end user based on which type of search was
+executed.
+
+**Endpoint:** `GET /searches/{searchId}`
+
+**Implementation Status:** Complete, but authorization is not implemented. Some improvements may be considered:
+- Adding URL parameters for paging
+- Adding a URL parameter to filter "unselected" results
+- Adding URL parameters to suppress some details from financing statements
+
+**Data Restriction:**
+- Search results must not be available to an end user until payment is complete
+- This should only be available to user with permission to view the record.  For public users, this would be results for
+a search submitted with the provided account id.
+- Depending on regulations there may be limitations on how long a set of search results
+
+### Select and De-select Search Results
 
 ## Preset Parties
 

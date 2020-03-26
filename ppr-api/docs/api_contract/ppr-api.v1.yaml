@@ -237,6 +237,7 @@ paths:
                             model: SLK-Class Kompressor
                         generalCollateral:
                           - description: Detailed description of general collateral.
+                          - addedDateTime: '2020-01-02T21:08:32Z'
                         expiryDate: '2021-01-02'
                         baseRegistrationNumber: '1000123'
                         documentId: D0000123
@@ -316,6 +317,7 @@ paths:
                         model: SLK-Class Kompressor
                     generalCollateral:
                       - description: A ride on lawn mower that has a great deal of personal value.
+                      - addedDateTime: '2020-02-21T18:38:20Z'
                     expiryDate: '2020-02-21'
                     baseRegistrationNumber: 791167G
                     documentId: B5645289
@@ -377,6 +379,7 @@ paths:
                       model: SLK-Class Kompressor
                   generalCollateral:
                     - description: A ride on lawn mower that has a great deal of personal value.
+                    - addedDateTime: '2020-02-21T18:38:20Z'
                   lifeYears: 5
       parameters:
         - schema:
@@ -580,6 +583,10 @@ components:
               description:
                 type: string
                 description: 'In accordance to legislative requirements, a description of the collateral.'
+              addedDateTime:
+                type: string
+                format: date-time
+                description: The time when this collateral item was registered in the PPR system.
             required:
               - description
         expiryDate:
