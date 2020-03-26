@@ -67,7 +67,7 @@ export default createComponent({
 
     const typeChangeMessage = computed((): string => {
       const label = FinancingStatementType[typeStash.value]
-      return `Confirm change type from "${props.value}" to "${label}"`
+      return `Confirm change type from "${props.value}" to "${label}". WARNING! You may lose information you entered.`
     })
 
     /**
