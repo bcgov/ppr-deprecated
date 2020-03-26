@@ -6,14 +6,11 @@
       @input="emitValid('header', $event)"
     >
       <form-section-header label="Type &amp; Duration" />
+      <div> Type {{ value.type }} </div>
       <v-container>
         <div v-if="editing">
-          <v-select
+          <type-component
             :value="value.type"
-            :items="fsTypes"
-            data-test-id="FinancingStatement.type.select"
-            label="Type"
-            name="typeInput"
             @input="updateType"
           />
           <v-text-field
@@ -72,6 +69,7 @@ import { FinancingStatementType } from '@/financing-statement/financing-statemen
 import { PersonNameModel } from '@/components/person-name-model'
 import BaseParty from '@/base-party/BaseParty.vue'
 import DebtorParties from '@/financing-statement/DebtorParties.vue'
+import TypeComponent from '@/financing-statement/TypeComponent.vue'
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
 import RegisteringParty from '@/components/RegisteringParty.vue'
 import SecuredParties from '@/financing-statement/SecuredParties.vue'
@@ -80,6 +78,7 @@ export default createComponent({
   components: {
     BaseParty,
     DebtorParties,
+    TypeComponent,
     FormSectionHeader,
     RegisteringParty,
     SecuredParties
@@ -98,17 +97,6 @@ export default createComponent({
 
   setup(props, { emit }) {
     const formIsValid = ref<boolean>(false)
-
-    // Create the set of text value pairs for the Type select
-    interface SelectItem {
-      text: string;
-      value: string;
-    }
-    const fsTypes: SelectItem[] = []
-    const fsTypeLabels: string[] = Object.values(FinancingStatementType)
-    Object.keys(FinancingStatementType).forEach((key: string, index: number): void => {
-      fsTypes.push({ text: fsTypeLabels[index], value: key })
-    })
 
     const life = ref<number>(1)
     const lifeRules = [
@@ -198,7 +186,6 @@ export default createComponent({
     }
 
     return {
-      fsTypes,
       formIsValid,
       life,
       lifeRules,
