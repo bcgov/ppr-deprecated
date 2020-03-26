@@ -6,7 +6,6 @@
       @input="emitValid('header', $event)"
     >
       <form-section-header label="Type &amp; Duration" />
-      <div> Type {{ value.type }} </div>
       <v-container>
         <div v-if="editing">
           <type-component
