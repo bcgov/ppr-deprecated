@@ -163,15 +163,16 @@ def test_read_financing_statement_debtor_address_should_be_mapped_to_schema():
 def test_read_financing_statement_general_collateral_should_be_included():
     base_reg_num = '123456D'
     collateral1 = models.collateral.GeneralCollateral(description='collateral description')
-    collateral2 = models.collateral.GeneralCollateral(description='another description')
+    collateral2 = models.collateral.GeneralCollateral(description=' plus appended portion')
     stub_fs = stub_financing_statement(base_reg_num, general_collateral=[collateral1, collateral2])
+    collateral1.start_event = stub_fs.get_base_event()
+    collateral2.start_event = stub_fs.get_base_event()
     repo = MockFinancingStatementRepository(stub_fs)
 
     result = endpoints.financing_statement.read_financing_statement(base_reg_num, repo)
 
-    assert len(result.generalCollateral) == 2
-    assert next(x for x in result.generalCollateral if x.description == collateral1.description)
-    assert next(x for x in result.generalCollateral if x.description == collateral2.description)
+    assert len(result.generalCollateral) == 1
+    assert result.generalCollateral[0].description == 'collateral description plus appended portion'
 
 
 def test_read_financing_statement_general_collateral_when_list_is_empty():

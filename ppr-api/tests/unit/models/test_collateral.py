@@ -1,14 +1,49 @@
+import datetime
+
 import models.collateral
+import models.financing_statement
 import schemas.collateral
 
 
-def test_general_collateral_as_schema():
-    model = models.collateral.GeneralCollateral(description='Test description')
+def test_general_collateral_list_as_schema_should_group_items_with_same_start():
+    event = models.financing_statement.FinancingStatementEvent(registration_number='1234',
+                                                               registration_date=datetime.datetime.now())
+    model1 = models.collateral.GeneralCollateral(description='Test description', starting_registration_number='1234')
+    model2 = models.collateral.GeneralCollateral(description=' - Part 2', starting_registration_number='1234')
 
-    schema = model.as_schema()
+    schema = models.collateral.GeneralCollateral.list_as_schema([model1, model2], [event])
 
-    assert isinstance(schema, schemas.collateral.GeneralCollateral)
-    assert schema.description == 'Test description'
+    assert len(schema) == 1
+    assert isinstance(schema[0], schemas.collateral.GeneralCollateral)
+    assert schema[0].description == 'Test description - Part 2'
+    assert schema[0].addedDateTime == event.registration_date
+
+
+def test_general_collateral_list_as_schema_should_not_group_items_with_different_start():
+    now = datetime.datetime.now()
+    event1 = models.financing_statement.FinancingStatementEvent(registration_number='1234', registration_date=now)
+    event2 = models.financing_statement.FinancingStatementEvent(registration_number='4321',
+                                                                registration_date=now + datetime.timedelta(seconds=1))
+    model1 = models.collateral.GeneralCollateral(description='Test description 1', starting_registration_number='1234')
+    model2 = models.collateral.GeneralCollateral(description='Test description 2', starting_registration_number='4321')
+
+    schema = models.collateral.GeneralCollateral.list_as_schema([model1, model2], [event1, event2])
+
+    assert len(schema) == 2
+    assert schema[0].description == 'Test description 1'
+    assert schema[0].addedDateTime == event1.registration_date
+    assert schema[1].description == 'Test description 2'
+    assert schema[1].addedDateTime == event2.registration_date
+
+
+def test_general_collateral_list_as_schema_should_use_none_date_when_event_not_found():
+    model = models.collateral.GeneralCollateral(description='Test description', starting_registration_number='1234')
+
+    schema = models.collateral.GeneralCollateral.list_as_schema([model], [])
+
+    assert len(schema) == 1
+    assert schema[0].addedDateTime is None
+    assert schema[0].description == 'Test description'
 
 
 def test_vehicle_collateral_as_schema_with_motor_vehicle():

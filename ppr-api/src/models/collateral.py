@@ -1,3 +1,5 @@
+import itertools
+
 import sqlalchemy
 
 import schemas.collateral
@@ -21,8 +23,28 @@ class GeneralCollateral(BaseORM):
                                                    sqlalchemy.ForeignKey(REGISTRATION_KEY))
     description = sqlalchemy.Column(sqlalchemy.String)
 
-    def as_schema(self):
-        return schemas.collateral.GeneralCollateral(description=self.description)
+    @staticmethod
+    def list_as_schema(general_collateral: list, events: list):
+        """
+        When output in the API, individual lines added for a single event need to be combined into one. This is
+        primarily for the purpose of handling historical data from the legacy PPR system, but also allows the API to
+        split input that too large into multiple rows.
+
+        Parameters:
+            general_collateral: The list of collateral to be converted to schema objects
+            events: The event objects to reference to get the date each general collateral was added
+        Returns:
+            list of schemas.collateral.GeneralCollateral
+        """
+        # For each starting event, the general collateral descriptions should be joined together into one
+        def grouped_gc_to_schema(event_reg_number, gc_event_list):
+            event = next((e for e in events if e.registration_number == event_reg_number), None)
+            description = ''.join(map(lambda gc: gc.description, gc_event_list))
+            return schemas.collateral.GeneralCollateral(
+                description=description, addedDateTime=event.registration_date if event else None
+            )
+        gc_grouped = itertools.groupby(general_collateral, key=lambda gc: gc.starting_registration_number)
+        return [grouped_gc_to_schema(k, g) for k, g in gc_grouped]
 
 
 class VehicleCollateral(BaseORM):

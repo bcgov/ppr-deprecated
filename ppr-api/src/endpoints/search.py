@@ -124,8 +124,9 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
     secured_parties_schema = list(map(models.party.Party.as_schema, secured_parties_model))
     debtors_model = filter(lambda p: p.type_code == PartyType.DEBTOR.value, parties_snapshot)
     debtors_schema = list(map(models.party.Party.as_schema, debtors_model))
-    general_collateral_schema = list(map(models.collateral.GeneralCollateral.as_schema, general_collateral_snapshot))
     vehicle_collateral_schema = list(map(models.collateral.VehicleCollateral.as_schema, vehicle_collateral_snapshot))
+    general_collateral_schema = models.collateral.GeneralCollateral.list_as_schema(general_collateral_snapshot,
+                                                                                   target_events)
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,

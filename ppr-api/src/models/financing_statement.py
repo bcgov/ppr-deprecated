@@ -49,8 +49,9 @@ class FinancingStatement(BaseORM):
         reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
         secured_parties_schema = list(map(models.party.Party.as_schema, self.get_secured_parties()))
         debtors_schema = list(map(models.party.Party.as_schema, self.get_debtors()))
-        general_collateral_schema = list(map(models.collateral.GeneralCollateral.as_schema, self.general_collateral))
         vehicle_collateral_schema = list(map(models.collateral.VehicleCollateral.as_schema, self.vehicle_collateral))
+        general_collateral_schema = models.collateral.GeneralCollateral.list_as_schema(self.general_collateral,
+                                                                                       self.events)
 
         return schemas.financing_statement.FinancingStatement(
             baseRegistrationNumber=self.registration_number, registrationDateTime=reg_date, expiryDate=self.expiry_date,

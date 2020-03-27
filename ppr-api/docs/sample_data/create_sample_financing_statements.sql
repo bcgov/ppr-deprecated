@@ -17,9 +17,9 @@ INSERT INTO vehicle (base_reg_number, reg_number_start, reg_number_end, vehicle_
 
 INSERT INTO general (base_reg_number, reg_number_start, reg_number_end, description) VALUES
     ('123456A', '123456A', null, 'An original description of general collateral'),
-    ('123456B', '123456B', null, 'An original continual general collateral'),
-    ('123456B', '123456B', '123456Z', 'An original general collateral that was removed on a follow-up event'),
-    ('123456B', '123456Z', null, 'A new general collateral that was added on a secondary registration');
+    ('123456B', '123456B', null, 'Everything in my kitchen except the sink'),
+    ('123456B', '123456B', '123456Z', ', plus an additional line that was originally appended, but should now be ignored except on historical views.'),
+    ('123456B', '123456Z', null, 'My sink should now be included');
 
 INSERT INTO address(addr_id, addr_line_1, addr_line_2, city, province, country_type_cd, postal_cd) VALUES
     (10000001, '123 Fake Street', 'Suite 100', 'Victoria', 'BC', 'CA', 'V1V 1V1'),
