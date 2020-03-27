@@ -490,6 +490,52 @@ paths:
           required: true
       tags:
         - Financing Statement
+  '/party-codes/{code}':
+    parameters:
+      - schema:
+          type: string
+        name: code
+        in: path
+        required: true
+        description: 'The preset party code to lookup. If an invalid code is submitted then [404].'
+    get:
+      summary: Lookup a Party Code
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    description: PPR Client Code.
+                  personName:
+                    $ref: '#/components/schemas/individual-name'
+                  businessName:
+                    type: string
+                    description: Legal business name.
+                  address:
+                    $ref: '#/components/schemas/address'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      operationId: get-party-codes-code
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          required: true
+          description: The account that the user is operating on behalf of.
+      description: Find the name and address details for a preset party.
 components:
   schemas:
     search:

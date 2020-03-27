@@ -279,7 +279,33 @@ remain unchanged.
   for a search submitted with the provided account id.
 - Depending on regulations there may be limitations on how long a user may perform this operation
 
-
 ## Preset Parties
 
+In the legacy PPR system, users have the capability to specify a party code for secured and registering parties. This
+populates the name and address information automatically so the user does not need to enter it in. This is very helpful,
+especially in the case of secured parties that users enter quite often.
+
+In the legacy system, users do not manage party codes, but rather they are entered manually by Registries staff upon
+request. As such, every party code is "global", in that they are not tied to individual users, but can be used by any
+user.
+
+The intended design for the UI in the new system proposes that users can continue to use party codes. When a user enters
+a party code the name and address fields for the party would be automatically populated, though the user would be
+allowed to change the values.
+
+Assuming we migrate party codes from the legacy system, we need to provide an API lookup to support this capability. If
+it is decided that users should be able to manage party codes themselves, then additional CRUD operations should be
+added to this set. 
+
 ### View a Party
+
+View the details for a single preset party.
+
+**Endpoint:** `GET /party-codes/{code}`
+
+**Implementation Status:** Not implemented at all
+
+**Security Warning:** As discussed in [the Party Codes ZenHub Issues](https://github.com/bcgov/ppr/issues/813), keys
+for party codes are predictable. Since they are global (not associated to specific accounts), that means that all codes
+are available to all users. As a result, building this endpoint as designed gives users the ability to enumerate all
+party codes. This is likely be an undesirable, so it is recommended to invest some effort in mitigating this risk.
