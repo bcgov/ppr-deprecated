@@ -207,9 +207,10 @@ paths:
               examples:
                 Example:
                   value:
-                    - type: EXACT
+                    - id: '1234'
+                      selected: true
+                      type: EXACT
                       financingStatement:
-                        ref: /financing-statements/95110d7f-91ce-47f2-a996-76e2dddc3cf7?version=1
                         type: SECURITY_AGREEMENT
                         registeringParty:
                           businessName: Name of party
@@ -237,7 +238,7 @@ paths:
                             model: SLK-Class Kompressor
                         generalCollateral:
                           - description: Detailed description of general collateral.
-                          - addedDateTime: '2020-01-02T21:08:32Z'
+                            addedDateTime: '2020-01-02T21:08:32Z'
                         expiryDate: '2021-01-02'
                         baseRegistrationNumber: '1000123'
                         documentId: D0000123
@@ -264,6 +265,83 @@ paths:
           name: Account-Id
           description: The account that the user is operating on behalf of.
           required: true
+    put:
+      summary: Select and Deselect Search Results
+      operationId: put-searches-searchId-results
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/search-result'
+              examples:
+                Example:
+                  value:
+                    - id: '1234'
+                      selected: true
+                      type: SIMILAR
+                      financingStatement:
+                        type: SECURITY_AGREEMENT
+                        registeringParty:
+                          businessName: Name of party
+                          address:
+                            street: 123 Fake St
+                            city: Victoria
+                            region: BC
+                            country: CA
+                            postalCode: A1A 1A1
+                        securedParties:
+                          - businessName: Name of party
+                            address:
+                              street: 123 Fake St
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
+                        debtors:
+                          - businessName: Debtor Name
+                        vehicleCollateral:
+                          - type: MOTOR_VEHICLE
+                            serial: WDBKK49F81F234840
+                            year: 2001
+                            make: Mercedes-Benz
+                            model: SLK-Class Kompressor
+                        generalCollateral:
+                          - description: Detailed description of general collateral.
+                            addedDateTime: '2020-01-02T21:08:32Z'
+                        expiryDate: '2021-01-02'
+                        baseRegistrationNumber: '1000123'
+                        documentId: D0000123
+                        registrationDateTime: '2020-01-02T21:08:32Z'
+                        lifeYears: 5
+      tags:
+        - Search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/search-result'
+            examples:
+              Example:
+                value:
+                  - id: '1234'
+                    selected: true
+                    type: SIMILAR
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          required: true
+          description: The account that the user is operating on behalf of.
+      description: Choose which search results to make available for final delivery of search results to the end user.
   /financing-statements:
     post:
       summary: Create a financing statement
@@ -317,7 +395,7 @@ paths:
                         model: SLK-Class Kompressor
                     generalCollateral:
                       - description: A ride on lawn mower that has a great deal of personal value.
-                      - addedDateTime: '2020-02-21T18:38:20Z'
+                        addedDateTime: '2020-02-21T18:38:20Z'
                     expiryDate: '2020-02-21'
                     baseRegistrationNumber: 791167G
                     documentId: B5645289
@@ -379,7 +457,7 @@ paths:
                       model: SLK-Class Kompressor
                   generalCollateral:
                     - description: A ride on lawn mower that has a great deal of personal value.
-                    - addedDateTime: '2020-02-21T18:38:20Z'
+                      addedDateTime: '2020-02-21T18:38:20Z'
                   lifeYears: 5
       parameters:
         - schema:
@@ -629,6 +707,14 @@ components:
             Similar matches are used when searching by Serial Number, Manufactured Home Registration Number and Aircraft DOT number.
         financingStatement:
           $ref: '#/components/schemas/financing-statement'
+        selected:
+          type: boolean
+          description: 'Whether this item is selected fro delivery in the final search results. Default is false when type is "SIMILAR". Must be true when type is "EXACT".'
+        id:
+          type: string
+      required:
+        - selected
+        - id
     error:
       title: error
       type: object
@@ -712,7 +798,7 @@ components:
   securitySchemes:
     JWT:
       type: http
-      scheme: Bearer
+      scheme: bearer
 tags:
   - name: Financing Statement
   - name: Search

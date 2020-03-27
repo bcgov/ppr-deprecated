@@ -232,25 +232,53 @@ would be searches submitted with the provided account id.
 
 ### View Search Results
 
-This capability is in place to allow users to review their search results.  Results are returned with financing
-statements in their state at the time the search was executed. All details of the financing statement are returned, so
-it is the responsibility of the UI to determine how to present them to the end user based on which type of search was
-executed.
+This capability is in place to allow users to list their search results.  Results are returned with financing statements
+in their state at the time the search was executed. All details of the financing statement are returned, so it is the
+responsibility of the UI to determine how to present them to the end user based on which type of search was executed.
 
-**Endpoint:** `GET /searches/{searchId}`
+The `id` of a Search Result only applies as an identifier with the context of an individual search entity.  The `id` is
+interchangeable with the "Document Registration Number" of the search result, which is also the same as the event
+reference identifier. This is present in the search result for purposed of selection and deselection. 
 
-**Implementation Status:** Complete, but authorization is not implemented. Some improvements may be considered:
-- Adding URL parameters for paging
-- Adding a URL parameter to filter "unselected" results
-- Adding URL parameters to suppress some details from financing statements
+**Payment information** for financing statements _must not_ be included in search results.
+
+**Endpoint:** `GET /searches/{searchId}/results`
+
+**Implementation Status:** Complete, but authorization is not implemented. Additionally:
+- `selected` is not yet included on search result objects
+- Some improvements may be considered:
+  - Adding URL parameters for paging
+  - Adding a URL parameter to filter "unselected" results
+  - Adding URL parameters to suppress some details from financing statements
+  - Limit the data returned in the list and implement `GET /searches/{searchId}/results/{id}` for complete details
 
 **Data Restriction:**
-- Search results must not be available to an end user until payment is complete
+- Search results must not be available to an end user until payment for the search is complete
 - This should only be available to user with permission to view the record.  For public users, this would be results for
 a search submitted with the provided account id.
 - Depending on regulations there may be limitations on how long a set of search results
 
 ### Select and De-select Search Results
+
+Part of the flow for search is to give the user an opportunity to review some basic details for search results and
+select the ones they wish to retrieve in complete detail. That selection must be persisted for delivery and future
+reporting.
+
+This operation provides the capability to change which items are selected in the search results. Note that only the
+`selected` field can be changed on search, all other details are read-only. Exact matches must remain selected. If on an
+operation the caller does not provide all the items in the search results, then the items that were not provided should
+remain unchanged.
+
+**Endpoint:** `PUT /searches/{searchId}/results`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:**
+- This operation must not be permitted until payment for the search is complete
+- This should only be permitted for users with permission to view the record.  For public users, this would be results
+  for a search submitted with the provided account id.
+- Depending on regulations there may be limitations on how long a user may perform this operation
+
 
 ## Preset Parties
 
