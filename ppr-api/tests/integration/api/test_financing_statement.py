@@ -302,23 +302,24 @@ def test_create_financing_statement_persists_debtor():
 def test_create_financing_statement_persists_general_collateral():
     request_payload = get_minimal_payload()
     request_payload.update(
-        generalCollateral=[{'description': 'general collateral 1'}, {'description': 'general collateral 2'}]
+        generalCollateral=[{'description': 'general collateral description'}]
     )
 
     rv = client.post('/financing-statements', json=request_payload)
 
     body = rv.json()
     assert 'generalCollateral' in body
-    assert len(body['generalCollateral']) == 2
-    assert next(x for x in body['generalCollateral'] if x['description'] == 'general collateral 1')
-    assert next(x for x in body['generalCollateral'] if x['description'] == 'general collateral 2')
+    assert len(body['generalCollateral']) == 1
+    collateral_body = body['generalCollateral'][0]
+    assert collateral_body['description'] == 'general collateral description'
+    assert 'addedDateTime' in collateral_body
 
     registration_number = body['baseRegistrationNumber']
     stored = sample_data_utility.retrieve_financing_statement_record(registration_number)
 
-    assert len(stored.general_collateral) == 2
-    assert next(x for x in stored.general_collateral if x.description == 'general collateral 1')
-    assert next(x for x in stored.general_collateral if x.description == 'general collateral 2')
+    assert len(stored.general_collateral) == 1
+    assert stored.general_collateral[0].description == 'general collateral description'
+    assert stored.events[0].registration_date.isoformat(timespec='seconds') == collateral_body['addedDateTime']
 
 
 def test_create_financing_statement_persists_vehicle_collateral():

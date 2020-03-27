@@ -1,3 +1,4 @@
+import datetime
 import enum
 
 import pydantic
@@ -16,6 +17,7 @@ class VehicleType(enum.Enum):
 
 class GeneralCollateral(pydantic.BaseModel):  # pylint:disable=no-member
     description: str
+    addedDateTime: datetime.datetime = None
 
 
 class VehicleCollateral(pydantic.BaseModel):  # pylint:disable=no-member
