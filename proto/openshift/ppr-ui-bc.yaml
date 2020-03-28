@@ -1,0 +1,81 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: ppr
+      build: ${APP_NAME}
+      pprgroup: ${PPR_GROUP}
+      role: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    failedBuildsHistoryLimit: 5
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    source:
+      # Uses the image stream created in the intermediate step, which contains the client code files and the built
+      # distribution.  Create an image with a Caddy server that uses the caddy configuration from the client code
+      # plus the built dist.
+      # Result is an imagestream ready to run the Caddy server with the application distribution files.
+      dockerfile: |
+        FROM bcgov-s2i-caddy
+        COPY Caddy/Caddyfile /etc/Caddyfile
+        RUN mkdir -p /var/www/html${APP_PATH}
+        COPY dist /var/www/html${APP_PATH}
+      images:
+      - as: null
+        from:
+          kind: ImageStreamTag
+          name: ${APP_INTER_NAME}:${APP_INTER_TAG}
+        paths:
+        - destinationDir: ./
+          sourcePath: /dist
+        - destinationDir: ./
+          sourcePath: /Caddy
+      type: Dockerfile
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          # TODO: Issue 273 research if we should specify version rather than take latest ....
+          name: bcgov-s2i-caddy:latest
+          namespace: openshift
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ppr
+      pprgroup: ${PPR_GROUP}
+      role: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+parameters:
+- description: The name of the intermediate build image for the PPR UI
+  displayName: APP Intermediate
+  name: APP_INTER_NAME
+  required: true
+- description: The tag of the intermediate build
+  displayName: APP Intermediate Tag
+  name: APP_INTER_TAG
+  required: true
+- description: The name of the appliction
+  displayName: APP Name
+  name: APP_NAME
+  required: true
+- description: The sub-path to the web application
+  displayName: APP Name
+  name: APP_PATH
+  required: true
+- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+  displayName: PPR group
+  name: PPR_GROUP
+  required: true
+
