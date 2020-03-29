@@ -1,4 +1,4 @@
-import { SerialCollateralInterface, SerialCollateralModel } from '@/financing-statement/serial-collateral-model'
+import { SerialCollateralInterface, SerialCollateralModel } from '@/serial-collateral/serial-collateral-model'
 
 /**
  * The interface to a collection of serial number collateral and a description of general collateral.
@@ -67,7 +67,7 @@ export class CollateralItemsModel implements CollateralItemsInterface {
 
   /**
    * Gets a CollateralItemsModel object from a JSON object.
-   * 
+   *
    * @param jsonObject the JSON version of the object.
    */
   public static fromJson(jsonObject: CollateralItemsInterface): CollateralItemsModel {

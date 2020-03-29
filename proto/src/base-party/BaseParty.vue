@@ -50,11 +50,11 @@
 
 <script lang="ts">
 import { computed, createComponent, ref } from '@vue/composition-api'
-import BusinessName from '@/components/BusinessName.vue'
-import PersonName from '@/components/PersonName.vue'
+import BusinessName from '@/business-name/BusinessName.vue'
+import PersonName from '@/person-name/PersonName.vue'
 import { BasePartyModel } from '@/base-party/base-party-model'
-import { BusinessNameModel } from '@/components/business-name-model'
-import { PersonNameModel } from '@/components/person-name-model'
+import { BusinessNameModel } from '@/business-name/business-name-model'
+import { PersonNameModel } from '@/person-name/person-name-model'
 
 export default createComponent({
   components: { BusinessName, PersonName },

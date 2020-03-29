@@ -1,4 +1,4 @@
-import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
+import { PersonNameInterface, PersonNameModel } from '@/person-name/person-name-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
 

@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts">
-import { NavigationBarConfig } from '@/proto/NavigationBarConfig'
 import { computed, createComponent, reactive, ref } from '@vue/composition-api'
-import { useUsers } from '@/models/users'
+import { NavigationBarConfig } from '@vue/common/NavigationBarConfig'
+import { useUsers } from '../models/users'
 
 export default createComponent({
   setup(_, { root }) {
@@ -73,7 +73,7 @@ export default createComponent({
 
 
 <style lang="scss" scoped>
-  @import '../assets/styles/theme.scss';
+  @import '../assets/styles/theme';
 
   .v-toolbar {
     margin-top: 0;

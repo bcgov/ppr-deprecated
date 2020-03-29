@@ -99,8 +99,8 @@
 <script lang="ts">
 import { computed, createComponent, ref } from '@vue/composition-api'
 
-import { SerialCollateralModel } from '@/financing-statement/serial-collateral-model'
-import { SerialCollateralType, serialCollateralTypeCodeList } from '@/financing-statement/serial-collateral-type'
+import { SerialCollateralModel } from '@/serial-collateral/serial-collateral-model'
+import { SerialCollateralType, serialCollateralTypeCodeList } from '@/serial-collateral/serial-collateral-type'
 
 export default createComponent({
   props: {
