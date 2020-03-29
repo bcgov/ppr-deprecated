@@ -29,17 +29,17 @@
             </p>
 
           </div>
-          <div v-if="userIsAuthed">
+          <div v-if="authenticated">
             Current User: {{ currentUser.name }} {{ currentUser.last }}, {{ currentUser.company }}, {{ currentUser.occupation }}
           </div>
           <div>
             <ul>
-              <li v-if="userIsAuthed">
+              <li v-if="authenticated">
                 <router-link to="search">
                   Search
                 </router-link>
               </li>
-              <li v-if="userIsAuthed">
+              <li v-if="authenticated">
                 <router-link to="financing">
                   Financing Statement
                 </router-link>
@@ -59,14 +59,12 @@
 
 <script lang="ts">
   import {createComponent, ref} from '@vue/composition-api'
-  import {mockStorage} from '@/proto/mock-storage'
+  import { useUsers } from '@/proto/users'
 
   export default createComponent({
     setup(_, {root}) {
-      const userIsAuthed = ref(mockStorage.isAuthed())
-      const currentUser = ref(mockStorage.getCurrentUser())
-
-      return {currentUser, userIsAuthed}
+      const { authenticated, currentUser} = useUsers()
+      return {authenticated, currentUser}
     }
   })
 
