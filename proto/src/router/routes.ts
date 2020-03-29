@@ -4,6 +4,9 @@ import SearchPage from '@/views/SearchPage.vue'
 import ResultsPage from '@/views/ResultsPage.vue'
 import FinancingStatement from '@/views/FinancingStatementView.vue'
 
+import Login from '@/proto/Login.vue'
+import Logout from '@/proto/Logout.vue'
+
 // TODO restore lazy load of components. Important when the app gets larger to reduce size of initial js files.
 // Disable the lazy load approach until we can determine the TS return type from something like
 // () => import(/* webpackChunkName: "about" */ '../views/Home.vue')
@@ -13,6 +16,18 @@ export default [
     path: '/',
     name: 'home',
     component: Home, //() => import(/* webpackChunkName: "about" */ '../views/Home.vue'),
+    meta: { layout: 'public' }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: { layout: 'public' }
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: Logout,
     meta: { layout: 'public' }
   },
   {

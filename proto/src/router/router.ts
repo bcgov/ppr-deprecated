@@ -1,7 +1,6 @@
 import VueRouter from 'vue-router'
 import { PositionResult, Route } from 'vue-router/types/router'
 import routes from './routes'
-import { authRedirect } from '@/utils/auth-helper'
 import { inject, provide } from '@vue/composition-api'
 
 export const RouterSymbol = Symbol()
@@ -16,16 +15,6 @@ const router = new VueRouter({
   }
 })
 
-// if there is no saved Keycloak token, redirect to Auth URL
-router.afterEach((to): void => {
-  try {
-    if (to.matched.some((record): boolean => record.meta.requiresAuth)) {
-      authRedirect()
-    }
-  } catch (error) {
-    console.error('Router afterEach', error)
-  }
-})
 
 export function provideRouter(): void {
   provide(RouterSymbol, router)

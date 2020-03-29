@@ -27,75 +27,47 @@
                 Personal Property Registry
               </a>
             </p>
-          </div>
 
-          <aside class="page-content__aside">
-            <section>
-              <header>
-                <h2>Sample Aside Section</h2>
-              </header>
-              <div>
-                <ul>
-                  <li v-if="userCanSearch">
-                    <router-link to="search">
-                      Search
-                    </router-link>
-                  </li>
-                  <li v-if="userCanFinanceStatement">
-                    <router-link to="financing">
-                      Financing Statement
-                    </router-link>
-                  </li>
-                  <li>
-                    <router-link to="about">
-                      About
-                    </router-link>
-                  </li>
-                </ul>
-              </div>
-            </section>
-          </aside>
+          </div>
+          <div v-if="userIsAuthed">
+            Current User: {{ currentUser.name }} {{ currentUser.last }}, {{ currentUser.company }}, {{ currentUser.occupation }}
+          </div>
+          <div>
+            <ul>
+              <li v-if="userIsAuthed">
+                <router-link to="search">
+                  Search
+                </router-link>
+              </li>
+              <li v-if="userIsAuthed">
+                <router-link to="financing">
+                  Financing Statement
+                </router-link>
+              </li>
+              <li>
+                <router-link to="about">
+                  About
+                </router-link>
+              </li>
+            </ul>
+          </div>
         </div>
       </article>
-    </v-container>
-
-    <v-container v-if="userCanSearch">
-      <v-btn
-        class="form-primary-btn"
-        color="primary"
-        @click="goSearch"
-      >
-        Go to search
-      </v-btn>
     </v-container>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, createComponent } from '@vue/composition-api'
+  import {createComponent, ref} from '@vue/composition-api'
+  import {mockStorage} from '@/proto/mock-storage'
 
-import { featureFlags } from '@/flags/feature-flags'
-import { useRouter } from '@/router/router'
+  export default createComponent({
+    setup(_, {root}) {
+      const userIsAuthed = ref(mockStorage.isAuthed())
+      const currentUser = ref(mockStorage.getCurrentUser())
 
-export default createComponent({
-  setup() {
-    const { router } = useRouter()
-
-    const userIsAuthed = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
-
-    // Feature Flag
-    const userCanSearch = computed((): boolean => featureFlags.getFlag('search-registration-number') &&
-      userIsAuthed.value)
-
-    const userCanFinanceStatement = computed((): boolean => featureFlags.getFlag('financing-statement') &&
-      userIsAuthed.value)
-
-    function goSearch(): void {
-      router.push('search')
+      return {currentUser, userIsAuthed}
     }
-
-    return { goSearch, userCanSearch, userCanFinanceStatement, userIsAuthed }
-  }
-})
+  })
 
 </script>

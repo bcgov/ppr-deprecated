@@ -9,7 +9,7 @@ export interface FinancingStatementInterface {
   baseRegistrationNumber: string | undefined;
   expiryDate: string | undefined;
   generalCollateral: [];
-  registeringParty: PersonNameInterface;
+  registeringParty: BasePartyInterface;
   registrationDateTime: string | undefined;
   securedParties: BasePartyInterface[];
   debtors: BasePartyInterface[];
@@ -21,7 +21,7 @@ export interface FinancingStatementInterface {
 export class FinancingStatementModel {
   private _baseRegistrationNumber: string | undefined
   private _expiryDate: string | undefined
-  private _registeringParty: PersonNameModel
+  private _registeringParty: BasePartyModel
   private _registrationDateTime: string | undefined
   private _type: FinancingStatementType
   private _years: number
@@ -43,7 +43,7 @@ export class FinancingStatementModel {
   public constructor(
     type: FinancingStatementType = FinancingStatementType.SECURITY_AGREEMENT,
     years: number = 1,
-    registeringParty: PersonNameModel = new PersonNameModel(),
+    registeringParty: BasePartyModel = new BasePartyModel(),
     securedParties: BasePartyModel[] = [new BasePartyModel()],
     debtorParties: BasePartyModel[] = [new BasePartyModel()],
     baseRegistrationNumber?: string,
@@ -91,7 +91,7 @@ export class FinancingStatementModel {
   /**
    * Gets the Person who registered the financing statement
    */
-  public get registeringParty(): PersonNameModel {
+  public get registeringParty(): BasePartyModel {
     return this._registeringParty
   }
 
@@ -170,12 +170,12 @@ export class FinancingStatementModel {
    * @param jsonObject the JSON version of the object.
    */
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
-    let registeringParty: PersonNameModel | undefined
+    let registeringParty: BasePartyModel | undefined
     let securedParties: BasePartyModel[] = []
     let debtorParties: BasePartyModel[] = []
 
     if (jsonObject.registeringParty) {
-      registeringParty = PersonNameModel.fromJson(jsonObject.registeringParty)
+      registeringParty = BasePartyModel.fromJson(jsonObject.registeringParty)
     }
 
     if (jsonObject.securedParties) {

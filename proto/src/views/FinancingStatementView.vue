@@ -61,7 +61,6 @@ import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel, FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
 import { useLoadIndicator } from '@/load-indicator'
 import axiosAuth from '@/utils/axios-auth'
-import Config from '@/utils/config'
 
 
 export default createComponent({
@@ -86,26 +85,26 @@ export default createComponent({
     function submit() {
       loadIndicator.start()
 
-      const url = Config.apiUrl + 'financing-statements'
-      axiosAuth.post(url, financingStatement.value.toJson()).then((response): void => {
-        loadIndicator.stop()
-        root.$router.push({ name: 'financing', query: { regNum: response.data.baseRegistrationNumber } })
-      }).catch(error => {
-        console.error(error)
-      })
+      // const url = Config.apiUrl + 'financing-statements'
+      // axiosAuth.post(url, financingStatement.value.toJson()).then((response): void => {
+      //   loadIndicator.stop()
+      //   root.$router.push({ name: 'financing', query: { regNum: response.data.baseRegistrationNumber } })
+      // }).catch(error => {
+      //   console.error(error)
+      // })
     }
 
     if (regNum) {
       loadIndicator.start()
 
-      const url = Config.apiUrl + 'financing-statements/' + regNum
-      axiosAuth.get<FinancingStatementInterface>(url).then((response): void => {
-        editing.value = false
-        loadIndicator.stop()
-        financingStatement.value = FinancingStatementModel.fromJson(response.data)
-      }).catch(error => {
-        console.error(error)
-      })
+      // const url = Config.apiUrl + 'financing-statements/' + regNum
+      // axiosAuth.get<FinancingStatementInterface>(url).then((response): void => {
+      //   editing.value = false
+      //   loadIndicator.stop()
+      //   financingStatement.value = FinancingStatementModel.fromJson(response.data)
+      // }).catch(error => {
+      //   console.error(error)
+      // })
     } else {
       editing.value = true
     }
