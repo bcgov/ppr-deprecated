@@ -20,7 +20,7 @@
 <script lang="ts">
 import { NavigationBarConfig } from '@/proto/NavigationBarConfig'
 import { computed, createComponent, reactive, ref } from '@vue/composition-api'
-import { useUsers } from '@/proto/users'
+import { useUsers } from '@/models/users'
 
 export default createComponent({
   setup(_, { root }) {
