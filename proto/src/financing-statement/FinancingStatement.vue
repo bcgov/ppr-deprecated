@@ -6,7 +6,6 @@
       @input="emitValid('header', $event)"
     >
       <form-section-header label="Type &amp; Duration" />
-      <div> Type {{ value.type }} </div>
       <v-container>
         <div v-if="editing">
           <type-component
@@ -14,7 +13,7 @@
             @input="updateType"
           />
           <v-text-field
-            :value="value.years"
+            :value="value.lifeYears"
             :rules="lifeRules"
             label="Life in Years"
             name="lifeInput"
