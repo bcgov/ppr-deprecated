@@ -1,4 +1,4 @@
-import Admin from '@/proto/Admin.vue'
+import Admin from '@/views/Admin.vue'
 import About from '@/views/About.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import FinancingStatement from '@/views/FinancingStatementView.vue'
@@ -7,8 +7,8 @@ import PartyCodes from '@/views/PartyCodes.vue'
 import ResultsPage from '@/views/ResultsPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
 
-import Login from '@/proto/Login.vue'
-import Logout from '@/proto/Logout.vue'
+import Login from '@/views/Login.vue'
+import Logout from '@/views/Logout.vue'
 
 export default [
   {

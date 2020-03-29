@@ -40,7 +40,6 @@ function getDefs() {
   const canAdmin = computed((): boolean => AdminRoles.includes(currentRole.value))
   const canDash = computed((): boolean => PowerUserRoles.includes(currentRole.value))
 
-
   function setUser(index) {
     currentUserIndex.value = index
     const str = `${currentUserIndex.value}`
