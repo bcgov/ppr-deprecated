@@ -69,12 +69,12 @@ import { createComponent, ref } from '@vue/composition-api'
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { PersonNameModel } from '@/components/person-name-model'
+import { PersonNameModel } from '@/person-name/person-name-model'
 import BaseParty from '@/base-party/BaseParty.vue'
-import DebtorParties from '@/financing-statement/DebtorParties.vue'
+import DebtorParties from '@/debtor-parties/DebtorParties.vue'
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
-import RegisteringParty from '@/components/RegisteringParty.vue'
-import SecuredParties from '@/financing-statement/SecuredParties.vue'
+import RegisteringParty from '@/registering-party/RegisteringParty.vue'
+import SecuredParties from '@/secured-parties/SecuredParties.vue'
 
 export default createComponent({
   components: {

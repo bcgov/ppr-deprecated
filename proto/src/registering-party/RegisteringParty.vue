@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { BusinessNameModel } from '@/components/business-name-model'
-import BaseParty from '@/base-party/BaseParty.vue'
+import { BusinessNameModel } from '../business-name/business-name-model'
+import BaseParty from '../base-party/BaseParty.vue'
 
 export default createComponent({
   components: { BaseParty },

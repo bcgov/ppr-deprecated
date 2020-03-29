@@ -15,9 +15,9 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import NavigationBar from '@/proto/NavigationBar.vue'
+import NavigationBar from '@/common/NavigationBar.vue'
 import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
-import SbcHeader from '@/proto/SbcHeader.vue'
+import SbcHeader from '@/common/SbcHeader.vue'
 
 export default createComponent({
   name: 'LayoutPublic',

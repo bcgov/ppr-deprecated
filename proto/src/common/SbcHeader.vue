@@ -19,7 +19,7 @@
 
 <script lang="ts">
   import { computed, createComponent,ref } from '@vue/composition-api'
-  import { useUsers } from '@/models/users'
+  import { useUsers } from '../models/users'
 
   export default createComponent({
     setup(_, { root }) {
@@ -41,7 +41,7 @@
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/theme.scss";
+@import "../assets/styles/theme";
 
 $app-header-font-color: #ffffff;
 

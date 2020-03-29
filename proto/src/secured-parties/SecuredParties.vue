@@ -40,10 +40,10 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { BasePartyModel } from '@/base-party/base-party-model'
-import BaseParty from '@/base-party/BaseParty.vue'
-import FormSectionHeader from '@/components/FormSectionHeader.vue'
-import PprListItem from '@/components/PprListItem.vue'
+import { BasePartyModel } from '../base-party/base-party-model'
+import BaseParty from '../base-party/BaseParty.vue'
+import FormSectionHeader from '../components/FormSectionHeader.vue'
+import PprListItem from '../components/PprListItem.vue'
 
 export default createComponent({
   components: {

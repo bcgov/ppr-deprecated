@@ -36,7 +36,7 @@
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 
-import { PersonNameModel } from '@/components/person-name-model'
+import { PersonNameModel } from '@/person-name/person-name-model'
 
 export default createComponent({
   props: {

@@ -1,6 +1,6 @@
 
-import { BusinessNameInterface, BusinessNameModel } from '@/components/business-name-model'
-import { PersonNameInterface, PersonNameModel } from '@/components/person-name-model'
+import { BusinessNameInterface, BusinessNameModel } from '@/business-name/business-name-model'
+import { PersonNameInterface, PersonNameModel } from '@/person-name/person-name-model'
 
 /**
  * The interface to a party that may be a person or a business.
