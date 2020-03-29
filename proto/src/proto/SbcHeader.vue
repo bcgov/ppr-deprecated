@@ -11,7 +11,6 @@
         <span class="brand__title">BC Registries <span class="brand__title--wrap">& Online Services</span></span>
       </a>
       <div class="app-header__actions">
-        currentUserIndex {{ currentUserIndex}} authenticated: {{ authenticated }} &nbsp; &nbsp; &nbsp;
         <v-btn color="#fcba19" class="log-in-btn" @click="login()">{{ buttonText }}</v-btn>
       </div>
     </div>
@@ -20,17 +19,13 @@
 
 <script lang="ts">
   import { computed, createComponent,ref } from '@vue/composition-api'
-  import { useUsers, UserInterface } from '@/proto/users'
+  import { useUsers } from '@/proto/users'
 
   export default createComponent({
     setup(_, { root }) {
       const { authenticated, currentUserIndex, currentUser, userList} = useUsers()
 
-      function getButtonText() {
-        return (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype'
-      }
-
-      const buttonText = ref (getButtonText())
+      const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
 
       function login(): void {
         if (authenticated.value) {
@@ -43,7 +38,6 @@
       return { authenticated, currentUserIndex, currentUser, login, buttonText}
     }
   })
-
 </script>
 
 <style lang="scss" scoped>

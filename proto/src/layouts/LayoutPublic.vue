@@ -1,6 +1,7 @@
 <template>
   <div>
     <sbc-header/>
+    <navigation-bar/>
 
     <div class="app-body">
       <main>
@@ -14,14 +15,14 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import LayoutHeader from '@/layouts/LayoutHeader.vue'
+import NavigationBar from '@/proto/NavigationBar.vue'
 import SbcFooter from 'sbc-common-components/src/components/SbcFooter.vue'
 import SbcHeader from '@/proto/SbcHeader.vue'
 
 export default createComponent({
   name: 'LayoutPublic',
   components: {
-    LayoutHeader,
+    NavigationBar,
     SbcFooter, SbcHeader
   }
 })

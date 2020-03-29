@@ -1,11 +1,6 @@
 <template>
   <div>
     <v-container class="view-container">
-      <router-link to="search">
-        Search
-      </router-link>
-    </v-container>
-    <v-container class="view-container">
       <article id="mockSearchResultsPage">
         <header>
           <h1>Personal Property Registry</h1>
