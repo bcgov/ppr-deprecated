@@ -3,13 +3,13 @@
     <v-container class="view-container">
       <article id="dashboardArticle">
         <header>
-          <h1>Welcome to the Personal Property Registry</h1>
+          <h1>Welcome {{ currentUser ? currentUser.name : '' }} to the prototype Personal Property Registry</h1>
         </header>
 
         <div class="page-content">
           <div class="page-content__main">
             <p>
-              <em>Note: This web site is a work in progress.</em>
+              <em>Note: This web site is a PROTOTYPE.</em>
             </p>
             <p>
               Protect yourself from loss or legal conflict by registering your interest in personal property (cars,
@@ -30,26 +30,12 @@
 
           </div>
           <div v-if="authenticated">
-            Current User: {{ currentUser.name }} {{ currentUser.last }}, {{ currentUser.company }}, {{ currentUser.occupation }}
-          </div>
-          <div>
-            <ul>
-              <li v-if="authenticated">
-                <router-link to="search">
-                  Search
-                </router-link>
-              </li>
-              <li v-if="authenticated">
-                <router-link to="financing">
-                  Financing Statement
-                </router-link>
-              </li>
-              <li>
-                <router-link to="about">
-                  About
-                </router-link>
-              </li>
-            </ul>
+            Current user is:
+            <div class="user-section">
+              <div> {{ currentUser.name }} {{ currentUser.last }}, </div>
+              <div> {{ currentUser.company }}, </div>
+              <div> {{ currentUser.occupation }} </div>
+            </div>
           </div>
         </div>
       </article>
@@ -69,3 +55,10 @@
   })
 
 </script>
+
+<style lang="scss" scoped>
+
+  .user-section{
+    padding-left:1rem;
+  }
+</style>

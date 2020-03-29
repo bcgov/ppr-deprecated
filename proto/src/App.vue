@@ -3,7 +3,7 @@
     id="app"
     class="app-container, theme--light"
   >
-    <component :is="layout">
+    <component is="public-layout">
       <router-view :key="$route.fullPath" />
     </component>
   </v-app>
@@ -25,7 +25,7 @@ export default createComponent({
   components: {
   },
   setup(_, { root }) {
-    const layout = computed((): string => (root.$router.currentRoute.meta.layout || DefaultLayout) + '-layout')
+    // const layout = computed((): string => (root.$router.currentRoute.meta.layout || DefaultLayout) + '-layout')
     const { setUser } = useUsers()
 
     onErrorCaptured((err): void => {
@@ -39,7 +39,7 @@ export default createComponent({
       }
     });
 
-    return { layout }
+    return {  }
   }
 })
 

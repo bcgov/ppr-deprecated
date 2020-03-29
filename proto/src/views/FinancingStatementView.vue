@@ -1,11 +1,6 @@
 <template>
   <div>
     <v-container class="view-container">
-      <router-link to="home">
-        Home
-      </router-link>
-    </v-container>
-    <v-container class="view-container">
       <article id="financingStatement">
         <header>
           <h1>Create Financing Statement</h1>

@@ -1,11 +1,6 @@
 <template>
   <div>
     <v-container class="view-container">
-      <router-link to="home">
-        Home
-      </router-link>
-    </v-container>
-    <v-container class="view-container">
       <article>
         <header>
           <h1>About the Personal Property Registry</h1>
