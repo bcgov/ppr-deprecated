@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { createComponent, computed, onErrorCaptured, onMounted } from '@vue/composition-api'
-import { useUsers } from '@/proto/users'
+import { useUsers } from '@/models/users'
 
 const DefaultLayout = 'public'
 
