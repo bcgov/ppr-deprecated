@@ -150,7 +150,7 @@ export class FinancingStatementModel {
       debtors: theDbers,
       type: this.type,
       serialCollateral: [],
-      lifeYears: this.years
+      lifeYears: this.lifeYears
     }
     return rval
   }
