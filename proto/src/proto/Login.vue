@@ -9,12 +9,13 @@
         <div class="page-content">
           <div class="page-content__main">
             <p>
-              This will be a PPR login page selectedUserIndex {{ currentUserIndex }} currentUser {{currentUser}} userList {{ userList }}
+              This is a login page for the prototype. In a real system users will authenticate
+              via the auth share system.
             </p>
             <v-btn
               color="#fcba19"
               class="log-in-btn"
-              :disabled="selectedUser < 0"
+              :disabled="currentUserIndex < 0"
               @click="proceed()"
             >
               Continue
@@ -22,7 +23,7 @@
           </div>
           <v-container>
             <v-radio-group
-              v-model="selectedUser"
+              v-model="currentUserIndex"
             >
               <v-radio v-for="user in userList" :key="user.index"
                 :label="`${user.name}, ${user.company}, ${user.occupation}`"
@@ -39,20 +40,12 @@
   </div>
 </template>
 <script lang="ts">
-  import { createComponent, reactive, ref } from '@vue/composition-api'
-  import { mockStorage } from '@/proto/mock-storage'
-  import { useUsers, UserInterface } from '@/proto/users'
+  import { createComponent } from '@vue/composition-api'
+  import { useUsers } from '@/proto/users'
 
   export default createComponent({
     setup(_, { root }) {
-      console.log('login 1')
-      const {     currentUserIndex, currentUser, userList} = useUsers()
-      console.log('login 2')
-
-      // const userList = ref(mockStorage.getUserList())
-      // const rStore = reactive(mockStorage)
-      //
-      // const selectedUser = ref(rStore.getCurrentUserIndex())
+      const { currentUserIndex, userList } = useUsers()
 
       function proceed(): void {
         root.$router.push({ name: 'home' })
@@ -60,11 +53,9 @@
 
       function changeUser(index) {
         currentUserIndex.value = index
-        // mockStorage.setCurrentUser(index)
-        // console.log(mockStorage.getCurrentUser().index)
       }
 
-      return { changeUser,  proceed, currentUserIndex, currentUser, userList }
+      return { changeUser,  proceed, currentUserIndex, userList }
     }
   })
 

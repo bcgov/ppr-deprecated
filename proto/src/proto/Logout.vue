@@ -19,24 +19,18 @@
   </div>
 </template>
 <script lang="ts">
-  import { createComponent,ref } from '@vue/composition-api'
-  import { mockStorage } from '@/proto/mock-storage'
+  import { createComponent } from '@vue/composition-api'
+  import { useUsers } from '@/proto/users'
 
   export default createComponent({
     setup(_, { root }) {
-      const isAuthed = ref(mockStorage.isAuthed())
-
-      function getButtonText() {
-        return (mockStorage.isAuthed() ? 'Log into' : 'Log out of') + ' the PPR prototype'
-      }
-      const buttonText = ref (getButtonText())
+      const { currentUserIndex } = useUsers()
 
       function proceed(): void {
-        mockStorage.setCurrentUser(-1)
+        currentUserIndex.value = -1
         root.$router.push({ name: 'home' })
       }
-
-      return { proceed, buttonText, isAuthed }
+      return { proceed }
     }
   })
 

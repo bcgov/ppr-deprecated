@@ -1,4 +1,3 @@
-import Vue, { VNode } from 'vue'
 import { computed, ref } from '@vue/composition-api'
 
 console.log('import see this once set up users')
@@ -10,6 +9,7 @@ function getDefs() {
 
   const currentUserIndex = ref(-1)
   const userList = ref(UserList())
+  const authenticated = computed((): boolean => currentUserIndex.value >= 0)
 
   // originally computed property
   const currentUser = computed(() => {
@@ -19,6 +19,7 @@ function getDefs() {
   })
 
   return {
+    authenticated,
     currentUserIndex,
     currentUser,
     userList

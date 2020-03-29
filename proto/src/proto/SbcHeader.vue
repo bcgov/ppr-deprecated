@@ -11,8 +11,7 @@
         <span class="brand__title">BC Registries <span class="brand__title--wrap">& Online Services</span></span>
       </a>
       <div class="app-header__actions">
-        currentUserIndex {{ currentUserIndex }}
-        currentUser {{ currentUser}} userIsAuthed2: {{ userIsAuthed2 }} &nbsp; &nbsp; &nbsp;
+        currentUserIndex {{ currentUserIndex}} authenticated: {{ authenticated }} &nbsp; &nbsp; &nbsp;
         <v-btn color="#fcba19" class="log-in-btn" @click="login()">{{ buttonText }}</v-btn>
       </div>
     </div>
@@ -20,38 +19,28 @@
 </template>
 
 <script lang="ts">
-  import { computed, reactive, createComponent,ref } from '@vue/composition-api'
-  import { mockStorage } from '@/proto/mock-storage'
+  import { computed, createComponent,ref } from '@vue/composition-api'
   import { useUsers, UserInterface } from '@/proto/users'
 
   export default createComponent({
     setup(_, { root }) {
-      console.log('header 1')
-
-      const {     currentUserIndex, currentUser, userList} = useUsers()
-      console.log('header 2')
-
-      const userIsAuthed2 = computed((): boolean => !!sessionStorage.getItem('KEYCLOAK_TOKEN'))
-
-      // const currentUser = ref(mockStorage.getCurrentUserIndex())
-      // const currentUser2 = computed((): boolean => mockStorage.getCurrentUserIndex())
+      const { authenticated, currentUserIndex, currentUser, userList} = useUsers()
 
       function getButtonText() {
-        return (mockStorage.isAuthed() ? 'Log out of' : 'Log into') + ' the PPR prototype'
+        return (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype'
       }
+
       const buttonText = ref (getButtonText())
 
       function login(): void {
-        if (mockStorage.isAuthed()) {
-          // buttonText.value = getButtonText()
+        if (authenticated.value) {
           root.$router.push({ name: 'logout' })
         } else {
-          // buttonText.value = getButtonText()
           root.$router.push({ name: 'login' })
         }
       }
 
-      return { currentUserIndex, currentUser, userIsAuthed2, login, buttonText, getButtonText, mockStorage}
+      return { authenticated, currentUserIndex, currentUser, login, buttonText}
     }
   })
 
