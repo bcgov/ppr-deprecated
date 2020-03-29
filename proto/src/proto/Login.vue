@@ -26,7 +26,7 @@
               v-model="currentUserIndex"
             >
               <v-radio v-for="user in userList" :key="user.index"
-                :label="`${user.name}, ${user.company}, ${user.occupation}`"
+                :label="`${user.name}, ${user.company}, ${user.occupation}, ${user.role}`"
                 :value="user.index"
                 @change="changeUser(user.index)"
               >
