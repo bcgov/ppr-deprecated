@@ -40,9 +40,7 @@
 </template>
 
 <script lang="ts">
-import { createComponent, ref } from '@vue/composition-api'
-import { useLoadIndicator } from '@/load-indicator'
-import { useRouter } from '@/router/router'
+import { createComponent } from '@vue/composition-api'
 import SearchInput from '@/search/SearchInput.vue'
 import SearchRegNumUi from '@/search/search-regnum-ui'
 import SearcherRegNum from '@/search/searcher-reg-num'
@@ -50,9 +48,8 @@ import SearcherRegNum from '@/search/searcher-reg-num'
 export default createComponent({
   components: { SearchInput },
 
-  setup() {
+  setup(_, { root }) {
     // const loadIndicator = useLoadIndicator()
-    const { router } = useRouter()
     // const searcherRegNum = new SearcherRegNum()
     // const searchRegNumUi = new SearchRegNumUi()
     // const fees = ref({})

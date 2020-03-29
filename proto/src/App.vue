@@ -3,8 +3,6 @@
     id="app"
     class="app-container, theme--light"
   >
-    <load-indicator />
-
     <component :is="layout">
       <router-view :key="$route.fullPath" />
     </component>
@@ -12,11 +10,8 @@
 </template>
 
 <script lang="ts">
-import { createComponent, computed, onErrorCaptured, provide } from '@vue/composition-api'
-import { Data } from '@vue/composition-api/dist/component'
-import LoadIndicator from '@/load-indicator/LoadIndicator.vue'
-import { provideLoadIndicator } from '@/load-indicator'
-import { provideRouter, useRouter } from '@/router/router'
+import { createComponent, computed, onErrorCaptured, onMounted } from '@vue/composition-api'
+import { useUsers } from '@/proto/users'
 
 const DefaultLayout = 'public'
 
@@ -28,25 +23,21 @@ function origin(): string {
 
 export default createComponent({
   components: {
-    LoadIndicator
   },
-  setup(): Data {
-    provideLoadIndicator()
-    provideRouter()
-
-    const { router } = useRouter()
-
-    const layout = computed((): string => (router.currentRoute.meta.layout || DefaultLayout) + '-layout')
+  setup(_, { root }) {
+    const layout = computed((): string => (root.$router.currentRoute.meta.layout || DefaultLayout) + '-layout')
+    const { setUser } = useUsers()
 
     onErrorCaptured((err): void => {
-      console.error('App errorCaptured', err)
-      // err: error trace
-      // The method has 2 additional parameters, which are unused in this case
-      //   vm: component in which error occured
-      //   info: Vue specific error information such as lifecycle hooks, events etc.
-      // TODO: Perform any custom logic or log to server
-      // return false to stop the propagation of errors further to parent or global error handler
+
     })
+
+    onMounted(() => {
+      const stashedUser = sessionStorage.getItem('user')
+      if (stashedUser) {
+        setUser(parseInt(stashedUser))
+      }
+    });
 
     return { layout }
   }
