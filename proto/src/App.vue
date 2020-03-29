@@ -34,6 +34,7 @@ export default createComponent({
 
     onMounted(() => {
       const stashedUser = sessionStorage.getItem('user')
+      console.log('stashed user', stashedUser)
       if (stashedUser) {
         setUser(parseInt(stashedUser))
       }

@@ -1,4 +1,5 @@
 import { computed, ref } from '@vue/composition-api'
+import { usePartyCodes, PartyCodeInterface } from '../party-code/party-code-model'
 
 export enum Roles {
   None = "no user",
@@ -22,12 +23,23 @@ export interface UserInterface {
   occupation: string;
   role: Roles;
   description?: string;
+  partyCode?: PartyCodeInterface
 }
 
 function getDefs() {
 
   const currentUserIndex = ref(-1)
-  const userList = ref(UserList())
+
+  const { findPartyCode } = usePartyCodes()
+  const list = UserList()
+  list.forEach( (user: UserInterface) => {
+    const code: PartyCodeInterface = findPartyCode(user.company)
+    if(code) {
+      user.partyCode = code
+    }
+  })
+  const userList = ref(list)
+
   const authenticated = computed((): boolean => currentUserIndex.value >= 0)
 
   const currentUser = computed((): UserInterface | undefined => {
@@ -75,7 +87,7 @@ export function useUsers () {
 
 export function UserList(): UserInterface[] {
   let _cnt = 0;
-  return [
+  const list = [
     {
       index: _cnt++,
       name: 'Darlene',
@@ -136,4 +148,5 @@ export function UserList(): UserInterface[] {
       role: Roles.Admin
     },
   ]
+  return list
 }
