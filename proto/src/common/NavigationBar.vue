@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts">
-import { computed, createComponent, reactive, ref } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { NavigationBarConfig } from '@vue/common/NavigationBarConfig'
-import { useUsers } from '../models/users'
+import { useUsers } from '../users/users'
 
 export default createComponent({
   setup(_, { root }) {

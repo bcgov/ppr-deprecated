@@ -1,4 +1,4 @@
-import { UserList, UserInterface } from '../models/users'
+import { UserList, UserInterface } from '../users/users'
 
 /**
  * Singleton class to mock out data for prototype

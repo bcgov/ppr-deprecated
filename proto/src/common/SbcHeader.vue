@@ -19,7 +19,7 @@
 
 <script lang="ts">
   import { computed, createComponent,ref } from '@vue/composition-api'
-  import { useUsers } from '../models/users'
+  import { useUsers } from '../users/users'
 
   export default createComponent({
     setup(_, { root }) {

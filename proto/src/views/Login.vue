@@ -41,7 +41,7 @@
 </template>
 <script lang="ts">
   import { createComponent } from '@vue/composition-api'
-  import { useUsers } from '../models/users'
+  import { useUsers } from '../users/users'
 
   export default createComponent({
     setup(_, { root }) {

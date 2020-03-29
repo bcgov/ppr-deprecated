@@ -1,4 +1,3 @@
-
 import { computed, ref } from '@vue/composition-api'
 import { AddressModel, AddressInterface } from '@/address/address-model'
 export interface PartyCodeInterface {
