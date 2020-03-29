@@ -51,37 +51,36 @@ export default createComponent({
   components: { SearchInput },
 
   setup() {
-    const loadIndicator = useLoadIndicator()
+    // const loadIndicator = useLoadIndicator()
     const { router } = useRouter()
-    const searcherRegNum = new SearcherRegNum()
-    const searchRegNumUi = new SearchRegNumUi()
-    const fees = ref({})
+    // const searcherRegNum = new SearcherRegNum()
+    // const searchRegNumUi = new SearchRegNumUi()
+    // const fees = ref({})
 
-    searcherRegNum.getSearchFees().then((data) => fees.value = data)
-
-    function doSearch(searcher, term: string): Promise<void> {
-      loadIndicator.start()
-      return searcher.doSearch(term)
-        .then((searchId: string): void => {
-          router.push({ name: 'results', query: { searchId: searchId } })
-        })
-        .catch((errorMessage: string): void => {
-          // Note that Sentry will capture all console.error
-          console.error('In search page catch on do search.', errorMessage)
-        })
-        .finally(() => {
-          loadIndicator.stop()
-        })
-    }
-
-    function doSearchRegNum(term: string) {
-      doSearch(searcherRegNum, term)
-    }
+    // searcherRegNum.getSearchFees().then((data) => fees.value = data)
+    // function doSearch(searcher, term: string): Promise<void> {
+    //   loadIndicator.start()
+    //   return searcher.doSearch(term)
+    //     .then((searchId: string): void => {
+    //       router.push({ name: 'results', query: { searchId: searchId } })
+    //     })
+    //     .catch((errorMessage: string): void => {
+    //       // Note that Sentry will capture all console.error
+    //       console.error('In search page catch on do search.', errorMessage)
+    //     })
+    //     .finally(() => {
+    //       loadIndicator.stop()
+    //     })
+    // }
+    //
+    // function doSearchRegNum(term: string) {
+    //   doSearch(searcherRegNum, term)
+    // }
 
     return {
-      fees,
-      doSearchRegNum,
-      searchRegNumUi
+      // fees,
+      // doSearchRegNum,
+      // searchRegNumUi
     }
   }
 })

@@ -1,21 +1,21 @@
 <template>
   <v-card flat>
-    <person-name
-      :editing="editing"
+    <base-party
       :value="value"
+      :editing="editing"
       @input="emitModel($event)"
-      @valid="formValid($event)"
+      @valid="emitValid($event)"
     />
   </v-card>
 </template>
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { PersonNameModel } from '@/components/person-name-model'
-import PersonName from '@/components/PersonName.vue'
+import { BusinessNameModel } from '@/components/business-name-model'
+import BaseParty from '@/base-party/BaseParty.vue'
 
 export default createComponent({
-  components: { PersonName },
+  components: { BaseParty },
 
   props: {
     editing: {
@@ -25,24 +25,24 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: PersonNameModel
+      type: BusinessNameModel
     }
   },
 
   setup(_, { emit }) {
     // Callback function for emitting the model back to the parent.
-    function emitModel(person: PersonNameModel) {
+    function emitModel(person: BusinessNameModel) {
       emit('input', person)
     }
 
-    // Callback function for emitting Person validity back to the parent.
-    function formValid(valid: boolean) {
+    // Callback function for emitting Registering Party validity back to the parent.
+    function emitValid(valid: boolean) {
       emit('valid', valid)
     }
 
     return {
       emitModel,
-      formValid
+      emitValid
     }
   }
 })
