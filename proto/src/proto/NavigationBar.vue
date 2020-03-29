@@ -1,6 +1,9 @@
 <template>
     <div class="nav-bar">
       <v-toolbar flat>
+        <v-toolbar-title>
+          PPR Prototype
+        </v-toolbar-title>
         <v-toolbar-items>
           <v-btn text
             v-for="menuItem in menuItems"
@@ -21,7 +24,7 @@ import { useUsers } from '@/proto/users'
 
 export default createComponent({
   setup(_, { root }) {
-    const { authenticated } = useUsers()
+    const { authenticated, currentUser, canAdmin, canDash } = useUsers()
     const menuItems = computed( () => {
       const list = []
       list.push({
@@ -29,14 +32,16 @@ export default createComponent({
         url: 'home'
       })
       if (authenticated.value) {
-        list.push({
-          name: 'Dashboard',
-          url: 'dashboard'
-        })
-        list.push({
-          name: 'Party Codes',
-          url: 'party-codes'
-        })
+        if(canDash.value) {
+          list.push({
+            name: 'Dashboard',
+            url: 'dashboard'
+          })
+          list.push({
+            name: 'Party Codes',
+            url: 'party-codes'
+          })
+        }
         list.push({
           name: 'Register',
           url: 'financing'
@@ -45,6 +50,12 @@ export default createComponent({
           name: 'Search',
           url: 'search'
         })
+        if(canAdmin.value) {
+          list.push({
+            name: 'Admin',
+            url: 'admin'
+          })
+        }
       }
       list.push({
         name:'About',
@@ -54,7 +65,7 @@ export default createComponent({
     })
 
 
-    return { authenticated, menuItems}
+    return { canDash, authenticated, menuItems}
   }
 })
 </script>

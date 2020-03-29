@@ -1,3 +1,4 @@
+import Admin from '@/proto/Admin.vue'
 import About from '@/views/About.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import FinancingStatement from '@/views/FinancingStatementView.vue'
@@ -33,6 +34,12 @@ export default [
     name: 'logout',
     component: Logout,
     meta: { layout: 'public' }
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: Admin,
+    meta: { requiresAuth: true, layout: 'user' }
   },
   {
     path: '/dashboard',

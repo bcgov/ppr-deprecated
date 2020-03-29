@@ -96,9 +96,12 @@ We'll try to say "persona" when we are talking about the "user" the prototype us
 Each persona works for a company or organization, which determines which role this persona has.
 
  - If the company can register FSs then it has role RP.
- - If the company is a secured party then the persona has role SP.
+ - If the company is a secured party then 
+    - the default persona has role SP and is mainly focused on searches
+    - persona who administer and works with lawyers who register FS for the SP will have role SPAdmin (Secured Party Admin)
  - If the persona works for SBC then the persona has role of Staff.
 
+SPAdmin is a role 
 The prototype user will select the "user" (persona) to use for simulation.  
 
 ## Page: /FS  register a FS
