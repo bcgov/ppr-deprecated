@@ -1,27 +1,33 @@
 import { computed, ref } from '@vue/composition-api'
 
-console.log('import see this once set up users')
-
-
 function getDefs() {
-
-  console.log('Should see this once define users')
 
   const currentUserIndex = ref(-1)
   const userList = ref(UserList())
   const authenticated = computed((): boolean => currentUserIndex.value >= 0)
 
-  // originally computed property
   const currentUser = computed(() => {
     if (currentUserIndex.value>=0)
       return userList.value[currentUserIndex.value]
     return undefined
   })
 
+  function setUser(index) {
+    currentUserIndex.value = index
+    const str = `${currentUserIndex.value}`
+    console.log('store ', str)
+    sessionStorage.setItem('user', str)
+  }
+  function logout() {
+    currentUserIndex.value = -1
+    sessionStorage.removeItem('user')
+  }
   return {
     authenticated,
     currentUserIndex,
     currentUser,
+    logout,
+    setUser,
     userList
   }
 }
@@ -33,12 +39,7 @@ function Instance() {
 
 
 export function useUsers () {
-  console.log('useUsers')
-
-  const rval =  Instance()
-  console.log('useUsers', rval)
-
-  return rval
+  return Instance()
 }
 
 export interface UserInterface {

@@ -5,7 +5,6 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import App from '@/App.vue'
 import router from '@/router/router'
-import store from './store'
 import layoutPublic from '@/layouts/LayoutPublic.vue'
 import layoutUser from '@/layouts/LayoutUser.vue'
 import './assets/styles/styles.scss'
@@ -20,14 +19,25 @@ Vue.config.productionTip = false
 Vue.component('public-layout', layoutPublic)
 Vue.component('user-layout', layoutUser)
 
+Vue.config.errorHandler = (err, vm, info) => {
+  console.log('Err', err)
+  console.log('Err info', info)
+  // err: error trace
+  // vm: component in which error occured
+  // info: Vue specific error information such as lifecycle hooks, events etc.
+
+  // TODO: Perform any custom logic or log to server
+
+};
+const vConfig = {
+  vuetify: new Vuetify(opts),
+  router,
+  render: (h): VNode => h(App)
+}
+
 Promise.resolve()
   .then(() => {
-    new Vue({
-      vuetify: new Vuetify(opts),
-      router,
-      store,
-      render: (h): VNode => h(App)
-    }).$mount('#app')
+    new Vue(vConfig).$mount('#app')
   })
   .catch((error): void => {
     console.error('error fetching config -', error)

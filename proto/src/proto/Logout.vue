@@ -24,10 +24,10 @@
 
   export default createComponent({
     setup(_, { root }) {
-      const { currentUserIndex } = useUsers()
+      const { logout } = useUsers()
 
       function proceed(): void {
-        currentUserIndex.value = -1
+        logout()
         root.$router.push({ name: 'home' })
       }
       return { proceed }

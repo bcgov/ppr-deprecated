@@ -45,14 +45,14 @@
 
   export default createComponent({
     setup(_, { root }) {
-      const { currentUserIndex, userList } = useUsers()
+      const { currentUserIndex, setUser, userList } = useUsers()
 
       function proceed(): void {
         root.$router.push({ name: 'home' })
       }
 
       function changeUser(index) {
-        currentUserIndex.value = index
+        setUser(index)
       }
 
       return { changeUser,  proceed, currentUserIndex, userList }

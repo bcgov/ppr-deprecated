@@ -59,8 +59,6 @@ import { createComponent, ref } from '@vue/composition-api'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel, FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
-import { useLoadIndicator } from '@/load-indicator'
-import axiosAuth from '@/utils/axios-auth'
 
 
 export default createComponent({
@@ -79,11 +77,9 @@ export default createComponent({
     const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties, debtorParties)
     const financingStatement = ref(fstmt)
 
-    const loadIndicator = useLoadIndicator()
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 
     function submit() {
-      loadIndicator.start()
 
       // const url = Config.apiUrl + 'financing-statements'
       // axiosAuth.post(url, financingStatement.value.toJson()).then((response): void => {
@@ -95,7 +91,6 @@ export default createComponent({
     }
 
     if (regNum) {
-      loadIndicator.start()
 
       // const url = Config.apiUrl + 'financing-statements/' + regNum
       // axiosAuth.get<FinancingStatementInterface>(url).then((response): void => {
