@@ -1,3 +1,4 @@
+import { computed, ref } from '@vue/composition-api'
 import { PersonNameInterface, PersonNameModel } from '@/person-name/person-name-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
@@ -14,7 +15,7 @@ export interface FinancingStatementInterface {
   securedParties: BasePartyInterface[];
   debtors: BasePartyInterface[];
   type: FinancingStatementType;
-  vehicleCollateral: [];
+  serialCollateral: [];
   lifeYears: number;
 }
 
@@ -24,7 +25,7 @@ export class FinancingStatementModel {
   private _registeringParty: BasePartyModel
   private _registrationDateTime: string | undefined
   private _type: FinancingStatementType
-  private _years: number
+  private _lifeYears: number
   private _securedParties: BasePartyModel[]
   private _debtorParties: BasePartyModel[]
 
@@ -51,7 +52,7 @@ export class FinancingStatementModel {
     expiryDate?: string
   ) {
     this._type = type
-    this._years = years
+    this._lifeYears = years
     this._registeringParty = registeringParty
     this._securedParties = securedParties
     this._debtorParties = debtorParties
@@ -79,6 +80,17 @@ export class FinancingStatementModel {
    */
   public get securedParties(): BasePartyModel[] {
     return this._securedParties
+  }
+
+  public get debtors(): [] {
+    return []
+  }
+
+  public get generalCollateral(): [] {
+    return []
+  }
+  public get serialCollateral(): [] {
+    return []
   }
 
   /**
@@ -112,8 +124,8 @@ export class FinancingStatementModel {
   /**
    * Gets the number of years the financing statement is registered for.
    */
-  public get years(): number {
-    return this._years
+  public get lifeYears(): number {
+    return this._lifeYears
   }
 
   /**
@@ -137,7 +149,7 @@ export class FinancingStatementModel {
       securedParties: theSPs,
       debtors: theDbers,
       type: this.type,
-      vehicleCollateral: [],
+      serialCollateral: [],
       lifeYears: this.years
     }
     return rval
@@ -200,4 +212,38 @@ export class FinancingStatementModel {
       jsonObject.expiryDate
     )
   }
+}
+
+
+function getDefs() {
+  // const fsList = ref(FSList())
+  function createFinancingStatement(): FinancingStatementModel {
+    // create FS model with defaults yet be sure secured parties has one empty party
+    const firstSecuredParty = new BasePartyModel()
+    firstSecuredParty.listId = 0
+    const securedParties = [firstSecuredParty]
+    const firstDebtor = new BasePartyModel()
+    firstDebtor.listId = 0
+    const debtorParties = [firstDebtor]
+    const fstmt = new FinancingStatementModel(undefined, 1, undefined, securedParties, debtorParties)
+    return fstmt
+  }
+  return {
+    createFinancingStatement
+  }
+}
+const instance = {_instance: undefined}
+function Instance() {
+  return instance._instance || (instance._instance = getDefs())
+}
+
+export function useFinancingStatments () {
+  return Instance()
+}
+
+export function FSList(): FinancingStatementInterface[] {
+  let _cnt = 100;
+  const list = [
+  ]
+  return []// FinancingStatementInterface[] = list.map( json => FinancingStatementModel.fromJson(json))
 }

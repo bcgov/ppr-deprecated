@@ -52,8 +52,7 @@
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
-import { BasePartyModel } from '@/base-party/base-party-model'
-import { FinancingStatementModel, FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
+import { FinancingStatementModel, useFinancingStatments } from '@/financing-statement/financing-statement-model'
 
 
 export default createComponent({
@@ -62,15 +61,8 @@ export default createComponent({
   setup(_, { root }) {
     const editing = ref(true)
     const formValid = ref(true)
-    // create FS model with defaults yet be sure secured parties has one empty party
-    const firstSecuredParty = new BasePartyModel()
-    firstSecuredParty.listId = 0
-    const securedParties = [firstSecuredParty]
-    const firstDebtor = new BasePartyModel()
-    firstDebtor.listId = 0
-    const debtorParties = [firstDebtor]
-    const fstmt = new FinancingStatementModel(undefined, undefined, undefined, securedParties, debtorParties)
-    const financingStatement = ref(fstmt)
+    const { createFinancingStatement } = useFinancingStatments()
+    const financingStatement = ref(createFinancingStatement())
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 

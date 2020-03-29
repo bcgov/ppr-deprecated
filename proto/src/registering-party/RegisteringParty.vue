@@ -11,8 +11,8 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { BusinessNameModel } from '../business-name/business-name-model'
-import BaseParty from '../base-party/BaseParty.vue'
+import { BasePartyModel } from '@/base-party/base-party-model'
+import BaseParty from '@/base-party/BaseParty.vue'
 
 export default createComponent({
   components: { BaseParty },
@@ -25,13 +25,13 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: BusinessNameModel
+      type: BasePartyModel
     }
   },
 
   setup(_, { emit }) {
     // Callback function for emitting the model back to the parent.
-    function emitModel(person: BusinessNameModel) {
+    function emitModel(person: BasePartyModel) {
       emit('input', person)
     }
 
