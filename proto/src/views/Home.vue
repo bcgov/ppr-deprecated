@@ -35,6 +35,8 @@
               <div> {{ currentUser.name }} {{ currentUser.last }}, </div>
               <div> {{ currentUser.company }}, </div>
               <div> {{ currentUser.occupation }} </div>
+              <div> {{ currentUser.role }} </div>
+              <div> {{ currentUser.partyCode }} </div>
             </div>
           </div>
         </div>

@@ -19,7 +19,6 @@
 
 <script lang="ts">
 import { computed, createComponent } from '@vue/composition-api'
-import { NavigationBarConfig } from '@vue/common/NavigationBarConfig'
 import { useUsers } from '../users/users'
 
 export default createComponent({

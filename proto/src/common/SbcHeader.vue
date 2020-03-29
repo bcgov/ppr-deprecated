@@ -1,6 +1,7 @@
 <template>
   <header class="app-header">
     <div class="container">
+      <div> currentUserIndex {{ currentUserIndex}}</div>
       <a @click="goToHome()" class="brand">
         <picture>
           <img class="brand__image"
@@ -19,11 +20,11 @@
 
 <script lang="ts">
   import { computed, createComponent,ref } from '@vue/composition-api'
-  import { useUsers } from '../users/users'
+  import { useUsers } from '@/users/users'
 
   export default createComponent({
     setup(_, { root }) {
-      const { authenticated, currentUserIndex, currentUser, userList} = useUsers()
+      const { authenticated, currentUserIndex, currentUser} = useUsers()
 
       const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
 

@@ -31,7 +31,7 @@
             Type: {{ value.type }}
           </div>
           <div>
-            Life in Years: {{ value.years }}
+            Life in Years: {{ value.lifeYears }}
           </div>
         </div>
       </v-container>
@@ -129,7 +129,7 @@ export default createComponent({
     function updateRegisteringParty(newPerson: PersonNameModel): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
-        props.value.years,
+        props.value.lifeYears,
         newPerson, // props.value.registeringParty
         props.value.securedParties,
         props.value.debtorParties
@@ -139,7 +139,7 @@ export default createComponent({
     function updateSecuredParties(newSecuredParties: BasePartyModel[]): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
-        props.value.years,
+        props.value.lifeYears,
         props.value.registeringParty,
         newSecuredParties,
         props.value.debtorParties
@@ -149,7 +149,7 @@ export default createComponent({
     function updateDebtorParties(newDebtorParties: BasePartyModel[]): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
-        props.value.years,
+        props.value.lifeYears,
         props.value.registeringParty,
         props.value.securedParties,
         newDebtorParties
@@ -171,7 +171,7 @@ export default createComponent({
     function updateType(newType: FinancingStatementType): void {
       emit('input', new FinancingStatementModel(
         newType, //props.value.type,
-        props.value.years,
+        props.value.lifeYears,
         props.value.registeringParty,
         props.value.securedParties,
         props.value.debtorParties
