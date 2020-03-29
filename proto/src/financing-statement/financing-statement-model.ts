@@ -43,7 +43,7 @@ export class FinancingStatementModel {
    */
   public constructor(
     type: FinancingStatementType = FinancingStatementType.SECURITY_AGREEMENT,
-    years: number = 1,
+    lifeYears: number = 1,
     registeringParty: BasePartyModel = new BasePartyModel(),
     securedParties: BasePartyModel[] = [new BasePartyModel()],
     debtorParties: BasePartyModel[] = [new BasePartyModel()],
@@ -52,7 +52,7 @@ export class FinancingStatementModel {
     expiryDate?: string
   ) {
     this._type = type
-    this._lifeYears = years
+    this._lifeYears = lifeYears
     this._registeringParty = registeringParty
     this._securedParties = securedParties
     this._debtorParties = debtorParties
@@ -225,7 +225,7 @@ function getDefs() {
     const firstDebtor = new BasePartyModel()
     firstDebtor.listId = 0
     const debtorParties = [firstDebtor]
-    const fstmt = new FinancingStatementModel(undefined, 1, undefined, securedParties, debtorParties)
+    const fstmt = new FinancingStatementModel(undefined, 5, undefined, securedParties, debtorParties)
     return fstmt
   }
   return {
