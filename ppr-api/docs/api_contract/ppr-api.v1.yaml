@@ -467,7 +467,7 @@ paths:
           description: The account that the user is operating on behalf of.
           required: true
     get:
-      summary: ''
+      summary: List Financing Statements
       operationId: get-financing-statements
       responses:
         '200':
@@ -536,6 +536,292 @@ paths:
           required: true
           description: The account that the user is operating on behalf of.
       description: Find the name and address details for a preset party.
+  /drafts:
+    get:
+      summary: List Drafts
+      tags:
+        - Draft
+        - Financing Statement
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/draft'
+              examples:
+                Example:
+                  value:
+                    - id: '12345'
+                      type: FINANCING_STATEMENT
+                    - id: '13579'
+                      type: AMENDMENT
+      operationId: get-drafts
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The account that the user is operating on behalf of.
+          required: true
+      description: Get a list of your existing drafts of all types.
+    post:
+      summary: Create a Draft
+      operationId: post-drafts
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/draft'
+              examples:
+                Financing Statement Draft:
+                  value:
+                    id: '12345'
+                    type: FINANCING_STATEMENT
+                    content:
+                      type: SECURITY_AGREEMENT
+                      registeringParty: []
+                      securedParties: []
+                      debtors:
+                        - businessName: My Company Inc
+                          address:
+                            street: 721 Debtor Ave
+                            city: Victoria
+                            region: BC
+                            country: CA
+                            postalCode: A1A 1A1
+                          birthdate: '1990-06-15'
+                      vehicleCollateral:
+                        - type: MOTOR_VEHICLE
+                          serial: WDBKK49F81F234840
+                          year: 2001
+                          make: Mercedes-Benz
+                          model: SLK-Class Kompressor
+                      generalCollateral: null
+                      lifeYears: 5
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      description: Create a new draft financing statement or amendment.
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/draft'
+            examples:
+              Financing Statement Draft:
+                value:
+                  type: FINANCING_STATEMENT
+                  content:
+                    type: SECURITY_AGREEMENT
+                    registeringParty: []
+                    securedParties: []
+                    debtors:
+                      - businessName: My Company Inc
+                        address:
+                          street: 721 Debtor Ave
+                          city: Victoria
+                          region: BC
+                          country: CA
+                          postalCode: A1A 1A1
+                        birthdate: '1990-06-15'
+                    vehicleCollateral:
+                      - type: MOTOR_VEHICLE
+                        serial: WDBKK49F81F234840
+                        year: 2001
+                        make: Mercedes-Benz
+                        model: SLK-Class Kompressor
+                    generalCollateral: null
+                    lifeYears: 5
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          required: true
+          description: The account that the user is operating on behalf of.
+      tags:
+        - Draft
+        - Financing Statement
+  '/drafts/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: 'The identifier of the draft record. If an invalid id is submitted then [404].'
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Draft
+        - Financing Statement
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/draft'
+              examples:
+                Example:
+                  value:
+                    id: '12345'
+                    type: FINANCING_STATEMENT
+                    content:
+                      type: SECURITY_AGREEMENT
+                      registeringParty: []
+                      securedParties: []
+                      debtors:
+                        - businessName: My Company Inc
+                          address:
+                            street: 721 Debtor Ave
+                            city: Victoria
+                            region: BC
+                            country: CA
+                            postalCode: A1A 1A1
+                          birthdate: '1990-06-15'
+                      vehicleCollateral:
+                        - type: MOTOR_VEHICLE
+                          serial: WDBKK49F81F234840
+                          year: 2001
+                          make: Mercedes-Benz
+                          model: SLK-Class Kompressor
+                      generalCollateral: null
+                      lifeYears: 5
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/draft'
+      operationId: get-drafts-code
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The account that the user is operating on behalf of.
+          required: true
+      description: Retrieve the contents for an existing draft financing statement or amendment.
+    put:
+      summary: ''
+      operationId: put-drafts-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/draft'
+              examples:
+                Example:
+                  value:
+                    id: '12345'
+                    type: FINANCING_STATEMENT
+                    content:
+                      type: SECURITY_AGREEMENT
+                      registeringParty: []
+                      securedParties: []
+                      debtors:
+                        - businessName: My Company Inc
+                          address:
+                            street: 721 Debtor Ave
+                            city: Victoria
+                            region: BC
+                            country: CA
+                            postalCode: A1A 1A1
+                          birthdate: '1990-06-15'
+                      vehicleCollateral:
+                        - type: MOTOR_VEHICLE
+                          serial: WDBKK49F81F234840
+                          year: 2001
+                          make: Mercedes-Benz
+                          model: SLK-Class Kompressor
+                      generalCollateral: null
+                      lifeYears: 5
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The account that the user is operating on behalf of.
+          required: true
+      description: Update the contents for an existing draft financing statement or amendment.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/draft'
+            examples:
+              Example:
+                value:
+                  id: '12345'
+                  type: FINANCING_STATEMENT
+                  content:
+                    type: SECURITY_AGREEMENT
+                    registeringParty: []
+                    securedParties: []
+                    debtors:
+                      - businessName: My Company Inc
+                        address:
+                          street: 721 Debtor Ave
+                          city: Victoria
+                          region: BC
+                          country: CA
+                          postalCode: A1A 1A1
+                        birthdate: '1990-06-15'
+                    vehicleCollateral:
+                      - type: MOTOR_VEHICLE
+                        serial: WDBKK49F81F234840
+                        year: 2001
+                        make: Mercedes-Benz
+                        model: SLK-Class Kompressor
+                    generalCollateral: null
+                    lifeYears: 5
+      tags:
+        - Draft
+        - Financing Statement
+    delete:
+      summary: Delete Draft
+      operationId: delete-drafts-id
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          required: true
+          description: The account that the user is operating on behalf of.
+      description: Delete an existing draft financing statement or amendment.
+      tags:
+        - Draft
+        - Financing Statement
 components:
   schemas:
     search:
@@ -841,10 +1127,56 @@ components:
         - country
         - postalCode
       description: Capture address information for an entity.
+    draft:
+      title: draft
+      type: object
+      description: Used to store a draft financing-statement or amendment for later submission.
+      x-examples:
+        Example Financing Statement Draft:
+          id: '12345'
+          type: FINANCING_STATEMENT
+          content:
+            type: SECURITY_AGREEMENT
+            registeringParty: []
+            securedParties: []
+            debtors:
+              - businessName: My Company Inc
+                address:
+                  street: 721 Debtor Ave
+                  city: Victoria
+                  region: BC
+                  country: CA
+                  postalCode: A1A 1A1
+                birthdate: '1990-06-15'
+            vehicleCollateral:
+              - type: MOTOR_VEHICLE
+                serial: WDBKK49F81F234840
+                year: 2001
+                make: Mercedes-Benz
+                model: SLK-Class Kompressor
+            generalCollateral: []
+            lifeYears: 5
+      properties:
+        id:
+          type: string
+          description: 'The identifier of the draft registration, used in the URL to perform operations.'
+        type:
+          type: string
+          description: The type content stored in the draft.
+          enum:
+            - AMENDMENT
+            - FINANCING_STATEMENT
+        content:
+          type: object
+          description: 'A schema-less object containing the JSON for the submission. This field does not need to be a valid representation for the type of submission, but best practice is that it matches the schema for the type being submitted.'
+      required:
+        - type
+        - content
   securitySchemes:
     JWT:
       type: http
       scheme: bearer
 tags:
+  - name: Draft
   - name: Financing Statement
   - name: Search

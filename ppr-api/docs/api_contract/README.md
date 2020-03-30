@@ -165,9 +165,15 @@ would be records associated with the provided account id. Consider whether addit
 
 ### Historical View of a Financing Statement
 
-### Draft a Financing Statement
+## Drafts
 
-### Draft an Amendment or Change
+### Draft a Financing Statement, Amendment or Change
+
+### List Drafts
+
+### View a Draft
+
+### Update a Draft
 
 ### Delete a Draft
 
