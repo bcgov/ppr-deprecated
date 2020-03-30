@@ -1,7 +1,6 @@
 <template>
   <header class="app-header">
     <div class="container">
-      <div> currentUserIndex {{ currentUserIndex}}</div>
       <a @click="goToHome()" class="brand">
         <picture>
           <img class="brand__image"
@@ -11,6 +10,9 @@
         </picture>
         <span class="brand__title">BC Registries <span class="brand__title--wrap">& Online Services</span></span>
       </a>
+      <div class="app-header__actions">
+        {{ welcomeText }}
+      </div>
       <div class="app-header__actions">
         <v-btn color="#fcba19" class="log-in-btn" @click="login()">{{ buttonText }}</v-btn>
       </div>
@@ -28,6 +30,8 @@
 
       const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
 
+      const welcomeText = computed( () => (authenticated.value ? 'Welcome ' + currentUser.value.name : 'Log in'))
+
       function login(): void {
         if (authenticated.value) {
           root.$router.push({ name: 'logout' })
@@ -36,7 +40,7 @@
         }
       }
 
-      return { authenticated, currentUserIndex, currentUser, login, buttonText}
+      return { authenticated, currentUserIndex, currentUser, login, buttonText, welcomeText}
     }
   })
 </script>
