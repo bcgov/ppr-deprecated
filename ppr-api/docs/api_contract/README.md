@@ -167,15 +167,67 @@ would be records associated with the provided account id. Consider whether addit
 
 ## Drafts
 
+On occasion users create some quite lengthy financing statements, potentially with hundreds of items in collateral. To
+handle this, users require a way to store work in progress. Due to the complexity of managing drafts along with
+validation and payments, it's preferable to not include them in the general financing statement endpoints.
+
+As a result, we've specified a set of endpoints that are specifically for storing and handling drafts. Both financing
+statements and amendments should be supported by simpling specifying a type and storing the data in `content` according
+to their schemas.
+
+Drafts should be available to the user that created them, though there may also be a need to share them amongst users
+authorized to operate on behalf of an account.
+
 ### Draft a Financing Statement, Amendment or Change
+
+Save a new draft. The draft schema should be submitted as a regular JSON object in the `content` property. No validation
+will be performed on the content.
+
+**Endpoint:** `POST /drafts`
+
+**Implementation Status:** Not implemented at all
 
 ### List Drafts
 
+Retrieve a list of drafts. This will be helpful to provide lookups when a user is returning to work on previously saved
+drafts. The `content` property should not be included in the response for this endpoint.
+
+**Endpoint:** `GET /drafts`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should only provide records that are available to the calling user.
+
 ### View a Draft
+
+Retrieve an existing draft. This would be used to continue work on previously saved draft.
+
+**Endpoint:** `GET /drafts/{id}`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should be restricted to drafts that are available to the calling user.
 
 ### Update a Draft
 
+Save changes to an existing draft.
+
+**Endpoint:** `PUT /drafts/{id}`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should be restricted to drafts that are available to the calling user.
+
 ### Delete a Draft
+
+Delete a previously saved draft. The calling system should use this automatically after successfully performing the New
+Registration or Amendment/Change operations. 
+
+**Endpoint:** `DELETE /drafts/{id}`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should be restricted to drafts that are available to the calling user.
 
 ## Search
 
