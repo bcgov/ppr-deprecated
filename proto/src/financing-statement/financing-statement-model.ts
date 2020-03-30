@@ -3,6 +3,7 @@ import { PersonNameInterface, PersonNameModel } from '@/person-name/person-name-
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
 import { useRegisteredParty, RegisteringPartyInterface, RegisteringPartyModel } from '@/registering-party/registering-party-model'
+import { useSecuredParty, SecuredPartyModel, SecuredPartyInterface } from '@/secured-parties/secured-party-model.ts'
 
 /**
  * The interface to a financing statement.
@@ -13,7 +14,7 @@ export interface FinancingStatementInterface {
   generalCollateral: [];
   registeringParty: RegisteringPartyInterface;
   registrationDateTime: string | undefined;
-  securedParties: BasePartyInterface[];
+  securedParties: SecuredPartyInterface[];
   debtors: BasePartyInterface[];
   type: FinancingStatementType;
   serialCollateral: [];
@@ -27,7 +28,7 @@ export class FinancingStatementModel {
   private _registrationDateTime: string | undefined
   private _type: FinancingStatementType
   private _lifeYears: number
-  private _securedParties: BasePartyModel[]
+  private _securedParties: SecuredPartyModel[]
   private _debtorParties: BasePartyModel[]
 
   /**
@@ -46,7 +47,7 @@ export class FinancingStatementModel {
     type: FinancingStatementType = FinancingStatementType.SECURITY_AGREEMENT,
     lifeYears: number = 1,
     registeringParty: RegisteringPartyModel,
-    securedParties: BasePartyModel[] = [new BasePartyModel()],
+    securedParties: SecuredPartyModel[] = [new SecuredPartyModel()],
     debtorParties: BasePartyModel[] = [new BasePartyModel()],
     baseRegistrationNumber?: string,
     registrationDatetime?: string,
@@ -79,7 +80,7 @@ export class FinancingStatementModel {
   /**
    * Gets the list of secured parties who own the lien
    */
-  public get securedParties(): BasePartyModel[] {
+  public get securedParties(): SecuredPartyModel[] {
     return this._securedParties
   }
 
@@ -133,8 +134,8 @@ export class FinancingStatementModel {
    * Gets the JSON representation of the FinancingStatementModel object.
    */
   public toJson(): FinancingStatementInterface {
-    const theSPs: BasePartyInterface[] = []
-    this.securedParties.forEach((sp: BasePartyModel): void => {
+    const theSPs: SecuredPartyInterface[] = []
+    this.securedParties.forEach((sp: SecuredPartyModel): void => {
       theSPs.push(sp.toJson())
     })
     const theDbers: BasePartyInterface[] = []
@@ -184,7 +185,7 @@ export class FinancingStatementModel {
    */
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
     let registeringParty: RegisteringPartyModel | undefined
-    let securedParties: BasePartyModel[] = []
+    let securedParties: SecuredPartyModel[] = []
     let debtorParties: BasePartyModel[] = []
 
     if (jsonObject.registeringParty) {
@@ -192,8 +193,8 @@ export class FinancingStatementModel {
     }
 
     if (jsonObject.securedParties) {
-      jsonObject.securedParties.forEach((sp: BasePartyInterface): void => {
-        securedParties.push(BasePartyModel.fromJson(sp))
+      jsonObject.securedParties.forEach((sp: SecuredPartyInterface): void => {
+        securedParties.push(SecuredPartyModel.fromJson(sp))
       })
     }
     if (jsonObject.debtors) {
@@ -220,14 +221,13 @@ function getDefs() {
   // const fsList = ref(FSList())
   function createFinancingStatement(): FinancingStatementModel {
     const { createFromCurrentUser } = useRegisteredParty()
-    const firstSecuredParty = new BasePartyModel()
+    const firstSecuredParty = new SecuredPartyModel(101)
     firstSecuredParty.listId = 0
     const securedParties = [firstSecuredParty]
     const firstDebtor = new BasePartyModel()
     firstDebtor.listId = 0
     const debtorParties = [firstDebtor]
     const registeringParty = createFromCurrentUser()
-    console.log('created registeringParty', registeringParty)
     const fstmt = new FinancingStatementModel(undefined, 5, registeringParty, securedParties, debtorParties)
     return fstmt
   }

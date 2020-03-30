@@ -66,6 +66,7 @@ import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/person-name/person-name-model'
+import { useSecuredParty, SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import BaseParty from '@/base-party/BaseParty.vue'
 import DebtorParties from '@/debtor-parties/DebtorParties.vue'
 import TypeComponent from '@/financing-statement/TypeComponent.vue'
@@ -136,7 +137,7 @@ export default createComponent({
       ))
     }
 
-    function updateSecuredParties(newSecuredParties: BasePartyModel[]): void {
+    function updateSecuredParties(newSecuredParties: SecuredPartyModel[]): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
         props.value.lifeYears,

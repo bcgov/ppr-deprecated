@@ -33,9 +33,7 @@ function getDefs() {
 
   function createFromCurrentUser() {
     const { currentUser } = useUsers()
-    console.log('try to create a RegParty user:', JSON.stringify(currentUser, null, 2))
     const party = currentUser.value.party
-    console.log('try to create a RegParty party:', party)
     if(party) {
       return new RegisteringPartyModel(party.code)
     }

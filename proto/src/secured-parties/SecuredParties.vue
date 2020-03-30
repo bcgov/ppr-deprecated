@@ -14,10 +14,9 @@
           <template #header>
             Enter the contact information for this <strong>Secured Party</strong>
           </template>
-          <base-party
+          <secured-party
             :value="securedParty"
             :editing="editing"
-            prompt="How should we identify this Secured Party?"
             @input="updateElement($event, index)"
             @valid="emitValidity($event, index)"
           />
@@ -40,14 +39,14 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { BasePartyModel } from '../base-party/base-party-model'
-import BaseParty from '../base-party/BaseParty.vue'
-import FormSectionHeader from '../components/FormSectionHeader.vue'
-import PprListItem from '../components/PprListItem.vue'
+import { useSecuredParty, SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
+import SecuredParty from '@/secured-parties/SecuredParty.vue'
+import FormSectionHeader from '@/components/FormSectionHeader.vue'
+import PprListItem from '@/components/PprListItem.vue'
 
 export default createComponent({
   components: {
-    BaseParty,
+    SecuredParty,
     FormSectionHeader,
     PprListItem
   },
@@ -83,9 +82,9 @@ export default createComponent({
 
     // Vue is not able to detect changes inside arrays so when emitting the array of parties
     // be sure to clone the array.
-    function updateElement(newSecuredParty: BasePartyModel, index: number): void {
+    function updateElement(newSecuredParty: SecuredPartyModel, index: number): void {
       let sp = [...props.value]
-      const previous: BasePartyModel = props.value[index] as BasePartyModel
+      const previous: SecuredPartyModel = props.value[index] as SecuredPartyModel
       newSecuredParty.listId = previous.listId
       sp[index] = newSecuredParty
       emit('input', sp)
@@ -93,8 +92,8 @@ export default createComponent({
 
     function addElement() {
       let sp = [...props.value]
-      const last: BasePartyModel = props.value[props.value.length - 1] as BasePartyModel
-      const newSecuredParty = new BasePartyModel()
+      const last: SecuredPartyModel = props.value[props.value.length - 1] as SecuredPartyModel
+      const newSecuredParty = new SecuredPartyModel()
       newSecuredParty.listId = last.listId + 1
       sp.push(newSecuredParty)
       emit('input', sp)
