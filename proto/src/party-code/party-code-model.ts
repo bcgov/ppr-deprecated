@@ -33,11 +33,18 @@ export class PartyCodeModel {
 function getDefs() {
   const _partyList = PartiesList()
   const partyList = ref(_partyList)
-  function findPartyCode( companyName: string ): PartyCodeInterface {
+
+  function findPartyCodeByCompanyName( companyName: string ): PartyCodeInterface {
     return _partyList.find( element => element.business === companyName)
   }
+
+  function findPartyCodeByCode( code: number ): PartyCodeInterface {
+    return _partyList.find( element => element.code === code)
+  }
+
   return {
-    findPartyCode,
+    findPartyCodeByCode,
+    findPartyCodeByCompanyName,
     partyList
   }
 }

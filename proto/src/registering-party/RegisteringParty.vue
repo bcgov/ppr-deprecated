@@ -1,17 +1,16 @@
-<template>
-  <v-card flat>
-    <base-party
-      :value="value"
-      :editing="editing"
-      @input="emitModel($event)"
-      @valid="emitValid($event)"
-    />
-  </v-card>
+<template lang="pug">
+  v-card(flat)
+    div 'code? {{ value.code }}
+    base-party(
+      :value="value",
+      :editing="editing",
+      @input="emitModel($event)",
+      @valid="emitValid($event)")
 </template>
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { BasePartyModel } from '@/base-party/base-party-model'
+import { RegisteringPartyModel } from '@/registering-party/registering-party-model'
 import BaseParty from '@/base-party/BaseParty.vue'
 
 export default createComponent({
@@ -25,7 +24,7 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: BasePartyModel
+      type: RegisteringPartyModel
     }
   },
 
