@@ -26,7 +26,7 @@
 
   export default createComponent({
     setup(_, { root }) {
-      const { authenticated, currentUserIndex, currentUser} = useUsers()
+      const { authenticated, currentUser} = useUsers()
 
       const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
 
@@ -40,7 +40,7 @@
         }
       }
 
-      return { authenticated, currentUserIndex, currentUser, login, buttonText, welcomeText}
+      return { authenticated, login, buttonText, welcomeText}
     }
   })
 </script>

@@ -30,6 +30,9 @@ function getDefs() {
 
   const currentUserIndex = ref(-1)
 
+  /**
+   * Create list of users.  Insert their party codes.
+   */
   const { findPartyCodeByCompanyName } = usePartyCodes()
   const list = UserList()
   list.forEach( (user: UserInterface) => {
@@ -38,13 +41,19 @@ function getDefs() {
       user.party = code
     }
   })
+  // export the list of users
   const userList = ref(list)
 
   const authenticated = computed((): boolean => currentUserIndex.value >= 0)
 
   const currentUser = computed((): UserInterface | undefined => {
-    if (currentUserIndex.value>=0)
-      return userList.value[currentUserIndex.value]
+    let index = currentUserIndex.value
+    const stashedUser = sessionStorage.getItem('user')
+    if (stashedUser) {
+      index = parseInt(stashedUser)
+    }
+    if (index>=0)
+      return userList.value[index]
     return undefined
   })
 
@@ -52,6 +61,13 @@ function getDefs() {
   const canAdmin = computed((): boolean => AdminRoles.includes(currentRole.value))
   const canDash = computed((): boolean => PowerUserRoles.includes(currentRole.value))
 
+  function tmp () {
+    const stashedUser = sessionStorage.getItem('user')
+    console.log('stashed user', stashedUser)
+    if (stashedUser) {
+      setUser(parseInt(stashedUser))
+    }
+  }
   function setUser(index) {
     currentUserIndex.value = index
     const str = `${currentUserIndex.value}`
