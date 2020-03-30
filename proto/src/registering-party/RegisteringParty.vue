@@ -1,21 +1,16 @@
 <template lang="pug">
   v-card(flat)
-    div 'code? {{ value.code }}
-    base-party(
-      :value="value",
-      :editing="editing",
-      @input="emitModel($event)",
-      @valid="emitValid($event)")
+    party-code(:value="party")
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { createComponent, computed } from '@vue/composition-api'
 import { RegisteringPartyModel } from '@/registering-party/registering-party-model'
-import BaseParty from '@/base-party/BaseParty.vue'
+import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
+import PartyCode from '@/party-code/PartyCode.vue'
 
 export default createComponent({
-  components: { BaseParty },
-
+  components: { PartyCode },
   props: {
     editing: {
       default: false,
@@ -28,9 +23,14 @@ export default createComponent({
     }
   },
 
-  setup(_, { emit }) {
+  setup(props, { emit }) {
+
+    const { findPartyCodeByCode } = usePartyCodes()
+
+    const party = computed( () => findPartyCodeByCode(props.value.partyCode))
+
     // Callback function for emitting the model back to the parent.
-    function emitModel(person: BasePartyModel) {
+    function emitModel(person: RegisteringPartyModel) {
       emit('input', person)
     }
 
@@ -41,7 +41,8 @@ export default createComponent({
 
     return {
       emitModel,
-      emitValid
+      emitValid,
+      party
     }
   }
 })
