@@ -2,6 +2,7 @@ import { computed, ref } from '@vue/composition-api'
 import { PersonNameInterface, PersonNameModel } from '@/person-name/person-name-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
+import { useRegisteredParty, RegisteringPartyInterface, RegisteringPartyModel } from '@/registering-party/registering-party-model'
 
 /**
  * The interface to a financing statement.
@@ -10,7 +11,7 @@ export interface FinancingStatementInterface {
   baseRegistrationNumber: string | undefined;
   expiryDate: string | undefined;
   generalCollateral: [];
-  registeringParty: BasePartyInterface;
+  registeringParty: RegisteringPartyInterface;
   registrationDateTime: string | undefined;
   securedParties: BasePartyInterface[];
   debtors: BasePartyInterface[];
@@ -22,7 +23,7 @@ export interface FinancingStatementInterface {
 export class FinancingStatementModel {
   private _baseRegistrationNumber: string | undefined
   private _expiryDate: string | undefined
-  private _registeringParty: BasePartyModel
+  private _registeringParty: RegisteringPartyModel
   private _registrationDateTime: string | undefined
   private _type: FinancingStatementType
   private _lifeYears: number
@@ -44,7 +45,7 @@ export class FinancingStatementModel {
   public constructor(
     type: FinancingStatementType = FinancingStatementType.SECURITY_AGREEMENT,
     lifeYears: number = 1,
-    registeringParty: BasePartyModel = new BasePartyModel(),
+    registeringParty: RegisteringPartyModel,
     securedParties: BasePartyModel[] = [new BasePartyModel()],
     debtorParties: BasePartyModel[] = [new BasePartyModel()],
     baseRegistrationNumber?: string,
@@ -103,7 +104,7 @@ export class FinancingStatementModel {
   /**
    * Gets the Person who registered the financing statement
    */
-  public get registeringParty(): BasePartyModel {
+  public get registeringParty(): RegisteringPartyModel {
     return this._registeringParty
   }
 
@@ -182,12 +183,12 @@ export class FinancingStatementModel {
    * @param jsonObject the JSON version of the object.
    */
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
-    let registeringParty: BasePartyModel | undefined
+    let registeringParty: RegisteringPartyModel | undefined
     let securedParties: BasePartyModel[] = []
     let debtorParties: BasePartyModel[] = []
 
     if (jsonObject.registeringParty) {
-      registeringParty = BasePartyModel.fromJson(jsonObject.registeringParty)
+      registeringParty = RegisteringPartyModel.fromJson(jsonObject.registeringParty)
     }
 
     if (jsonObject.securedParties) {
@@ -218,14 +219,16 @@ export class FinancingStatementModel {
 function getDefs() {
   // const fsList = ref(FSList())
   function createFinancingStatement(): FinancingStatementModel {
-    // create FS model with defaults yet be sure secured parties has one empty party
+    const { createFromCurrentUser } = useRegisteredParty()
     const firstSecuredParty = new BasePartyModel()
     firstSecuredParty.listId = 0
     const securedParties = [firstSecuredParty]
     const firstDebtor = new BasePartyModel()
     firstDebtor.listId = 0
     const debtorParties = [firstDebtor]
-    const fstmt = new FinancingStatementModel(undefined, 5, undefined, securedParties, debtorParties)
+    const registeringParty = createFromCurrentUser()
+    console.log('created registeringParty', registeringParty)
+    const fstmt = new FinancingStatementModel(undefined, 5, registeringParty, securedParties, debtorParties)
     return fstmt
   }
   return {

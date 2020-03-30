@@ -23,19 +23,19 @@ export interface UserInterface {
   occupation: string;
   role: Roles;
   description?: string;
-  partyCode?: PartyCodeInterface
+  party?: PartyCodeInterface
 }
 
 function getDefs() {
 
   const currentUserIndex = ref(-1)
 
-  const { findPartyCode } = usePartyCodes()
+  const { findPartyCodeByCompanyName } = usePartyCodes()
   const list = UserList()
   list.forEach( (user: UserInterface) => {
-    const code: PartyCodeInterface = findPartyCode(user.company)
+    const code: PartyCodeInterface = findPartyCodeByCompanyName(user.company)
     if(code) {
-      user.partyCode = code
+      user.party = code
     }
   })
   const userList = ref(list)
@@ -79,7 +79,6 @@ const instance = {_instance: undefined}
 function Instance() {
   return instance._instance || (instance._instance = getDefs())
 }
-
 
 export function useUsers () {
   return Instance()
