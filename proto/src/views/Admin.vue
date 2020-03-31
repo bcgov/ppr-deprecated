@@ -3,27 +3,20 @@
     v-container(class="view-container")
       article
         header
-          h1 Dashboard
-
+          h1 Prototype Admin
         div(class="page-content")
           div(class="page-content__main")
-            p Placeholder page.
-    v-container
-      div(style="padding-left: 1rem")
-      div {{ currentUser.name }} {{ currentUser.last }},
-      div {{ currentUser.company }},
-      div {{ currentUser.occupation }}
+            admin
 
 </template>
 <script lang="ts">
   import { createComponent } from '@vue/composition-api'
-  import { useUsers } from '../users/users'
+  import Admin from '@/admin/Admin.vue'
 
   export default createComponent({
+    components: { Admin },
     setup(_, { root }) {
-      const { authenticated, currentUser} = useUsers()
-
-      return {authenticated, currentUser}
+      return {}
     }
   })
 
