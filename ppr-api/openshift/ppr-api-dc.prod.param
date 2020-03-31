@@ -4,10 +4,16 @@
 # Component: deploy
 # Action: build
 # Template File: ppr-api/openshift/ppr-api-dc.yaml
-# Hint: oc process -f ppr-api-dc.yaml --param-file=ppr-api-dc.prod.param | oc apply -n zwmtib-prod -f -
+# Hint:
+#   export DB_PASSWORD=<secret> DB_USERNAME=<secret> SENTRY_DSN=<secret>
+#   oc process -f ppr-api-dc.yaml --param-file=ppr-api-dc.prod.param -p DB_PASSWORD=$DB_PASSWORD -p DB_USERNAME=$DB_USERNAME -p SENTRY_DSN=$SENTRY_DSN | oc apply -n zwmtib-prod -f -
 #=========================================================
 AUTH_API_URL="https://auth-api.pathfinder.gov.bc.ca/api/v1"
 CORS_ORIGINS="https://www.bcregistry.ca"
+DB_HOSTNAME="sbc-dev-service.hak2zo-prod.svc"
+DB_HOSTNAME_PATRONI="patroni-master.zwmtib-prod.svc"
+DB_NAME="ppr-prod"
+DB_PORT="5444"
 ENVIRONMENT="prod"
 IMAGE_TAG="prod"
 PAY_API_URL="https://pay-api.pathfinder.gov.bc.ca/api/v1"
