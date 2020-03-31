@@ -13,17 +13,22 @@
       div {{ currentUser.name }} {{ currentUser.last }},
       div {{ currentUser.company }},
       div {{ currentUser.occupation }}
+    v-container
+      div(v-for="fstmt in financingStatementsList")
+        div {{fstmt}}
 
 </template>
 <script lang="ts">
   import { createComponent } from '@vue/composition-api'
+  import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
   import { useUsers } from '@/users/users'
 
   export default createComponent({
     setup(_, { root }) {
+      const { financingStatementsList } = useFinancingStatements()
       const { authenticated, currentUser} = useUsers()
 
-      return {authenticated, currentUser}
+      return {authenticated, currentUser, financingStatementsList}
     }
   })
 

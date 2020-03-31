@@ -47,7 +47,7 @@
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
-import { useFinancingStatments } from '@/financing-statement/financing-statement-store'
+import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
 
@@ -58,7 +58,7 @@ export default createComponent({
   setup(_, { root }) {
     const editing = ref(true)
     const formValid = ref(true)
-    const { createFinancingStatement, findFinancingStatement, registerFinancingStatement } = useFinancingStatments()
+    const { createFinancingStatement, findFinancingStatement, registerFinancingStatement } = useFinancingStatements()
     const financingStatement = ref(createFinancingStatement())
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
@@ -66,26 +66,10 @@ export default createComponent({
     function submit() {
       const baseRegistrationNumber = registerFinancingStatement(financingStatement.value)
       root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber } })
-
-      // const url = Config.apiUrl + 'financing-statements'
-      // axiosAuth.post(url, financingStatement.value.toJson()).then((response): void => {
-      //   loadIndicator.stop()
-      //   root.$router.push({ name: 'financing', query: { regNum: response.data.baseRegistrationNumber } })
-      // }).catch(error => {
-      //   console.error(error)
-      // })
     }
 
     if (regNum) {
       financingStatement.value = findFinancingStatement(regNum)
-      // const url = Config.apiUrl + 'financing-statements/' + regNum
-      // axiosAuth.get<FinancingStatementInterface>(url).then((response): void => {
-      //   editing.value = false
-      //   loadIndicator.stop()
-      //   financingStatement.value = FinancingStatementModel.fromJson(response.data)
-      // }).catch(error => {
-      //   console.error(error)
-      // })
       editing.value = false
     } else {
       editing.value = true
