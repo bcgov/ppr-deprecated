@@ -5,11 +5,11 @@
     div Type: {{ value.type }}
     div Life in Years: {{ value.lifeYears }}
     div First secured party
-      secured-party(:value="value.securedParties[0]", condensed="true")
+      secured-party(:value="value.securedParties[0]", condensed=true)
     div First debtor
-      debtor-party(:value="value.debtorParties[0]", condensed="false")
+      debtor-party(:value="value.debtorParties[0]", condensed=false)
     div Registering party
-      registering-party(:value="value.registeringParty", condensed="true")
+      registering-party(:value="value.registeringParty", condensed=true)
 </template>
 
 <script lang="ts">

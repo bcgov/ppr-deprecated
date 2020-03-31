@@ -34,6 +34,14 @@ function getDefs() {
     return fs.baseRegistrationNumber
   }
 
+  function getFinancingStatementStash(): string {
+    return localStorage.getItem('fslist')
+  }
+  function loadFinancingStatementStash(jsonString): void {
+    localStorage.setItem('fslist', jsonString)
+    _loadList()
+  }
+
   // Private methods
 
   function _loadList(): FinancingStatementInterface[] {
@@ -60,6 +68,8 @@ function getDefs() {
     financingStatementsList,
     // functions
     createFinancingStatement,
+    getFinancingStatementStash,
+    loadFinancingStatementStash,
     findFinancingStatement,
     registerFinancingStatement
   }
