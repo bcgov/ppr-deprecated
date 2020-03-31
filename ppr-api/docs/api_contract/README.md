@@ -159,7 +159,65 @@ would be records associated with the provided account id. Consider whether addit
 
 ### Amendments or Change Statements
 
+The goal of this operation is to apply a change to a financing statement. Under the BC Government statutes, there are
+several different types of amendments, each of one performs a specifically design change. There also exists a change,
+which is a more general update to financing statement that provides capabilities that equivalent to multiple amendments
+at once. Some clarification is still required on whether standalone amendments are necessary or whether having the
+ability to do changes is sufficient.
+
+As for the proposed implementation, there are a few different ways to approach this. Ultimately, we've recommended this
+particular approach as it ties changes to the event model. Some aspects of a change event to not go well with a state
+based model, such as payments, extending life (renewals, described separately below) or adding general collateral.
+
+It may be possible to use a more general CRUD approach to updating financing statements, and build events by comparing
+the deltas of the existing record and submitted payload. Some potential alternatives are described below.
+
+**Endpoint:** `POST /financing-statements/{financingStatementId}/events`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should be allowed for records that are available to the calling user.  For public users, this
+would be records associated with the provided account id.
+
+**Alternatives to Consider:**
+- An update of a financing statement could be performed with `PUT /financing-statements/{financingStatementId}`.
+  Challenges to address would be how to represent payments for individual events and how to handle general collateral
+  where pre-existing collateral is read only. A benefit is that operations such as debtor transfers could be performed
+  by reviewing the new values, removing any that weren't provided and adding any that did not previously exist. 
+- Likewise, a similar approach would be to use `PATCH /financing-statements/{financingStatementId}`. The benefit of this
+  approach is that it would not be necessary to submit all of the data in the financing statement for a change, which
+  would be a pit simpler than a PUT. Additionally, rules around handling changes would be more flexible. Challenges
+  would be similar to a PUT.
+- Another approach would be to make individual endpoints for specific types of amendments. For example, a debtor
+  transfer could be done with `PUT /financing-statements/{financingStatementId}/debtors`. This would require more
+  endpoints to implement, but would provide a significant amount of flexibility in implementation. 
+
 ### Renewal
+
+This operation is similar to amendments and changes, but is slightly different. The goal of a renewal is to extend the
+life of a financing statements. This should not be available with other changes, nor should this operation change any
+other portion of the financing statement.
+
+A renewal should simply extend the expiry date by the number of years specified (or set it to null if infinite).
+Financing statements that already have infinite life should not required renewals. The currently defined approach is to
+use the same endpoint as amendments/changes, but to specify `RENEWAL` as the type and specify only life in
+`detailsAdded`. Some other potential alternatives are described below.
+
+There will be some special behaviour required for renewal of repairer's liens.
+
+**Endpoint:** `POST /financing-statements/{financingStatementId}/events`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should be allowed for records that are available to the calling user.  For public users, this
+would be records associated with the provided account id.
+
+**Alternatives to Consider:**
+- An endpoint specifically to create renewals could be added to the financing statement. Using
+  `POST /financing-statements/{financingStatementId}/renewals` would have the benefit of simplifying the work to be
+   explicitly for this operation, though it would add an additional endpoint to be maintained.
+- An update to life could be handled with `PATCH /financing-statements/{financingStatementId}`, thought this interface
+  may be an over simplification of the operation.
 
 ### Discharge
 

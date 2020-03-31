@@ -341,6 +341,18 @@ paths:
                         documentId: D0000123
                         registrationDateTime: '2020-01-02T21:08:32Z'
                         lifeYears: 5
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
       tags:
         - Search
       requestBody:
@@ -856,7 +868,8 @@ paths:
         description: 'A base registration number that is valid and not expired. If {financingStatementId} is not found, then [404].'
     get:
       summary: List Financing Statemement Events
-      tags: []
+      tags:
+        - Financing Statement
       responses:
         '200':
           description: OK
@@ -936,6 +949,10 @@ paths:
                               country: CA
                               postalCode: A1A 1A1
                             birthdate: '1990-06-15'
+                      payment:
+                        id: 1345
+                        status: CREATED
+                        method: CC
                     - type: RENEWAL
                       registrationNumber: '1246789'
                       registrationDateTime: '2022-01-31T11:15:00Z'
@@ -943,6 +960,10 @@ paths:
                         lifeYears: 5
                         expiryDate: '2027-02-21'
                       detailsRemoved: null
+                      payment:
+                        id: 2456
+                        status: CREATED
+                        method: CC
         '404':
           description: Not Found
           content:
@@ -960,6 +981,118 @@ paths:
           name: Account-Id
           description: The account that the user is operating on behalf of.
           required: true
+    post:
+      summary: Create a Financing Statement Event
+      operationId: post-financing-statements-financingStatementId-events
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/financing-statement-event'
+              examples:
+                Renewal:
+                  value:
+                    type: RENEWAL
+                    registrationNumber: '1246789'
+                    registrationDateTime: '2022-01-31T11:15:00Z'
+                    detailsAdded:
+                      lifeYears: 5
+                      expiryDate: '2027-02-21'
+                    detailsRemoved: null
+                    payment:
+                      id: 1234
+                      status: CREATED
+                      method: CC
+                Debtor Transfer:
+                  value:
+                    type: DEBTOR_TRANSFER
+                    registrationNumber: '1235678'
+                    registrationDateTime: '2020-09-22T18:30:00Z'
+                    detailsAdded:
+                      debtors:
+                        - businessName: New owner of Collateral
+                          address:
+                            street: 650 Somewhere Ave
+                            city: Victoria
+                            region: BC
+                            country: CA
+                            postalCode: V1A 1A1
+                          birthdate: null
+                    detailsRemoved:
+                      debtors:
+                        - businessName: My Company Inc
+                          address:
+                            street: 721 Debtor Ave
+                            city: Victoria
+                            region: BC
+                            country: CA
+                            postalCode: A1A 1A1
+                          birthdate: '1990-06-15'
+                    payment:
+                      id: 1345
+                      status: CREATED
+                      method: CC
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          required: true
+          description: The account that the user is operating on behalf of.
+      description: 'Submit a new event, such as an amendment or renewal, to a financing statement.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/financing-statement-event'
+            examples:
+              Debtor Transfer:
+                value:
+                  type: DEBTOR_TRANSFER
+                  detailsAdded:
+                    debtors:
+                      - businessName: New owner of Collateral
+                        address:
+                          street: 650 Somewhere Ave
+                          city: Victoria
+                          region: BC
+                          country: CA
+                          postalCode: V1A 1A1
+                        birthdate: null
+                  detailsRemoved:
+                    debtors:
+                      - businessName: My Company Inc
+                        address:
+                          street: 721 Debtor Ave
+                          city: Victoria
+                          region: BC
+                          country: CA
+                          postalCode: A1A 1A1
+                        birthdate: '1990-06-15'
+              Renewal:
+                value:
+                  type: RENEWAL
+                  detailsAdded:
+                    lifeYears: 5
+                  detailsRemoved: null
+      tags:
+        - Financing Statement
   '/searches/{searchId}/results/{id}/events':
     parameters:
       - schema:
@@ -1449,7 +1582,11 @@ components:
           $ref: '#/components/schemas/payment'
         type:
           type: string
-          description: An enumerable type describing the type of transaction that took place. Values are TBD and not all events require a value.
+          description: 'An enumerable type describing the type of transaction that took place. Some values are defined, but the full list of enumerable values is TBD. Not all events require a value.'
+          enum:
+            - REGISTRATION
+            - DEBTOR_TRANSFER
+            - RENEWAL
       required:
         - detailsAdded
   securitySchemes:
