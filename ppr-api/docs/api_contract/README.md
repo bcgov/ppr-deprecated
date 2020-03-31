@@ -163,7 +163,44 @@ would be records associated with the provided account id. Consider whether addit
 
 ### Discharge
 
+Discharge a financing statement. This should not physically delete the record, but rather create a discharge event that
+updates the status of the financing statement.
+
+Consider whether a different end point would be better suited to this operation, as the financing statement should still
+be available for read operations after this occurs.
+
+**Endpoint:** `DELETE /financing-statements/{financingStatementId}`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should be allowed for records that are available to the calling user.  For public users, this
+would be records associated with the provided account id.
+
 ### Historical View of a Financing Statement
+
+It is a common need for PPR users to review the changes that have occurred on a financing statement. As such, this
+operation provides the means for an owner of a financing statement to review changes that have been applied.
+
+Calling this operation should return a list of all events that have been applied to the financing statement.  Each event
+should have its own unique registration number and date. In the case of the original event (base registration), the
+registration number should be the same as the base registration number in the URL. The registration number can be
+considered the event identifier and is also known to users as a "Document Registration Number".
+
+Changes applied on each event will be stored in `detailsAdded` and `detailsRemoved` properties. This should only contain
+values that actually changed on the event.  For example, if a debtor transfer occurred then debtors should be added and
+removed, but no other details commonly in the `financing-statement` schema should be provided for each one. Similarly,
+in the case of a renewal, there should be a `detailsAdded` object with life properties that reflect the length of the
+extension along with the adjusted expiry date.
+
+Each event may also have a type which describes what type of change or amendment created the event. This is not required
+and may depend on the approach to submitting changes vs amendments, but it may provide valuable details.
+
+**Endpoint:** `GET /financing-statements/{financingStatementId}/events`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:** This should be allowed for records that are available to the calling user.  For public users, this
+would be records associated with the provided account id. Consider whether additional restrictions apply.
 
 ## Drafts
 
@@ -296,7 +333,7 @@ responsibility of the UI to determine how to present them to the end user based 
 
 The `id` of a Search Result only applies as an identifier with the context of an individual search entity.  The `id` is
 interchangeable with the "Document Registration Number" of the search result, which is also the same as the event
-reference identifier. This is present in the search result for purposed of selection and deselection. 
+identifier. This is present in the search result for purposed of selection and deselection. 
 
 **Payment information** for financing statements _must not_ be included in search results.
 
@@ -332,6 +369,28 @@ remain unchanged.
 **Implementation Status:** Not implemented at all
 
 **Data Restriction:**
+- This operation must not be permitted until payment for the search is complete
+- This should only be permitted for users with permission to view the record.  For public users, this would be results
+  for a search submitted with the provided account id.
+- Depending on regulations there may be limitations on how long a user may perform this operation
+
+### Historical View of a Financing Statement
+
+When a PPR user performs a search, they often need to review the changes that have occurred on a financing statement. As
+such, this operation provides the means to see the full history of the financing statement, including collateral and
+debtor changes.
+
+Calling this operation should return a list of all events that have been applied to the financing statement (limited to
+events as of search execution time).  Each event should have its own unique registration number. The
+registration number can be considered the event identifier and is also known to users as a "Document Registration
+Number".
+
+**Endpoint:** `GET /searches/{searchId}/results/{id}/events`
+
+**Implementation Status:** Not implemented at all
+
+**Data Restriction:**
+- Events must be limited to only those on the financing statement up to the time the search was executed.
 - This operation must not be permitted until payment for the search is complete
 - This should only be permitted for users with permission to view the record.  For public users, this would be results
   for a search submitted with the provided account id.

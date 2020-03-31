@@ -153,7 +153,7 @@ paths:
         name: financingStatementId
         in: path
         required: true
-        description: 'A base registration number that is valid and not expired.  If {financingStatementId} is not found, then [404].'
+        description: 'A base registration number that is valid and not expired. If {financingStatementId} is not found, then [404].'
     get:
       summary: View a financing statement
       tags:
@@ -183,6 +183,30 @@ paths:
       description: View a financing statement record.
       security:
         - JWT: []
+    delete:
+      summary: Discharge a Financing Statement
+      operationId: delete-financing-statements-financingStatementId
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      tags:
+        - Financing Statement
+      description: Discharge a financing statement record.
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The account that the user is operating on behalf of.
+          required: true
   '/searches/{searchId}/results':
     parameters:
       - schema:
@@ -822,6 +846,240 @@ paths:
       tags:
         - Draft
         - Financing Statement
+  '/financing-statements/{financingStatementId}/events':
+    parameters:
+      - schema:
+          type: string
+        name: financingStatementId
+        in: path
+        required: true
+        description: 'A base registration number that is valid and not expired. If {financingStatementId} is not found, then [404].'
+    get:
+      summary: List Financing Statemement Events
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/financing-statement-event'
+              examples:
+                Event History:
+                  value:
+                    - type: REGISTRATION
+                      registrationNumber: '1234567'
+                      registrationDateTime: '2020-02-21T18:38:20Z'
+                      detailsAdded:
+                        type: SECURITY_AGREEMENT
+                        lifeYears: 2
+                        expiryDate: '2022-02-21'
+                        registeringParty:
+                          businessName: Mr. Plow
+                          address:
+                            street: 742 Evergreen Terrace
+                            city: Springfield
+                            region: BC
+                            country: CA
+                            postalCode: A1A 1A1
+                        securedParties:
+                          - businessName: Spacely Sprockets
+                            address:
+                              street: 123 Fake St
+                              city: Jupiter
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
+                        debtors:
+                          - businessName: My Company Inc
+                            address:
+                              street: 721 Debtor Ave
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
+                            birthdate: '1990-06-15'
+                        vehicleCollateral:
+                          - type: MOTOR_VEHICLE
+                            serial: WDBKK49F81F234840
+                            year: 2001
+                            make: Mercedes-Benz
+                            model: SLK-Class Kompressor
+                        generalCollateral: []
+                      detailsRemoved: null
+                      payment:
+                        id: 1234
+                        status: CREATED
+                        method: CC
+                    - type: DEBTOR_TRANSFER
+                      registrationNumber: '1235678'
+                      registrationDateTime: '2020-09-22T18:30:00Z'
+                      detailsAdded:
+                        debtors:
+                          - businessName: New owner of Collateral
+                            address:
+                              street: 650 Somewhere Ave
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: V1A 1A1
+                            birthdate: null
+                      detailsRemoved:
+                        debtors:
+                          - businessName: My Company Inc
+                            address:
+                              street: 721 Debtor Ave
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
+                            birthdate: '1990-06-15'
+                    - type: RENEWAL
+                      registrationNumber: '1246789'
+                      registrationDateTime: '2022-01-31T11:15:00Z'
+                      detailsAdded:
+                        lifeYears: 5
+                        expiryDate: '2027-02-21'
+                      detailsRemoved: null
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/financing-statement'
+      operationId: get-financing-statements-financingStatementId-events
+      description: Get a list of all events for a financing statement.
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The account that the user is operating on behalf of.
+          required: true
+  '/searches/{searchId}/results/{id}/events':
+    parameters:
+      - schema:
+          type: string
+        name: searchId
+        in: path
+        required: true
+        description: 'The value of the search response id value.  If an invalid searchId is submitted then [404].'
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+        description: 'The value of the individual search result id value. This is combined with searchId to identify the result. If an invalid id is submitted then [404].'
+    get:
+      summary: List financing statement events for a Search Result
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/financing-statement-event'
+              examples:
+                Example:
+                  value:
+                    - type: REGISTRATION
+                      registrationNumber: '1234567'
+                      registrationDateTime: '2020-02-21T18:38:20Z'
+                      detailsAdded:
+                        type: SECURITY_AGREEMENT
+                        lifeYears: 2
+                        expiryDate: '2022-02-21'
+                        registeringParty:
+                          businessName: Mr. Plow
+                          address:
+                            street: 742 Evergreen Terrace
+                            city: Springfield
+                            region: BC
+                            country: CA
+                            postalCode: A1A 1A1
+                        securedParties:
+                          - businessName: Spacely Sprockets
+                            address:
+                              street: 123 Fake St
+                              city: Jupiter
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
+                        debtors:
+                          - businessName: My Company Inc
+                            address:
+                              street: 721 Debtor Ave
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
+                            birthdate: '1990-06-15'
+                        vehicleCollateral:
+                          - type: MOTOR_VEHICLE
+                            serial: WDBKK49F81F234840
+                            year: 2001
+                            make: Mercedes-Benz
+                            model: SLK-Class Kompressor
+                        generalCollateral: []
+                      detailsRemoved: null
+                      payment:
+                        id: 1234
+                        status: CREATED
+                        method: CC
+                    - type: DEBTOR_TRANSFER
+                      registrationNumber: '1235678'
+                      registrationDateTime: '2020-09-22T18:30:00Z'
+                      detailsAdded:
+                        debtors:
+                          - businessName: New owner of Collateral
+                            address:
+                              street: 650 Somewhere Ave
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: V1A 1A1
+                            birthdate: null
+                      detailsRemoved:
+                        debtors:
+                          - businessName: My Company Inc
+                            address:
+                              street: 721 Debtor Ave
+                              city: Victoria
+                              region: BC
+                              country: CA
+                              postalCode: A1A 1A1
+                            birthdate: '1990-06-15'
+                    - type: RENEWAL
+                      registrationNumber: '1246789'
+                      registrationDateTime: '2022-01-31T11:15:00Z'
+                      detailsAdded:
+                        lifeYears: 5
+                        expiryDate: '2027-02-21'
+                      detailsRemoved: null
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      operationId: get-searches-searchId-results-id
+      description: Provide a historical list of events for a financing statement
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Account-Id
+          description: The account that the user is operating on behalf of.
+          required: true
 components:
   schemas:
     search:
@@ -1172,6 +1430,28 @@ components:
       required:
         - type
         - content
+    financing-statement-event:
+      title: financing-statement
+      type: object
+      description: 'Details of the Financing Statement on file, or to be filed.'
+      properties:
+        registrationNumber:
+          type: string
+        registrationDateTime:
+          type: string
+          format: date-time
+          description: The date when the registration was successfully created.
+        detailsAdded:
+          $ref: '#/components/schemas/financing-statement'
+        detailsRemoved:
+          $ref: '#/components/schemas/financing-statement'
+        payment:
+          $ref: '#/components/schemas/payment'
+        type:
+          type: string
+          description: An enumerable type describing the type of transaction that took place. Values are TBD and not all events require a value.
+      required:
+        - detailsAdded
   securitySchemes:
     JWT:
       type: http
