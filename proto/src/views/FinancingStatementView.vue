@@ -46,7 +46,8 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { FinancingStatementModel, useFinancingStatments } from '@/financing-statement/financing-statement-model'
+import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
+import { useFinancingStatments } from '@/financing-statement/financing-statement-store'
 import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
 
@@ -57,12 +58,14 @@ export default createComponent({
   setup(_, { root }) {
     const editing = ref(true)
     const formValid = ref(true)
-    const { createFinancingStatement } = useFinancingStatments()
+    const { createFinancingStatement, findFinancingStatement, registerFinancingStatement } = useFinancingStatments()
     const financingStatement = ref(createFinancingStatement())
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 
     function submit() {
+      const baseRegistrationNumber = registerFinancingStatement(financingStatement.value)
+      root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber } })
 
       // const url = Config.apiUrl + 'financing-statements'
       // axiosAuth.post(url, financingStatement.value.toJson()).then((response): void => {
@@ -74,7 +77,7 @@ export default createComponent({
     }
 
     if (regNum) {
-
+      financingStatement.value = findFinancingStatement(regNum)
       // const url = Config.apiUrl + 'financing-statements/' + regNum
       // axiosAuth.get<FinancingStatementInterface>(url).then((response): void => {
       //   editing.value = false
@@ -83,6 +86,7 @@ export default createComponent({
       // }).catch(error => {
       //   console.error(error)
       // })
+      editing.value = false
     } else {
       editing.value = true
     }

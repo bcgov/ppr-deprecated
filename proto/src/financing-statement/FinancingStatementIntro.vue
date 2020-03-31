@@ -19,6 +19,14 @@
           td Security Aggreement
           td PPS Act
           td blah blah
+        tr
+          td Security Aggreement
+          td PPS Act
+          td blah blah
+        tr
+          td Security Aggreement
+          td PPS Act
+          td blah blah
 
 </template>
 
@@ -47,14 +55,17 @@ export default createComponent({
 
 .v-data-table {
   th {
-    background-color: #0d47a1;
-    color: white !important;
+    background-color: #38598A;
+    color: #F8F9FA  !important;
     font-weight: bolder;
     font-size: 1.5rem;
   }
 
   th, td {
     border: 0.5px dotted darkgrey;
+  }
+  tbody tr:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, .05);
   }
 }
 </style>
