@@ -1,5 +1,6 @@
 <template>
   <v-card outlined>
+    <div>{{validationState}}</div>
     <v-form
       :class="getFormClass()"
       data-test-id="FinancingStatement.form"
@@ -181,6 +182,7 @@ export default createComponent({
       updateSecuredParties,
       updateType,
       emitValid,
+      validationState
     }
   }
 })
