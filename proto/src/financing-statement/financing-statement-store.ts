@@ -1,16 +1,15 @@
-import { computed, ref } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementInterface, FinancingStatementModel } from '@/financing-statement/financing-statement-model'
-import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { SecuredPartyModel} from '@/secured-parties/secured-party-model.ts'
 import { useRegisteredParty } from '@/registering-party/registering-party-model'
 
 function getDefs() {
-  const fsList = ref(FSList())
+  const financingStatementsList = ref(_loadList())
 
   function createFinancingStatement(): FinancingStatementModel {
     const { createFromCurrentUser } = useRegisteredParty()
-    const firstSecuredParty = new SecuredPartyModel("101")
+    const firstSecuredParty = new SecuredPartyModel()
     firstSecuredParty.listId = 0
     const securedParties = [firstSecuredParty]
     const firstDebtor = new BasePartyModel()
@@ -21,37 +20,56 @@ function getDefs() {
   }
 
   function findFinancingStatement( regNum: string) {
-    return fsList.value.find( element => {
+    return financingStatementsList.value.find( element => {
       console.log('compare ', regNum, element.baseRegistrationNumber)
       return element.baseRegistrationNumber === regNum
     })
   }
 
+
   function registerFinancingStatement( fs: FinancingStatementModel): string {
     fs.registerLien()
-    fsList.value.push(fs)
+    financingStatementsList.value.push(fs)
+    _saveList()
     return fs.baseRegistrationNumber
   }
 
+  // Private methods
+
+  function _loadList(): FinancingStatementInterface[] {
+    const stash = localStorage.getItem('fslist')
+    const list: FinancingStatementInterface[] = []
+    if(stash) {
+      try {
+        let asStored:FinancingStatementInterface[] = JSON.parse(stash)
+        asStored.forEach((jsonStr:FinancingStatementInterface): number => list.push(FinancingStatementModel.fromJson(jsonStr)))
+      } catch(error) {
+        console.error("Error parsing financing statement list", error)
+      }
+    }
+    return list
+  }
+  function _saveList() {
+    let list = []
+    financingStatementsList.value.forEach((element: FinancingStatementModel) => list.push(element.toJson()))
+    localStorage.setItem('fslist', JSON.stringify(list))
+  }
+
   return {
-    fsList,
+    // refs
+    financingStatementsList,
     // functions
     createFinancingStatement,
     findFinancingStatement,
     registerFinancingStatement
   }
 }
+
 const instance = {_instance: undefined}
 function Instance() {
   return instance._instance || (instance._instance = getDefs())
 }
 
-export function useFinancingStatments () {
+export function useFinancingStatements () {
   return Instance()
-}
-
-export function FSList(): FinancingStatementInterface[] {
-  const list = [
-  ]
-  return list// FinancingStatementInterface[] = list.map( json => FinancingStatementModel.fromJson(json))
 }
