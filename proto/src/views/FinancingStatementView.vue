@@ -1,20 +1,15 @@
 <template>
   <div>
     <v-container class="view-container">
+      <article id="financingStatementIntro">
+        <financing-statement-intro
+          :editing="editing"
+        />
+      </article>
+    </v-container>
+    <v-container class="view-container">
       <article id="financingStatement">
-        <header>
-          <h1>Create Financing Statement</h1>
-        </header>
-        <p>
-          <em>Note: This web site is a work in progress.</em>
-        </p>
         <section v-if="editing">
-          <div>
-            <p>
-              Need copy here to instruct user as to how to create a financing statement.
-              Future development will include; debtors, collateral, and secured parties
-            </p>
-          </div>
           <v-form>
             <financing-statement
               :value="financingStatement"
@@ -51,12 +46,13 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { FinancingStatementModel, useFinancingStatments } from '@/financing-statement/financing-statement-model'
+import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
+import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
 
 
 export default createComponent({
-  components: { FinancingStatement },
+  components: { FinancingStatement, FinancingStatementIntro },
 
   setup(_, { root }) {
     const editing = ref(true)
