@@ -1,30 +1,30 @@
 import { useUsers } from '../users/users'
 
 export interface RegisteringPartyInterface {
-  partyCode?: number | undefined;
+  clientCode?: string | undefined;
 }
 
 export class RegisteringPartyModel {
-  private _partyCode?: number
+  private _partyCode?: string
 
   public constructor(
-    partyCode?: number
+    clientCode?: string
   ) {
-    this._partyCode = partyCode
+    this._partyCode = clientCode
   }
 
-  public get partyCode(): number | undefined {
+  public get clientCode(): string | undefined {
     return this._partyCode
   }
 
   public toJson(): RegisteringPartyInterface {
     return {
-      partyCode: this.partyCode
+      clientCode: this.clientCode
     }
   }
 
   public static fromJson(jsonObject: RegisteringPartyInterface): RegisteringPartyModel {
-    return new RegisteringPartyModel(jsonObject.partyCode)
+    return new RegisteringPartyModel(jsonObject.clientCode)
   }
 
 }
@@ -33,10 +33,12 @@ function getDefs() {
 
   function createFromCurrentUser() {
     const { currentUser } = useUsers()
+    console.log('createFromCurrentUser', currentUser, currentUser.value)
     const party = currentUser.value.party
     if(party) {
-      return new RegisteringPartyModel(party.code)
+      return new RegisteringPartyModel(party.clientCode)
     }
+    console.log('Error?  could not find part for user')
   }
 
   return {

@@ -51,9 +51,6 @@
       <v-container>
         <registering-party
           :value="value.registeringParty"
-          :editing="editing"
-          @input="updateRegisteringParty"
-          @valid="emitValid('registeringParty', $event)"
         />
       </v-container>
     </v-form>
@@ -66,7 +63,7 @@ import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/person-name/person-name-model'
-import { useSecuredParty, SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
+import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import BaseParty from '@/base-party/BaseParty.vue'
 import DebtorParties from '@/debtor-parties/DebtorParties.vue'
 import TypeComponent from '@/financing-statement/TypeComponent.vue'
@@ -113,7 +110,6 @@ export default createComponent({
     const validationState = {
       header: false,
       debtorParties: false,
-      registeringParty: false,
       securedParties: false
     }
 
@@ -125,16 +121,6 @@ export default createComponent({
       }, true)
       formIsValid.value = formValid
       emit('valid', formValid)
-    }
-
-    function updateRegisteringParty(newPerson: PersonNameModel): void {
-      emit('input', new FinancingStatementModel(
-        props.value.type,
-        props.value.lifeYears,
-        newPerson, // props.value.registeringParty
-        props.value.securedParties,
-        props.value.debtorParties
-      ))
     }
 
     function updateSecuredParties(newSecuredParties: SecuredPartyModel[]): void {
@@ -192,7 +178,6 @@ export default createComponent({
       getFormClass,
       updateLife,
       updateDebtorParties,
-      updateRegisteringParty,
       updateSecuredParties,
       updateType,
       emitValid,

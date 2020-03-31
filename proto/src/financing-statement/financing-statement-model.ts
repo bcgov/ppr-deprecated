@@ -3,7 +3,7 @@ import { PersonNameInterface, PersonNameModel } from '@/person-name/person-name-
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
 import { useRegisteredParty, RegisteringPartyInterface, RegisteringPartyModel } from '@/registering-party/registering-party-model'
-import { useSecuredParty, SecuredPartyModel, SecuredPartyInterface } from '@/secured-parties/secured-party-model.ts'
+import { SecuredPartyModel, SecuredPartyInterface } from '@/secured-parties/secured-party-model.ts'
 
 /**
  * The interface to a financing statement.
@@ -53,6 +53,7 @@ export class FinancingStatementModel {
     registrationDatetime?: string,
     expiryDate?: string
   ) {
+    //console.log('make a FS with ', registeringParty)
     this._type = type
     this._lifeYears = lifeYears
     this._registeringParty = registeringParty
@@ -221,13 +222,14 @@ function getDefs() {
   // const fsList = ref(FSList())
   function createFinancingStatement(): FinancingStatementModel {
     const { createFromCurrentUser } = useRegisteredParty()
-    const firstSecuredParty = new SecuredPartyModel(101)
+    const firstSecuredParty = new SecuredPartyModel("101")
     firstSecuredParty.listId = 0
     const securedParties = [firstSecuredParty]
     const firstDebtor = new BasePartyModel()
     firstDebtor.listId = 0
     const debtorParties = [firstDebtor]
     const registeringParty = createFromCurrentUser()
+    //console.log('create fs with user', registeringParty)
     const fstmt = new FinancingStatementModel(undefined, 5, registeringParty, securedParties, debtorParties)
     return fstmt
   }

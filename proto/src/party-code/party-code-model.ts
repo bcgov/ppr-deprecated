@@ -1,7 +1,7 @@
 import { computed, ref } from '@vue/composition-api'
 import { AddressModel, AddressInterface } from '@/address/address-model'
 export interface PartyCodeInterface {
-  code: number;
+  clientCode: string;
   business: string;
   address?: AddressInterface;
   contact?: string;
@@ -9,7 +9,7 @@ export interface PartyCodeInterface {
 }
 
 export class PartyCodeModel {
-  public code: number
+  public clientCode: string
   public business: string
   public address: AddressModel
   public contact: string
@@ -21,7 +21,7 @@ export class PartyCodeModel {
   //
   public static fromJson(jsonObject: PartyCodeInterface | undefined): PartyCodeModel {
     const result = new PartyCodeModel()
-    result.code = jsonObject.code
+    result.clientCode = jsonObject.clientCode
     result.business = jsonObject.business
     result.address = AddressModel.fromJson(jsonObject.address)
     result.contact = jsonObject.contact
@@ -34,17 +34,18 @@ function getDefs() {
   const _partyList = PartiesList()
   const partyList = ref(_partyList)
 
-  function findPartyCodeByCompanyName( companyName: string ): PartyCodeInterface {
+  function findPartyByCompanyName( companyName: string ): PartyCodeInterface {
     return _partyList.find( element => element.business === companyName)
   }
 
-  function findPartyCodeByCode( code: number ): PartyCodeInterface {
-    return _partyList.find( element => element.code === code)
+  function findPartyByCode( clientCode: string ): PartyCodeInterface {
+    const rval =  _partyList.find( element => element.clientCode === clientCode)
+    return rval
   }
 
   return {
-    findPartyCodeByCode,
-    findPartyCodeByCompanyName,
+    findPartyByCode,
+    findPartyByCompanyName,
     partyList
   }
 }
@@ -61,7 +62,7 @@ export function PartiesList(): PartyCodeInterface[] {
   let _cnt = 100;
   const list = [
     {
-      code: _cnt++,
+      clientCode: '' + _cnt++,
       business: "BC Registries",
       address: {
         street: "840 Broughton",
@@ -73,7 +74,7 @@ export function PartiesList(): PartyCodeInterface[] {
       contact:"Carol"
     },
     {
-      code: _cnt++,
+      clientCode: '' + _cnt++,
       business: "Dye and Durham",
       address: {
         street: "123 Front St",
@@ -85,7 +86,7 @@ export function PartiesList(): PartyCodeInterface[] {
       contact:"Darlene Dunn"
     },
     {
-      code: _cnt++,
+      clientCode: '' + _cnt++,
       business: "Big Bank",
       address: {
         street: "897 Bank St",
@@ -97,7 +98,7 @@ export function PartiesList(): PartyCodeInterface[] {
       contact:"Adam Minister"
     },
     {
-      code: _cnt++,
+      clientCode: '' + _cnt++,
       business: "Andrew's Used Cars",
       address: {
         street: "999 Fast St",

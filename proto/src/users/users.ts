@@ -33,12 +33,12 @@ function getDefs() {
   /**
    * Create list of users.  Insert their party codes.
    */
-  const { findPartyCodeByCompanyName } = usePartyCodes()
+  const { findPartyByCompanyName } = usePartyCodes()
   const list = UserList()
   list.forEach( (user: UserInterface) => {
-    const code: PartyCodeInterface = findPartyCodeByCompanyName(user.company)
-    if(code) {
-      user.party = code
+    const party: PartyCodeInterface = findPartyByCompanyName(user.company)
+    if(party) {
+      user.party = party
     }
   })
   // export the list of users

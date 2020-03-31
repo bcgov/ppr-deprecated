@@ -1,16 +1,21 @@
 <template lang="pug">
-  v-card(flat)
-    party-code(:value="party")
+  div
+    v-card(flat)
+      client-code(
+        :value="partyCode",
+        :editing="editing",
+        @input="updateClientCode($event)"
+      )
 </template>
 
 <script lang="ts">
 import { createComponent, computed } from '@vue/composition-api'
 import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
-import { useSecuredParty, SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
-import PartyCode from '@/party-code/PartyCode.vue'
+import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
+import ClientCode from '@/client-code/ClientCode.vue'
 
 export default createComponent({
-  components: { PartyCode },
+  components: { ClientCode },
   props: {
     editing: {
       default: false,
@@ -25,21 +30,19 @@ export default createComponent({
 
   setup(props, { emit }) {
 
-    const { findPartyCodeByCode } = usePartyCodes()
-    const party = computed( () => findPartyCodeByCode(props.value.partyCode))
+    const { findPartyByCode } = usePartyCodes()
+    const partyCode = computed(() => {
+      const p = findPartyByCode(props.value.clientCode)
+      return p ? p.clientCode : ''
+    })
 
-    function emitModel(model: SecuredPartyModel) {
-      emit('input', model)
-    }
-
-    function emitValid(valid: boolean) {
-      emit('valid', valid)
+    function updateClientCode(clientCode: string) {
+      emit('input', new SecuredPartyModel(clientCode))
     }
 
     return {
-      emitModel,
-      emitValid,
-      party
+      partyCode,
+      updateClientCode
     }
   }
 })
