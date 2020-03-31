@@ -1,8 +1,7 @@
-import { computed, ref } from '@vue/composition-api'
-import { PersonNameInterface, PersonNameModel } from '@/person-name/person-name-model'
+import moment from 'moment'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
-import { useRegisteredParty, RegisteringPartyInterface, RegisteringPartyModel } from '@/registering-party/registering-party-model'
+import { RegisteringPartyInterface, RegisteringPartyModel } from '@/registering-party/registering-party-model'
 import { SecuredPartyModel, SecuredPartyInterface } from '@/secured-parties/secured-party-model.ts'
 
 /**
@@ -64,6 +63,14 @@ export class FinancingStatementModel {
     this._expiryDate = expiryDate
   }
 
+  public registerLien() {
+    function getRandomDocId() {
+      const base = 100000000
+      return Math.floor(Math.random() * base);
+    }
+    this._baseRegistrationNumber = '' + getRandomDocId()
+    this._registrationDateTime = moment().format("MMM Do YY");
+  }
   /**
    * Gets the unique registration number for the financing statement.
    */
@@ -215,40 +222,4 @@ export class FinancingStatementModel {
       jsonObject.expiryDate
     )
   }
-}
-
-
-function getDefs() {
-  // const fsList = ref(FSList())
-  function createFinancingStatement(): FinancingStatementModel {
-    const { createFromCurrentUser } = useRegisteredParty()
-    const firstSecuredParty = new SecuredPartyModel("101")
-    firstSecuredParty.listId = 0
-    const securedParties = [firstSecuredParty]
-    const firstDebtor = new BasePartyModel()
-    firstDebtor.listId = 0
-    const debtorParties = [firstDebtor]
-    const registeringParty = createFromCurrentUser()
-    //console.log('create fs with user', registeringParty)
-    const fstmt = new FinancingStatementModel(undefined, 5, registeringParty, securedParties, debtorParties)
-    return fstmt
-  }
-  return {
-    createFinancingStatement
-  }
-}
-const instance = {_instance: undefined}
-function Instance() {
-  return instance._instance || (instance._instance = getDefs())
-}
-
-export function useFinancingStatments () {
-  return Instance()
-}
-
-export function FSList(): FinancingStatementInterface[] {
-  let _cnt = 100;
-  const list = [
-  ]
-  return []// FinancingStatementInterface[] = list.map( json => FinancingStatementModel.fromJson(json))
 }
