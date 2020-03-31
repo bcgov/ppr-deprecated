@@ -15,21 +15,24 @@
           @input="updateParty($event)",
           return-object=false
         )
-    v-simple-table(v-if="partyCode")
-      tbody
-        tr
-          td Code:
-          td {{partyCode.clientCode}}
-        tr
-          td Business:
-          td {{partyCode.business}}
-        tr
-          td Contact:
-          td {{partyCode.contact}}
-        tr
-          td Address:
-          td
-            address-segment(:value="partyCode.address")
+    div(v-if="partyCode")
+      div(v-if="condensed")
+        div {{partyCode.clientCode }}, {{partyCode.business}}
+      v-simple-table(v-else)
+        tbody
+          tr
+            td Code:
+            td {{partyCode.clientCode}}
+          tr
+            td Business:
+            td {{partyCode.business}}
+          tr
+            td Contact:
+            td {{partyCode.contact}}
+          tr
+            td Address:
+            td
+              address-segment(:value="partyCode.address")
 </template>
 
 <script lang="ts">
@@ -41,6 +44,11 @@ import AddressSegment from '../address/AddressSegment.vue'
 export default createComponent({
   components: { AddressSegment },
   props: {
+    condensed: {
+      default: false,
+      required: false,
+      type: Boolean
+    },
     editing: {
       default: false,
       required: false,
