@@ -12,7 +12,7 @@
           @remove="removeElement"
         >
           <template #header>
-            Enter the contact information for this <strong>Secured Party</strong>
+            Select a client for this <strong>Secured Party</strong>
           </template>
           <secured-party
             :value="securedParty"
@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { useSecuredParty, SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
+import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import SecuredParty from '@/secured-parties/SecuredParty.vue'
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
 import PprListItem from '@/components/PprListItem.vue'

@@ -1,49 +1,34 @@
 
 export interface SecuredPartyInterface {
-  partyCode?: number | undefined;
+  clientCode?: string | undefined;
 }
 
 export class SecuredPartyModel {
-  private _partyCode?: number
+  private _partyCode?: string
   /**
    * Provide a publicly accessible property that lists can use to index parties
    */
   public listId: number = 0
 
   public constructor(
-    partyCode?: number
+    clientCode: string = ''
   ) {
-    this._partyCode = partyCode
+    this._partyCode = clientCode
   }
 
-  public get partyCode(): number | undefined {
+  public get clientCode(): string | undefined {
     return this._partyCode
   }
 
   public toJson(): SecuredPartyInterface {
     return {
-      partyCode: this.partyCode
+      clientCode: this.clientCode
     }
   }
 
   public static fromJson(jsonObject: SecuredPartyInterface): SecuredPartyModel {
-    return new SecuredPartyModel(jsonObject.partyCode)
+    return new SecuredPartyModel(jsonObject.clientCode)
   }
 
-}
-
-function getDefs() {
-
-  return {
-  }
-}
-
-const instance = {_instance: undefined}
-function Instance() {
-  return instance._instance || (instance._instance = getDefs())
-}
-
-export function useSecuredParty () {
-  return Instance()
 }
 

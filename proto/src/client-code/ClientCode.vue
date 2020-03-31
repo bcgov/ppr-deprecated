@@ -3,40 +3,39 @@
     v-card(flat, v-if="editing")
       v-form(
         v-if="editing"
-        @input="emitValid($event)"
       )
         v-autocomplete(
-          :value="model",
+          :value="value",
           :items="partyList",
           item-text="business",
           item-value="clientCode",
-          label="Clients codes available",
           placeholder="Start typing to search for a client code",
           prepend-icon="mdi-id-card",
           @input="updateParty($event)",
-          return-object=true
+          return-object=false
         )
-    v-simple-table
+    v-simple-table(v-if="partyCode")
       tbody
         tr
           td Code:
-          td {{value.clientCode}}
+          td {{partyCode.clientCode}}
         tr
           td Business:
-          td {{value.business}}
+          td {{partyCode.business}}
         tr
           td Contact:
-          td {{value.contact}}
+          td {{partyCode.contact}}
         tr
           td Address:
           td
-            address-segment(:value="value.address")
+            address-segment(:value="partyCode.address")
 </template>
 
 <script lang="ts">
-  import { computed, createComponent, ref } from '@vue/composition-api'
-import AddressSegment from '@/address/AddressSegment.vue'
-import { PartyCodeModel, usePartyCodes } from '@/party-code/party-code-model'
+import { computed, createComponent, ref } from '@vue/composition-api'
+import { usePartyCodes } from '../party-code/party-code-model'
+import { ClientCodeModel } from '@/client-code/client-code-model'
+import AddressSegment from '../address/AddressSegment.vue'
 
 export default createComponent({
   components: { AddressSegment },
@@ -48,27 +47,22 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: PartyCodeModel
+      type: String
     }
   },
   setup(props, { emit }) {
 
-    function emitValid(valid: boolean) {
-      emit('valid', valid)
+    function updateParty(clientCode): void {
+      emit('input', clientCode)
     }
 
-    function updateParty(party: any): void {
-      console.log('emit the new party', party)
-      emit('input', new PartyCodeModel(party.clientCode))
-    }
+    const { partyList, findPartyByCode } = usePartyCodes()
 
-    const { partyList } = usePartyCodes()
+    const partyCode = computed(() => findPartyByCode(props.value))
 
-    const model = ref(props.value.clientCode)
     return {
-      emitValid,
       partyList,
-      model,
+      partyCode,
       updateParty
     }
   }
