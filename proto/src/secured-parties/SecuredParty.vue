@@ -5,6 +5,7 @@
         :value="partyCode",
         :editing="editing",
         @input="updateClientCode($event)"
+        @valid="emitValid($event)"
       )
 </template>
 
@@ -40,7 +41,11 @@ export default createComponent({
       emit('input', new SecuredPartyModel(clientCode))
     }
 
+    function emitValid(formValid: boolean) {
+      emit('valid', formValid)
+    }
     return {
+      emitValid,
       partyCode,
       updateClientCode
     }

@@ -2,7 +2,8 @@
   div
     v-card(flat, v-if="editing")
       v-form(
-        v-if="editing"
+        v-if="editing",
+        @input="formValid($event)"
       )
         v-autocomplete(
           :value="value",
@@ -60,7 +61,13 @@ export default createComponent({
 
     const partyCode = computed(() => findPartyByCode(props.value))
 
+    // Callback function for emitting form validity back to the parent.
+    function formValid(valid: boolean) {
+      emit('valid', valid)
+    }
+
     return {
+      formValid,
       partyList,
       partyCode,
       updateParty
