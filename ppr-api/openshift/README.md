@@ -2,12 +2,6 @@
 
 The following commands are used to apply these files.
 
-## Tools Namespace `BuildConfig`
-
-```
-$ oc process -f ppr-api/openshift/ppr-api-bc.yaml | oc -n zwmtib-tools apply -f -
-```
-
 ## Development Namespace `DeploymentConfig`
 
 ```bash
