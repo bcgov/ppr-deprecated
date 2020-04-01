@@ -3,14 +3,14 @@
  * The interface to a business.
  */
 export interface BusinessNameInterface {
-  businessName?: string | undefined;
+  businessName?: string;
 }
 
 /**
  * The model for a business, such as a registering party, secured party, debtor
  */
 export class BusinessNameModel {
-  private _businessName: string | undefined
+  private _businessName?: string
 
   /**
    * Creates a new Business model instance.
@@ -33,9 +33,13 @@ export class BusinessNameModel {
    * Gets the JSON representation of the BusinessNameModel object.
    */
   public toJson(): BusinessNameInterface {
-    return {
-      businessName: this._businessName
+    let rval: BusinessNameInterface = {}
+
+    if (this.businessName) {
+      rval = Object.assign(rval, { businessName: this.businessName })
     }
+
+    return rval
   }
 
   /*
@@ -47,7 +51,13 @@ export class BusinessNameModel {
    *
    * @param jsonObject the JSON version of the object.
    */
-  public static fromJson(jsonObject: BusinessNameInterface): BusinessNameModel {
-    return new BusinessNameModel(jsonObject.businessName)
+  public static fromJson(jsonObject?: BusinessNameInterface): BusinessNameModel | undefined {
+    let businessNameModel: BusinessNameModel | undefined
+
+    if (jsonObject) {
+      businessNameModel = new BusinessNameModel(jsonObject.businessName)
+    }
+
+    return businessNameModel
   }
 }

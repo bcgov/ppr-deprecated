@@ -180,12 +180,19 @@ export class FinancingStatementModel {
 
     if (jsonObject.securedParties) {
       jsonObject.securedParties.forEach((sp: BasePartyInterface): void => {
-        securedParties.push(BasePartyModel.fromJson(sp))
+        const model = BasePartyModel.fromJson(sp)
+        if (model) {
+          securedParties.push(model)
+        }
       })
     }
+
     if (jsonObject.debtors) {
       jsonObject.debtors.forEach((sp: BasePartyInterface): void => {
-        debtorParties.push(BasePartyModel.fromJson(sp))
+        const model = BasePartyModel.fromJson(sp)
+        if (model) {
+          debtorParties.push(model)
+        }
       })
     }
 

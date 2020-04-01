@@ -69,7 +69,8 @@ export default createComponent({
       type: String
     },
     value: {
-      required: true,
+      default: () => new BasePartyModel(),
+      required: false,
       type: BasePartyModel
     }
   },
@@ -92,7 +93,7 @@ export default createComponent({
     validationState[HEADER] = false
     validationState[PERSON_NAME] = false
 
-    let type = (props.value.personName.first || props.value.personName.last) ? PERSON_NAME : BUSINESS_NAME
+    let type = (props.value.personName?.first || props.value.personName?.last) ? PERSON_NAME : BUSINESS_NAME
     // partyType tracks the active name. Start showing one model, say, the business name
     const partyType = ref(type)
 

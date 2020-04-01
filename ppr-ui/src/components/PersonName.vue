@@ -46,7 +46,8 @@ export default createComponent({
       type: Boolean
     },
     value: {
-      required: true,
+      default: () => new PersonNameModel(),
+      required: false,
       type: PersonNameModel
     }
   },

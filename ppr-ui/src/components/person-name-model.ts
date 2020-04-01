@@ -1,27 +1,19 @@
-
-interface PersonNameInnerInterface {
-  first: string | undefined;
-  middle: string | undefined;
-  last: string | undefined;
-}
 /**
  * The interface to a person name.
  */
 export interface PersonNameInterface {
-  personName?: PersonNameInnerInterface;
+  first?: string;
+  middle?: string;
+  last?: string;
 }
 
 /**
  * The model for a person name, such as for a registering party.
  */
-export class PersonNameModel implements PersonNameInterface {
-  // declare property to hold the person's name and match structure of the API.  Also need to explicitly construct
-  // the object so the constructor can refer to the inner properties (first, middle, last)
-  private _personName: PersonNameInnerInterface = {
-    first: undefined,
-    middle: undefined,
-    last: undefined
-  }
+export class PersonNameModel {
+  private _first?: string
+  private _middle?: string
+  private _last?: string
 
   /**
    * Creates a new Person Name model instance.
@@ -30,38 +22,31 @@ export class PersonNameModel implements PersonNameInterface {
    * @param middle the middle name of the person.
    * @param last the last name of the person.
    */
-  public constructor(first: string = '', middle: string = '', last: string = '') {
-    this._personName.first = first
-    this._personName.middle = middle
-    this._personName.last = last
-  }
-
-  /**
-   * Gets personName
-   */
-  public get personName(): PersonNameInnerInterface {
-    return this._personName
+  public constructor(first?: string, middle?: string, last?: string) {
+    this._first = first
+    this._middle = middle
+    this._last = last
   }
 
   /**
    * Gets the first name of the person.
    */
   public get first(): string | undefined {
-    return this._personName.first
+    return this._first
   }
 
   /**
    * Gets the middle name of the person.
    */
   public get middle(): string | undefined {
-    return this._personName.middle
+    return this._middle
   }
 
   /**
    * Gets the last name of the person.
    */
   public get last(): string | undefined {
-    return this._personName.last
+    return this._last
   }
 
   /**
@@ -69,11 +54,9 @@ export class PersonNameModel implements PersonNameInterface {
    */
   public toJson(): PersonNameInterface {
     return {
-      personName: {
-        first: this.first,
-        middle: this.middle,
-        last: this.last
-      }
+      first: this.first,
+      middle: this.middle,
+      last: this.last
     }
   }
 
@@ -86,10 +69,13 @@ export class PersonNameModel implements PersonNameInterface {
    *
    * @param jsonObject the JSON version of the object.
    */
-  public static fromJson(jsonObject: PersonNameInterface): PersonNameModel {
-    return new PersonNameModel(
-      jsonObject.personName.first,
-      jsonObject.personName.middle,
-      jsonObject.personName.last)
+  public static fromJson(jsonObject?: PersonNameInterface): PersonNameModel | undefined {
+    let personNameModel: PersonNameModel | undefined
+
+    if (jsonObject) {
+      personNameModel = new PersonNameModel(jsonObject.first, jsonObject.middle, jsonObject.last)
+    }
+
+    return personNameModel
   }
 }

@@ -167,6 +167,7 @@ describe('BaseParty.vue', (): void => {
       await Vue.nextTick()
       wrapper.get('input[data-test-id="BusinessName.input.name"]').setValue('NewBusinessName')
       await Vue.nextTick()
+      await Vue.nextTick()
 
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
@@ -179,6 +180,7 @@ describe('BaseParty.vue', (): void => {
       await Vue.nextTick()
       wrapper.get('input[data-test-id="PersonName.first"]').setValue('afirst')
       wrapper.get('input[data-test-id="PersonName.last"]').setValue('alast')
+      await Vue.nextTick()
       await Vue.nextTick()
 
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
@@ -197,6 +199,7 @@ describe('BaseParty.vue', (): void => {
       wrapper.get('input[data-test-id="PersonName.first"]').setValue('afirst')
       wrapper.get('input[data-test-id="PersonName.last"]').setValue('alast')
       await Vue.nextTick()
+      await Vue.nextTick()
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
 
@@ -211,6 +214,7 @@ describe('BaseParty.vue', (): void => {
       wrapper.find('[data-test-id="BaseParty.radio.business"]').trigger('click')
       await Vue.nextTick()
       wrapper.get('input[data-test-id="BusinessName.input.name"]').setValue('abusiness')
+      await Vue.nextTick()
       await Vue.nextTick()
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })

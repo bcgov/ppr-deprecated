@@ -130,7 +130,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
       return financingStatement
     }
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    function addParty(list) {
+    function addParty(list: BasePartyModel[]) {
       let sp = [...list]
       const last: BasePartyModel = list[list.length - 1] as BasePartyModel
       const newParty = new BasePartyModel()
