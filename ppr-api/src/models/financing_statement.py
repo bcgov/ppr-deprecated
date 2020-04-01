@@ -84,6 +84,7 @@ class FinancingStatementEvent(BaseORM):
     description = sqlalchemy.Column(sqlalchemy.String)
     document_number = sqlalchemy.Column(sqlalchemy.String(length=8))
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
+    life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
 
     base_registration = sqlalchemy.orm.relationship('FinancingStatement', back_populates='events')
     starting_parties = sqlalchemy.orm.relationship(

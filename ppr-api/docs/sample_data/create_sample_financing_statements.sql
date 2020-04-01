@@ -1,10 +1,11 @@
 INSERT INTO financing_statement (reg_number, reg_type_cd, status, life, expiry_date) VALUES
-    ('123456A', 'SA', 'A', 5, now() + interval '5 years'),
+    ('123456A', 'SA', 'A', 7, now() + interval '7 years'),
     ('123456B', 'SA', 'A', -1, null);
 
 INSERT INTO registration (reg_number, base_reg_number, change_type_cd, reg_date, life, document_number) VALUES
-    ('123456A', '123456A', NULL, now(), null, 'A0000001'),
-    ('123456B', '123456B', NULL, now(), null, 'A0000002'),
+    ('123456A', '123456A', NULL, now(), 5, 'A0000001'),
+    ('123456C', '123456A', NULL, now() + interval '1 hour', 2, 'A0000004'),
+    ('123456B', '123456B', NULL, now(), -1, 'A0000002'),
     ('123456Z', '123456B', 'DT', now() + interval '1 hour', null, 'A0000003');
 
 INSERT INTO vehicle (base_reg_number, reg_number_start, reg_number_end, vehicle_type_cd, mhr_number, year, make, model, serial_number) VALUES
