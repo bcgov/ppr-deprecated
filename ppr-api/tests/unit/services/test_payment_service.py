@@ -12,12 +12,15 @@ import services.payment_service
 def test_create_payment_request_is_successful(mock_post):
     mock_post.return_value = requests.Response()
     mock_post.return_value.status_code = http.HTTPStatus.CREATED.value
-    mock_post.return_value._content = b'{"test": "json"}'
+    mock_post.return_value._content = b'{"id": 1234, "paymentMethod": "CC", "statusCode": "CREATED"}'
     credentials = fastapi.security.http.HTTPAuthorizationCredentials(scheme='Bearer', credentials='token_value')
+    service = services.payment_service.PaymentService(credentials, '123456')
 
-    result = services.payment_service.create_payment_request(credentials)
+    payment = service.create_payment(services.payment_service.FilingCode.SEARCH)
 
-    assert result == {'test': 'json'}
+    assert payment.id == 1234
+    assert payment.status == 'CREATED'
+    assert payment.method == 'CC'
 
 
 @patch('requests.post')
@@ -26,9 +29,10 @@ def test_create_payment_request_with_bad_auth_response(mock_post):
     mock_post.return_value.status_code = http.HTTPStatus.FORBIDDEN
     mock_post.return_value._content = b'{"code": "error_code", "description": "Reason for restriction"}'
     credentials = fastapi.security.http.HTTPAuthorizationCredentials(scheme='Bearer', credentials='token_value')
+    service = services.payment_service.PaymentService(credentials, '123456')
 
     try:
-        services.payment_service.create_payment_request(credentials)
+        service.create_payment(services.payment_service.FilingCode.SEARCH)
     except fastapi.HTTPException as ex:
         assert ex.status_code == http.HTTPStatus.FORBIDDEN.value
         assert ex.detail == 'Reason for restriction'
@@ -42,21 +46,12 @@ def test_create_payment_request_with_unexpected_response(mock_post):
     mock_post.return_value.status_code = http.HTTPStatus.NOT_FOUND
     mock_post.return_value._content = b'Non JSON Content - Not Found'
     credentials = fastapi.security.http.HTTPAuthorizationCredentials(scheme='Bearer', credentials='token_value')
+    service = services.payment_service.PaymentService(credentials, '123456')
 
     try:
-        services.payment_service.create_payment_request(credentials)
+        service.create_payment(services.payment_service.FilingCode.SEARCH)
     except fastapi.HTTPException as ex:
         assert ex.status_code == http.HTTPStatus.INTERNAL_SERVER_ERROR.value
         assert ex.detail == http.HTTPStatus.INTERNAL_SERVER_ERROR.phrase
     else:
         pytest.fail('A general error was expected since the payment api returned an unexpected response')
-
-
-def test_get_current_user():
-    api_response = {'id': 1234, 'paymentMethod': 'CC', 'statusCode': 'CREATED'}
-
-    payment = services.payment_service.get_payment(api_response)
-
-    assert payment.id == 1234
-    assert payment.status == 'CREATED'
-    assert payment.method == 'CC'

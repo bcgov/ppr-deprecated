@@ -46,7 +46,7 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
                   search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
                   fs_repo: repository.financing_statement_repository.FinancingStatementRepository = fastapi.Depends(),
                   user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user),
-                  payment: schemas.payment.Payment = fastapi.Depends(services.payment_service.get_payment)):
+                  payment_service: services.payment_service.PaymentService = fastapi.Depends()):
     exact_matches = []
     similar_matches = []
     criteria_value = search_input.criteria['value'].strip() if 'value' in search_input.criteria else None
@@ -56,6 +56,7 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
         if fs_event:
             exact_matches = [fs_event.registration_number]
 
+    payment = payment_service.create_payment(services.payment_service.FilingCode.SEARCH)
     search_model = search_repository.create_search(search_input, exact_matches, similar_matches, user, payment)
     response.status_code = status.HTTP_201_CREATED
 

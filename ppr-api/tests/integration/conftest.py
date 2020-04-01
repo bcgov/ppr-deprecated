@@ -36,5 +36,10 @@ def mock_payment():
 
 @pytest.fixture(autouse=True)
 def default_payment_dependency():
-    """Override the get_payment Fast API dependency to eliminate the need for an external Payment service"""
-    main.app.dependency_overrides[services.payment_service.get_payment] = create_mock_remote_payment
+    """Override the PaymentService Fast API dependency to eliminate the need for an external Payment service"""
+    main.app.dependency_overrides[services.payment_service.PaymentService] = MockPaymentService
+
+
+class MockPaymentService:
+    def create_payment(self, filing_code: services.payment_service.FilingCode):
+        return create_mock_remote_payment()
