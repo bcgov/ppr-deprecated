@@ -14,7 +14,20 @@ Vue.use(VueCompositionApi)
 
 const vuetify = new Vuetify()
 
+/*
+*  Create an app elements with a data-app attribute to prevent this warning:
+*  console.warn node_modules/vuetify/dist/vuetify.js:40211
+* [Vuetify] Unable to locate target [data-app]
+*
+* This happens because the component hierachy includes a v-dialog which is, by default,
+* attached to the app element.
+*/
+const app = document.createElement('div')
+app.setAttribute('data-app', 'true')
+document.body.append(app)
+
 describe('FinancingStatmentContainer.vue', (): void => {
+
   describe(':props', (): void => {
     it(':editing - false contains no inputs', (): void => {
       const properties = ref({ editing: false, value: new FinancingStatementModel() })
