@@ -16,7 +16,7 @@
     setup(_, { root }) {
       const { financingStatementsList } = useFinancingStatements()
 
-      return {financingStatementsList}
+      return { financingStatementsList }
     }
   })
 
@@ -25,7 +25,4 @@
 
 <style lang="scss" scoped>
   @import '../assets/styles/theme.scss';
-  .party-code {
-    margin: 1rem 0;
-  }
 </style>

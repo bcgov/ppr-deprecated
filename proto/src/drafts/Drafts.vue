@@ -3,7 +3,7 @@
     div(class="draft-header") This content is purely mockup base on the UX wireframe.  Except it's not a true representation of the wireframes.  For example the UX calls for elements that can filter and sort the list of drafts.
     v-simple-table
       tbody
-        tr(v-for="draft in draftList" key="draft.key")
+        tr(v-for="draft in draftList" :key="draft.key")
           td
             draft(:draft="draft")
 
