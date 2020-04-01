@@ -22,36 +22,25 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-// import { useLoadIndicator } from '@/load-indicator'
-// import SearcherRegNum from '@/search/searcher-reg-num'
-// import { AxiosResponse } from 'axios'
+import SearcherRegNum from '@/search/searcher-reg-num'
 
 export default createComponent({
   setup(_, { root }) {
-    // const loadIndicator = useLoadIndicator()
-    // const searcherRegNum = new SearcherRegNum()
+    const searcherRegNum = new SearcherRegNum()
     const searchId = root.$route.query['searchId'] as string
 
     const criteria = ref({})
     const results = ref({})
 
-    // loadIndicator.start()
-    // searcherRegNum.getSearch(searchId)
-    //   .then((response: AxiosResponse) => {
-    //     criteria.value = response.data
-    //   })
-    //   .finally(() => {
-    //     loadIndicator.stop()
-    //   })
-    //
-    // loadIndicator.start()
-    // searcherRegNum.getResults(searchId)
-    //   .then((response: AxiosResponse) => {
-    //     results.value = response.data
-    //   })
-    //   .finally(() => {
-    //     loadIndicator.stop()
-    //   })
+    searcherRegNum.getSearch(searchId)
+      .then((response: AxiosResponse) => {
+        criteria.value = response.data
+      })
+
+    searcherRegNum.getResults(searchId)
+      .then((response: AxiosResponse) => {
+        results.value = response.data
+      })
 
     return {
       results,

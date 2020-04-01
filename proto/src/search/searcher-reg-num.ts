@@ -16,28 +16,32 @@ export interface RegNumResult {
 }
 
 export default class SearcherRegNum {
-  private _baseUrl: string
 
   public constructor() {
   }
 
-  // public doSearch(term: string); void {
-  //   const data = {
-  //     'type_code': 'REGISTRATION_NUMBER',
-  //     'criteria': { 'value': term }
-  //   }
-  // }
-  //
-  // public getSearchFees(): void {
-  //
-  // }
-  //
-  // public getSearch(searchId: string): Promise<Object> {
-  //   return Promise.resolve({})
-  // }
-  //
+  public doSearch(term: string): void {
+  }
+
+  public getSearch(searchId: string): Promise<Record<string, any>> {
+    return Promise.resolve({})
+  }
+
   // public getResults(searchId: string): Promise<> {
   //   return Promise.resolve()
   // }
 
+}
+
+function getDefs() {
+
+  return { }
+}
+const instance = {_instance: undefined}
+function Instance() {
+  return instance._instance || (instance._instance = getDefs())
+}
+
+export function useSearching () {
+  return Instance()
 }

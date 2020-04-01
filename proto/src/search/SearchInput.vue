@@ -1,31 +1,25 @@
-<template>
-  <v-card flat>
-    <v-form v-model="formValid">
-      <v-text-field
-        id="search"
-        v-model="searchTerm"
-        :hint="hint"
-        :label="label"
-        :rules="rules"
+<template lang="pug">
+  v-card(flat)
+    v-form(v-model="formValid")
+      v-text-field(
+        id="search",
+        v-model="searchTerm",
+        :hint="hint",
+        :label="label",
+        :rules="rules",
         required
-      />
-      <v-btn
-        id="search-btn"
-        color="primary"
-        :disabled="!formValid"
+      )
+      v-btn(
+        id="search-btn",
+        color="primary",
+        :disabled="!formValid",
         @click="search"
-      >
-        Search
-      </v-btn>
-      <v-banner
-        v-show="errorMessage"
-        id="errorMessage"
+      ) Search
+      v-banner(
+        v-show="errorMessage",
+        id="errorMessage",
         single-line
-      >
-        {{ errorMessage }}
-      </v-banner>
-    </v-form>
-  </v-card>
+      ) {{ errorMessage }}
 </template>
 
 <script lang="ts">
@@ -54,4 +48,4 @@ export default createComponent({
     }
   }
 })
-</script>  
+</script>
