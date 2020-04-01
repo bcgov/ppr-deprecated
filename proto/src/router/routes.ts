@@ -54,6 +54,12 @@ export default [
     meta: { requiresAuth: true, layout: 'user' }
   },
   {
+    path: '/financing-view',
+    name: 'financing-view',
+    component: FinancingStatement,
+    meta: { requiresAuth: true, layout: 'user' }
+  },
+  {
     path: '/party-codes',
     name: 'partyCodes',
     component: PartyCodes,

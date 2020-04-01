@@ -1,7 +1,22 @@
 <template lang="pug">
-  v-card(flat)
-    div
-    party-code(:value="party")
+  div
+    div(v-if="condensed")
+      div Client Code: {{partyCode.clientCode }}, Company Name: {{partyCode.business}}
+    v-simple-table(v-else)
+      tbody
+        tr
+          td Code:
+          td {{partyCode.clientCode}}
+        tr
+          td Business:
+          td {{partyCode.business}}
+        tr
+          td Contact:
+          td {{partyCode.contact}}
+        tr
+          td Address:
+          td
+            address-segment(:value="partyCode.address")
 </template>
 
 <script lang="ts">
@@ -9,10 +24,16 @@ import { createComponent, computed } from '@vue/composition-api'
 import { RegisteringPartyModel } from '@/registering-party/registering-party-model'
 import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
 import PartyCode from '@/party-code/PartyCode.vue'
+import ClientCode from '@/client-code/ClientCode.vue'
 
 export default createComponent({
-  components: { PartyCode },
+  components: { ClientCode, PartyCode },
   props: {
+    condensed: {
+      default: false,
+      required: false,
+      type: Boolean
+    },
     value: {
       required: true,
       type: RegisteringPartyModel
@@ -23,12 +44,13 @@ export default createComponent({
 
     const { findPartyByCode } = usePartyCodes()
 
-    const party = computed(() => {
-      return findPartyByCode(props.value.clientCode)
+    const partyCode = computed(() => {
+      const rval = findPartyByCode(props.value.clientCode)
+      return rval
     })
 
     return {
-      party
+      partyCode
     }
   }
 })
