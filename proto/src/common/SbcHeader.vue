@@ -30,7 +30,7 @@
 
       const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
 
-      const welcomeText = computed( () => (authenticated.value ? 'Welcome ' + currentUser.value.name : 'Log in'))
+      const welcomeText = computed( () => (authenticated.value ? `Welcome ${currentUser.value.name}, ${currentUser.value.company}` : 'Log in'))
 
       function login(): void {
         if (authenticated.value) {

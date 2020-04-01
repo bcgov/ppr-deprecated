@@ -1,55 +1,22 @@
 <template lang="pug">
   div
     v-row
-      v-col(
-        :key="1",
-        cols="12",
-        sm="4",
-      )
-        v-card(
-          class="pa-2",
-          outlined,
-          tile
-        )
+      v-col(cols="12",sm="4")
+        v-card(class="pa-2",outlined)
           div Type: {{ draft.type }}
           div Name: {{ draft.name }}
-      v-col(
-      :key="2",
-      cols="12",
-      sm="4",
-      )
-        v-card(
-        class="pa-2",
-        outlined,
-        tile
-        )
+      v-col(cols="12",sm="4")
+        v-card(class="pa-2",outlined)
           div Date Created: {{ draft.created }}
           div Last Modified: {{ draft.last }}
-      v-col(
-      :key="3",
-      cols="12",
-      sm="4",
-      )
-        v-card(
-          class="pa-2",
-          outlined
-        )
-          v-btn(
-            icon,
-            color="red"
-              )
+      v-col(cols="12",sm="4")
+        v-card(class="pa-2",outlined)
+          v-btn(icon,color="red")
             v-icon mdi-close-circle-outline
             span Delete draft
     v-row
-      v-col(
-      cols="12",
-      sm="12",
-      )
-        v-card(
-        class="pa-2",
-        outlined,
-        tile
-        )
+      v-col(cols="12",sm="4")
+        v-card(class="pa-2",outlined)
           v-btn Edit draft
 
 

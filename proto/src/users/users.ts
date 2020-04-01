@@ -150,7 +150,7 @@ export function UserList(): UserInterface[] {
       index: _cnt++,
       name: 'Sarah',
       last: 'Sawyer',
-      company:"Service BC",
+      company:"BC Registries",
       occupation: "Customer Care Representative",
       role: Roles.Staff
     },

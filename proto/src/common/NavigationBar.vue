@@ -1,20 +1,16 @@
-<template>
-    <div class="nav-bar">
-      <v-toolbar flat>
-        <v-toolbar-title>
-          PPR Prototype
-        </v-toolbar-title>
-        <v-toolbar-items>
-          <v-btn text
-            v-for="menuItem in menuItems"
-            :data-test="menuItem.name"
-            :key="menuItem.name"
-            :to="menuItem.url">
-            <span>{{ menuItem.name }}</span>
-          </v-btn>
-        </v-toolbar-items>
-      </v-toolbar>
-    </div>
+<template lang="pug">
+    div(class="nav-bar")
+      v-toolbar(flat, class="nav-bar")
+        v-toolbar-title
+          router-link(to="/") PPR Prototype
+        v-toolbar-items
+          v-btn( text,
+            v-for="menuItem in menuItems",
+            :data-test="menuItem.name",
+            :key="menuItem.name",
+            :to="menuItem.url"
+          )
+            span {{ menuItem.name }}
 </template>
 
 <script lang="ts">
@@ -26,19 +22,11 @@ export default createComponent({
     const { authenticated, currentUser, canAdmin, canDash } = useUsers()
     const menuItems = computed( () => {
       const list = []
-      list.push({
-        name:'Home',
-        url: 'home'
-      })
       if (authenticated.value) {
         if(canDash.value) {
           list.push({
             name: 'Dashboard',
             url: 'dashboard'
-          })
-          list.push({
-            name: 'Party Codes',
-            url: 'party-codes'
           })
         }
         list.push({
@@ -69,19 +57,18 @@ export default createComponent({
 })
 </script>
 
-
-
 <style lang="scss" scoped>
   @import '../assets/styles/theme';
 
-  .v-toolbar {
+  .nav-bar {
+    background-color: $BCgovBlue4 !important;
+  }
+
+  .v-toolbar__content {
+    background-color: $BCgovBlue4 !important;
     margin-top: 0;
     padding-top: 0;
     max-height: 4rem;
-  }
-
-  .toolbar-container {
-    border-top: 1px solid $BCgovBlue4;
   }
 
   .v-toolbar__title {
@@ -107,32 +94,8 @@ export default createComponent({
     margin-right: auto;
   }
 
-  ::v-deep .v-toolbar__content {
-    max-width: 1360px;
-    margin: 0 auto;
-  }
-
   .v-btn {
-    font-weight: 400;
-  }
-
-  .v-btn.menu-btn {
-    font-weight: 700;
-  }
-
-  .v-list {
-    border-radius: 0 !important;
-  }
-
-  .theme--dark.v-btn--active:before,
-  .theme--dark.v-btn--active:hover:before {
-    //border-bottom: 3px solid $BCgovGold5;
-    background-color: $BCgovBlue3;
-    opacity: 0.5;
-  }
-
-  .theme--dark.v-btn:focus:before {
-    background-color: $BCgovBlue3;
-    opacity: 0.5;
+    color: white;
+    font-weight: 600;
   }
 </style>

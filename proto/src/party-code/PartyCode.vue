@@ -41,6 +41,11 @@ import { PartyCodeModel, usePartyCodes } from '@/party-code/party-code-model'
 export default createComponent({
   components: { AddressSegment },
   props: {
+    condensed: {
+      default: false,
+      required: false,
+      type: Boolean
+    },
     editing: {
       default: false,
       required: false,

@@ -5,16 +5,16 @@ export interface RegisteringPartyInterface {
 }
 
 export class RegisteringPartyModel {
-  private _partyCode?: string
+  private _clientCode?: string
 
   public constructor(
     clientCode?: string
   ) {
-    this._partyCode = clientCode
+    this._clientCode = clientCode
   }
 
   public get clientCode(): string | undefined {
-    return this._partyCode
+    return this._clientCode
   }
 
   public toJson(): RegisteringPartyInterface {
@@ -33,7 +33,6 @@ function getDefs() {
 
   function createFromCurrentUser() {
     const { currentUser } = useUsers()
-    console.log('createFromCurrentUser', currentUser, currentUser.value)
     const party = currentUser.value.party
     if(party) {
       return new RegisteringPartyModel(party.clientCode)

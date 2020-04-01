@@ -69,7 +69,7 @@ export class FinancingStatementModel {
       return Math.floor(Math.random() * base);
     }
     this._baseRegistrationNumber = '' + getRandomDocId()
-    this._registrationDateTime = moment().format("MMM Do YY");
+    this._registrationDateTime = moment().format("MMM DD YYYY");
   }
   /**
    * Gets the unique registration number for the financing statement.
