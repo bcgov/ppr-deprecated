@@ -1,6 +1,7 @@
 import datetime
 
 import fastapi
+import freezegun
 import pytest
 
 import endpoints.search
@@ -68,7 +69,8 @@ def test_read_search_results_has_inexact_match():
 
 
 def test_read_search_results_provides_event_base_registration_number():
-    stub_fin_stmt_event = stub_financing_statement_event('123456A', '765432B')
+    base_event = stub_financing_statement_event('765432B')
+    stub_fin_stmt_event = stub_financing_statement_event('123456A', financing_statement=base_event.base_registration)
     search_record = models.search.Search(results=[stub_search_result(stub_fin_stmt_event)])
     repo = MockSearchRepository(search_record)
 
@@ -99,17 +101,6 @@ def test_read_search_results_provides_event_document_number():
     assert results[0].financingStatement.documentId == 'Z9876543'
 
 
-def test_read_search_results_provides_financing_statement_expiry_date():
-    stub_fin_stmt_event = stub_financing_statement_event('123456A')
-    stub_fin_stmt_event.base_registration.expiry_date = datetime.date.today() + datetime.timedelta(days=27)
-    search_record = models.search.Search(results=[stub_search_result(stub_fin_stmt_event)])
-    repo = MockSearchRepository(search_record)
-
-    results = endpoints.search.read_search_results(27, repo)
-
-    assert results[0].financingStatement.expiryDate == stub_fin_stmt_event.base_registration.expiry_date
-
-
 def test_read_search_results_provides_secured_party_at_time_of_matched_registration_number():
     now = datetime.datetime.now()
     fin_stmt = stub_financing_statement('123456A', last_updated=now + datetime.timedelta(seconds=2))
@@ -138,7 +129,6 @@ def test_read_search_results_provides_secured_party_at_time_of_matched_registrat
     third_event.starting_parties = [third_secured_party]
     third_event.ending_parties = [second_secured_party]
     fin_stmt.parties = [third_secured_party]
-    fin_stmt.events = [base_event, second_event, third_event]
     search_record = models.search.Search(results=[stub_search_result(second_event)])
     repo = MockSearchRepository(search_record)
 
@@ -176,7 +166,6 @@ def test_read_search_results_provides_debtor_at_time_of_matched_registration_num
     third_event.starting_parties = [third_debtor]
     third_event.ending_parties = [second_debtor]
     fin_stmt.parties = [third_debtor]
-    fin_stmt.events = [base_event, second_event, third_event]
     search_record = models.search.Search(results=[stub_search_result(second_event)])
     repo = MockSearchRepository(search_record)
 
@@ -199,7 +188,6 @@ def test_read_search_results_provides_debtor_details():
     )
     event.starting_parties = [debtor]
     fin_stmt.parties = [debtor]
-    fin_stmt.events = [event]
     search_record = models.search.Search(results=[stub_search_result(event)])
     repo = MockSearchRepository(search_record)
 
@@ -250,7 +238,6 @@ def test_read_search_results_provides_vehicle_collateral_at_time_of_matched_regi
     third_event.starting_vehicle_collateral = [third_collateral]
     third_event.ending_vehicle_collateral = [second_collateral]
     fin_stmt.vehicle_collateral = [first_collateral_remains, third_collateral]
-    fin_stmt.events = [base_event, second_event, third_event]
     search_record = models.search.Search(results=[stub_search_result(second_event)])
     repo = MockSearchRepository(search_record)
 
@@ -264,20 +251,19 @@ def test_read_search_results_provides_vehicle_collateral_at_time_of_matched_regi
 
 
 def test_read_search_results_infinite_life():
-    fin_stmt = stub_financing_statement(life=-1)
-    event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    event = stub_financing_statement_event('123456A', life=-1)
     search_record = models.search.Search(results=[stub_search_result(event)])
     repo = MockSearchRepository(search_record)
 
     results = endpoints.search.read_search_results(27, repo)
 
     assert results[0].financingStatement.lifeInfinite is True
+    assert results[0].financingStatement.expiryDate is None
     assert results[0].financingStatement.lifeYears is None
 
 
 def test_read_search_results_life_has_years_value():
-    fin_stmt = stub_financing_statement(life=7)
-    event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    event = stub_financing_statement_event('123456A', life=7)
     search_record = models.search.Search(results=[stub_search_result(event)])
     repo = MockSearchRepository(search_record)
 
@@ -285,6 +271,23 @@ def test_read_search_results_life_has_years_value():
 
     assert results[0].financingStatement.lifeYears == 7
     assert results[0].financingStatement.lifeInfinite is False
+
+
+@freezegun.freeze_time('2020-02-29 12:00:00')
+def test_read_search_results_life_accumulates_from_events():
+    fin_stmt = stub_financing_statement(life=7)
+    stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    stub_financing_statement_event('123456B', financing_statement=fin_stmt)
+    event = stub_financing_statement_event('123456C', life=5, financing_statement=fin_stmt)
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.lifeYears == 12
+    # Even though 2032 is a leap year, the expiry date is not Feb 29 as the original expiry would have been
+    # March 1, 2027, and the renewal would be an extension from that date
+    assert results[0].financingStatement.expiryDate == datetime.date(2032, 3, 1)
 
 
 def stub_financing_statement(base_reg_number: str = '123456A', life: int = -1,
@@ -295,17 +298,20 @@ def stub_financing_statement(base_reg_number: str = '123456A', life: int = -1,
     )
 
 
-def stub_financing_statement_event(reg_number: str, base_reg_number: str = None,
+def stub_financing_statement_event(reg_number: str, base_reg_number: str = None, life: int = None,
                                    financing_statement: models.financing_statement.FinancingStatement = None):
     if financing_statement:
         base_reg_number = financing_statement.registration_number
     elif not base_reg_number:
         base_reg_number = reg_number
 
+    if base_reg_number == reg_number and life is None:
+        life = financing_statement.life_in_years if financing_statement else -1
+
     return models.financing_statement.FinancingStatementEvent(
         registration_number=reg_number, base_registration_number=base_reg_number, document_number='A1234567',
-        registration_date=datetime.datetime.now(), user_id='user_id_stub',
-        base_registration=financing_statement or stub_financing_statement(base_reg_number)
+        registration_date=datetime.datetime.now(), user_id='user_id_stub', life_in_years=life,
+        base_registration=financing_statement or stub_financing_statement(base_reg_number, life)
     )
 
 

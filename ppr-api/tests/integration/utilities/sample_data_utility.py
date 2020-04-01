@@ -18,7 +18,7 @@ def create_test_financing_statement(**kwargs):
     options = dict({
         'type_code': schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value,  # RegistrationType value
         'num_of_events': 1,
-        'years': -1,  # An int for 1 to 25, or -1 for Infinity
+        'years': -1,  # An int from 1 to 25, or -1 for Infinity
         'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
         'secured_parties': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'debtors': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
@@ -30,12 +30,14 @@ def create_test_financing_statement(**kwargs):
     try:
         reg_num = next_reg_number(db)
         life = options['years']
-        expiry = datetime.date.today() + datedelta.datedelta(years=options['years']) if life > 0 else None
+        expiry = datetime.date.today() + datedelta.datedelta(years=life) if life > 0 else None
         fin_stmt = models.financing_statement.FinancingStatement(
             registration_type_code=options['type_code'], registration_number=reg_num, status='A',
-            life_in_years=options['years'], expiry_date=expiry
+            life_in_years=life, expiry_date=expiry
         )
-        event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num)
+        event = models.financing_statement.FinancingStatementEvent(
+            registration_number=reg_num, life_in_years=life
+        )
         fin_stmt.events.append(event)
 
         if options['registering_party']:
@@ -74,6 +76,7 @@ def create_test_financing_statement(**kwargs):
 def create_test_financing_statement_event(fin_stmt: models.financing_statement.FinancingStatement, **kwargs):
     options = dict({
         'change_type_code': None,  # A 2 character string, a RegistrationType value
+        'years': None,  # An int from 1 to 25, or -1 for Infinity
         'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
         'secured_parties': None,  # a list of dict with keys first_name, middle_name, last_name, business_name & address
         'debtors': None,  # a list of dict with keys first_name, middle_name, last_name, business_name & address
@@ -84,8 +87,14 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
     db = models.database.SessionLocal()
     try:
         reg_num = next_reg_number(db)
-        event = models.financing_statement.FinancingStatementEvent(registration_number=reg_num,
-                                                                   change_type_code=options['change_type_code'])
+        life = options['years']
+        if life is not None:
+            fin_stmt.life_in_years = fin_stmt.life_in_years + life if life > 0 else -1
+            fin_stmt.expiry_date = fin_stmt.expiry_date + datedelta.datedelta(years=life) if life > 0 else None
+
+        event = models.financing_statement.FinancingStatementEvent(
+            registration_number=reg_num, change_type_code=options['change_type_code']
+        )
         fin_stmt.events.append(event)
 
         reg_party_input = options['registering_party']
