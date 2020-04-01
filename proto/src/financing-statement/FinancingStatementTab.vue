@@ -9,17 +9,18 @@
       v-tab-item
         div(v-if="editing")
           v-form(@input="emitValid('header', $event)")
-            type-component(
-              :value="value.type",
-              @input="updateType"
-            )
-            v-text-field(
-              :value="value.lifeYears",
-              :rules="lifeRules",
-              label="Life in Years",
-              name="lifeInput",
-              @input="updateLife",
-            )
+            v-container
+              type-component(
+                :value="value.type",
+                @input="updateType"
+              )
+              v-text-field(
+                :value="value.lifeYears",
+                :rules="lifeRules",
+                label="Life in Years",
+                name="lifeInput",
+                @input="updateLife",
+              )
         div(v-else)
           div Base Registration Number: {{ value.baseRegistrationNumber }}
           div Expiry Date: {{ value.expiryDate }}
@@ -40,7 +41,8 @@
           @valid="emitValid('debtorParties', $event)"
         )
       v-tab-item
-        div Collateral
+        v-container
+          div Collateral
       v-tab-item
         registering-party(:value="value.registeringParty")
 </template>

@@ -6,41 +6,39 @@
     v-tab Client Codes
     v-tab Drafts
     v-tab-item
-      v-card
-        v-simple-table
-          tbody
-            tr(v-for="financingStatement in financingStatementsList")
-              td
-                financing-statement-condensed(:value="financingStatement")
+      v-container
+        v-card
+          registrations-tab
     v-tab-item
-      v-card
-        div This tab is a placeholder for searches this user has conducted in the past
-        div(style="padding-left: 1rem")
-          div {{ currentUser.name }} {{ currentUser.last }},
-          div {{ currentUser.company }},
-          div {{ currentUser.occupation }}
+      v-container
+        v-card
+          div This tab is a placeholder for searches this user has conducted in the past
+          div(style="padding-left: 1rem")
+            div {{ currentUser.name }} {{ currentUser.last }},
+            div {{ currentUser.company }},
+            div {{ currentUser.occupation }}
     v-tab-item
-      v-card
-        party-codes
+      v-container
+        v-card
+          client-codes-tab
     v-tab-item
-      v-card
-        drafts
+      v-container
+        v-card
+          drafts
 </template>
 <script lang="ts">
   import { createComponent } from '@vue/composition-api'
-  import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
   import { useUsers } from '@/users/users'
-  import FinancingStatementCondensed from '@/financing-statement/FinancingStatementCondensed.vue'
   import Drafts from '@/drafts/Drafts.vue'
-  import PartyCodes from '@/dashboard/PartyCodes.vue'
+  import ClientCodesTab from '@/dashboard/ClientCodesTab.vue'
+  import RegistrationsTab from '@/dashboard/RegistrationsTab.vue'
 
   export default createComponent({
-    components: { Drafts, FinancingStatementCondensed, PartyCodes },
+    components: { Drafts, RegistrationsTab, ClientCodesTab },
     setup(_, { root }) {
-      const { financingStatementsList } = useFinancingStatements()
       const { authenticated, currentUser} = useUsers()
 
-      return {authenticated, currentUser, financingStatementsList}
+      return {authenticated, currentUser}
     }
   })
 
