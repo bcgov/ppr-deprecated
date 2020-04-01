@@ -25,6 +25,9 @@
       v-col(cols="12",sm="4")
         v-card(class="pa-2",outlined)
           v-btn(@click="view")  View
+          v-btn(@click="view",disabled)  Amend
+          v-btn(@click="view",disabled)  Renew
+          v-btn(@click="view",disabled)  Discharge
 </template>
 
 <script lang="ts">
@@ -72,4 +75,7 @@ export default createComponent({
 .formInvalid {
   border: 1px solid blanchedalmond;
 }
+  .v-btn {
+    margin-right: 10px;
+  }
 </style>
