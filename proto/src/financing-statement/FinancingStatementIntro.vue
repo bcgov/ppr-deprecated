@@ -1,6 +1,8 @@
 <template lang="pug">
   div
-    h1 Register a Lien
+    h1 {{ title }}
+    p.
+      &nbsp;
     p.
       A lien is ....Lorem ipsum dolor sit amet, consectetur adipiscing elit,
       sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
@@ -31,7 +33,7 @@
 </template>
 
 <script>
-import { createComponent } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 
@@ -43,8 +45,10 @@ export default createComponent({
       type: Boolean
     }
   },
-  setup() {
+  setup(props) {
+    const title = computed(() => props.editing ? 'Register a Lien' : 'View Your Lien')
     return {
+      title
     }
   }
 })

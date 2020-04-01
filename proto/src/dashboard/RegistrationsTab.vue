@@ -1,22 +1,24 @@
 <template lang="pug">
   v-simple-table
     tbody
-      tr(v-for="financingStatement in financingStatementsList")
+      tr(v-for="financingStatement in fsList")
         td
           financing-statement-condensed(:value="financingStatement")
 
 </template>
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import { useUsers } from '@/users/users'
 import FinancingStatementCondensed from '@/financing-statement/FinancingStatementCondensed.vue'
 export default createComponent({
   components: { FinancingStatementCondensed },
   setup() {
-    const { financingStatementsList } = useFinancingStatements()
+    const { getUsersFinancingStatementList } = useFinancingStatements()
 
-    return { financingStatementsList }
+    const fsList = computed(() => getUsersFinancingStatementList() )
+
+    return { fsList }
   }
 })
 

@@ -2,9 +2,10 @@ import { ref } from '@vue/composition-api'
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementInterface, FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-
 import { SecuredPartyModel} from '@/secured-parties/secured-party-model.ts'
 import { useRegisteredParty } from '@/registering-party/registering-party-model'
+import { useUsers } from '@/users/users'
+
 
 function getDefs() {
   const financingStatementsList = ref(_loadList())
@@ -27,7 +28,6 @@ function getDefs() {
     })
   }
 
-
   function registerFinancingStatement( fs: FinancingStatementModel): string {
     fs.registerLien()
     financingStatementsList.value.push(fs)
@@ -38,10 +38,22 @@ function getDefs() {
   function getFinancingStatementStash(): string {
     return localStorage.getItem('fslist')
   }
+
   function loadFinancingStatementStash(jsonString): void {
     localStorage.setItem('fslist', jsonString)
     _loadList()
   }
+
+  function getUsersFinancingStatementList() {
+    const { currentUser } = useUsers()
+    const party = currentUser.value.party
+    const cc = party.clientCode
+    const usersList = financingStatementsList.value.filter((fs) => {
+      return fs.registeringParty.clientCode === cc
+    })
+    return usersList
+  }
+
 
   // Private methods
 
@@ -70,6 +82,7 @@ function getDefs() {
     // functions
     createFinancingStatement,
     getFinancingStatementStash,
+    getUsersFinancingStatementList,
     loadFinancingStatementStash,
     findFinancingStatement,
     registerFinancingStatement

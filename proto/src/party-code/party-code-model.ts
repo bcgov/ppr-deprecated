@@ -109,6 +109,67 @@ export function PartiesList(): PartyCodeInterface[] {
       },
       contact:"Andrew Lodge"
     },
+    {
+      clientCode: '' + _cnt++,
+      business: "General Bank",
+      address: {
+        street: "896 Bank St",
+        city: "Victoria",
+        province: "BC",
+        postal: " XnX YnY",
+        country: "Canada"
+      },
+      contact:"Chris Alex"
+    },
+    {
+      clientCode: '' + _cnt++,
+      business: "Awesome Parking System",
+      address: {
+        street: "897 Park St",
+        city: "Victoria",
+        province: "BC",
+        postal: " XnX YnY",
+        country: "Canada"
+      },
+      contact:"Dan Smith"
+    },
+    {
+      clientCode: '' + _cnt++,
+      business: "International Properties",
+      address: {
+        street: "897 Property St",
+        city: "Victoria",
+        province: "BC",
+        postal: " XnX YnY",
+        country: "Canada"
+      },
+      contact:"Richard Dolan"
+    },
+    {
+      clientCode: '' + _cnt++,
+      business: "Ready Investments",
+      address: {
+        street: "897 Country St",
+        city: "Victoria",
+        province: "BC",
+        postal: " XnX YnY",
+        country: "Canada"
+      },
+      contact:"Adrienne Michaels"
+    },
+    {
+      clientCode: '' + _cnt++,
+      business: "Jones James Josuah Law",
+      address: {
+        street: "897 Defenders St",
+        city: "Victoria",
+        province: "BC",
+        postal: " XnX YnY",
+        country: "Canada"
+      },
+      contact:"Michael Briar"
+    },
+
   ]
   const result: PartyCodeInterface[] = list.map( json => PartyCodeModel.fromJson(json))
   return result

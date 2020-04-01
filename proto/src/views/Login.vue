@@ -28,7 +28,7 @@
               <v-radio
                 v-for="user in userList"
                 :key="user.index"
-                :label="`${user.name}, ${user.company}, ${user.occupation}, ${user.role}`"
+                :label="userLabel(user)"
                 :value="user.index"
                 @change="changeUser(user.index)"
               />
@@ -40,7 +40,7 @@
   </div>
 </template>
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { useUsers } from '@/users/users'
 
 export default createComponent({
@@ -55,7 +55,21 @@ export default createComponent({
       setUser(index)
     }
 
-    return { changeUser,  proceed, currentUserIndex, userList }
+    function userLabel(user) {
+      const parts = []
+      // `${user.name}, ${user.company}, ${user.occupation}, ${user.role}, ${user.party.clientCode}`
+      parts.push(user.name)
+      parts.push(user.company)
+      if (user.party) {
+        parts.push('(' + user.party.clientCode +')')
+      }
+      parts.push(user.occupation)
+      parts.push(user.role)
+      return parts.join(', ')
+    }
+
+
+    return { changeUser,  proceed, currentUserIndex, userLabel, userList }
   }
 })
 

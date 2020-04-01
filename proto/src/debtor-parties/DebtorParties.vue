@@ -1,6 +1,6 @@
 <template>
   <v-form>
-    <form-section-header label="Debtors" />
+    <form-section-header v-if="editing" label="Debtors" />
     <v-container>
       <v-list>
         <ppr-list-item

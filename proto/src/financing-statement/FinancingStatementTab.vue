@@ -22,27 +22,41 @@
                 @input="updateLife",
               )
         div(v-else)
-          div Base Registration Number: {{ value.baseRegistrationNumber }}
-          div Expiry Date: {{ value.expiryDate }}
-          div Type: {{ value.type }}
-          div Life in Years: {{ value.lifeYears }}
-      v-tab-item
-        secured-parties(
-          :editing="editing",
-          :value="value.securedParties",
-          @input="updateSecuredParties",
-          @valid="emitValid('securedParties', $event)"
-        )
-      v-tab-item
-        debtor-parties(
-          :editing="editing",
-          :value="value.debtorParties",
-          @input="updateDebtorParties",
-          @valid="emitValid('debtorParties', $event)"
-        )
+          v-container
+            v-card
+              v-row
+                v-col(cols="12",sm="4")
+                  v-card(class="pa-2",outlined)
+                    div Base Registration Number: {{ value.baseRegistrationNumber }}
+                    div Expiry Date: {{ value.expiryDate }}
+                    div Registration Date: {{ value.registrationDateTime }}
+                v-col(cols="12",sm="4")
+                  v-card(class="pa-2",outlined)
+                    div Type: {{ value.type }}
+                    div Life in Years: {{ value.lifeYears }}
+
       v-tab-item
         v-container
-          div Collateral
+          v-card
+            secured-parties(
+              :editing="editing",
+              :value="value.securedParties",
+              @input="updateSecuredParties",
+              @valid="emitValid('securedParties', $event)"
+            )
+      v-tab-item
+        v-container
+          v-card
+            debtor-parties(
+              :editing="editing",
+              :value="value.debtorParties",
+              @input="updateDebtorParties",
+              @valid="emitValid('debtorParties', $event)"
+            )
+      v-tab-item
+        v-container
+          v-card
+            div Collateral
       v-tab-item
         registering-party(:value="value.registeringParty")
 </template>
@@ -180,6 +194,10 @@ export default createComponent({
 <style lang="scss" scoped>
 .formInvalid {
   border: 1px solid blanchedalmond;
+}
+
+.v-card {
+  padding: 1rem;
 }
 
   .v-tab {

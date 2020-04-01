@@ -1,6 +1,6 @@
 <template>
   <v-form>
-    <form-section-header label="Secured Parties" />
+    <form-section-header v-if="editing" label="Secured Parties" />
     <v-container>
       <v-list>
         <ppr-list-item

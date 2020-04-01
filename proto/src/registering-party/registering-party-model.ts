@@ -1,4 +1,4 @@
-import { useUsers } from '../users/users'
+import { useUsers } from '@/users/users'
 
 export interface RegisteringPartyInterface {
   clientCode?: string | undefined;
@@ -29,7 +29,7 @@ export class RegisteringPartyModel {
 
 }
 
-function getDefs():object {
+function getDefs() {
 
   function createFromCurrentUser() {
     const { currentUser } = useUsers()
@@ -46,11 +46,11 @@ function getDefs():object {
 }
 
 const instance = {_instance: undefined}
-function Instance():object {
+function Instance() {
   return instance._instance || (instance._instance = getDefs())
 }
 
-export function useRegisteredParty ():object {
+export function useRegisteredParty () {
   return Instance()
 }
 
