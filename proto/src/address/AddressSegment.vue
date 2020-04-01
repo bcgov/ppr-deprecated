@@ -27,7 +27,7 @@ export default createComponent({
       props.value.province ? text.push(props.value.province) : undefined
       props.value.postal ? text.push(props.value.postal) : undefined
       props.value.country ? text.push(props.value.country) : undefined
-      return text.join(',')
+      return text.join(', ')
     })
     return {
       oneLine

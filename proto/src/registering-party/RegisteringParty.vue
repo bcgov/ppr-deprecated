@@ -23,11 +23,12 @@
 import { createComponent, computed } from '@vue/composition-api'
 import { RegisteringPartyModel } from '@/registering-party/registering-party-model'
 import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
+import AddressSegment from '@/address/AddressSegment.vue'
 import PartyCode from '@/party-code/PartyCode.vue'
 import ClientCode from '@/client-code/ClientCode.vue'
 
 export default createComponent({
-  components: { ClientCode, PartyCode },
+  components: { AddressSegment, ClientCode, PartyCode },
   props: {
     condensed: {
       default: false,

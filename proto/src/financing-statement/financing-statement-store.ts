@@ -21,7 +21,6 @@ function getDefs() {
 
   function findFinancingStatement( regNum: string) {
     return financingStatementsList.value.find( element => {
-      console.log('compare ', regNum, element.baseRegistrationNumber)
       return element.baseRegistrationNumber === regNum
     })
   }

@@ -1,11 +1,7 @@
 
 <template lang="pug">
-  v-tabs(
-    fixed-tabs,
-    background-color="white"
-    dark
-  )
-    v-tab Registerations
+  v-tabs(fixed-tabs, background-color="white", dark)
+    v-tab Registrations
     v-tab Searches
     v-tab Client Codes
     v-tab Drafts
@@ -67,11 +63,11 @@
     }
 
     th, td {
-      border: 0.5px dotted darkgrey;
       padding-bottom: 2rem;
+      font-size: 1.0rem;
     }
     tbody tr:nth-of-type(even) {
-      background-color: rgba(0, 0, 0, .05);
+      background-color: white;
     }
   }
 </style>

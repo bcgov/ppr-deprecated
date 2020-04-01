@@ -1,59 +1,41 @@
-<template>
-  <div>
-    <v-container class="view-container">
-      <article id="financingStatementIntro">
-        <financing-statement-intro
-          :editing="editing"
-        />
-      </article>
-    </v-container>
-    <v-container class="view-container">
-      <article id="financingStatement">
-        <section v-if="editing">
-          <v-form>
-            <financing-statement
-              :value="financingStatement"
-              :editing="editing"
-              @input="updateFinancingModel"
+<template lang="pug">
+  div
+    v-container(class="view-container")
+      article(id="financingStatementIntro")
+        financing-statement-intro(:editing="editing")
+    v-container(class="view-container")
+      article(id="financingStatement")
+        section(v-if="editing")
+          v-form
+            financing-statement-tab(
+              :value="financingStatement",
+              :editing="editing",
+              @input="updateFinancingModel",
               @valid="formValid = $event"
-            />
-            <v-btn
-              id="submit-btn"
-              color="primary"
-              :disabled="!formValid"
+            )
+            v-btn(
+              id="submit-btn",
+              color="primary",
+              :disabled="!formValid",
               @click="submit"
-            >
-              Submit
-            </v-btn>
-          </v-form>
-        </section>
-        <section v-else>
-          <div>
-            <p>
-              Need copy here to tell user this is their submitted financing statement.
-              Future development will include; debtors, collateral, and secured parties
-            </p>
-          </div>
-          <financing-statement
-            :value="financingStatement"
+            ) Submit
+        section(v-else)
+          financing-statement-tab(
+            :value="financingStatement",
             :editing="editing"
-          />
-        </section>
-      </article>
-    </v-container>
-  </div>
+          )
 </template>
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
-import FinancingStatement from '@/financing-statement/FinancingStatementTab.vue'
+import FinancingStatementTab from '@/financing-statement/FinancingStatementTab.vue'
 import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
 
 
 export default createComponent({
-  components: { FinancingStatement, FinancingStatementIntro },
+  components: { FinancingStatementTab, FinancingStatementIntro },
 
   setup(_, { root }) {
     const editing = ref(true)
