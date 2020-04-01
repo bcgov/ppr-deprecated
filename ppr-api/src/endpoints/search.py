@@ -2,6 +2,7 @@
 
 import typing
 
+import datedelta
 import fastapi
 from starlette import responses, status
 
@@ -18,6 +19,7 @@ import schemas.party
 import schemas.payment
 import schemas.search
 import services.payment_service
+import utils
 from schemas.party import PartyType
 
 
@@ -103,8 +105,9 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
     fs_model = event.base_registration
     target_events = sorted(filter(lambda e: e.registration_date <= event.registration_date, fs_model.events),
                            key=lambda e: e.registration_date)
-    infinite = fs_model.life_in_years == -1
-    years = fs_model.life_in_years if not infinite else None
+    years = 0
+    infinite = False
+    expiry = utils.datetime.today_pacific()
 
     parties_snapshot = []
     general_collateral_snapshot = []
@@ -118,6 +121,16 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
         vehicle_collateral_snapshot = filter_ending(applied_event.registration_number, vehicle_collateral_snapshot)
         vehicle_collateral_snapshot.extend(applied_event.starting_vehicle_collateral)
 
+        # Apply the life of each event to capture the combined expiry. This includes renewals.
+        if not infinite:
+            if applied_event.life_in_years == -1:
+                infinite = True
+                years = None
+                expiry = None
+            elif applied_event.life_in_years and applied_event.life_in_years > 0:
+                years += applied_event.life_in_years
+                expiry += datedelta.datedelta(years=applied_event.life_in_years)
+
     reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
     reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
     secured_parties_model = filter(lambda p: p.type_code == PartyType.SECURED.value, parties_snapshot)
@@ -130,7 +143,7 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
 
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
-        documentId=event.document_number, expiryDate=fs_model.expiry_date, lifeYears=years, lifeInfinite=infinite,
+        documentId=event.document_number, expiryDate=expiry, lifeYears=years, lifeInfinite=infinite,
         registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
         vehicleCollateral=vehicle_collateral_schema, generalCollateral=general_collateral_schema,
         type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name
