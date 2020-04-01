@@ -31,24 +31,24 @@
 </template>
 
 <script>
-  import { createComponent, computed } from '@vue/composition-api'
-  import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
-  import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
-  import ClientCode from '@/client-code/ClientCode.vue'
+import { createComponent, computed } from '@vue/composition-api'
+import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
+import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
+import ClientCode from '@/client-code/ClientCode.vue'
 
 export default createComponent({
-    props: {
-      editing: {
-        default: false,
-        required: false,
-        type: Boolean
-      }
-    },
-    setup({}) {
-      return {
-      }
+  props: {
+    editing: {
+      default: false,
+      required: false,
+      type: Boolean
     }
-  })
+  },
+  setup({}) {
+    return {
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>

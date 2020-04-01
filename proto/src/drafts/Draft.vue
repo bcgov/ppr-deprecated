@@ -22,20 +22,20 @@
 
 </template>
 <script lang="ts">
-  import { createComponent } from '@vue/composition-api'
+import { createComponent } from '@vue/composition-api'
 
-  export default createComponent({
-    components: {  },
-    props: {
-      draft: {
-        required: true,
-        type: Object
-      }
-    },
-    setup() {
-      return {}
+export default createComponent({
+  components: {  },
+  props: {
+    draft: {
+      required: true,
+      type: Object
     }
-  })
+  },
+  setup() {
+    return {}
+  }
+})
 
 </script>
 

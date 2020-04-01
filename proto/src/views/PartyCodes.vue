@@ -11,17 +11,17 @@
 
 </template>
 <script lang="ts">
-  import { createComponent } from '@vue/composition-api'
-  import { usePartyCodes } from '../party-code/party-code-model'
-  import PartyCode from '@/party-code/PartyCode.vue'
-  export default createComponent({
-    components: { PartyCode },
-    setup(_, { root }) {
-      const { partyList } = usePartyCodes()
+import { createComponent } from '@vue/composition-api'
+import { usePartyCodes } from '../party-code/party-code-model'
+import PartyCode from '@/party-code/PartyCode.vue'
+export default createComponent({
+  components: { PartyCode },
+  setup(_, { root }) {
+    const { partyList } = usePartyCodes()
 
-      return {partyList}
-    }
-  })
+    return {partyList}
+  }
+})
 
 </script>
 

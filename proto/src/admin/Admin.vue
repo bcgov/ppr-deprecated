@@ -14,25 +14,25 @@
 </template>
 
 <script>
-  import { createComponent } from '@vue/composition-api'
-  import { useAdmin } from '@/admin/admin'
+import { createComponent } from '@vue/composition-api'
+import { useAdmin } from '@/admin/admin'
 
-  export default createComponent({
-    setup(_, { root }) {
-      const { loadFinancingStatements, saveFinancingStatements } = useAdmin()
+export default createComponent({
+  setup(_, { root }) {
+    const { loadFinancingStatements, saveFinancingStatements } = useAdmin()
 
-      function setFile (event) {
-        const file = event.target.files[0]
-        console.log("File name", file)
-        loadFinancingStatements(file)
-      }
-
-      return {
-        saveFinancingStatements,
-        setFile
-      }
+    function setFile (event) {
+      const file = event.target.files[0]
+      console.log("File name", file)
+      loadFinancingStatements(file)
     }
-  })
+
+    return {
+      saveFinancingStatements,
+      setFile
+    }
+  }
+})
 
 
 </script>

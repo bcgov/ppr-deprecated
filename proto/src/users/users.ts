@@ -19,12 +19,12 @@ const PowerUserRoles = [ Roles.Staff, Roles.SP, Roles.SPAdmin, Roles.Admin, Role
 export interface UserInterface {
   index: number;
   name: string;
-  last: string
+  last: string;
   company: string;
   occupation: string;
   role: Roles;
   description?: string;
-  party?: PartyCodeInterface
+  party?: PartyCodeInterface;
 }
 
 function getDefs() {
@@ -104,7 +104,7 @@ export function useUsers () {
 }
 
 export function UserList(): UserInterface[] {
-  let _cnt = 0;
+  let _cnt = 0
   const list = [
     {
       index: _cnt++,

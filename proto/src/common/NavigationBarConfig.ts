@@ -1,6 +1,6 @@
 export interface NavigationBarConfig {
-  titleItem: NavigationMenuItem,
-  menuItems: NavigationMenuItem[]
+  titleItem: NavigationMenuItem;
+  menuItems: NavigationMenuItem[];
 }
 
 interface NavigationMenuItem {

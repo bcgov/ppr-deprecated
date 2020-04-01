@@ -28,7 +28,7 @@ Vue.config.errorHandler = (err, vm, info) => {
 
   // TODO: Perform any custom logic or log to server
 
-};
+}
 const vConfig = {
   vuetify: new Vuetify(opts),
   router,

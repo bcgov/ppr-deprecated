@@ -38,7 +38,7 @@ export default createComponent({
       if (stashedUser) {
         setUser(parseInt(stashedUser))
       }
-    });
+    })
 
     return {  }
   }

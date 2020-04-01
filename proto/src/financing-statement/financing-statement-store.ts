@@ -50,8 +50,8 @@ function getDefs() {
     const list: FinancingStatementInterface[] = []
     if(stash) {
       try {
-        let asStored:FinancingStatementInterface[] = JSON.parse(stash)
-        asStored.forEach((jsonStr:FinancingStatementInterface): number => list.push(FinancingStatementModel.fromJson(jsonStr)))
+        let asStored: FinancingStatementInterface[] = JSON.parse(stash)
+        asStored.forEach((jsonStr: FinancingStatementInterface): number => list.push(FinancingStatementModel.fromJson(jsonStr)))
       } catch(error) {
         console.error("Error parsing financing statement list", error)
       }

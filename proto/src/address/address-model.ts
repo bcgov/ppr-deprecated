@@ -1,9 +1,9 @@
 export interface AddressInterface {
-      street?: string,
-      city?: string,
-      province?: string,
-      postal?: string,
-      country?: string
+  street?: string;
+  city?: string;
+  province?: string;
+  postal?: string;
+  country?: string;
 }
 
 export class AddressModel {

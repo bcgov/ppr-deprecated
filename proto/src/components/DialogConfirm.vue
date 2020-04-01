@@ -8,8 +8,12 @@
     @keydown.esc="onClickCancel()"
   >
     <v-card>
-      <v-card-title data-test-id="Confirm.title">{{ title }}</v-card-title>
-      <v-card-text data-test-id="Confirm.message">{{ message }}</v-card-text>
+      <v-card-title data-test-id="Confirm.title">
+        {{ title }}
+      </v-card-title>
+      <v-card-text data-test-id="Confirm.message">
+        {{ message }}
+      </v-card-text>
       <v-card-actions>
         <v-spacer />
         <v-btn

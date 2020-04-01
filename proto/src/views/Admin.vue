@@ -10,14 +10,14 @@
 
 </template>
 <script lang="ts">
-  import { createComponent } from '@vue/composition-api'
-  import Admin from '@/admin/Admin.vue'
+import { createComponent } from '@vue/composition-api'
+import Admin from '@/admin/Admin.vue'
 
-  export default createComponent({
-    components: { Admin },
-    setup(_, { root }) {
-      return {}
-    }
-  })
+export default createComponent({
+  components: { Admin },
+  setup(_, { root }) {
+    return {}
+  }
+})
 
 </script>

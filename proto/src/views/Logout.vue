@@ -11,7 +11,13 @@
             <p>
               This will be a PPR logout page
             </p>
-            <v-btn color="#fcba19" class="log-in-btn" @click="proceed()">Continue to log out</v-btn>
+            <v-btn
+              color="#fcba19"
+              class="log-in-btn"
+              @click="proceed()"
+            >
+              Continue to log out
+            </v-btn>
           </div>
         </div>
       </article>
@@ -19,19 +25,19 @@
   </div>
 </template>
 <script lang="ts">
-  import { createComponent } from '@vue/composition-api'
-  import { useUsers } from '../users/users'
+import { createComponent } from '@vue/composition-api'
+import { useUsers } from '../users/users'
 
-  export default createComponent({
-    setup(_, { root }) {
-      const { logout } = useUsers()
+export default createComponent({
+  setup(_, { root }) {
+    const { logout } = useUsers()
 
-      function proceed(): void {
-        logout()
-        root.$router.push({ name: 'home' })
-      }
-      return { proceed }
+    function proceed(): void {
+      logout()
+      root.$router.push({ name: 'home' })
     }
-  })
+    return { proceed }
+  }
+})
 
 </script>

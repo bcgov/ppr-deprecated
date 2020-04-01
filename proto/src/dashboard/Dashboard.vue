@@ -27,20 +27,20 @@
           drafts
 </template>
 <script lang="ts">
-  import { createComponent } from '@vue/composition-api'
-  import { useUsers } from '@/users/users'
-  import Drafts from '@/drafts/Drafts.vue'
-  import ClientCodesTab from '@/dashboard/ClientCodesTab.vue'
-  import RegistrationsTab from '@/dashboard/RegistrationsTab.vue'
+import { createComponent } from '@vue/composition-api'
+import { useUsers } from '@/users/users'
+import Drafts from '@/drafts/Drafts.vue'
+import ClientCodesTab from '@/dashboard/ClientCodesTab.vue'
+import RegistrationsTab from '@/dashboard/RegistrationsTab.vue'
 
-  export default createComponent({
-    components: { Drafts, RegistrationsTab, ClientCodesTab },
-    setup(_, { root }) {
-      const { authenticated, currentUser} = useUsers()
+export default createComponent({
+  components: { Drafts, RegistrationsTab, ClientCodesTab },
+  setup(_, { root }) {
+    const { authenticated, currentUser} = useUsers()
 
-      return {authenticated, currentUser}
-    }
-  })
+    return {authenticated, currentUser}
+  }
+})
 
 </script>
 <style lang="scss" scoped>

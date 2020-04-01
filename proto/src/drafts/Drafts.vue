@@ -9,40 +9,40 @@
 
 </template>
 <script lang="ts">
-  import { createComponent, ref } from '@vue/composition-api'
-  import Draft from '@/drafts/Draft.vue'
+import { createComponent, ref } from '@vue/composition-api'
+import Draft from '@/drafts/Draft.vue'
 
-  export default createComponent({
-    components: { Draft },
-    setup(_, { root }) {
+export default createComponent({
+  components: { Draft },
+  setup(_, { root }) {
 
-      const draftList = ref([
-        {
-          key: "1",
-          type: "Security Agreement",
-          name: "draft for Grand Furniture",
-          created: "Jan 21 2020",
-          last: "Feb 12 2020"
-        },
-        {
-          key: "2",
-          type: "Repairers Lien",
-          name: "draft for Auto Repair Victoria",
-          created: "Jan 21 2020",
-          last: "Feb 12 2020"
-        },
-        {
-          key: "3",
-          type: "Repairers Lien",
-          name: "draft for Auto Repair Victoria",
-          created: "Mar 21 2020",
-          last: "Mar 31 2020"
-        }
-      ])
+    const draftList = ref([
+      {
+        key: "1",
+        type: "Security Agreement",
+        name: "draft for Grand Furniture",
+        created: "Jan 21 2020",
+        last: "Feb 12 2020"
+      },
+      {
+        key: "2",
+        type: "Repairers Lien",
+        name: "draft for Auto Repair Victoria",
+        created: "Jan 21 2020",
+        last: "Feb 12 2020"
+      },
+      {
+        key: "3",
+        type: "Repairers Lien",
+        name: "draft for Auto Repair Victoria",
+        created: "Mar 21 2020",
+        last: "Mar 31 2020"
+      }
+    ])
 
-      return {draftList}
-    }
-  })
+    return {draftList}
+  }
+})
 
 </script>
 

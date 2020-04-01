@@ -27,7 +27,6 @@
                 Personal Property Registry
               </a>
             </p>
-
           </div>
           <div v-if="authenticated">
             Current persona is:
@@ -36,7 +35,8 @@
               <div> Company: {{ currentUser.company }}, </div>
               <div> Occupation: {{ currentUser.occupation }} </div>
               <div> Role: {{ currentUser.role }} </div>
-              <div> Party:
+              <div>
+                Party:
                 <party-code :value="currentUser.party" />
               </div>
             </div>
@@ -48,17 +48,17 @@
 </template>
 
 <script lang="ts">
-  import {createComponent, ref} from '@vue/composition-api'
-  import { useUsers } from '@/users/users'
-  import PartyCode from '@/party-code/PartyCode.vue'
+import {createComponent, ref} from '@vue/composition-api'
+import { useUsers } from '@/users/users'
+import PartyCode from '@/party-code/PartyCode.vue'
 
-  export default createComponent({
-    components: { PartyCode },
-    setup(_, {root}) {
-      const { authenticated, currentUser} = useUsers()
-      return {authenticated, currentUser}
-    }
-  })
+export default createComponent({
+  components: { PartyCode },
+  setup(_, {root}) {
+    const { authenticated, currentUser} = useUsers()
+    return {authenticated, currentUser}
+  }
+})
 
 </script>
 

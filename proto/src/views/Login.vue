@@ -25,13 +25,13 @@
             <v-radio-group
               v-model="currentUserIndex"
             >
-              <v-radio v-for="user in userList" :key="user.index"
+              <v-radio
+                v-for="user in userList"
+                :key="user.index"
                 :label="`${user.name}, ${user.company}, ${user.occupation}, ${user.role}`"
                 :value="user.index"
                 @change="changeUser(user.index)"
-              >
-              </v-radio>
-
+              />
             </v-radio-group>
           </v-container>
         </div>
@@ -40,23 +40,23 @@
   </div>
 </template>
 <script lang="ts">
-  import { createComponent } from '@vue/composition-api'
-  import { useUsers } from '@/users/users'
+import { createComponent } from '@vue/composition-api'
+import { useUsers } from '@/users/users'
 
-  export default createComponent({
-    setup(_, { root }) {
-      const { currentUserIndex, setUser, userList } = useUsers()
+export default createComponent({
+  setup(_, { root }) {
+    const { currentUserIndex, setUser, userList } = useUsers()
 
-      function proceed(): void {
-        root.$router.push({ name: 'home' })
-      }
-
-      function changeUser(index) {
-        setUser(index)
-      }
-
-      return { changeUser,  proceed, currentUserIndex, userList }
+    function proceed(): void {
+      root.$router.push({ name: 'home' })
     }
-  })
+
+    function changeUser(index) {
+      setUser(index)
+    }
+
+    return { changeUser,  proceed, currentUserIndex, userList }
+  }
+})
 
 </script>

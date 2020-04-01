@@ -1,6 +1,6 @@
 <template>
   <div>
-    <sbc-header/>
+    <sbc-header />
 
     <div class="app-body">
       <main>

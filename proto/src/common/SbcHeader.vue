@@ -1,12 +1,17 @@
 <template>
   <header class="app-header">
     <div class="container">
-      <a @click="goToHome()" class="brand">
+      <a
+        class="brand"
+        @click="goToHome()"
+      >
         <picture>
-          <img class="brand__image"
+          <img
+            class="brand__image"
             src="../assets/images/gov3_bc_logo.png"
             alt="Government of British Columbia Logo"
-            title="Government of British Columbia">
+            title="Government of British Columbia"
+          >
         </picture>
         <span class="brand__title">BC Registries <span class="brand__title--wrap">& Online Services</span></span>
       </a>
@@ -14,35 +19,41 @@
         {{ welcomeText }}
       </div>
       <div class="app-header__actions">
-        <v-btn color="#fcba19" class="log-in-btn" @click="login()">{{ buttonText }}</v-btn>
+        <v-btn
+          color="#fcba19"
+          class="log-in-btn"
+          @click="login()"
+        >
+          {{ buttonText }}
+        </v-btn>
       </div>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-  import { computed, createComponent,ref } from '@vue/composition-api'
-  import { useUsers } from '@/users/users'
+import { computed, createComponent,ref } from '@vue/composition-api'
+import { useUsers } from '@/users/users'
 
-  export default createComponent({
-    setup(_, { root }) {
-      const { authenticated, currentUser} = useUsers()
+export default createComponent({
+  setup(_, { root }) {
+    const { authenticated, currentUser} = useUsers()
 
-      const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
+    const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
 
-      const welcomeText = computed( () => (authenticated.value ? `Welcome ${currentUser.value.name}, ${currentUser.value.company}` : 'Log in'))
+    const welcomeText = computed( () => (authenticated.value ? `Welcome ${currentUser.value.name}, ${currentUser.value.company}` : 'Log in'))
 
-      function login(): void {
-        if (authenticated.value) {
-          root.$router.push({ name: 'logout' })
-        } else {
-          root.$router.push({ name: 'login' })
-        }
+    function login(): void {
+      if (authenticated.value) {
+        root.$router.push({ name: 'logout' })
+      } else {
+        root.$router.push({ name: 'login' })
       }
-
-      return { authenticated, login, buttonText, welcomeText}
     }
-  })
+
+    return { authenticated, login, buttonText, welcomeText}
+  }
+})
 </script>
 
 <style lang="scss" scoped>

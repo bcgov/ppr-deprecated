@@ -43,7 +43,7 @@ class MockStorage {
 
   public setCurrentUser(index: number): void {
     if (index >= 0)
-    sessionStorage.setItem('KEYCLOAK_TOKEN', ''+ index)
+      sessionStorage.setItem('KEYCLOAK_TOKEN', ''+ index)
     else
       sessionStorage.removeItem('KEYCLOAK_TOKEN')
     this._currentUserIndex = index

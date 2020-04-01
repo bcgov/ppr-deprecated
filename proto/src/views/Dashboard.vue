@@ -10,14 +10,14 @@
 
 </template>
 <script lang="ts">
-  import { createComponent } from '@vue/composition-api'
-  import DashBoard from '@/dashboard/Dashboard.vue'
+import { createComponent } from '@vue/composition-api'
+import DashBoard from '@/dashboard/Dashboard.vue'
 
-  export default createComponent({
-    components: { DashBoard },
-    setup() {
-      return {}
-    }
-  })
+export default createComponent({
+  components: { DashBoard },
+  setup() {
+    return {}
+  }
+})
 
 </script>

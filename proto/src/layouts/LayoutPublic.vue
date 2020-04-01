@@ -1,7 +1,7 @@
 <template>
   <div>
-    <sbc-header/>
-    <navigation-bar/>
+    <sbc-header />
+    <navigation-bar />
 
     <div class="app-body">
       <main>

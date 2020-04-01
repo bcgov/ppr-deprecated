@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-  import { computed, createComponent } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { AddressModel } from '@/address/address-model'
 
 export default createComponent({

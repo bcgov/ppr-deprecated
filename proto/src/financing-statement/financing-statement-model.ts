@@ -66,10 +66,10 @@ export class FinancingStatementModel {
   public registerLien() {
     function getRandomDocId() {
       const base = 100000000
-      return Math.floor(Math.random() * base);
+      return Math.floor(Math.random() * base)
     }
     this._baseRegistrationNumber = '' + getRandomDocId()
-    this._registrationDateTime = moment().format("MMM DD YYYY");
+    this._registrationDateTime = moment().format("MMM DD YYYY")
   }
   /**
    * Gets the unique registration number for the financing statement.

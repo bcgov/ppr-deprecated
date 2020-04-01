@@ -59,7 +59,7 @@ export function usePartyCodes () {
 }
 
 export function PartiesList(): PartyCodeInterface[] {
-  let _cnt = 100;
+  let _cnt = 100
   const list = [
     {
       clientCode: '' + _cnt++,
