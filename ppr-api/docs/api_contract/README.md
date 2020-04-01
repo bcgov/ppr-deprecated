@@ -10,7 +10,7 @@ capabilities.
 
 Both documents are a work in progress and are subject change.  Generally speaking, this API has been designed in such a
 way that write operations (`POST`, `DELETE`, etc...) correspond with capabilities that are charged, where as read
-operations (`GET`) would are geared to be lookups, and would not have a charge.
+operations (`GET`) are intended to be lookups, and would not have a charge to the end user.
 
 ### Implementation Status
 
@@ -84,10 +84,12 @@ operations must use this identifier.
 
 For purposes of the API, any write operations are considered events. Under the hood, each event references the financing
 statement.  Any relational data associated with the financing statement will have references to the starting and ending
-events. Internally, this enables us to leverage the data model to wither do a quick lookup of the current state of the
+events. Internally, this enables us to leverage the data model to either do a quick lookup of the current state of the
 financing statement or use the events to rebuild the state up to a specific point in time.
 
-When performing an operation using a `financing-statement` endpoint in the API, this leverages the current state.
+Operations on the `financing-statement` schema are designed as CRUD operations on a financing state.  As such, events
+are abstracted out of the interface, so reading a response object can be considered the current state of the financing
+statement.
 
 ### New Registration
 
@@ -160,13 +162,14 @@ would be records associated with the provided account id. Consider whether addit
 ### Amendments or Change Statements
 
 The goal of this operation is to apply a change to a financing statement. Under the BC Government statutes, there are
-several different types of amendments, each of one performs a specifically design change. There also exists a change,
-which is a more general update to financing statement that provides capabilities that equivalent to multiple amendments
-at once. Some clarification is still required on whether standalone amendments are necessary or whether having the
-ability to do changes is sufficient.
+several different types of amendments, each of one performs a specifically designed change. There also exists a
+"change", which is a more general update to financing statement that provides capabilities that equivalent to multiple
+amendments at once. Some clarification is still required on whether standalone amendments are necessary or whether
+having the ability to do changes is sufficient. The recommended approach is to not implement fine grained amendments
+and instead just have a "General Change" operation. 
 
-As for the proposed implementation, there are a few different ways to approach this. Ultimately, we've recommended this
-particular approach as it ties changes to the event model. Some aspects of a change event to not go well with a state
+As for the proposed implementation of changes, there are a few possible approaches. Ultimately, we've recommended a
+`POST` to events as it ties changes to the event model. Some aspects of a change event to not go well with a state
 based model, such as payments, extending life (renewals, described separately below) or adding general collateral.
 
 It may be possible to use a more general CRUD approach to updating financing statements, and build events by comparing
@@ -186,7 +189,7 @@ would be records associated with the provided account id.
   by reviewing the new values, removing any that weren't provided and adding any that did not previously exist. 
 - Likewise, a similar approach would be to use `PATCH /financing-statements/{financingStatementId}`. The benefit of this
   approach is that it would not be necessary to submit all of the data in the financing statement for a change, which
-  would be a pit simpler than a PUT. Additionally, rules around handling changes would be more flexible. Challenges
+  would be a bit simpler than a PUT. Additionally, rules around handling changes would be more flexible. Challenges
   would be similar to a PUT.
 - Another approach would be to make individual endpoints for specific types of amendments. For example, a debtor
   transfer could be done with `PUT /financing-statements/{financingStatementId}/debtors`. This would require more
@@ -216,7 +219,7 @@ would be records associated with the provided account id.
 - An endpoint specifically to create renewals could be added to the financing statement. Using
   `POST /financing-statements/{financingStatementId}/renewals` would have the benefit of simplifying the work to be
    explicitly for this operation, though it would add an additional endpoint to be maintained.
-- An update to life could be handled with `PATCH /financing-statements/{financingStatementId}`, thought this interface
+- An update to life could be handled with `PATCH /financing-statements/{financingStatementId}`, though this interface
   may be an over simplification of the operation.
 
 ### Discharge
