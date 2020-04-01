@@ -43,10 +43,17 @@ export default createComponent({
       default: false,
       required: false,
       type: Boolean
+    },
+    submitted:  {
+      default: false,
+      required: false,
+      type: Boolean
     }
   },
   setup(props) {
-    const title = computed(() => props.editing ? 'Register a Lien' : 'View Your Lien')
+    const title = computed(() => {
+      return props.editing ? 'Register a Lien' : (props.submitted ? 'Successful Registration' : 'View Your Lien')
+    })
     return {
       title
     }

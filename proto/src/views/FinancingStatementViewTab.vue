@@ -2,7 +2,7 @@
   div
     v-container(class="view-container")
       article(id="financingStatementIntro")
-        financing-statement-intro(:editing="editing")
+        financing-statement-intro(:editing="editing", :submitted="submitted")
     v-container(class="view-container")
       article(id="financingStatement")
         section(v-if="editing")
@@ -56,6 +56,8 @@ export default createComponent({
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 
+    const submitted = root.$route.query ? root.$route.query['success'] : false
+
     const { currentRole } = useUsers()
     const submitButtonText = computed(() => (currentRole.value !== Roles.Staff ? 'Pay and Register' : 'Register'))
 
@@ -85,7 +87,7 @@ export default createComponent({
     function confirmConfirmed() {
       confirmDialogOpen.value = false
       const baseRegistrationNumber = registerFinancingStatement(financingStatement.value)
-      root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber } })
+      root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber, success: true } })
     }
 
     function submit() {
@@ -102,6 +104,7 @@ export default createComponent({
       financingStatement,
       formValid,
       submit,
+      submitted,
       submitButtonText,
       updateFinancingModel
     }

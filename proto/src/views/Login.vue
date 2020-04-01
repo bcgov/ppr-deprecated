@@ -3,14 +3,15 @@
     <v-container class="view-container">
       <article>
         <header>
-          <h1>Log into the Personal Property Registry prototype</h1>
+          <h1>Log into the prototype Personal Property Registry</h1>
         </header>
 
         <div class="page-content">
           <div class="page-content__main">
-            <p>
+            <p class="intro">
               This is a login page for the prototype. In a real system users will authenticate
-              via the auth share system.
+              via the auth share system.  Here you can chose a fictional persona that represents
+              various types of users of a PPR system.
             </p>
             <v-btn
               color="#fcba19"
@@ -74,3 +75,10 @@ export default createComponent({
 })
 
 </script>
+<style lang="scss" scoped>
+  @import '../assets/styles/theme.scss';
+  .intro {
+    padding-top: 2rem;
+    max-width: 60rem;
+  }
+</style>
