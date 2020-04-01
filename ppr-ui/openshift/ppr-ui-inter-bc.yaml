@@ -7,7 +7,6 @@ objects:
     labels:
       app: ppr
       build: ${APP_NAME}
-      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -48,7 +47,6 @@ objects:
   metadata:
     labels:
       app: ppr
-      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -70,8 +68,4 @@ parameters:
 - description: The git repository URI
   displayName: Git URI
   name: GIT_URI
-  required: true
-- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
-  displayName: PPR group
-  name: PPR_GROUP
   required: true
