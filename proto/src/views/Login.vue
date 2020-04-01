@@ -16,7 +16,7 @@
             <v-btn
               color="#fcba19"
               class="log-in-btn"
-              :disabled="currentUserIndex < 0"
+              :disabled="currentUserIndex === noUserIndex"
               @click="proceed()"
             >
               Continue
@@ -28,10 +28,10 @@
             >
               <v-radio
                 v-for="user in userList"
-                :key="user.index"
+                :key="user.userId"
                 :label="userLabel(user)"
-                :value="user.index"
-                @change="changeUser(user.index)"
+                :value="user.userId"
+                @change="changeUser(user.userId)"
               />
             </v-radio-group>
           </v-container>
@@ -46,14 +46,14 @@ import { useUsers } from '@/users/users'
 
 export default createComponent({
   setup(_, { root }) {
-    const { currentUserIndex, setUser, userList } = useUsers()
+    const { currentUserIndex, noUserIndex, setUser, userList } = useUsers()
 
     function proceed(): void {
       root.$router.push({ name: 'home' })
     }
 
-    function changeUser(index) {
-      setUser(index)
+    function changeUser(userId) {
+      setUser(userId)
     }
 
     function userLabel(user) {
@@ -70,7 +70,7 @@ export default createComponent({
     }
 
 
-    return { changeUser,  proceed, currentUserIndex, userLabel, userList }
+    return { changeUser,  proceed, currentUserIndex, noUserIndex, userLabel, userList }
   }
 })
 

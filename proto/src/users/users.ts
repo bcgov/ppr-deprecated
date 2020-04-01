@@ -17,7 +17,7 @@ const SuperRoles = [ Roles.Admin]
 const PowerUserRoles = [ Roles.Staff, Roles.SP, Roles.SPAdmin, Roles.Admin, Roles.RP ]
 
 export interface UserInterface {
-  index: number;
+  userId: number;
   name: string;
   last: string;
   company: string;
@@ -29,7 +29,8 @@ export interface UserInterface {
 
 function getDefs() {
 
-  const currentUserIndex = ref(-1)
+  const noUserIndex = ref('')
+  const currentUserIndex = ref(noUserIndex.value)
 
   /**
    * Create list of users.  Insert their party codes.
@@ -45,16 +46,16 @@ function getDefs() {
   // export the list of users
   const userList = ref(list)
 
-  const authenticated = computed((): boolean => currentUserIndex.value >= 0)
+  const authenticated = computed((): boolean => currentUserIndex.value !== noUserIndex.value)
 
   const currentUser = computed((): UserInterface | undefined => {
-    let index = currentUserIndex.value
+    let userId = currentUserIndex.value
     const stashedUser = sessionStorage.getItem('user')
     if (stashedUser) {
-      index = parseInt(stashedUser)
+      userId = stashedUser
     }
-    if (index>=0)
-      return userList.value[index]
+    if (userId !== noUserIndex.value)
+      return userList.value[userId]
     return undefined
   })
 
@@ -63,13 +64,13 @@ function getDefs() {
   const canDash = computed((): boolean => PowerUserRoles.includes(currentRole.value))
   const canSuper = computed((): boolean => SuperRoles.includes(currentRole.value))
 
-  function setUser(index): void {
-    currentUserIndex.value = index
+  function setUser(userId): void {
+    currentUserIndex.value = userId
     const str = `${currentUserIndex.value}`
     sessionStorage.setItem('user', str)
   }
   function logout(): void {
-    currentUserIndex.value = -1
+    currentUserIndex.value = noUserIndex.value
     sessionStorage.removeItem('user')
   }
 
@@ -82,6 +83,7 @@ function getDefs() {
     currentUserIndex,
     currentUser,
     logout,
+    noUserIndex,
     setUser,
     userList
   }
@@ -100,7 +102,7 @@ function UserList(): UserInterface[] {
   let _cnt = 0
   const list = [
     {
-      index: _cnt++,
+      userId: _cnt++,
       name: 'Darlene',
       last: 'Dunn',
       company:'Dye and Durham',
@@ -110,7 +112,7 @@ function UserList(): UserInterface[] {
 
     },
     {
-      index: _cnt++,
+      userId: _cnt++,
       name: 'Laylee',
       last: 'Lorn',
       company:'Dye and Durham',
@@ -119,7 +121,7 @@ function UserList(): UserInterface[] {
       description: "Mainly does searches, and a few registrations, discharges, amendments"
     },
     {
-      index: _cnt++,
+      userId: _cnt++,
       name: 'Adam',
       last: 'Minister',
       company:"Big Bank", // same as John Jones
@@ -127,7 +129,7 @@ function UserList(): UserInterface[] {
       role: Roles.SPAdmin
     },
     {
-      index: _cnt++,
+      userId: _cnt++,
       name: 'John',
       last: 'Jones',
       company:'Big Bank',
@@ -135,7 +137,7 @@ function UserList(): UserInterface[] {
       role: Roles.SP
     },
     {
-      index: _cnt++,
+      userId: _cnt++,
       name: 'Andrew',
       last: 'Lodge',
       company:"Andrew's Used Cars",
@@ -143,7 +145,7 @@ function UserList(): UserInterface[] {
       role: Roles.User
     },
     {
-      index: _cnt++,
+      userId: _cnt++,
       name: 'Sarah',
       last: 'Sawyer',
       company:"BC Registries",
@@ -151,7 +153,7 @@ function UserList(): UserInterface[] {
       role: Roles.Staff
     },
     {
-      index: _cnt++,
+      userId: _cnt++,
       name: 'Super',
       last: 'User',
       company:"Prototype explorer",
