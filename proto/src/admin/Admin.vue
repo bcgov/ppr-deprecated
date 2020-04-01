@@ -18,7 +18,7 @@ import { createComponent } from '@vue/composition-api'
 import { useAdmin } from '@/admin/admin'
 
 export default createComponent({
-  setup(_, { root }) {
+  setup() {
     const { loadFinancingStatements, saveFinancingStatements } = useAdmin()
 
     function setFile (event) {

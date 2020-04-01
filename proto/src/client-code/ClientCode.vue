@@ -36,9 +36,8 @@
 </template>
 
 <script lang="ts">
-import { computed, createComponent, ref } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { usePartyCodes } from '../party-code/party-code-model'
-import { ClientCodeModel } from '@/client-code/client-code-model'
 import AddressSegment from '../address/AddressSegment.vue'
 
 export default createComponent({

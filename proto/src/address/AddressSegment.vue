@@ -19,7 +19,7 @@ export default createComponent({
       type: AddressModel
     }
   },
-  setup(props, { emit }) {
+  setup(props, { }) {
     const oneLine = computed(() => {
       const text = []
       props.value.street ? text.push(props.value.street) : undefined

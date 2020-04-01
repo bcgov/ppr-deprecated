@@ -2,11 +2,11 @@ import { saveAs } from 'file-saver'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 
 
-function getDefs() {
+function getDefs(): object {
 
   const { getFinancingStatementStash, loadFinancingStatementStash } = useFinancingStatements()
 
-  function loadFinancingStatements (file) {
+  function loadFinancingStatements (file): void {
     const reader = new FileReader()
     reader.onload = (function (event) {
       const contents = event.target.result
@@ -15,7 +15,7 @@ function getDefs() {
     reader.readAsText(file)
   }
 
-  function saveFinancingStatements() {
+  function saveFinancingStatements(): void {
     const stringData = getFinancingStatementStash()
     const fileName = 'ppr-proto-fslist.json'
     const type = 'application/json'
@@ -29,10 +29,10 @@ function getDefs() {
 }
 
 const instance = {_instance: undefined}
-function Instance() {
+function Instance(): object {
   return instance._instance || (instance._instance = getDefs())
 }
 
-export function useAdmin () {
+export function useAdmin(): object {
   return Instance()
 }

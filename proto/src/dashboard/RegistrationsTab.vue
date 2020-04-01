@@ -13,7 +13,7 @@ import { useUsers } from '@/users/users'
 import FinancingStatementCondensed from '@/financing-statement/FinancingStatementCondensed.vue'
 export default createComponent({
   components: { FinancingStatementCondensed },
-  setup(_, { root }) {
+  setup() {
     const { financingStatementsList } = useFinancingStatements()
 
     return { financingStatementsList }

@@ -58,24 +58,17 @@ function getDefs() {
     return undefined
   })
 
-  const currentRole = computed( () => currentUser.value ? currentUser.value.role : Roles.None)
+  const currentRole = computed( (): Roles => currentUser.value ? currentUser.value.role : Roles.None)
   const canAdmin = computed((): boolean => AdminRoles.includes(currentRole.value))
   const canDash = computed((): boolean => PowerUserRoles.includes(currentRole.value))
   const canSuper = computed((): boolean => SuperRoles.includes(currentRole.value))
 
-  function tmp () {
-    const stashedUser = sessionStorage.getItem('user')
-    console.log('stashed user', stashedUser)
-    if (stashedUser) {
-      setUser(parseInt(stashedUser))
-    }
-  }
-  function setUser(index) {
+  function setUser(index): void {
     currentUserIndex.value = index
     const str = `${currentUserIndex.value}`
     sessionStorage.setItem('user', str)
   }
-  function logout() {
+  function logout(): void {
     currentUserIndex.value = -1
     sessionStorage.removeItem('user')
   }
@@ -99,11 +92,11 @@ function Instance() {
   return instance._instance || (instance._instance = getDefs())
 }
 
-export function useUsers () {
+export function useUsers() {
   return Instance()
 }
 
-export function UserList(): UserInterface[] {
+function UserList(): UserInterface[] {
   let _cnt = 0
   const list = [
     {

@@ -18,7 +18,7 @@ import { computed, createComponent } from '@vue/composition-api'
 import { useUsers } from '../users/users'
 
 export default createComponent({
-  setup(_, { root }) {
+  setup() {
     const { authenticated, currentUser, canAdmin, canDash, canSuper } = useUsers()
     const menuItems = computed( () => {
       const list = []

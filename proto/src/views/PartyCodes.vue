@@ -16,7 +16,7 @@ import { usePartyCodes } from '../party-code/party-code-model'
 import PartyCode from '@/party-code/PartyCode.vue'
 export default createComponent({
   components: { PartyCode },
-  setup(_, { root }) {
+  setup() {
     const { partyList } = usePartyCodes()
 
     return {partyList}

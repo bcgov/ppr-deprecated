@@ -1,4 +1,4 @@
-import {computed, ref} from '@vue/composition-api'
+import {ref} from '@vue/composition-api'
 
 
 function getDefs() {
@@ -8,11 +8,11 @@ function getDefs() {
   function doSearch(term: string): void {
   }
 
-  function getSearch(searchId: string) {
+  function getSearch(searchId: string): void {
 
   }
 
-  function getResults(searchId: string) {
+  function getResults(searchId: string): void {
 
   }
 
@@ -21,10 +21,10 @@ function getDefs() {
 
 const instance = {_instance: undefined}
 
-function Instance() {
+function Instance():object {
   return instance._instance || (instance._instance = getDefs())
 }
 
-export function useSearching() {
+export function useSearching():object {
   return Instance()
 }

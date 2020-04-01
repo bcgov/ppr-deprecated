@@ -14,7 +14,7 @@ import Draft from '@/drafts/Draft.vue'
 
 export default createComponent({
   components: { Draft },
-  setup(_, { root }) {
+  setup() {
 
     const draftList = ref([
       {

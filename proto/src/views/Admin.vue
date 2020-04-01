@@ -15,7 +15,7 @@ import Admin from '@/admin/Admin.vue'
 
 export default createComponent({
   components: { Admin },
-  setup(_, { root }) {
+  setup() {
     return {}
   }
 })

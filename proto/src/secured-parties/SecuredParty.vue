@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { createComponent, computed } from '@vue/composition-api'
-import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
+import { usePartyCodes } from '@/party-code/party-code-model'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import ClientCode from '@/client-code/ClientCode.vue'
 

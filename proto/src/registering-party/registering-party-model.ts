@@ -29,7 +29,7 @@ export class RegisteringPartyModel {
 
 }
 
-function getDefs() {
+function getDefs():object {
 
   function createFromCurrentUser() {
     const { currentUser } = useUsers()
@@ -46,11 +46,11 @@ function getDefs() {
 }
 
 const instance = {_instance: undefined}
-function Instance() {
+function Instance():object {
   return instance._instance || (instance._instance = getDefs())
 }
 
-export function useRegisteredParty () {
+export function useRegisteredParty ():object {
   return Instance()
 }
 

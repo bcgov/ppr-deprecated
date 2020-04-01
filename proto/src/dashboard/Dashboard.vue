@@ -35,7 +35,7 @@ import RegistrationsTab from '@/dashboard/RegistrationsTab.vue'
 
 export default createComponent({
   components: { Drafts, RegistrationsTab, ClientCodesTab },
-  setup(_, { root }) {
+  setup() {
     const { authenticated, currentUser} = useUsers()
 
     return {authenticated, currentUser}

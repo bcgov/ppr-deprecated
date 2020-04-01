@@ -3,33 +3,27 @@
     id="app"
     class="app-container, theme--light"
   >
-    <component is="public-layout">
+    <component :is="DefaultLayout">
       <router-view :key="$route.fullPath" />
     </component>
   </v-app>
 </template>
 
 <script lang="ts">
-import { createComponent, computed, onErrorCaptured, onMounted } from '@vue/composition-api'
+import { createComponent, onErrorCaptured, onMounted } from '@vue/composition-api'
 import { useUsers } from '@/users/users'
 
-const DefaultLayout = 'public'
-
-function origin(): string {
-  const root = window.location.origin || ''
-  const path = process.env.BASE_URL
-  return `${root}${path}`
-}
+const DefaultLayout = 'public-layout'
 
 export default createComponent({
   components: {
   },
-  setup(_, { root }) {
+  setup() {
     // const layout = computed((): string => (root.$router.currentRoute.meta.layout || DefaultLayout) + '-layout')
     const { setUser } = useUsers()
 
     onErrorCaptured((err): void => {
-
+      console.log('App captured error', err)
     })
 
     onMounted(() => {
@@ -40,7 +34,7 @@ export default createComponent({
       }
     })
 
-    return {  }
+    return { DefaultLayout }
   }
 })
 

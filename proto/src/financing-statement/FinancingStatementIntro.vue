@@ -31,10 +31,9 @@
 </template>
 
 <script>
-import { createComponent, computed } from '@vue/composition-api'
+import { createComponent } from '@vue/composition-api'
 import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
-import ClientCode from '@/client-code/ClientCode.vue'
 
 export default createComponent({
   props: {
@@ -44,7 +43,7 @@ export default createComponent({
       type: Boolean
     }
   },
-  setup({}) {
+  setup() {
     return {
     }
   }

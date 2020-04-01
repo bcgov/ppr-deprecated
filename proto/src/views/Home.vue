@@ -54,7 +54,7 @@ import PartyCode from '@/party-code/PartyCode.vue'
 
 export default createComponent({
   components: { PartyCode },
-  setup(_, {root}) {
+  setup() {
     const { authenticated, currentUser} = useUsers()
     return {authenticated, currentUser}
   }
