@@ -19,7 +19,7 @@ import { useUsers } from '../users/users'
 
 export default createComponent({
   setup(_, { root }) {
-    const { authenticated, currentUser, canAdmin, canDash } = useUsers()
+    const { authenticated, currentUser, canAdmin, canDash, canSuper } = useUsers()
     const menuItems = computed( () => {
       const list = []
       if (authenticated.value) {
@@ -29,15 +29,17 @@ export default createComponent({
             url: 'dashboard'
           })
         }
-        list.push({
-          name: 'Register',
-          url: 'financing'
-        })
+        if(!canSuper.value) {
+          list.push({
+            name: 'Register',
+            url: 'financing'
+          })
+        }
         list.push({
           name: 'Search',
           url: 'search'
         })
-        if(canAdmin.value) {
+        if(canSuper.value) {
           list.push({
             name: 'Admin',
             url: 'admin'

@@ -18,7 +18,16 @@
               color="primary",
               :disabled="!formValid",
               @click="submit"
-            ) Submit
+            ) {{ submitButtonText }}
+            dialog-confirm(
+              :value="confirmDialogOpen",
+              title="Confirm Pay and Register",
+              :message="confirmPaymentMessage",
+              :options="{ok:'Confirm', width:600}",
+              @cancel="confirmCanceled($event)",
+              @ok="confirmConfirmed($event)"
+            )
+
         section(v-else)
           financing-statement-tab(
             :value="financingStatement",
@@ -27,15 +36,17 @@
 </template>
 
 <script lang="ts">
-import { createComponent, ref } from '@vue/composition-api'
+import { computed, createComponent, ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import FinancingStatementTab from '@/financing-statement/FinancingStatementTab.vue'
 import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
+import DialogConfirm from "@/components/DialogConfirm.vue"
+import { useUsers, Roles } from '@/users/users'
 
 
 export default createComponent({
-  components: { FinancingStatementTab, FinancingStatementIntro },
+  components: { DialogConfirm, FinancingStatementTab, FinancingStatementIntro },
 
   setup(_, { root }) {
     const editing = ref(true)
@@ -45,10 +56,8 @@ export default createComponent({
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 
-    function submit() {
-      const baseRegistrationNumber = registerFinancingStatement(financingStatement.value)
-      root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber } })
-    }
+    const { currentRole } = useUsers()
+    const submitButtonText = computed(() => (currentRole.value !== Roles.Staff ? 'Pay and Register' : 'Register'))
 
     if (regNum) {
       financingStatement.value = findFinancingStatement(regNum)
@@ -61,11 +70,39 @@ export default createComponent({
       financingStatement.value = newValue
     }
 
+    // Controls confirmation to register dialog state.
+    const confirmDialogOpen = ref(false)
+
+    const confirmPaymentMessage = computed((): string => {
+      const fees = 5 * financingStatement.value.lifeYears
+      return `To register this lien you need to pay $${fees}.  Do you wish to proceed?.`
+    })
+
+    function confirmCanceled() {
+      confirmDialogOpen.value = false
+    }
+
+    function confirmConfirmed() {
+      confirmDialogOpen.value = false
+      const baseRegistrationNumber = registerFinancingStatement(financingStatement.value)
+      root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber } })
+    }
+
+    function submit() {
+      confirmDialogOpen.value = true
+    }
+
+
     return {
+      confirmCanceled,
+      confirmConfirmed,
+      confirmDialogOpen,
+      confirmPaymentMessage,
       editing,
       financingStatement,
       formValid,
       submit,
+      submitButtonText,
       updateFinancingModel
     }
   }

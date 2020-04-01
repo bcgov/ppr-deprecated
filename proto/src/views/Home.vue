@@ -30,13 +30,15 @@
 
           </div>
           <div v-if="authenticated">
-            Current user is:
+            Current persona is:
             <div class="user-section">
-              <div> {{ currentUser.name }} {{ currentUser.last }}, </div>
-              <div> {{ currentUser.company }}, </div>
-              <div> {{ currentUser.occupation }} </div>
-              <div> {{ currentUser.role }} </div>
-              <div> {{ currentUser.clientCode }} </div>
+              <div> Name: {{ currentUser.name }} {{ currentUser.last }}, </div>
+              <div> Company: {{ currentUser.company }}, </div>
+              <div> Occupation: {{ currentUser.occupation }} </div>
+              <div> Role: {{ currentUser.role }} </div>
+              <div> Party:
+                <party-code :value="currentUser.party" />
+              </div>
             </div>
           </div>
         </div>
@@ -48,8 +50,10 @@
 <script lang="ts">
   import {createComponent, ref} from '@vue/composition-api'
   import { useUsers } from '@/users/users'
+  import PartyCode from '@/party-code/PartyCode.vue'
 
   export default createComponent({
+    components: { PartyCode },
     setup(_, {root}) {
       const { authenticated, currentUser} = useUsers()
       return {authenticated, currentUser}

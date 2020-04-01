@@ -12,7 +12,8 @@ export enum Roles {
   Admin = "Admin"
 }
 
-const AdminRoles = [ Roles.SPAdmin, Roles.Staff, Roles.Admin]
+const AdminRoles = [ Roles.SPAdmin, Roles.Staff]
+const SuperRoles = [ Roles.Admin]
 const PowerUserRoles = [ Roles.Staff, Roles.SP, Roles.SPAdmin, Roles.Admin, Roles.RP ]
 
 export interface UserInterface {
@@ -60,6 +61,7 @@ function getDefs() {
   const currentRole = computed( () => currentUser.value ? currentUser.value.role : Roles.None)
   const canAdmin = computed((): boolean => AdminRoles.includes(currentRole.value))
   const canDash = computed((): boolean => PowerUserRoles.includes(currentRole.value))
+  const canSuper = computed((): boolean => SuperRoles.includes(currentRole.value))
 
   function tmp () {
     const stashedUser = sessionStorage.getItem('user')
@@ -82,6 +84,7 @@ function getDefs() {
     authenticated,
     canAdmin,
     canDash,
+    canSuper,
     currentRole,
     currentUserIndex,
     currentUser,

@@ -52,7 +52,7 @@ export class FinancingStatementModel {
     registrationDatetime?: string,
     expiryDate?: string
   ) {
-    //console.log('make a FS with ', registeringParty)
+    console.log('make a FS with ', type)
     this._type = type
     this._lifeYears = lifeYears
     this._registeringParty = registeringParty
