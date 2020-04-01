@@ -20,25 +20,26 @@
         @valid="emitValidity(PERSON_NAME, $event)"
       )
     div(v-else)
-      div(v-if="condensed")
+      div(v-if="layout=='condensed'")
         div(v-if="value.businessName")
           div(class="section") Business Name
-          business-name(
-            :value="value.businessName",
-          )
+          business-name(:value="value.businessName")
         div(v-if="personName") "{{personName}}"
           div(class="section") Individual Name
-          person-name(
-            :value="personName",
-          )
+          person-name(:value="personName")
+      div(v-if="layout=='minimal'")
+        div(v-if="value.businessName")
+          business-name(:value="value.businessName")
+        div(v-if="personName") "{{personName}}"
+          person-name(:value="personName")
       div(v-else)
-        business-name(
-        :value="value.businessName",
-        )
-        person-name(
-        :value="value.personName",
-        )
-
+        div(v-if="value.businessName")
+          div(class="section") Business Name
+          business-name(:value="value.businessName")
+        div(v-if="personName") "{{personName}}"
+          div(class="section") Individual Name
+          person-name(:value="personName")
+        // insert address here
 </template>
 
 <script lang="ts">
@@ -53,10 +54,10 @@ export default createComponent({
   components: { BusinessName, PersonName },
 
   props: {
-    condensed: {
-      default: false,
+    layout: {
+      default: 'full',
       required: false,
-      type: Boolean
+      type: String
     },
     editing: {
       default: false,

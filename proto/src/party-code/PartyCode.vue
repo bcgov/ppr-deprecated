@@ -41,10 +41,10 @@ import { PartyCodeModel, usePartyCodes } from '@/party-code/party-code-model'
 export default createComponent({
   components: { AddressSegment },
   props: {
-    condensed: {
-      default: false,
+    layout: {
+      default: 'full',
       required: false,
-      type: Boolean
+      type: String
     },
     editing: {
       default: false,

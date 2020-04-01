@@ -16,7 +16,7 @@
           return-object=false
         )
     div(v-if="partyCode")
-      div(v-if="condensed")
+      div(v-if="layout === 'condensed' || layout === 'minimal'")
         div {{partyCode.clientCode }}, {{partyCode.business}}
       v-simple-table(v-else)
         tbody
@@ -43,10 +43,10 @@ import AddressSegment from '../address/AddressSegment.vue'
 export default createComponent({
   components: { AddressSegment },
   props: {
-    condensed: {
-      default: false,
+    layout: {
+      default: 'full',
       required: false,
-      type: Boolean
+      type: String
     },
     editing: {
       default: false,

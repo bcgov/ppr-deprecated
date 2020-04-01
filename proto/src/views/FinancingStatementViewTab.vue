@@ -56,7 +56,7 @@ export default createComponent({
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 
-    const submitted = root.$route.query ? root.$route.query['success'] : false
+    const submitted = ref(root.$route.query ? root.$route.query['success'] : false)
 
     const { currentRole } = useUsers()
     const submitButtonText = computed(() => (currentRole.value !== Roles.Staff ? 'Pay and Register' : 'Register'))
@@ -69,6 +69,7 @@ export default createComponent({
     }
 
     function updateFinancingModel(newValue: FinancingStatementModel) {
+      console.log('update fs', newValue)
       financingStatement.value = newValue
     }
 
@@ -95,7 +96,7 @@ export default createComponent({
     }
 
 
-    return {
+    return {currentRole,
       confirmCanceled,
       confirmConfirmed,
       confirmDialogOpen,

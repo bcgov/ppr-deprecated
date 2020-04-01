@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    div(v-if="condensed")
+    div(v-if="layout=='condensed'")
       div Client Code: {{partyCode.clientCode }}, Company Name: {{partyCode.business}}
     v-simple-table(v-else)
       tbody
@@ -30,10 +30,10 @@ import ClientCode from '@/client-code/ClientCode.vue'
 export default createComponent({
   components: { AddressSegment, ClientCode, PartyCode },
   props: {
-    condensed: {
-      default: false,
+    layout: {
+      default: 'full',
       required: false,
-      type: Boolean
+      type: String
     },
     value: {
       required: true,

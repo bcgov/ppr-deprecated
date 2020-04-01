@@ -3,7 +3,7 @@
     v-card(flat)
       client-code(
         :value="partyCode",
-        :condensed="condensed",
+        :layout="layout",
         :editing="editing",
         @input="updateClientCode($event)"
         @valid="emitValid($event)"
@@ -19,10 +19,10 @@ import ClientCode from '@/client-code/ClientCode.vue'
 export default createComponent({
   components: { ClientCode },
   props: {
-    condensed: {
-      default: false,
+    layout: {
+      default: 'full',
       required: false,
-      type: Boolean
+      type: String
     },
     editing: {
       default: false,

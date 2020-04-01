@@ -13,15 +13,15 @@
       v-col(cols="12",sm="4")
         v-card(class="pa-2",outlined)
           div Registering party:
-            registering-party(:value="value.registeringParty", condensed=true)
+            registering-party(:value="value.registeringParty", layout="condensed")
       v-col(cols="12",sm="4")
         v-card(class="pa-2",outlined)
           div First secured party:
-            secured-party(:value="value.securedParties[0]", condensed=true)
+            secured-party(:value="value.securedParties[0]", layout="condensed")
       v-col(cols="12",sm="4")
         v-card(class="pa-2",outlined)
           div First debtor:
-            debtor-party(:value="value.debtorParties[0]", condensed=false)
+            debtor-party(:value="value.debtorParties[0]", layout="condensed")
       v-col(cols="12",sm="4")
         v-card(class="pa-2",outlined)
           v-btn(@click="view")  View
