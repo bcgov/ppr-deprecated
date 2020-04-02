@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    party-code(v-for="party in partyList", :value="party", class="party-code")
+    party-code(v-for="party in partyList", :key="party.clientCode", :value="party", class="party-code")
 
 </template>
 <script lang="ts">

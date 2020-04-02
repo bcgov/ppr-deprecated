@@ -14,6 +14,9 @@ export class PartyCodeModel {
   public address: AddressModel
   public contact: string
   public description: string
+  public constructor(clientCode?){
+    this.clientCode = clientCode
+  }
   // public toJson(): PartyCodeInterface {
   //   let rval = {}
   //   return rval

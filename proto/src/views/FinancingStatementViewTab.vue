@@ -88,7 +88,7 @@ export default createComponent({
     function confirmConfirmed() {
       confirmDialogOpen.value = false
       const baseRegistrationNumber = registerFinancingStatement(financingStatement.value)
-      root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber, success: true } })
+      root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber, success: "true" } })
     }
 
     function submit() {

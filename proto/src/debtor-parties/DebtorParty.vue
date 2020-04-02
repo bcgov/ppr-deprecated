@@ -114,9 +114,9 @@ export default createComponent({
 
     const personName = computed((): string => {
       const parts: string[] = []
-      props.value.firstName ? parts.push(props.value.firstName) : undefined
-      props.value.middleName ? parts.push(props.value.middleName) : undefined
-      props.value.lastName ? parts.push(props.value.lastName) : undefined
+      props.value.personName.first ? parts.push(props.value.personName.first) : undefined
+      props.value.personName.middle ? parts.push(props.value.personName.middle) : undefined
+      props.value.personName.last ? parts.push(props.value.personName.last) : undefined
       return parts.join(',')
     })
 

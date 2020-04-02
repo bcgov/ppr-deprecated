@@ -1,5 +1,6 @@
 import { computed, ref } from '@vue/composition-api'
 import { usePartyCodes, PartyCodeInterface } from '../party-code/party-code-model'
+import { SearchInterface } from '@/search/searching'
 
 export enum Roles {
   None = "no user",
@@ -25,6 +26,7 @@ export interface UserInterface {
   role: Roles;
   description?: string;
   party?: PartyCodeInterface;
+  searchList?: SearchInterface[];
 }
 
 function getDefs() {
@@ -86,6 +88,15 @@ function getDefs() {
     sessionStorage.removeItem('user')
   }
 
+  function searchAdd(search: SearchInterface) {
+    // search list storage exists. See setup below.
+    currentUser.value.searchList.push(search)
+  }
+
+  function searchGetList(search: SearchInterface) {
+    return currentUser.value.searchList
+  }
+
   return {
     authenticated,
     canAdmin,
@@ -97,6 +108,8 @@ function getDefs() {
     logout,
     noUserIndex,
     restoreUserFromStash,
+    searchAdd,
+    searchGetList,
     setUser,
     userList
   }
@@ -113,7 +126,7 @@ export function useUsers() {
 
 function UserList(): UserInterface[] {
   let _cnt = 0
-  const list = [
+  const list: UserInterface[] = [
     {
       userId: 'user' + _cnt++,
       name: 'Darlene',
@@ -122,7 +135,6 @@ function UserList(): UserInterface[] {
       occupation: "Professional Services",
       role: Roles.RP,
       description: "Professional services"
-
     },
     {
       userId: 'user' + _cnt++,
@@ -174,5 +186,9 @@ function UserList(): UserInterface[] {
       role: Roles.Admin
     },
   ]
+  // set up the search lists.
+  list.forEach( (user) => {
+    (user as UserInterface).searchList = []
+  })
   return list
 }
