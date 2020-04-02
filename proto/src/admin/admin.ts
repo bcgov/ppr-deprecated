@@ -4,7 +4,11 @@ import { useFinancingStatements } from '@/financing-statement/financing-statemen
 
 function getDefs(): object {
 
-  const { getFinancingStatementStash, loadFinancingStatementStash } = useFinancingStatements()
+  const { clearFinancingStatementStash, getFinancingStatementStash, loadFinancingStatementStash } = useFinancingStatements()
+
+  function clearLocalStorage() {
+    clearFinancingStatementStash()
+  }
 
   function loadFinancingStatements (file): void {
     const reader = new FileReader()
@@ -24,6 +28,7 @@ function getDefs(): object {
   }
 
   return {
+    clearLocalStorage,
     loadFinancingStatements, saveFinancingStatements
   }
 }

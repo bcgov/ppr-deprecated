@@ -17,7 +17,7 @@ const SuperRoles = [ Roles.Admin]
 const PowerUserRoles = [ Roles.Staff, Roles.SP, Roles.SPAdmin, Roles.Admin, Roles.RP ]
 
 export interface UserInterface {
-  userId: number;
+  userId: string;
   name: string;
   last: string;
   company: string;
@@ -49,14 +49,17 @@ function getDefs() {
   const authenticated = computed((): boolean => currentUserIndex.value !== noUserIndex.value)
 
   const currentUser = computed((): UserInterface | undefined => {
+    let cUser
     let userId = currentUserIndex.value
     const stashedUser = sessionStorage.getItem('user')
+    console.log('get current user see stashedUser', stashedUser)
     if (stashedUser) {
       userId = stashedUser
     }
     if (userId !== noUserIndex.value)
-      return userList.value[userId]
-    return undefined
+      cUser = userList.value.find( e => e.userId === userId)
+    console.log('get current user', cUser)
+    return cUser
   })
 
   const currentRole = computed( (): Roles => currentUser.value ? currentUser.value.role : Roles.None)
@@ -66,8 +69,17 @@ function getDefs() {
 
   function setUser(userId): void {
     currentUserIndex.value = userId
-    const str = `${currentUserIndex.value}`
-    sessionStorage.setItem('user', str)
+    sessionStorage.setItem('user', userId)
+    console.log('set current user to', userId)
+  }
+
+  function restoreUserFromStash() {
+    const stashedUser = sessionStorage.getItem('user')
+    console.log('stashed user', stashedUser)
+    if (stashedUser) {
+      setUser(stashedUser)
+    }
+
   }
   function logout(): void {
     currentUserIndex.value = noUserIndex.value
@@ -84,6 +96,7 @@ function getDefs() {
     currentUser,
     logout,
     noUserIndex,
+    restoreUserFromStash,
     setUser,
     userList
   }
@@ -102,7 +115,7 @@ function UserList(): UserInterface[] {
   let _cnt = 0
   const list = [
     {
-      userId: _cnt++,
+      userId: 'user' + _cnt++,
       name: 'Darlene',
       last: 'Dunn',
       company:'Dye and Durham',
@@ -112,7 +125,7 @@ function UserList(): UserInterface[] {
 
     },
     {
-      userId: _cnt++,
+      userId: 'user' + _cnt++,
       name: 'Laylee',
       last: 'Lorn',
       company:'Dye and Durham',
@@ -121,7 +134,7 @@ function UserList(): UserInterface[] {
       description: "Mainly does searches, and a few registrations, discharges, amendments"
     },
     {
-      userId: _cnt++,
+      userId: 'user' + _cnt++,
       name: 'Adam',
       last: 'Minister',
       company:"Big Bank", // same as John Jones
@@ -129,7 +142,7 @@ function UserList(): UserInterface[] {
       role: Roles.SPAdmin
     },
     {
-      userId: _cnt++,
+      userId: 'user' + _cnt++,
       name: 'John',
       last: 'Jones',
       company:'Big Bank',
@@ -137,7 +150,7 @@ function UserList(): UserInterface[] {
       role: Roles.SP
     },
     {
-      userId: _cnt++,
+      userId: 'user' + _cnt++,
       name: 'Andrew',
       last: 'Lodge',
       company:"Andrew's Used Cars",
@@ -145,7 +158,7 @@ function UserList(): UserInterface[] {
       role: Roles.User
     },
     {
-      userId: _cnt++,
+      userId: 'user' + _cnt++,
       name: 'Sarah',
       last: 'Sawyer',
       company:"BC Registries",
@@ -153,7 +166,7 @@ function UserList(): UserInterface[] {
       role: Roles.Staff
     },
     {
-      userId: _cnt++,
+      userId: 'user' + _cnt++,
       name: 'Super',
       last: 'User',
       company:"Prototype explorer",

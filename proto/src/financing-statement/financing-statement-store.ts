@@ -35,6 +35,10 @@ function getDefs() {
     return fs.baseRegistrationNumber
   }
 
+  function clearFinancingStatementStash() {
+    localStorage.removeItem('fslist')
+  }
+
   function getFinancingStatementStash(): string {
     return localStorage.getItem('fslist')
   }
@@ -81,6 +85,7 @@ function getDefs() {
     financingStatementsList,
     // functions
     createFinancingStatement,
+    clearFinancingStatementStash,
     getFinancingStatementStash,
     getUsersFinancingStatementList,
     loadFinancingStatementStash,

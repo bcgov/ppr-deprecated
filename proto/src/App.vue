@@ -20,18 +20,14 @@ export default createComponent({
   },
   setup() {
     // const layout = computed((): string => (root.$router.currentRoute.meta.layout || DefaultLayout) + '-layout')
-    const { setUser } = useUsers()
+    const { setUser, restoreUserFromStash } = useUsers()
 
     onErrorCaptured((err): void => {
       console.log('App captured error', err)
     })
 
     onMounted(() => {
-      const stashedUser = sessionStorage.getItem('user')
-      console.log('stashed user', stashedUser)
-      if (stashedUser) {
-        setUser(parseInt(stashedUser))
-      }
+      restoreUserFromStash()
     })
 
     return { DefaultLayout }
