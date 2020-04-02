@@ -11,6 +11,7 @@
     section
       search-input(
       id="debtor",
+      disabled=true,
       label="Debtor name",
       :hint="debtorValidDescription",
       :rules="debtorValidationRules",
@@ -19,6 +20,7 @@
     section
       search-input(
       id="serial",
+      disabled=true,
       label="Serial number",
       :hint="serialValidDescription",
       :rules="serialValidationRules",
@@ -27,6 +29,7 @@
     section
       search-input(
       id="general",
+      disabled=true,
       label="General collateral",
       :hint="generalValidDescription",
       :rules="generalValidationRules",
@@ -83,8 +86,8 @@
     const debtorValidDescription = computed(() => TEXT.describeValid)
 
     function debtorSearch(term) {
-      const { doSearch } = useSearching()
-      const searchId = doSearch(SearchTypes.DEBTOR, term)
+      const { searchDo } = useSearching()
+      const searchId = searchDo(SearchTypes.DEBTOR, term)
       root.$router.push({ name: 'results', query: { searchId: searchId } })
     }
 
@@ -114,8 +117,8 @@
     const generalValidDescription = computed(() => TEXT.describeValid)
 
     function generalSearch(term) {
-      const { doSearch } = useSearching()
-      const searchId = doSearch(SearchTypes.GENERAL, term)
+      const { searchDo } = useSearching()
+      const searchId = searchDo(SearchTypes.GENERAL, term)
       root.$router.push({ name: 'results', query: { searchId: searchId } })
     }
 
@@ -150,8 +153,8 @@
     const regNumValidDescription = computed(() => TEXT.describeValid)
 
     function regNumSearch(term) {
-      const { doSearch } = useSearching()
-      const searchId = doSearch(SearchTypes.TEXT, term)
+      const { searchDo } = useSearching()
+      const searchId = searchDo(SearchTypes.REG_NUM, term)
       root.$router.push({ name: 'results', query: { searchId: searchId } })
     }
 
@@ -186,8 +189,8 @@
     const serialValidDescription = computed(() => TEXT.describeValid)
 
     function serialSearch(term) {
-      const { doSearch } = useSearching()
-      const searchId = doSearch(SearchTypes.SERIAL, term)
+      const { searchDo } = useSearching()
+      const searchId = searchDo(SearchTypes.SERIAL, term)
       root.$router.push({ name: 'results', query: { searchId: searchId } })
     }
 

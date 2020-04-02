@@ -1,5 +1,5 @@
 import { computed, ref } from '@vue/composition-api'
-import { usePartyCodes, PartyCodeInterface } from '../party-code/party-code-model'
+import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
 import { SearchInterface } from '@/search/searching'
 
 export enum Roles {
@@ -26,7 +26,6 @@ export interface UserInterface {
   role: Roles;
   description?: string;
   party?: PartyCodeInterface;
-  searchList?: SearchInterface[];
 }
 
 function getDefs() {
@@ -54,13 +53,11 @@ function getDefs() {
     let cUser
     let userId = currentUserIndex.value
     const stashedUser = sessionStorage.getItem('user')
-    console.log('get current user see stashedUser', stashedUser)
     if (stashedUser) {
       userId = stashedUser
     }
     if (userId !== noUserIndex.value)
       cUser = userList.value.find( e => e.userId === userId)
-    console.log('get current user', cUser)
     return cUser
   })
 
@@ -72,12 +69,10 @@ function getDefs() {
   function setUser(userId): void {
     currentUserIndex.value = userId
     sessionStorage.setItem('user', userId)
-    console.log('set current user to', userId)
   }
 
   function restoreUserFromStash() {
     const stashedUser = sessionStorage.getItem('user')
-    console.log('stashed user', stashedUser)
     if (stashedUser) {
       setUser(stashedUser)
     }
@@ -88,14 +83,6 @@ function getDefs() {
     sessionStorage.removeItem('user')
   }
 
-  function searchAdd(search: SearchInterface) {
-    // search list storage exists. See setup below.
-    currentUser.value.searchList.push(search)
-  }
-
-  function searchGetList(search: SearchInterface) {
-    return currentUser.value.searchList
-  }
 
   return {
     authenticated,
@@ -108,8 +95,6 @@ function getDefs() {
     logout,
     noUserIndex,
     restoreUserFromStash,
-    searchAdd,
-    searchGetList,
     setUser,
     userList
   }
@@ -186,9 +171,5 @@ function UserList(): UserInterface[] {
       role: Roles.Admin
     },
   ]
-  // set up the search lists.
-  list.forEach( (user) => {
-    (user as UserInterface).searchList = []
-  })
   return list
 }

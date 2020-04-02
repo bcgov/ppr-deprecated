@@ -3,12 +3,11 @@
     <v-container class="view-container">
       <article id="mockSearchResultsPage">
         <header>
-          <h1>Personal Property Registry</h1>
+          <h1>Results for your search</h1>
         </header>
         <section>
-          <p>This is where text will appear about the list of financing statements that have resulted from a search</p>
+          <search-results />
         </section>
-        <search-results />
       </article>
     </v-container>
   </div>

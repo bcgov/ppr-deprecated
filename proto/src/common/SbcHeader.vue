@@ -37,7 +37,7 @@ import { useUsers } from '@/users/users'
 
 export default createComponent({
   setup(_, { root }) {
-    const { authenticated, currentUser} = useUsers()
+    const { authenticated, currentUser, logout} = useUsers()
 
     const buttonText = computed( () => (authenticated.value ? 'Log out of' : 'Log into') + ' the PPR prototype')
 
@@ -45,7 +45,8 @@ export default createComponent({
 
     function login(): void {
       if (authenticated.value) {
-        root.$router.push({ name: 'logout' })
+        logout()
+        root.$router.push({ name: 'home' })
       } else {
         root.$router.push({ name: 'login' })
       }

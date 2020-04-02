@@ -30,12 +30,6 @@ export default [
     meta: { layout: 'public' }
   },
   {
-    path: '/logout',
-    name: 'logout',
-    component: Logout,
-    meta: { layout: 'public' }
-  },
-  {
     path: '/admin',
     name: 'admin',
     component: Admin,

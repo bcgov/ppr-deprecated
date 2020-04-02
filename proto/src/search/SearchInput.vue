@@ -4,6 +4,7 @@
       v-text-field(
         id="search",
         v-model="searchTerm",
+        :disabled="disabled",
         :hint="hint",
         :label="label",
         :rules="rules",
@@ -12,7 +13,7 @@
       v-btn(
         id="search-btn",
         color="primary",
-        :disabled="!formValid",
+        :disabled="!formValid || disabled",
         @click="search"
       ) Search
       v-banner(
@@ -27,6 +28,7 @@ import { createComponent, ref } from '@vue/composition-api'
 
 export default createComponent({
   props: {
+    disabled: Boolean,
     errorMessage: String,
     hint: String,
     label: String,

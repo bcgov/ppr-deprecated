@@ -5,6 +5,8 @@
            h1 Search the prototype Personal Property Registry
         p.
           This page demonstrates search for the prototype Personal Property Registry.
+        p.
+          If any input is disabled that means this prototype has not yet implemented that type of search.
         section
           search
 </template>

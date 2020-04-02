@@ -1,16 +1,18 @@
 <template lang="pug">
   div
-    h2 Financing Statements
-    v-container
-      v-card
+    section
+      h2 Financing Statements
+      v-container
         div
-          v-btn(@click="saveFinancingStatements") Save Financing Statements
+          v-btn(@click="saveFinancingStatements") Save
         div
           label(for="loadFS") Import financing statements as JSON:
           input(type="file", id="loadFS", name="loadFS", accept="application/json", @change="setFile")
-        div(style="display:none")
-          label(for="avatar") Choose a profile picture:
-          input(type="file", id="avatar", name="avatar", accept="image/png, image/jpeg")
+    section
+      h2 Search Results
+      v-container
+        div
+          v-btn(@click="searchAdminReset") Reset
 
 
 </template>
@@ -18,10 +20,12 @@
 <script>
 import { createComponent } from '@vue/composition-api'
 import { useAdmin } from '@/admin/admin'
+import { useSearching } from '@/search/searching'
 
 export default createComponent({
   setup() {
     const { clearLocalStorage, loadFinancingStatements, saveFinancingStatements } = useAdmin()
+    const { searchAdminReset } = useSearching()
 
     function setFile (event) {
       const file = event.target.files[0]
@@ -31,7 +35,8 @@ export default createComponent({
 
     return {
       saveFinancingStatements,
-      setFile
+      setFile,
+      searchAdminReset
     }
   }
 })
@@ -39,6 +44,9 @@ export default createComponent({
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
+  section {
+    margin: 1rem 0;
+  }
 </style>
