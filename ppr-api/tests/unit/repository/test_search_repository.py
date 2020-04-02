@@ -11,7 +11,7 @@ import schemas.search
 def test_create_search_fills_column_fields(mock_session):
     repo = repository.search_repository.SearchRepository(mock_session)
     search_input = schemas.search.SearchBase(type=schemas.search.SearchType.MHR_NUMBER.value, criteria={'value': '123'})
-    user = auth.authentication.User(user_id='12345', user_name='fred')
+    user = auth.authentication.User(user_id='12345', user_name='fred', account_id='54321')
     payment = schemas.payment.Payment(id=1234, status='COMPLETED', method='CC')
 
     search = repo.create_search(search_input, [], [], user, payment)
@@ -19,6 +19,7 @@ def test_create_search_fills_column_fields(mock_session):
     assert search.criteria == {'value': '123'}
     assert search.type_code == schemas.search.SearchType.MHR_NUMBER.value
     assert search.user_id == '12345'
+    assert search.account_id == '54321'
 
 
 @patch('sqlalchemy.orm.Session')

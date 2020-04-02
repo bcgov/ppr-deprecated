@@ -48,10 +48,11 @@ class FinancingStatementRepository:
 
         model = models.financing_statement.FinancingStatement(
             registration_number=reg_num, status='A', life_in_years=years, expiry_date=expiry_date,
-            registration_type_code=schemas.financing_statement.RegistrationType[fs_input.type].value
+            registration_type_code=schemas.financing_statement.RegistrationType[fs_input.type].value,
+            account_id=user.account_id
         )
         event_model = models.financing_statement.FinancingStatementEvent(
-            registration_number=reg_num, user_id=user.user_id, life_in_years=years
+            registration_number=reg_num, user_id=user.user_id, account_id=user.account_id, life_in_years=years
         )
 
         reg_party_model = map_party_schema_to_model(schemas.party.PartyType.REGISTERING, fs_input.registeringParty)

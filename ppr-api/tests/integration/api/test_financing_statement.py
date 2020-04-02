@@ -143,7 +143,7 @@ def test_create_financing_statement_for_root_object_details():
     request_payload = get_minimal_payload()
     request_payload.update(type='SECURITY_AGREEMENT', lifeYears=5)
 
-    rv = client.post('/financing-statements', json=request_payload)
+    rv = client.post('/financing-statements', json=request_payload, headers={'Account-Id': 'fake_account_id'})
 
     assert rv.status_code == 201
     body = rv.json()
@@ -160,11 +160,13 @@ def test_create_financing_statement_for_root_object_details():
     assert stored.life_in_years == 5
     assert stored.expiry_date.isoformat() == body['expiryDate']
     assert stored.last_updated
+    assert stored.account_id == 'fake_account_id'
 
     assert len(stored.events) == 1
     assert stored.events[0].registration_number == registration_number
     assert stored.events[0].base_registration_number == registration_number
     assert stored.events[0].user_id == 'fake_user_id'  # Default user for integration tests
+    assert stored.events[0].account_id == 'fake_account_id'
     assert stored.events[0].registration_date.isoformat(timespec='seconds') == body['registrationDateTime']
 
 

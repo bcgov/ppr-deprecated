@@ -27,7 +27,7 @@ def test_read_search(mock_payment):
 def test_create_registration_number_search():
     search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': '987654Z'}}
 
-    rv = client.post('/searches', json=search_input)
+    rv = client.post('/searches', json=search_input, headers={'Account-Id': 'fake_account_id'})
 
     assert rv.status_code == 201
     body = rv.json()
@@ -41,6 +41,7 @@ def test_create_registration_number_search():
     assert stored.type_code == 'REGISTRATION_NUMBER'
     assert stored.criteria == {'value': '987654Z'}
     assert stored.user_id == 'fake_user_id'  # Default user for integration tests
+    assert stored.account_id == 'fake_account_id'
     assert body['searchDateTime'] == stored.creation_date_time.isoformat(timespec='seconds')
 
 
