@@ -34,7 +34,8 @@ export default createComponent({
       type: Boolean
     },
     value: {
-      required: true,
+      default: () => new BusinessNameModel(),
+      required: false,
       type: BusinessNameModel
     }
   },

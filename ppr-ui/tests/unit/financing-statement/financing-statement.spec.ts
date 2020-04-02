@@ -94,7 +94,7 @@ describe('FinancingStatementModel', (): void => {
 
       expect(fstmt.securedParties).toBeDefined()
       expect(fstmt.securedParties.length).toBe(1)
-      expect(fstmt.securedParties[0].personName.first).toEqual(testPerson.first)
+      expect(fstmt.securedParties[0].personName?.first).toEqual(testPerson.first)
     })
 
 
