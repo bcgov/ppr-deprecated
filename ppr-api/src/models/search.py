@@ -15,6 +15,7 @@ class Search(BaseORM):
     criteria = sqlalchemy.Column(postgresql.JSONB)
     creation_date_time = sqlalchemy.Column(sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
     type_code = sqlalchemy.Column('type_long_code', sqlalchemy.String(length=40))
+    account_id = sqlalchemy.Column(sqlalchemy.String(length=36))
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
     payment_id = sqlalchemy.Column(sqlalchemy.BigInteger, sqlalchemy.ForeignKey('payment.id'))
 

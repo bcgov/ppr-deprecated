@@ -14,12 +14,12 @@ db.close()
 
 
 @pytest.fixture(autouse=True)
-def default_current_user_dependency():
-    """Override the get_current_user Fast API dependency to eliminate the need for an external Auth API service"""
-    def mock_get_current_user():
-        return auth.authentication.User(user_id='fake_user_id', user_name='fake_user_name')
+def default_remote_user_dependency():
+    """Override the get_user_from_auth Fast API dependency to eliminate the need for an external Auth API service"""
+    def mock_get_user_from_auth():
+        return {'keycloakGuid': 'fake_user_id', 'username': 'fake_user_name'}
 
-    main.app.dependency_overrides[auth.authentication.get_current_user] = mock_get_current_user
+    main.app.dependency_overrides[auth.authentication.get_user_from_auth] = mock_get_user_from_auth
 
 
 def create_mock_remote_payment():

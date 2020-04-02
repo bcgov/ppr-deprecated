@@ -19,6 +19,7 @@ class FinancingStatement(BaseORM):
     life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
     expiry_date = sqlalchemy.Column(sqlalchemy.Date)
     discharged = sqlalchemy.Column(sqlalchemy.BOOLEAN)
+    account_id = sqlalchemy.Column(sqlalchemy.String(length=36))  # Designates ownership of the financing statement
     last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, server_default=sqlalchemy.func.now(),
                                      onupdate=sqlalchemy.func.now())
 
@@ -83,6 +84,7 @@ class FinancingStatementEvent(BaseORM):
     registration_date = sqlalchemy.Column('reg_date', sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
     description = sqlalchemy.Column(sqlalchemy.String)
     document_number = sqlalchemy.Column(sqlalchemy.String(length=8))
+    account_id = sqlalchemy.Column(sqlalchemy.String(length=36))
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
     life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
 

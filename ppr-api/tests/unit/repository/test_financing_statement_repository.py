@@ -360,4 +360,4 @@ def stub_financing_statement_input(
 
 
 def stub_user(user_id: str = '12345'):
-    return auth.authentication.User(user_id=user_id, user_name='fred')
+    return auth.authentication.User(user_id=user_id, user_name='fred', account_id='54321')

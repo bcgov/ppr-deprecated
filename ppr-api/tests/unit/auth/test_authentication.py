@@ -71,11 +71,13 @@ def test_get_user_from_auth_with_unexpected_response(mock_get):
 def test_get_current_user():
     auth_api_user = {'keycloakGuid': 'dad87b8e-0c80-4c8d-815b-0967cc68d65d',
                      'username': 'bcsc/32b44e37aa6a40019de1068c4891da10'}
+    account_id = '1234567'
 
-    user = auth.authentication.get_current_user(auth_api_user)
+    user = auth.authentication.get_current_user(auth_api_user, account_id)
 
     assert user.user_id == 'dad87b8e-0c80-4c8d-815b-0967cc68d65d'
     assert user.user_name == 'bcsc/32b44e37aa6a40019de1068c4891da10'
+    assert user.account_id == account_id
 
 
 def test_check_auth_response_forbidden_has_no_description_field():
