@@ -69,6 +69,7 @@ export class FinancingStatementModel {
     }
     this._baseRegistrationNumber = '' + getRandomDocId()
     this._registrationDateTime = moment().format("MMM DD YYYY")
+    this._expiryDate = moment().add(this.lifeYears, 'years').format("MMM DD YYYY")
   }
   /**
    * Gets the unique registration number for the financing statement.

@@ -124,6 +124,11 @@ function getDefs() {
     })
   }
 
+  function searchGetList(): SearchInterface[] {
+    const userId = getUserId()
+    return getList().filter((rec: SearchInterface) => rec.userId === userId )
+  }
+
   function searchGetResults(searchId: string): FinancingStatementInterface[] {
     const {findFinancingStatement} = useFinancingStatements()
     const record = searchGet(searchId)
@@ -148,6 +153,7 @@ function getDefs() {
     searchAdminReset,
     searchDo,
     searchGet,
+    searchGetList,
     searchGetResults,
   }
 }

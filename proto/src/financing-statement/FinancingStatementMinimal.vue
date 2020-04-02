@@ -2,7 +2,7 @@
   div
     div(class="part") {{ value.baseRegistrationNumber }}
     div(class="part") exp: {{ value.expiryDate }}
-    div(class="part") {{ value.type }}
+    div(class="part fsType") {{ value.type }}
     div(class="part")
       span Base debtor:
         debtor-party(:value="value.debtorParties[0]", layout="minimal")
@@ -57,4 +57,7 @@ export default createComponent({
   display: table-cell;
   padding-right: 1rem;
 }
+  .fsType {
+    min-width: 12rem;
+  }
 </style>

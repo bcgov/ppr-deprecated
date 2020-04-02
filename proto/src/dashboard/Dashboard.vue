@@ -1,30 +1,22 @@
 
 <template lang="pug">
-  v-tabs(fixed-tabs, background-color="white", dark)
+  v-tabs(fixed-tabs, class="customDash")
     v-tab Registrations
     v-tab Searches
     v-tab Client Codes
     v-tab Drafts
     v-tab-item
-      v-container
-        v-card
-          registrations-tab
+      v-card
+        registrations-tab
     v-tab-item
-      v-container
-        v-card
-          div This tab is a placeholder for searches this user has conducted in the past
-          div(style="padding-left: 1rem")
-            div {{ currentUser.name }} {{ currentUser.last }},
-            div {{ currentUser.company }},
-            div {{ currentUser.occupation }}
+      v-card
+        searches-tab
     v-tab-item
-      v-container
-        v-card
-          client-codes-tab
+      v-card
+        client-codes-tab
     v-tab-item
-      v-container
-        v-card
-          drafts
+      v-card
+        drafts
 </template>
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
@@ -32,9 +24,10 @@ import { useUsers } from '@/users/users'
 import Drafts from '@/drafts/Drafts.vue'
 import ClientCodesTab from '@/dashboard/ClientCodesTab.vue'
 import RegistrationsTab from '@/dashboard/RegistrationsTab.vue'
+import SearchesTab from '@/dashboard/SearchesTab.vue'
 
 export default createComponent({
-  components: { Drafts, RegistrationsTab, ClientCodesTab },
+  components: { Drafts, RegistrationsTab, ClientCodesTab, SearchesTab },
   setup() {
     const { authenticated, currentUser} = useUsers()
 
@@ -43,29 +36,38 @@ export default createComponent({
 })
 
 </script>
-<style lang="scss" scoped>
-  .v-tab {
-    background-color: #0d47a1 !important;
-    margin-right: 1rem;
-  }
-  .v-tab--active {
-    background-color: #fefefe !important;
-    color: #0d47a1 !important;
-  }
-  .v-data-table {
-    th {
-      background-color: #38598A;
-      color: #F8F9FA  !important;
-      font-weight: bolder;
-      font-size: 1.5rem;
+<style lang="scss">
+  .customDash {
+    .v-item-group {
+      background-color: #f1f3f5 !important;
+
     }
 
-    th, td {
-      padding-bottom: 2rem;
-      font-size: 1.0rem;
+    .v-tab {
+      background-color: #38598A !important;
+      color: white !important;
+      font-size: 1.1rem;
+      margin-right: 1rem;
     }
-    tbody tr:nth-of-type(even) {
-      background-color: white;
+    .v-tab--active {
+      background-color: #E6EAF4 !important;
+      color: #0d47a1 !important;
+    }
+    .v-data-table {
+      th {
+        background-color: #38598A;
+        color: #F8F9FA  !important;
+        font-weight: bolder;
+        font-size: 1.5rem;
+      }
+
+      th, td {
+        padding-bottom: 2rem;
+        font-size: 1.0rem;
+      }
+      tbody tr:nth-of-type(even) {
+        background-color: white;
+      }
     }
   }
 </style>
