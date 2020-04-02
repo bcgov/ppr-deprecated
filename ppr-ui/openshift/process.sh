@@ -24,12 +24,6 @@ APP_NAME=$APP_BASE$APP_TAG
 APP_UI_NAME=$APP_BASE$APP_TAG
 APP_INTER_NAME=$APP_BASE-inter$APP_TAG
 
-# PPR_GROUP
-# This label is applied to all resources (buildconfigs, deployconfigs, images, routes, services, etc
-# created by these openshift configuration files.  Usage includes get, describe and delete all
-# of these resources.  See the echo at the end of this file.
-PPR_GROUP=$APP_NAME
-
 HOST=dev.bcregistry.ca
 DEPLOY_TARGET=1rdehl-dev
 
@@ -39,24 +33,21 @@ DEPLOY_TARGET=1rdehl-dev
 
 # Generate temporary env files for use with oc process
 # For the intermediate buildconfig
-echo "PPR_GROUP=$PPR_GROUP
-APP_NAME=$APP_INTER_NAME
+echo "APP_NAME=$APP_INTER_NAME
 APP_PATH=$APP_PATH
 GIT_URI=$REPO
 GIT_REF=$BRANCH
 " > .env.inter
 
 # For buildconfig
-echo "PPR_GROUP=$PPR_GROUP
-APP_NAME=$APP_UI_NAME
+echo "APP_NAME=$APP_UI_NAME
 APP_INTER_NAME=$APP_INTER_NAME
 APP_INTER_TAG=latest
 APP_PATH=$APP_PATH
 " > .env.bc
 
 # For deploy
-echo "PPR_GROUP=$PPR_GROUP
-APP_NAME=$APP_UI_NAME
+echo "APP_NAME=$APP_UI_NAME
 APP_PATH=$APP_PATH
 CADDY_CONFIG=$APP_NAME-caddy-config$APP_TAG
 IMAGE_TAG=latest
@@ -84,14 +75,3 @@ echo "oc process -f ppr-ui-dc.yaml --param-file=.env.dc | oc -n $DEPLOY_TARGET a
 echo ".env.dc"
 cat .env.dc
 #oc process -f ppr-ui-dc.yaml --param-file=.env.dc | oc -n $DEPLOY_TARGET apply -f -
-
-
-echo "
-
-# To list all related resources
-    oc -n zwmtib-tools get all -l pprgroup=$PPR_GROUP
-    oc -n 1rdehl-dev get all,configmap -l pprgroup=$PPR_GROUP
-# To clean up all related resources
-    oc -n zwmtib-tools delete all -l pprgroup=$PPR_GROUP
-    oc -n 1rdehl-dev delete all,configmap -l pprgroup=$PPR_GROUP
-"

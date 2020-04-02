@@ -7,7 +7,6 @@ objects:
     labels:
       app: ppr
       deploymentconfig: ${APP_NAME}
-      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -16,7 +15,6 @@ objects:
     selector:
       app: ppr
       deploymentconfig: ${APP_NAME}
-      pprgroup: ${PPR_GROUP}
       environment: ${ENVIRONMENT}
       role: ${APP_NAME}
     strategy:
@@ -34,7 +32,6 @@ objects:
         labels:
           app: ppr
           deploymentconfig: ${APP_NAME}
-          pprgroup: ${PPR_GROUP}
           environment: ${ENVIRONMENT}
           role: ${APP_NAME}
       spec:
@@ -114,7 +111,6 @@ objects:
     labels:
       app: ppr
       environment: ${ENVIRONMENT}
-      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
@@ -132,7 +128,6 @@ objects:
   metadata:
     labels:
       app: ppr
-      pprgroup: ${PPR_GROUP}
       environment: ${ENVIRONMENT}
       role: ${APP_NAME}
     name: ${APP_NAME}
@@ -154,7 +149,6 @@ objects:
   metadata:
     labels:
       app: ppr
-      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${CADDY_CONFIG}
   data:
@@ -172,7 +166,6 @@ objects:
   metadata:
     labels:
       app: ppr
-      pprgroup: ${PPR_GROUP}
       role: ${APP_NAME}
     name: ${APP_CONFIG}
   data:
@@ -226,10 +219,6 @@ parameters:
 - description: The full url to the payment service
   displayName: PAY API URL
   name: PAY_API_URL
-  required: true
-- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
-  displayName: PPR group
-  name: PPR_GROUP
   required: true
 - description: The hostname to use for the route.
   displayName: Route HOST
