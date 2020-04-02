@@ -37,6 +37,7 @@ function getDefs() {
 
   function clearFinancingStatementStash() {
     localStorage.removeItem('fslist')
+    _loadList()
   }
 
   function getFinancingStatementStash(): string {

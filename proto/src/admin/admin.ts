@@ -29,6 +29,7 @@ function getDefs(): object {
 
   return {
     clearLocalStorage,
+    clearFinancingStatementStash,
     loadFinancingStatements, saveFinancingStatements
   }
 }

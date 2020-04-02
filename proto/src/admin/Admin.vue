@@ -4,15 +4,22 @@
       h2 Financing Statements
       v-container
         div
-          v-btn(@click="saveFinancingStatements") Save
+          v-btn(@click="clearFinancingStatementStash") Reset Financing Statements
         div
-          label(for="loadFS") Import financing statements as JSON:
+          p &nbsp;
+        div
+          v-btn(@click="saveFinancingStatements") Save Financing Statements as JSON
+        div
+          p &nbsp;
+        div
           input(type="file", id="loadFS", name="loadFS", accept="application/json", @change="setFile")
+          label(for="loadFS") Import financing statements as JSON:
     section
       h2 Search Results
       v-container
         div
           v-btn(@click="searchAdminReset") Reset
+
 
 
 </template>
@@ -24,7 +31,7 @@ import { useSearching } from '@/search/searching'
 
 export default createComponent({
   setup() {
-    const { clearLocalStorage, loadFinancingStatements, saveFinancingStatements } = useAdmin()
+    const { clearLocalStorage, clearFinancingStatementStash, loadFinancingStatements, saveFinancingStatements } = useAdmin()
     const { searchAdminReset } = useSearching()
 
     function setFile (event) {
@@ -34,6 +41,7 @@ export default createComponent({
     }
 
     return {
+      clearFinancingStatementStash,
       saveFinancingStatements,
       setFile,
       searchAdminReset
