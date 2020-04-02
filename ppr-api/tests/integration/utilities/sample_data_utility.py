@@ -49,8 +49,8 @@ def create_test_financing_statement(**kwargs):
         for debtor_input in options['debtors']:
             add_test_party(fin_stmt, event, 'DE', **debtor_input)
 
-        for description in options['general_collateral']:
-            collateral = models.collateral.GeneralCollateral(description=description)
+        for description_enum in enumerate(options['general_collateral'], start=1):
+            collateral = models.collateral.GeneralCollateral(description=description_enum[1], index=description_enum[0])
             fin_stmt.general_collateral.append(collateral)
             event.starting_general_collateral.append(collateral)
 
@@ -119,8 +119,8 @@ def create_test_financing_statement_event(fin_stmt: models.financing_statement.F
         if options['general_collateral'] is not None:
             for existing_collateral in fin_stmt.general_collateral:
                 event.ending_general_collateral.append(existing_collateral)
-            for description in options['general_collateral']:
-                collateral = models.collateral.GeneralCollateral(description=description)
+            for desc_enum in enumerate(options['general_collateral'], start=1):
+                collateral = models.collateral.GeneralCollateral(description=desc_enum[1], index=desc_enum[0])
                 fin_stmt.general_collateral.append(collateral)
                 event.starting_general_collateral.append(collateral)
 

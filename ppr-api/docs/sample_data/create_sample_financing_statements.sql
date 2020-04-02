@@ -16,11 +16,11 @@ INSERT INTO vehicle (base_reg_number, reg_number_start, reg_number_end, vehicle_
     ('123456B', '123456B', '123456Z', 'MV', null, 2002, 'Toyota', 'Avalon', '4T1BF28B82U291010'),
     ('123456B', '123456Z', null, 'MV', null, 1998, 'Pontiac', 'Grand Prix', '1G2WP1211WF243800');
 
-INSERT INTO general (base_reg_number, reg_number_start, reg_number_end, description) VALUES
-    ('123456A', '123456A', null, 'An original description of general collateral'),
-    ('123456B', '123456B', null, 'Everything in my kitchen except the sink'),
-    ('123456B', '123456B', '123456Z', ', plus an additional line that was originally appended, but should now be ignored except on historical views.'),
-    ('123456B', '123456Z', null, 'My sink should now be included');
+INSERT INTO general (base_reg_number, reg_number_start, reg_number_end, description, gc_ind) VALUES
+    ('123456A', '123456A', null, 'An original description of general collateral', 1),
+    ('123456B', '123456B', null, 'Everything in my kitchen except the sink', 1),
+    ('123456B', '123456B', '123456Z', ', plus an additional line that was originally appended, but should now be ignored except on historical views.', 2),
+    ('123456B', '123456Z', null, 'My sink should now be included', 1);
 
 INSERT INTO address(addr_id, addr_line_1, addr_line_2, city, province, country_type_cd, postal_cd) VALUES
     (10000001, '123 Fake Street', 'Suite 100', 'Victoria', 'BC', 'CA', 'V1V 1V1'),

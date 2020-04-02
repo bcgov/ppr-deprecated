@@ -22,6 +22,7 @@ class GeneralCollateral(BaseORM):
     ending_registration_number = sqlalchemy.Column('reg_number_end', sqlalchemy.String(length=10),
                                                    sqlalchemy.ForeignKey(REGISTRATION_KEY))
     description = sqlalchemy.Column(sqlalchemy.String)
+    index = sqlalchemy.Column('gc_ind', sqlalchemy.Integer)
 
     @staticmethod
     def list_as_schema(general_collateral: list, events: list):
@@ -36,10 +37,11 @@ class GeneralCollateral(BaseORM):
         Returns:
             list of schemas.collateral.GeneralCollateral
         """
-        # For each starting event, the general collateral descriptions should be joined together into one
         def grouped_gc_to_schema(event_reg_number, gc_event_list):
+            """For each starting event, the general collateral descriptions should be joined together into one"""
             event = next((e for e in events if e.registration_number == event_reg_number), None)
-            description = ''.join(map(lambda gc: gc.description, gc_event_list))
+            sorted_collateral = sorted(gc_event_list, key=lambda e: e.index or 0)
+            description = ''.join(map(lambda gc: gc.description, sorted_collateral))
             return schemas.collateral.GeneralCollateral(
                 description=description, addedDateTime=event.registration_date if event else None
             )
