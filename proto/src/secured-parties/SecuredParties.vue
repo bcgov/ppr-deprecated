@@ -1,28 +1,25 @@
 <template>
   <v-form>
-    <form-section-header v-if="editing" label="Secured Parties" />
-    <v-container>
-      <v-list>
-        <ppr-list-item
-          v-for="(securedParty, index) in value"
-          :key="securedParty.listId"
+    <v-list>
+      <ppr-list-item
+        v-for="(securedParty, index) in value"
+        :key="securedParty.listId"
+        :editing="editing"
+        :index="index"
+        :list-length="value.length"
+        @remove="removeElement"
+      >
+        <template #header>
+          Select a client for this <strong>Secured Party</strong>
+        </template>
+        <secured-party
+          :value="securedParty"
           :editing="editing"
-          :index="index"
-          :list-length="value.length"
-          @remove="removeElement"
-        >
-          <template #header>
-            Select a client for this <strong>Secured Party</strong>
-          </template>
-          <secured-party
-            :value="securedParty"
-            :editing="editing"
-            @input="updateElement($event, index)"
-            @valid="emitValidity($event, index)"
-          />
-        </ppr-list-item>
-      </v-list>
-    </v-container>
+          @input="updateElement($event, index)"
+          @valid="emitValidity($event, index)"
+        />
+      </ppr-list-item>
+    </v-list>
     <v-container
       v-if="editing"
       class="flex-center"

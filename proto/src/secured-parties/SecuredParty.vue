@@ -1,13 +1,11 @@
 <template lang="pug">
-  div
-    v-card(flat)
-      client-code(
-        :value="partyCode",
-        :layout="layout",
-        :editing="editing",
-        @input="updateClientCode($event)"
-        @valid="emitValid($event)"
-      )
+  client-code(
+    :value="partyCode",
+    :layout="layout",
+    :editing="editing",
+    @input="updateClientCode($event)"
+    @valid="emitValid($event)"
+  )
 </template>
 
 <script lang="ts">

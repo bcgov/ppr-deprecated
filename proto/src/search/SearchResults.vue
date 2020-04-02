@@ -15,16 +15,19 @@
           tr(v-for="financingStatement in fsList")
             td
               financing-statement-minimal(:value="financingStatement")
+            td
+              financing-statement-actions(:value="financingStatement")
 
 </template>
 
 <script lang="ts">
 import { computed, createComponent, ref } from '@vue/composition-api'
 import { useSearching, SearchTypes } from '@/search/searching'
+import FinancingStatementActions from '@/financing-statement/FinancingStatementActions.vue'
 import FinancingStatementMinimal from '@/financing-statement/FinancingStatementMinimal.vue'
 
 export default createComponent({
-  components: { FinancingStatementMinimal },
+  components: { FinancingStatementActions, FinancingStatementMinimal },
   setup(_, { root }) {
     const { searchGet, searchGetResults } = useSearching()
     const searchId = root.$route.query['searchId'] as string

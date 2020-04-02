@@ -8,57 +8,55 @@
       v-tab Registering Party
       v-tab-item
         div(v-if="editing")
-          v-form(@input="emitValid('header', $event)")
-            v-container
-              type-component(
-                :value="value.type",
-                @input="updateType"
-              )
-              v-text-field(
-                :value="value.lifeYears",
-                :rules="lifeRules",
-                label="Life in Years",
-                name="lifeInput",
-                @input="updateLife",
-              )
+          v-card
+            v-form(@input="emitValid('header', $event)")
+              v-container
+                type-component(
+                  :value="value.type",
+                  @input="updateType"
+                )
+                v-text-field(
+                  :value="value.lifeYears",
+                  :rules="lifeRules",
+                  label="Life in Years",
+                  name="lifeInput",
+                  @input="updateLife",
+                )
         div(v-else)
-          v-container
-            v-card
-              v-row
-                v-col(cols="12",sm="4")
-                  v-card(class="pa-2",outlined)
-                    div Base Registration Number: {{ value.baseRegistrationNumber }}
-                    div Expiry Date: {{ value.expiryDate }}
-                    div Registration Date: {{ value.registrationDateTime }}
-                v-col(cols="12",sm="4")
-                  v-card(class="pa-2",outlined)
-                    div Type: {{ value.type }}
-                    div Life in Years: {{ value.lifeYears }}
+          v-card
+            v-row
+              v-col(cols="12",sm="4")
+                v-card(class="pa-2",outlined)
+                  div Base Registration Number: {{ value.baseRegistrationNumber }}
+                  div Expiry Date: {{ value.expiryDate }}
+                  div Registration Date: {{ value.registrationDateTime }}
+              v-col(cols="12",sm="4")
+                v-card(class="pa-2",outlined)
+                  div Type: {{ value.type }}
+                  div Life in Years: {{ value.lifeYears }}
 
       v-tab-item
-        v-container
-          v-card
-            secured-parties(
-              :editing="editing",
-              :value="value.securedParties",
-              @input="updateSecuredParties",
-              @valid="emitValid('securedParties', $event)"
-            )
+        v-card
+          secured-parties(
+            :editing="editing",
+            :value="value.securedParties",
+            @input="updateSecuredParties",
+            @valid="emitValid('securedParties', $event)"
+          )
       v-tab-item
-        v-container
-          v-card
-            debtor-parties(
-              :editing="editing",
-              :value="value.debtorParties",
-              @input="updateDebtorParties",
-              @valid="emitValid('debtorParties', $event)"
-            )
+        v-card
+          debtor-parties(
+            :editing="editing",
+            :value="value.debtorParties",
+            @input="updateDebtorParties",
+            @valid="emitValid('debtorParties', $event)"
+          )
       v-tab-item
-        v-container
-          v-card
-            div Collateral
+        v-card
+          div Collateral
       v-tab-item
-        registering-party(:value="value.registeringParty")
+        v-card
+          registering-party(:value="value.registeringParty")
 </template>
 
 <script lang="ts">

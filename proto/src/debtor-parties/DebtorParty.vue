@@ -1,36 +1,37 @@
 <template lang="pug">
-  div
-    v-form(
-      v-if="editing",
-      :class="getFormClass()",
-      class="base-party-form",
-      data-test-id="BaseParty.form",
-      @input="emitValidity(HEADER, $event)"
-    )
-      business-name(
-        :editing="editing",
-        :value="value.businessName",
-        @input="updateBusiness($event)",
-        @valid="emitValidity(BUSINESS_NAME, $event)",
+  div(style="display:inline")
+    v-card(flat, v-if="editing")
+      v-form(
+        v-if="editing",
+        :class="getFormClass()",
+        class="base-party-form",
+        data-test-id="BaseParty.form",
+        @input="emitValidity(HEADER, $event)"
       )
-      person-name(
-        :editing="editing",
-        :value="value.personName",
-        @input="updatePerson($event)",
-        @valid="emitValidity(PERSON_NAME, $event)"
-      )
-    div(v-else)
-      div(v-if="layout=='condensed'")
+        business-name(
+          :editing="editing",
+          :value="value.businessName",
+          @input="updateBusiness($event)",
+          @valid="emitValidity(BUSINESS_NAME, $event)",
+        )
+        person-name(
+          :editing="editing",
+          :value="value.personName",
+          @input="updatePerson($event)",
+          @valid="emitValidity(PERSON_NAME, $event)"
+        )
+    div(v-else, style="display:inline")
+      div(v-if="layout==='condensed'")
         div(v-if="value.businessName")
           div(class="section") Business Name
           business-name(:value="value.businessName")
         div(v-if="personName") "{{personName}}"
           div(class="section") Individual Name
           person-name(:value="personName")
-      div(v-if="layout=='minimal'")
-        div(v-if="value.businessName")
+      div(v-if="layout==='minimal'",style="display:inline")
+        span(v-if="value.businessName")
           business-name(:value="value.businessName")
-        div(v-if="personName") "{{personName}}"
+        span(v-if="personName") "{{personName}}"
           person-name(:value="personName")
       div(v-else)
         div(v-if="value.businessName")

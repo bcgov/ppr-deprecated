@@ -1,24 +1,23 @@
 <template lang="pug">
-  div
-    v-card(flat, v-if="editing")
-      v-form(
-        v-if="editing",
-        @input="formValid($event)"
+  div(style="display:inline")
+    v-form(
+      v-if="editing",
+      @input="formValid($event)"
+    )
+      v-autocomplete(
+        :value="value",
+        :items="partyList",
+        item-text="business",
+        item-value="clientCode",
+        placeholder="Start typing to search for a client code",
+        prepend-icon="mdi-id-card",
+        @input="updateParty($event)",
+        return-object=false
       )
-        v-autocomplete(
-          :value="value",
-          :items="partyList",
-          item-text="business",
-          item-value="clientCode",
-          placeholder="Start typing to search for a client code",
-          prepend-icon="mdi-id-card",
-          @input="updateParty($event)",
-          return-object=false
-        )
-    div(v-if="partyCode")
-      div(v-if="layout === 'condensed' || layout === 'minimal'")
-        div {{partyCode.clientCode }}, {{partyCode.business}}
-      v-simple-table(v-else)
+    div(v-if="layout === 'minimal' && partyCode && !editing")
+      span {{partyCode.clientCode }}, {{partyCode.business}}
+    div(v-if="layout !== 'minimal' && partyCode && !editing")
+      v-simple-table
         tbody
           tr
             td Code:

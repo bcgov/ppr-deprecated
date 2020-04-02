@@ -8,7 +8,6 @@ import ResultsPage from '@/views/ResultsPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
 
 import Login from '@/views/Login.vue'
-import Logout from '@/views/Logout.vue'
 
 export default [
   {

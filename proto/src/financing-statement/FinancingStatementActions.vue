@@ -1,14 +1,9 @@
 <template lang="pug">
-  div
-    div(class="part") {{ value.baseRegistrationNumber }}
-    div(class="part") exp: {{ value.expiryDate }}
-    div(class="part") {{ value.type }}
-    div(class="part")
-      span Base debtor:
-        debtor-party(:value="value.debtorParties[0]", layout="minimal")
-    div(class="part")
-      span Base secured party:
-        secured-party(:value="value.securedParties[0]", layout="minimal")
+  v-col(cols="12",sm="12")
+    v-btn(@click="view")  View
+    v-btn(@click="view",disabled)  Amend
+    v-btn(@click="view",disabled)  Renewal
+    v-btn(@click="view",disabled)  Discharge
 </template>
 
 <script lang="ts">
@@ -23,17 +18,7 @@ import RegisteringParty from '@/registering-party/RegisteringParty.vue'
 import SecuredParty from '@/secured-parties/SecuredParty.vue'
 
 export default createComponent({
-  components: {
-    DebtorParty,
-    RegisteringParty,
-    SecuredParty
-  },
   props: {
-    editing: {
-      default: false,
-      required: false,
-      type: Boolean
-    },
     value: {
       required: true,
       type: FinancingStatementModel
@@ -41,10 +26,13 @@ export default createComponent({
   },
 
   setup(props, { root }) {
+
     function view() {
       const baseRegistrationNumber = props.value.baseRegistrationNumber
       root.$router.push({ name: 'financing-view', query: { regNum: baseRegistrationNumber } })
     }
+
+
     return {
       view
     }
@@ -53,8 +41,7 @@ export default createComponent({
 </script>
 
 <style lang="scss" scoped>
-.part {
-  display: table-cell;
-  padding-right: 1rem;
-}
+  .v-btn {
+    margin-right: 10px;
+  }
 </style>
