@@ -59,10 +59,11 @@ class FinancingStatementRepository:
                                    fs_input.securedParties))
         debtors = list(map(lambda p: map_party_schema_to_model(schemas.party.PartyType.DEBTOR, p, p.birthdate),
                            fs_input.debtors))
-
-        general_collateral = list(map(lambda c: models.collateral.GeneralCollateral(description=c.description),
-                                      fs_input.generalCollateral))
         vehicle_collateral = list(map(map_vehicle_collateral_schema_to_model, fs_input.vehicleCollateral))
+        general_collateral = list(
+            map(lambda e: models.collateral.GeneralCollateral(description=e[1].description, index=e[0]),
+                enumerate(fs_input.generalCollateral, start=1))
+        )
 
         model.events.append(event_model)
         model.parties.append(reg_party_model)

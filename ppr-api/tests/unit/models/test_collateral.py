@@ -8,8 +8,9 @@ import schemas.collateral
 def test_general_collateral_list_as_schema_should_group_items_with_same_start():
     event = models.financing_statement.FinancingStatementEvent(registration_number='1234',
                                                                registration_date=datetime.datetime.now())
-    model1 = models.collateral.GeneralCollateral(description='Test description', starting_registration_number='1234')
-    model2 = models.collateral.GeneralCollateral(description=' - Part 2', starting_registration_number='1234')
+    model1 = models.collateral.GeneralCollateral(description='Test description', index=1,
+                                                 starting_registration_number='1234')
+    model2 = models.collateral.GeneralCollateral(description=' - Part 2', index=2, starting_registration_number='1234')
 
     schema = models.collateral.GeneralCollateral.list_as_schema([model1, model2], [event])
 
@@ -24,8 +25,10 @@ def test_general_collateral_list_as_schema_should_not_group_items_with_different
     event1 = models.financing_statement.FinancingStatementEvent(registration_number='1234', registration_date=now)
     event2 = models.financing_statement.FinancingStatementEvent(registration_number='4321',
                                                                 registration_date=now + datetime.timedelta(seconds=1))
-    model1 = models.collateral.GeneralCollateral(description='Test description 1', starting_registration_number='1234')
-    model2 = models.collateral.GeneralCollateral(description='Test description 2', starting_registration_number='4321')
+    model1 = models.collateral.GeneralCollateral(description='Test description 1', index=1,
+                                                 starting_registration_number='1234')
+    model2 = models.collateral.GeneralCollateral(description='Test description 2', index=2,
+                                                 starting_registration_number='4321')
 
     schema = models.collateral.GeneralCollateral.list_as_schema([model1, model2], [event1, event2])
 
@@ -37,13 +40,41 @@ def test_general_collateral_list_as_schema_should_not_group_items_with_different
 
 
 def test_general_collateral_list_as_schema_should_use_none_date_when_event_not_found():
-    model = models.collateral.GeneralCollateral(description='Test description', starting_registration_number='1234')
+    model = models.collateral.GeneralCollateral(description='Test description', index=1,
+                                                starting_registration_number='1234')
 
     schema = models.collateral.GeneralCollateral.list_as_schema([model], [])
 
     assert len(schema) == 1
     assert schema[0].addedDateTime is None
     assert schema[0].description == 'Test description'
+
+
+def test_general_collateral_list_as_schema_should_sort_by_index_before_joining():
+    event = models.financing_statement.FinancingStatementEvent(registration_number='1234',
+                                                               registration_date=datetime.datetime.now())
+    model1 = models.collateral.GeneralCollateral(description='1', index=1, starting_registration_number='1234')
+    model2 = models.collateral.GeneralCollateral(description='2', index=2, starting_registration_number='1234')
+    model3 = models.collateral.GeneralCollateral(description='3', index=3, starting_registration_number='1234')
+    model4 = models.collateral.GeneralCollateral(description='4', index=4, starting_registration_number='1234')
+
+    # Send the collateral into the method in scrambled order to verify they get sorted
+    schema = models.collateral.GeneralCollateral.list_as_schema([model3, model1, model4, model2], [event])
+
+    assert schema[0].description == '1234'
+
+
+def test_general_collateral_list_as_schema_with_empty_index_should_use_existing_order():
+    event = models.financing_statement.FinancingStatementEvent(registration_number='1234',
+                                                               registration_date=datetime.datetime.now())
+    model1 = models.collateral.GeneralCollateral(description='1', starting_registration_number='1234')
+    model2 = models.collateral.GeneralCollateral(description='2', starting_registration_number='1234')
+    model3 = models.collateral.GeneralCollateral(description='3', starting_registration_number='1234')
+    model4 = models.collateral.GeneralCollateral(description='4', starting_registration_number='1234')
+
+    schema = models.collateral.GeneralCollateral.list_as_schema([model1, model2, model3, model4], [event])
+
+    assert schema[0].description == '1234'
 
 
 def test_vehicle_collateral_as_schema_with_motor_vehicle():

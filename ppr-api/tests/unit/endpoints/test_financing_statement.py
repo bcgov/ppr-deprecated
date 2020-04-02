@@ -162,8 +162,8 @@ def test_read_financing_statement_debtor_address_should_be_mapped_to_schema():
 
 def test_read_financing_statement_general_collateral_should_be_included():
     base_reg_num = '123456D'
-    collateral1 = models.collateral.GeneralCollateral(description='collateral description')
-    collateral2 = models.collateral.GeneralCollateral(description=' plus appended portion')
+    collateral1 = models.collateral.GeneralCollateral(description='collateral description', index=1)
+    collateral2 = models.collateral.GeneralCollateral(description=' plus appended portion', index=2)
     stub_fs = stub_financing_statement(base_reg_num, general_collateral=[collateral1, collateral2])
     collateral1.start_event = stub_fs.get_base_event()
     collateral2.start_event = stub_fs.get_base_event()
