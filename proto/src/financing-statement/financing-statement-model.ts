@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { BasePartyInterface, BasePartyModel } from '@/base-party/base-party-model'
+import { DebtorInterface, DebtorModel, } from '@/debtor-parties/debtor-model'
 import { RegisteringPartyInterface, RegisteringPartyModel } from '@/registering-party/registering-party-model'
 import { SecuredPartyModel, SecuredPartyInterface } from '@/secured-parties/secured-party-model.ts'
 
@@ -14,7 +14,7 @@ export interface FinancingStatementInterface {
   registeringParty: RegisteringPartyInterface;
   registrationDateTime: string | undefined;
   securedParties: SecuredPartyInterface[];
-  debtors: BasePartyInterface[];
+  debtors: DebtorInterface[];
   type: FinancingStatementType;
   serialCollateral: [];
   lifeYears: number;
@@ -28,7 +28,7 @@ export class FinancingStatementModel {
   private _type: FinancingStatementType
   private _lifeYears: number
   private _securedParties: SecuredPartyModel[]
-  private _debtorParties: BasePartyModel[]
+  private _debtorParties: DebtorModel[]
 
   /**
    * Creates a new FinancingStatementModel model instance.
@@ -47,7 +47,7 @@ export class FinancingStatementModel {
     lifeYears: number = 1,
     registeringParty: RegisteringPartyModel,
     securedParties: SecuredPartyModel[] = [new SecuredPartyModel()],
-    debtorParties: BasePartyModel[] = [new BasePartyModel()],
+    debtorParties: DebtorModel[] = [new DebtorModel()],
     baseRegistrationNumber?: string,
     registrationDatetime?: string,
     expiryDate?: string
@@ -106,7 +106,7 @@ export class FinancingStatementModel {
   /**
  * Gets the list of debtors who own the collateral
  */
-  public get debtorParties(): BasePartyModel[] {
+  public get debtorParties(): DebtorModel[] {
     return this._debtorParties
   }
 
@@ -146,8 +146,8 @@ export class FinancingStatementModel {
     this.securedParties.forEach((sp: SecuredPartyModel): void => {
       theSPs.push(sp.toJson())
     })
-    const theDbers: BasePartyInterface[] = []
-    this.debtorParties.forEach((sp: BasePartyModel): void => {
+    const theDbers: DebtorInterface[] = []
+    this.debtorParties.forEach((sp: DebtorModel): void => {
       theDbers.push(sp.toJson())
     })
     const rval: FinancingStatementInterface = {
@@ -194,7 +194,7 @@ export class FinancingStatementModel {
   public static fromJson(jsonObject: FinancingStatementInterface): FinancingStatementModel {
     let registeringParty: RegisteringPartyModel | undefined
     let securedParties: SecuredPartyModel[] = []
-    let debtorParties: BasePartyModel[] = []
+    let debtorParties: DebtorModel[] = []
 
     if (jsonObject.registeringParty) {
       registeringParty = RegisteringPartyModel.fromJson(jsonObject.registeringParty)
@@ -206,8 +206,8 @@ export class FinancingStatementModel {
       })
     }
     if (jsonObject.debtors) {
-      jsonObject.debtors.forEach((sp: BasePartyInterface): void => {
-        debtorParties.push(BasePartyModel.fromJson(sp))
+      jsonObject.debtors.forEach((sp: DebtorInterface): void => {
+        debtorParties.push(DebtorModel.fromJson(sp))
       })
     }
 

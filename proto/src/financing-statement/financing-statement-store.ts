@@ -1,5 +1,5 @@
 import { ref } from '@vue/composition-api'
-import { BasePartyModel } from '@/base-party/base-party-model'
+import { DebtorModel, } from '@/debtor-parties/debtor-model'
 import { FinancingStatementInterface, FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { SecuredPartyModel} from '@/secured-parties/secured-party-model.ts'
@@ -15,11 +15,13 @@ function getDefs() {
     const firstSecuredParty = new SecuredPartyModel()
     firstSecuredParty.listId = 0
     const securedParties = [firstSecuredParty]
-    const firstDebtor = new BasePartyModel()
+    const firstDebtor = new DebtorModel()
     firstDebtor.listId = 0
     const debtorParties = [firstDebtor]
     const registeringParty = createFromCurrentUser()
-    return new FinancingStatementModel(FinancingStatementType.SECURITY_AGREEMENT, 5, registeringParty, securedParties, debtorParties)
+    return new FinancingStatementModel(
+      FinancingStatementType.SECURITY_AGREEMENT, 5,
+      registeringParty, securedParties, debtorParties)
   }
 
   function findFinancingStatement( regNum: string) {

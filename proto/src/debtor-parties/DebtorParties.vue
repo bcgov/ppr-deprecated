@@ -1,29 +1,26 @@
 <template>
   <v-form>
-    <form-section-header v-if="editing" label="Debtors" />
-    <v-container>
-      <v-list>
-        <ppr-list-item
-          v-for="(debtorParty, index) in value"
-          :key="debtorParty.listId"
+    <v-list>
+      <ppr-list-item
+        v-for="(debtorParty, index) in value"
+        :key="debtorParty.listId"
+        :editing="editing"
+        :index="index"
+        :list-length="value.length"
+        @remove="removeElement"
+      >
+        <template #header>
+          Enter the contact information for this <strong>Debtor</strong>
+        </template>
+        <debtor-party
+          :value="debtorParty"
           :editing="editing"
-          :index="index"
-          :list-length="value.length"
-          @remove="removeElement"
-        >
-          <template #header>
-            Enter the contact information for this <strong>Debtor</strong>
-          </template>
-          <base-party
-            :value="debtorParty"
-            :editing="editing"
-            prompt="How should we identify this Debtor?"
-            @input="updateElement($event, index)"
-            @valid="emitValidity($event, index)"
-          />
-        </ppr-list-item>
-      </v-list>
-    </v-container>
+          prompt="How should we identify this Debtor?"
+          @input="updateElement($event, index)"
+          @valid="emitValidity($event, index)"
+        />
+      </ppr-list-item>
+    </v-list>
     <v-container
       v-if="editing"
       class="flex-center"
@@ -40,14 +37,14 @@
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { BasePartyModel } from '../base-party/base-party-model'
-import BaseParty from '../base-party/BaseParty.vue'
+import { DebtorModel } from '@/debtor-parties/debtor-model'
+import DebtorParty from '../debtor-parties/DebtorParty.vue'
 import FormSectionHeader from '../components/FormSectionHeader.vue'
 import PprListItem from '../components/PprListItem.vue'
 
 export default createComponent({
   components: {
-    BaseParty,
+    DebtorParty,
     FormSectionHeader,
     PprListItem
   },
@@ -68,7 +65,6 @@ export default createComponent({
     const formIsValid = ref<boolean>(false)
 
     // Create a structure to hold the validation state of the elements of the list
-    // TODO consider if this needs to be reactive
     const validationState: boolean[] = new Array(props.value.length).fill(false)
 
     // Callback function for emitting form validity on the header section back to the parent.
@@ -83,9 +79,9 @@ export default createComponent({
 
     // Vue is not able to detect changes inside arrays so when emitting the array of parties
     // be sure to clone the array.
-    function updateElement(newParty: BasePartyModel, index: number): void {
+    function updateElement(newParty: DebtorModel, index: number): void {
       let sp = [...props.value]
-      const previous: BasePartyModel = props.value[index] as BasePartyModel
+      const previous: DebtorModel = props.value[index] as DebtorModel
       newParty.listId = previous.listId
       sp[index] = newParty
       emit('input', sp)
@@ -93,8 +89,8 @@ export default createComponent({
 
     function addElement() {
       let sp = [...props.value]
-      const last: BasePartyModel = props.value[props.value.length - 1] as BasePartyModel
-      const newParty = new BasePartyModel()
+      const last: DebtorModel = props.value[props.value.length - 1] as DebtorModel
+      const newParty = new DebtorModel()
       newParty.listId = last.listId + 1
       sp.push(newParty)
       emit('input', sp)

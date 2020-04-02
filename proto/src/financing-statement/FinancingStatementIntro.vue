@@ -10,25 +10,31 @@
       commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
       cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
       proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    v-simple-table(v-if="editing")
-      thead
-        tr
-          th Type of Lien
-          th Legislation
-          th Condition
-      tbody
-        tr
-          td Security Aggreement
-          td PPS Act
-          td blah blah
-        tr
-          td Security Aggreement
-          td PPS Act
-          td blah blah
-        tr
-          td Security Aggreement
-          td PPS Act
-          td blah blah
+
+    v-expansion-panels
+      v-expansion-panel
+        v-expansion-panel-header
+          v-simple-table(v-if="editing")
+            thead
+              tr
+                th Type of Lien
+                th Legislation
+                th Condition
+        v-expansion-panel-content
+          v-simple-table(v-if="editing")
+            tbody
+              tr
+                td Security Aggreement
+                td PPS Act
+                td blah blah
+              tr
+                td Security Aggreement
+                td PPS Act
+                td blah blah
+              tr
+                td Security Aggreement
+                td PPS Act
+                td blah blah
 
 </template>
 
@@ -62,13 +68,15 @@ export default createComponent({
 </script>
 
 <style lang="scss" scoped>
-
+.v-expansion-panel-header {
+  padding: 0;
+}
 .v-data-table {
   th {
     background-color: #38598A;
     color: #F8F9FA  !important;
     font-weight: bolder;
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
 
   th, td {

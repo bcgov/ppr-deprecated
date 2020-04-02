@@ -7,30 +7,63 @@ export interface AddressInterface {
 }
 
 export class AddressModel {
-  public street?: string
-  public city?: string
-  public province?: string
-  public postal?: string
-  public country?: string
+  readonly _street?: string
+  readonly _city?: string
+  readonly _province?: string
+  readonly _postal?: string
+  readonly _country?: string
+
+  public constructor(
+    street?: string,
+    city?: string,
+    province?: string,
+    postal?: string,
+    country?: string
+  ) {
+    this._street = street || ''
+    this._city = city || ''
+    this._province = province || ''
+    this._postal = postal || ''
+    this._country = country || ''
+  }
+
+  public get street() {
+    return this._street
+  }
+
+  public get city() {
+    return this._city
+  }
+
+  public get province() {
+    return this._province
+  }
+
+  public get postal() {
+    return this._postal
+  }
+
+  public get country() {
+    return this._country
+  }
 
   public toJson(): AddressInterface {
-    const rval = {
-      street: this.street,
-      city: this.city,
-      province: this.province,
-      postal: this.postal,
-      country: this.country,
+    return {
+      street: this._street,
+      city: this._city,
+      province: this._province,
+      postal: this._postal,
+      country: this._country,
     }
-    return rval
   }
 
   public static fromJson(jsonObject: AddressInterface | undefined): AddressModel {
-    const rval = new AddressModel()
-    rval.street = jsonObject.street
-    rval.city = jsonObject.city
-    rval.province = jsonObject.province
-    rval.postal = jsonObject.postal
-    rval.country = jsonObject.country
-    return rval
+    return new AddressModel(
+      jsonObject.street,
+      jsonObject.city,
+      jsonObject.province,
+      jsonObject.postal,
+      jsonObject.country
+    )
   }
 }

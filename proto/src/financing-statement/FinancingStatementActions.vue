@@ -13,9 +13,6 @@ import { FinancingStatementModel } from '@/financing-statement/financing-stateme
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/person-name/person-name-model'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
-import DebtorParty from '@/debtor-parties/DebtorParty.vue'
-import RegisteringParty from '@/registering-party/RegisteringParty.vue'
-import SecuredParty from '@/secured-parties/SecuredParty.vue'
 
 export default createComponent({
   props: {

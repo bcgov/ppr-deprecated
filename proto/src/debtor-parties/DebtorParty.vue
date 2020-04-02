@@ -5,55 +5,52 @@
         v-if="editing",
         :class="getFormClass()",
         class="base-party-form",
-        data-test-id="BaseParty.form",
-        @input="emitValidity(HEADER, $event)"
+        @input="emitValid('party', $event)"
       )
-        business-name(
-          :editing="editing",
-          :value="value.businessName",
-          @input="updateBusiness($event)",
-          @valid="emitValidity(BUSINESS_NAME, $event)",
+        v-text-field(
+        label="Business",
+        :value="value.business",
+        @input="update('business', $event)"
         )
-        person-name(
+        v-row
+          v-col
+            v-text-field(
+            label="First",
+            :value="value.first",
+            @input="update('first', $event)"
+            )
+          v-col
+            v-text-field(
+            label="Middle",
+            :value="value.middle",
+            @input="update('middle', $event)"
+            )
+          v-col
+            v-text-field(
+            label="Last",
+            :value="value.last",
+            @input="update('last', $event)"
+            )
+        address-segment(
           :editing="editing",
-          :value="value.personName",
-          @input="updatePerson($event)",
-          @valid="emitValidity(PERSON_NAME, $event)"
+          :value="value.address",
+          @input="update('address', $event)",
+          @valid="emitValid('address', $event)"
         )
     div(v-else, style="display:inline")
-      div(v-if="layout==='condensed'")
-        div(v-if="value.businessName")
-          div(class="section") Business Name
-          business-name(:value="value.businessName")
-        div(v-if="personName") "{{personName}}"
-          div(class="section") Individual Name
-          person-name(:value="personName")
-      div(v-if="layout==='minimal'",style="display:inline")
-        span(v-if="value.businessName")
-          business-name(:value="value.businessName")
-        span(v-if="personName") "{{personName}}"
-          person-name(:value="personName")
-      div(v-else)
-        div(v-if="value.businessName")
-          div(class="section") Business Name
-          business-name(:value="value.businessName")
-        div(v-if="personName") "{{personName}}"
-          div(class="section") Individual Name
-          person-name(:value="personName")
-        // insert address here
+      div(v-if="layout==='condensed'")  display condensed {{value }}
+      div(v-if="layout==='minimal'",style="display:inline")   display minimal {{value }}
+      div(v-else)  display full {{value }}
 </template>
 
 <script lang="ts">
 import { computed, createComponent, ref } from '@vue/composition-api'
-import BusinessName from '@/business-name/BusinessName.vue'
-import PersonName from '@/person-name/PersonName.vue'
-import { BasePartyModel } from '@/base-party/base-party-model'
-import { BusinessNameModel } from '@/business-name/business-name-model'
-import { PersonNameModel } from '@/person-name/person-name-model'
+import { AddressModel } from '@/address/address-model'
+import { DebtorModel } from '@/debtor-parties/debtor-model'
+import AddressSegment from '@/address/AddressSegment.vue'
 
 export default createComponent({
-  components: { BusinessName, PersonName },
-
+  components: { AddressSegment },
   props: {
     layout: {
       default: 'full',
@@ -70,79 +67,28 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: BasePartyModel
+      type: DebtorModel
     }
   },
 
   setup(props, { emit }) {
 
     const formIsValid = ref<boolean>(false)
-
-    const BUSINESS_NAME = 'businessName'
-    const HEADER = 'header'
-    const PERSON_NAME = 'personName'
+    const debtor = ref(props.value)
 
     /*  Create a structure to hold the validation state of the various sections of the form.
     */
-    interface StringKeyedObject {
-      [index: string]: boolean;
-    }
     const validationState: StringKeyedObject = {}
-    validationState[BUSINESS_NAME] = false
-    validationState[HEADER] = false
-    validationState[PERSON_NAME] = false
+    validationState['party'] = false
+    validationState['address'] = false
 
-    let type = (props.value.personName.first || props.value.personName.last) ? PERSON_NAME : BUSINESS_NAME
-    // partyType tracks the active name. Start showing one model, say, the business name
-    const partyType = ref(type)
-
-    // Callback function for emitting form validity on all sections back to the parent.
-    function emitValidity(key: string, validElement: boolean) {
+    function emitValid(key: string, validElement: boolean) {
       validationState[key] = validElement
-      let formValid = validationState[HEADER]
-      if (partyType.value === BUSINESS_NAME) {
-        formValid = formValid && validationState[BUSINESS_NAME]
-      }
-      if (partyType.value === PERSON_NAME) {
-        formValid = formValid && validationState[PERSON_NAME]
-      }
-      formIsValid.value = formValid
-      emit('valid', formValid)
-    }
-
-    const showBusinessName = computed((): boolean => partyType.value === BUSINESS_NAME)
-    const showPersonName = computed((): boolean => partyType.value === PERSON_NAME)
-
-    const personName = computed((): string => {
-      const parts: string[] = []
-      props.value.personName.first ? parts.push(props.value.personName.first) : undefined
-      props.value.personName.middle ? parts.push(props.value.personName.middle) : undefined
-      props.value.personName.last ? parts.push(props.value.personName.last) : undefined
-      return parts.join(',')
-    })
-
-    // Callback function for emitting the business name model change back to the parent.
-    function updateBusiness(newValue: BusinessNameModel): void {
-      emit('input', new BasePartyModel(
-        newValue,
-        props.value.personName
-      ))
-    }
-
-    // Callback function for emitting the person name model change back to the parent.
-    function updatePerson(newValue: PersonNameModel): void {
-      emit('input', new BasePartyModel(
-        props.value.businessName,
-        newValue
-      ))
-    }
-
-    // Callback function for tracking the current name model.
-    // Intentional side effect to clear both business and person name fields.
-    function changeType(type: string) {
-      partyType.value = type
-      const model = new BasePartyModel()
-      emit('input', model)
+      let formValid = validationState['party']
+      formValid = formValid && validationState['address']
+      // todo restore validation
+      formIsValid.value = true
+      emit('valid', true)
     }
 
     function getFormClass() {
@@ -151,23 +97,61 @@ export default createComponent({
       }
     }
 
+    function update (key: string, model: string | AddressModel) {
+      const prev = props.value
+      let newModel: DebtorModel
+      if (key === 'business') {
+        newModel = new DebtorModel(model, prev.first, prev.middle, prev.last, prev.address, prev.birthDate)
+      }
+      if (key === 'first') {
+        newModel = new DebtorModel(prev.business, model, prev.middle, prev.last, prev.address, prev.birthDate)
+      }
+      if (key === 'middle') {
+        newModel = new DebtorModel(prev.business, prev.first, model, prev.last, prev.address, prev.birthDate)
+      }
+      if (key === 'last') {
+        newModel = new DebtorModel(prev.business, prev.first, prev.middle, model, prev.address, prev.birthDate)
+      }
+      if (key === 'address') {
+        newModel = new DebtorModel(prev.business, prev.first, prev.middle, prev.last, model, prev.birthDate)
+      }
+      if (key === 'birthDate') {
+        newModel = new DebtorModel(prev.business, prev.first, prev.middle, prev.last, prev.address, model)
+      }
+      emit('input',newModel)
+    }
+
+    const { businessRules, businessUpdate} = useBusiness(debtor, emit)
     return {
-      BUSINESS_NAME,
-      HEADER,
-      PERSON_NAME,
-      changeType,
+      businessRules, businessUpdate,
       formIsValid,
       getFormClass,
-      partyType,
-      personName,
-      showBusinessName,
-      showPersonName,
-      updateBusiness,
-      updatePerson,
-      emitValidity
+      emitValid,
+      update
     }
   }
 })
+
+  function useBusiness(debtor: DebtorModel, emit) {
+    const businessRules = [
+      (value: string): (boolean | string) => {
+        console.log('!!value && !debtor.value.last', value, debtor.value.last)
+        return !!value && !debtor.value.last || 'The business name is required if there is no person last name'
+      }
+    ]
+
+    function businessUpdate(name: string): void {
+      const prev = debtor.value
+      emit('input', new DebtorModel(
+        name,
+        prev.first, prev.middle, prev.last, prev.address,
+        prev.birthDate
+      ))
+    }
+    return {
+      businessRules, businessUpdate
+    }
+  }
 </script>
 
 <!-- must be unscoped to hide the radio button circles -->
@@ -196,6 +180,10 @@ export default createComponent({
   }
 }
 
+.v-text-field {
+  margin: 0;
+  padding: 0;
+}
 .v-item--active {
   border: 1px solid $BCgovGold5;
 }
