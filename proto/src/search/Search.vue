@@ -20,7 +20,6 @@
     section
       search-input(
       id="serial",
-      disabled=true,
       label="Serial number",
       :hint="serialValidDescription",
       :rules="serialValidationRules",

@@ -1,15 +1,15 @@
 <template lang="pug">
   section
-    header
-      h2 Results for your search
     p.
-      The content on this page is for demonstration purposes only.
-    div
-      p.
-        Searched for: {{ criteria.term }}
+      This prototype demonstrations a limited set of what a real PPR search needs to do.
+    h3 Search Criteria:
+    v-row
+      v-col Searched for: '{{ criteria.term }}'
+      v-col At time: {{ criteria.date }}
+      v-col Search Type: {{criteria.typeAsString }}
+
     div(id="searchResults")
-      p.
-        Search results:
+      h3 Financing statements:
       v-simple-table
         tbody
           tr(v-for="financingStatement in fsList")
@@ -34,6 +34,7 @@ export default createComponent({
 
     const criteria = computed(() => searchGet(searchId) )
     const fsList = computed(() => searchGetResults(searchId) )
+
 
     return {
       fsList,

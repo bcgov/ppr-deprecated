@@ -7,35 +7,58 @@ import { useUsers } from '@/users/users'
 export enum SearchTypes {
   REG_NUM,
   DEBTOR,
-  SERIAL,
-  GENERAL
+  SERIAL
 }
+
+export interface SearchResultsInterface {
+  exact: string[];
+  similar: string[]
+}
+
+
 export interface SearchInterface {
   id: string;
   userId: string;
   type: SearchTypes;
+  typeAsString: string;
   term: string;
   date: string;
-  list: string[];
+  exactList: string[];
+  similarList: string[];
+}
+
+function typeToString( type: SearchTypes) {
+  let str = ''
+  if (type === SearchTypes.REG_NUM) str = 'Registration number search'
+  if (type === SearchTypes.DEBTOR) str = 'Debtor search'
+  if (type === SearchTypes.SERIAL) str = 'Serial number search'
+  return str
 }
 
 export class SearchRecord implements SearchInterface {
   readonly _id: string
   readonly _userId: string
   readonly _type: SearchTypes
+  readonly _typeAsString: string
   readonly _term: string
   readonly _date: string
-  readonly _list: string[]
+  readonly _exactList: string[]
+  readonly _similarList: string[]
   constructor(id: string, userId: string, type: SearchTypes, term: string, date: string) {
     this._id = id
     this._userId = userId
     this._type = type
+    this._typeAsString = typeToString(type)
     this._term = term
     this._date = date
-    this._list = []
+    this._exactList = []
+    this._similarList = []
   }
-  public addToList(regnum: string) {
-    this._list.push(regnum)
+  public addToExactList(regnum: string) {
+    this._exactList.push(regnum)
+  }
+  public addToSimilarList(regnum: string) {
+    this._similarList.push(regnum)
   }
   public get id() {
     return this._id
@@ -46,14 +69,20 @@ export class SearchRecord implements SearchInterface {
   public get type() {
     return this._type
   }
+  public get typeAsString() {
+    return this._typeAsString
+  }
   public get term() {
     return this._term
   }
   public get date() {
     return this._date
   }
-  public get list() {
-    return [...this._list]
+  public get exactList() {
+    return [...this._exactList]
+  }
+  public get similarList() {
+    return [...this._similarList]
   }
 }
 
@@ -62,16 +91,17 @@ function getDefs() {
   // PRIVATE
   let searchList = undefined
 
-  function getList(): SearchInterface[] {
+  function getSearchRecordsList(): SearchInterface[] {
     if(!searchList) {
       searchList = []
       const stash = localStorage.getItem('searchList')
       if(stash) {
-        searchList = JSON.parse(stash).map(elem => {
-          const record = new SearchRecord(elem._id, elem._userId, elem._type, elem._term, elem._date)
+        searchList = JSON.parse(stash).map(stashed => {
+          const record = new SearchRecord(stashed._id, stashed._userId, stashed._type, stashed._term, stashed._date)
           // transfer the list of base registration numbers
+          stashed._exactList.forEach(regnum => record.addToExactList(regnum))
+          stashed._similarList.forEach(regnum => record.addToSimilarList(regnum))
           // TODO add, if needed, amendment ids
-          elem._list.forEach(regnum => record.addToList(regnum))
           return record
         })
       }
@@ -80,8 +110,8 @@ function getDefs() {
     return searchList
   }
 
-  function addToList(record) {
-    const list = getList()
+  function addToSearchRecordsList(record) {
+    const list = getSearchRecordsList()
     list.push(record)
     localStorage.setItem('searchList', JSON.stringify(list, null, 2))
   }
@@ -92,22 +122,23 @@ function getDefs() {
   }
 
   function runSearch(record: SearchRecord ) {
-    const {findFinancingStatementByRegNum} = useFinancingStatements()
     console.log('runSearch', record)
     if (record.type === SearchTypes.REG_NUM) {
+      const {findFinancingStatementByRegNum} = useFinancingStatements()
       const stmt = findFinancingStatementByRegNum(record.term)
       console.log('found? ', stmt)
       if(stmt) {
-        record.addToList(stmt.baseRegistrationNumber)
+        record.addToExactList(stmt.baseRegistrationNumber)
         // TODO add, if needed, amendment ids
       }
     }
     if (record.type === SearchTypes.SERIAL) {
-      // const stmt = findFinancingStatementByRegNum(record.term)
-      // console.log('found? ', stmt)
-      // if(stmt) {
-      //   record.addToList(stmt.baseRegistrationNumber)
-      // }
+      const {findFinancingStatementsBySerial} = useFinancingStatements()
+
+      const results:SearchResultsInterface = findFinancingStatementsBySerial(record.term)
+      console.log('findFinancingStatementsBySerial? ', results)
+      results.exact.map((regNum:string) => record.addToExactList(regNum))
+      results.similar.map((regNum:string) => record.addToSimilarList(regNum))
     }
     // TODO add search for other types
   }
@@ -119,20 +150,20 @@ function getDefs() {
     const date = moment().format('YYYY-MM-DD HH:mm:ss')
     const record = new SearchRecord(searchId, userId, type, term, date)
     runSearch(record)
-    addToList(record)
+    addToSearchRecordsList(record)
     return record.id
   }
 
   function searchGet(searchId: string): SearchInterface {
     const userId = getUserId()
-    return getList().find((rec: SearchInterface) => {
+    return getSearchRecordsList().find((rec: SearchInterface) => {
       return rec.id === searchId && rec.userId === userId
     })
   }
 
   function searchGetList(): SearchInterface[] {
     const userId = getUserId()
-    return getList().filter((rec: SearchInterface) => rec.userId === userId )
+    return getSearchRecordsList().filter((rec: SearchInterface) => rec.userId === userId )
   }
 
   function searchGetResults(searchId: string): FinancingStatementInterface[] {
@@ -141,7 +172,7 @@ function getDefs() {
     // console.log('get results', searchId, record)
     const results: FinancingStatementInterface[] = []
     if(record) {
-      record.list.map( num => {
+      record.exactList.map( num => {
         const stmt = findFinancingStatementByRegNum(num)
         // TODO add, if needed, amendment ids
         results.push(stmt)
