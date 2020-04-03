@@ -1,22 +1,28 @@
 <template lang="pug">
   div
-    div(v-if="layout=='condensed'")
+    div(v-if="layout==='minimal'")
       div Client Code: {{partyCode.clientCode }}, Company Name: {{partyCode.business}}
-    v-simple-table(v-else)
-      tbody
-        tr
-          td Code:
-          td {{partyCode.clientCode}}
-        tr
-          td Business:
-          td {{partyCode.business}}
-        tr
-          td Contact:
-          td {{partyCode.contact}}
-        tr
-          td Address:
-          td
-            address-segment(:value="partyCode.address")
+    div(v-else)
+      v-row
+        v-col(cols="2")
+          div Business:
+        v-col(cols="3")
+          div {{partyCode.business}}
+      v-row
+        v-col(cols="2")
+          div Contact:
+        v-col(cols="3")
+          div {{partyCode.contact}}
+      v-row
+        v-col(cols="2")
+          div Address:
+        v-col(cols="3")
+          address-segment(:value="partyCode.address")
+      v-row
+        v-col(cols="2")
+          div Code:
+        v-col(cols="3")
+          div {{partyCode.clientCode}}
 </template>
 
 <script lang="ts">
@@ -56,3 +62,13 @@ export default createComponent({
   }
 })
 </script>
+
+<style lang="scss" scoped>
+
+  .col {
+    padding: 3px !important;
+  }
+  .row {
+    margin: 0 !important;
+  }
+</style>

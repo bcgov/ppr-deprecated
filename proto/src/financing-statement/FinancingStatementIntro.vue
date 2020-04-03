@@ -3,25 +3,24 @@
     h1 {{ title }}
     p.
       &nbsp;
-    p(v-if="editing").
-      A lien is ....Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-      sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-      minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
     v-expansion-panels(v-if="editing")
       v-expansion-panel
         v-expansion-panel-header
+          div(class="expansion-header-content") How do I register a lien?
+        v-expansion-panel-content
+          p.
+            A lien is ....Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+            minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
           v-simple-table
             thead
               tr
                 th Type of Lien
                 th Legislation
                 th Condition
-        v-expansion-panel-content
-          v-simple-table(v-if="editing")
             tbody
               tr
                 td Security Aggreement
@@ -74,6 +73,10 @@ export default createComponent({
 </script>
 
 <style lang="scss" scoped>
+
+.expansion-header-content {
+  margin-left: 1rem;
+}
 .v-expansion-panel-header {
   padding: 0;
 }

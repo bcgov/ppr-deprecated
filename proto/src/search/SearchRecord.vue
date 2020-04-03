@@ -22,7 +22,7 @@
 <script lang="ts">
 import { computed, createComponent } from '@vue/composition-api'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
-import { SearchInterface } from '@/search/searching'
+import { SearchRecord } from '@/search/searching'
 import FinancingStatementActions from '@/financing-statement/FinancingStatementActions.vue'
 import FinancingStatementMinimal from '@/financing-statement/FinancingStatementMinimal.vue'
 
@@ -53,7 +53,7 @@ export default createComponent({
   props: {
     record: {
       required: true,
-      type: SearchInterface
+      type: SearchRecord
     }
   },
   setup() {

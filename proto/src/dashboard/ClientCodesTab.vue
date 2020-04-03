@@ -1,6 +1,6 @@
 <template lang="pug">
   v-list
-    ppr-list-item(v-for="party in partyList", :key="party.clientCode")
+    ppr-list-item(v-for="(party, index) in partyList", :key="party.clientCode", :index="index", :list-length="partyList.length")
       party-code(:value="party", class="party-code")
 
 </template>

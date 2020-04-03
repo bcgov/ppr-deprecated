@@ -42,18 +42,21 @@
       div(v-if="layout==='minimal'",style="display:inline")
         div {{ minimalText }}
       div(v-else)
-        v-simple-table
-          tbody
-            tr
-              td Business:
-              td {{value.business}}
-            tr
-              td Individual:
-              td {{personName}}
-            tr
-              td Address:
-              td
-                address-segment(:value="value.address")
+        v-row
+          v-col(cols="2")
+              div Business:
+          v-col(cols="3")
+              div {{value.business}}
+        v-row
+          v-col(cols="2")
+              div Individual:
+          v-col(cols="3")
+              div {{personName}}
+        v-row
+          v-col(cols="2")
+              div Address:
+          v-col(cols="3")
+              address-segment(:value="value.address")
 </template>
 
 <script lang="ts">
@@ -116,7 +119,7 @@ export default createComponent({
 
     /*  Create a structure to hold the validation state of the various sections of the form.
     */
-    const validationState: StringKeyedObject = {}
+    const validationState = {}
     validationState['party'] = false
     validationState['address'] = false
 
@@ -139,27 +142,27 @@ export default createComponent({
       const prev = props.value
       let newModel: DebtorModel
       if (key === 'business') {
-        newModel = new DebtorModel(model, prev.first, prev.middle, prev.last, prev.address, prev.birthDate)
+        newModel = new DebtorModel(model as string, prev.first, prev.middle, prev.last, prev.address, prev.birthDate)
       }
       if (key === 'first') {
-        newModel = new DebtorModel(prev.business, model, prev.middle, prev.last, prev.address, prev.birthDate)
+        newModel = new DebtorModel(prev.business, model as string, prev.middle, prev.last, prev.address, prev.birthDate)
       }
       if (key === 'middle') {
-        newModel = new DebtorModel(prev.business, prev.first, model, prev.last, prev.address, prev.birthDate)
+        newModel = new DebtorModel(prev.business, prev.first, model as string, prev.last, prev.address, prev.birthDate)
       }
       if (key === 'last') {
-        newModel = new DebtorModel(prev.business, prev.first, prev.middle, model, prev.address, prev.birthDate)
+        newModel = new DebtorModel(prev.business, prev.first, prev.middle, model as string, prev.address, prev.birthDate)
       }
       if (key === 'address') {
-        newModel = new DebtorModel(prev.business, prev.first, prev.middle, prev.last, model, prev.birthDate)
+        newModel = new DebtorModel(prev.business, prev.first, prev.middle, prev.last, model as AddressModel, prev.birthDate)
       }
       if (key === 'birthDate') {
-        newModel = new DebtorModel(prev.business, prev.first, prev.middle, prev.last, prev.address, model)
+        newModel = new DebtorModel(prev.business, prev.first, prev.middle, prev.last, prev.address, model as string)
       }
       emit('input',newModel)
     }
 
-    const { businessRules, businessUpdate} = useBusiness(debtor, emit)
+    const { businessRules, businessUpdate} = useBusiness(debtor.value, emit)
     return {
       businessRules, businessUpdate,
       formIsValid,
@@ -175,13 +178,13 @@ export default createComponent({
   function useBusiness(debtor: DebtorModel, emit) {
     const businessRules = [
       (value: string): (boolean | string) => {
-        console.log('!!value && !debtor.value.last', value, debtor.value.last)
-        return !!value && !debtor.value.last || 'The business name is required if there is no person last name'
+        console.log('!!value && !debtor.last', value, debtor.last)
+        return !!value && !debtor.last || 'The business name is required if there is no person last name'
       }
     ]
 
     function businessUpdate(name: string): void {
-      const prev = debtor.value
+      const prev = debtor
       emit('input', new DebtorModel(
         name,
         prev.first, prev.middle, prev.last, prev.address,
@@ -197,6 +200,15 @@ export default createComponent({
 <!-- must be unscoped to hide the radio button circles -->
 <style lang="scss">
 @import "../assets/styles/theme.scss";
+
+.col {
+  padding: 3px !important;
+}
+.row {
+  margin: 0 !important;
+}
+
+
 .section {
   font-weight: bold;
 }

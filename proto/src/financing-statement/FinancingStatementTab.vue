@@ -4,37 +4,16 @@
       v-tab Main
       v-tab Secured Parties
       v-tab Debtors
-      v-tab Collateral
-      v-tab Registering Party
+      v-tab Collateral General
+      v-tab Collateral Serial
       v-tab-item
-        div(v-if="editing")
-          v-card
-            v-form(@input="emitValid('header', $event)")
-              v-container
-                type-component(
-                  :value="value.type",
-                  @input="updateType"
-                )
-                v-text-field(
-                  :value="value.lifeYears",
-                  :rules="lifeRules",
-                  label="Life in Years",
-                  name="lifeInput",
-                  @input="updateLife",
-                )
-        div(v-else)
-          v-card
-            v-row
-              v-col(cols="12",sm="4")
-                v-card(class="pa-2",outlined)
-                  div Base Registration Number: {{ value.baseRegistrationNumber }}
-                  div Expiry Date: {{ value.expiryDate }}
-                  div Registration Date: {{ value.registrationDateTime }}
-              v-col(cols="12",sm="4")
-                v-card(class="pa-2",outlined)
-                  div Type: {{ value.type }}
-                  div Life in Years: {{ value.lifeYears }}
-
+        v-card
+          financing-statement-main(
+            :editing="editing",
+            :value="value",
+            @input="updateMain",
+            @valid="emitValid('main', $event)"
+          )
       v-tab-item
         v-card
           secured-parties(
@@ -53,33 +32,27 @@
           )
       v-tab-item
         v-card
-          div Collateral
+          div Collateral General
       v-tab-item
         v-card
-          registering-party(:value="value.registeringParty")
+          div Collateral Serial
 </template>
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { BasePartyModel } from '@/base-party/base-party-model'
+import { DebtorModel } from '@/debtor-parties/debtor-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/person-name/person-name-model'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
-import BaseParty from '@/base-party/BaseParty.vue'
 import DebtorParties from '@/debtor-parties/DebtorParties.vue'
-import TypeComponent from '@/financing-statement/TypeComponent.vue'
-import FormSectionHeader from '@/components/FormSectionHeader.vue'
-import RegisteringParty from '@/registering-party/RegisteringParty.vue'
+import FinancingStatementMain from '@/financing-statement/FinancingStatementMain.vue'
 import SecuredParties from '@/secured-parties/SecuredParties.vue'
 
 export default createComponent({
   components: {
-    BaseParty,
     DebtorParties,
-    TypeComponent,
-    FormSectionHeader,
-    RegisteringParty,
+    FinancingStatementMain,
     SecuredParties
   },
   props: {
@@ -97,20 +70,10 @@ export default createComponent({
   setup(props, { emit }) {
     const formIsValid = ref<boolean>(false)
 
-    const life = ref<number>(1)
-    const lifeRules = [
-      (value: string): (boolean | string) => {
-        return !!value || 'Life is required'
-      },
-      (value: string): (boolean | string) => {
-        return FinancingStatementModel.isValidYears(value) ? true : 'Life must be a number between 1 and 25'
-      }
-    ]
-
     /*  Create a structure to hold the validation state of the various sections of the form.
     */
     const validationState = {
-      header: false,
+      main: false,
       debtorParties: false,
       securedParties: false
     }
@@ -135,7 +98,7 @@ export default createComponent({
       ))
     }
 
-    function updateDebtorParties(newDebtorParties: BasePartyModel[]): void {
+    function updateDebtorParties(newDebtorParties: DebtorModel[]): void {
       emit('input', new FinancingStatementModel(
         props.value.type,
         props.value.lifeYears,
@@ -145,26 +108,9 @@ export default createComponent({
       ))
     }
 
-    // Callback function for emitting model changes made to the FS life
-    function updateLife(newLife: number): void {
-      emit('input', new FinancingStatementModel(
-        props.value.type,
-        newLife, // props.value.life,
-        props.value.registeringParty,
-        props.value.securedParties,
-        props.value.debtorParties
-      ))
-    }
-
-    // Callback function for emitting model changes made to the FS type
-    function updateType(newType: FinancingStatementType): void {
-      emit('input', new FinancingStatementModel(
-        newType, //props.value.type,
-        props.value.lifeYears,
-        props.value.registeringParty,
-        props.value.securedParties,
-        props.value.debtorParties
-      ))
+    function updateMain(newFinancingStatement: FinancingStatementModel): void {
+      // just pass on the new statement to the parent
+      emit('input', newFinancingStatement)
     }
 
     function getFormClass() {
@@ -175,13 +121,10 @@ export default createComponent({
 
     return {
       formIsValid,
-      life,
-      lifeRules,
       getFormClass,
-      updateLife,
       updateDebtorParties,
+      updateMain,
       updateSecuredParties,
-      updateType,
       emitValid,
       validationState
     }
@@ -210,22 +153,6 @@ export default createComponent({
   .v-tab--active {
     background-color: #E6EAF4 !important;
     color: #0d47a1 !important;
-  }
-  .v-data-table {
-    th {
-      background-color: #38598A;
-      color: #F8F9FA  !important;
-      font-weight: bolder;
-      font-size: 1.5rem;
-    }
-
-    th, td {
-      padding-bottom: 2rem;
-      font-size: 1.0rem;
-    }
-    tbody tr:nth-of-type(even) {
-      background-color: white;
-    }
   }
 }
 

@@ -14,10 +14,9 @@ import { useFinancingStatements } from '@/financing-statement/financing-statemen
 import { useUsers } from '@/users/users'
 import FinancingStatementActions from '@/financing-statement/FinancingStatementActions.vue'
 import FinancingStatementMinimal from '@/financing-statement/FinancingStatementMinimal.vue'
-import FinancingStatementCondensed from '@/financing-statement/FinancingStatementCondensed.vue'
 
 export default createComponent({
-  components: { FinancingStatementActions, FinancingStatementCondensed, FinancingStatementMinimal },
+  components: { FinancingStatementActions, FinancingStatementMinimal },
   setup() {
     const { getUsersFinancingStatementList } = useFinancingStatements()
 
