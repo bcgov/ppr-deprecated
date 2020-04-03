@@ -49,7 +49,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
       expect(wrapper.text()).toContain(FinancingStatementType.SECURITY_AGREEMENT)
     })
 
-    it('@input - type change should be emitted', async (): Promise<void> => {
+    it('@input - type change should be displayed', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
       const sel = wrapper.get('input[data-test-id="FinancingStatement.type.select"]')
@@ -62,9 +62,11 @@ describe('FinancingStatmentContainer.vue', (): void => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
       const sel = wrapper.get('input[data-test-id="FinancingStatement.type.select"]')
-      sel.setValue('MFD_HOME_TAX_LIEN')
+      sel.setValue('REPAIRERS_LIEN')
       await Vue.nextTick()
-      expect(wrapper.text()).toContain(FinancingStatementType.MFD_HOME_TAX_LIEN)
+
+      const emitted = wrapper.emitted('input').slice(-1)[0][0]
+      expect(emitted.type).toBe('REPAIRERS_LIEN')
     })
 
     it('@input - life change should be emitted', async (): Promise<void> => {

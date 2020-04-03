@@ -132,6 +132,12 @@ describe('FinancingStatementModel', (): void => {
       expect(fstmtReceived).toEqual(fstmt)
     })
 
+    it('json type is correct', (): void => {
+      const fstmt = new FinancingStatementModel(FinancingStatementType.REPAIRERS_LIEN)
+
+      expect(fstmt.toJson().type).toEqual('REPAIRERS_LIEN')
+    })
+
     it('json with type', (): void => {
       const fstmt = new FinancingStatementModel(FinancingStatementType.REPAIRERS_LIEN)
       const fstmtReceived = FinancingStatementModel.fromJson(fstmt.toJson())

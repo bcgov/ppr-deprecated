@@ -9,7 +9,7 @@ export interface FinancingStatementInterface {
   baseRegistrationNumber: string | undefined;
   expiryDate: string | undefined;
   generalCollateral: [];
-  registeringParty: PersonNameInterface;
+  registeringParty: { personName: PersonNameInterface };
   registrationDateTime: string | undefined;
   securedParties: BasePartyInterface[];
   debtors: BasePartyInterface[];
@@ -132,7 +132,7 @@ export class FinancingStatementModel {
       baseRegistrationNumber: this.baseRegistrationNumber,
       expiryDate: this.expiryDate,
       generalCollateral: [],
-      registeringParty: this.registeringParty.toJson(),
+      registeringParty: { personName: this.registeringParty.toJson() },
       registrationDateTime: this.registrationDateTime,
       securedParties: theSPs,
       debtors: theDbers,
@@ -175,7 +175,7 @@ export class FinancingStatementModel {
     let debtorParties: BasePartyModel[] = []
 
     if (jsonObject.registeringParty) {
-      registeringParty = PersonNameModel.fromJson(jsonObject.registeringParty)
+      registeringParty = PersonNameModel.fromJson(jsonObject.registeringParty.personName)
     }
 
     if (jsonObject.securedParties) {
