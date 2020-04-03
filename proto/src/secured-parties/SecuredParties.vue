@@ -1,37 +1,25 @@
-<template>
-  <v-form>
-    <v-list>
-      <ppr-list-item
-        v-for="(securedParty, index) in value"
-        :key="securedParty.listId"
-        :editing="editing"
-        :index="index"
-        :list-length="value.length"
+<template lang="pug">
+  v-form
+    v-list
+      ppr-list-item(
+        v-for="(securedParty, index) in value",
+        :key="securedParty.listId",
+        :editing="editing",
+        :index="index",
+        :list-length="value.length",
         @remove="removeElement"
-      >
-        <template #header>
-          Select a client for this <strong>Secured Party</strong>
-        </template>
-        <secured-party
-          :value="securedParty"
-          :editing="editing"
-          @input="updateElement($event, index)"
+      )
+        template(#header) Select a client for this <strong>Secured Party</strong>
+        secured-party(
+          :value="securedParty",
+          :editing="editing",
+          :layout="editing ? 'full' : 'minimal'",
+          @input="updateElement($event, index)",
           @valid="emitValidity($event, index)"
-        />
-      </ppr-list-item>
-    </v-list>
-    <v-container
-      v-if="editing"
-      class="flex-center"
-    >
-      <v-btn
-        data-test-id="SecuredParties.button.add"
-        @click="addElement"
-      >
-        <span>Add new secured party</span>
-      </v-btn>
-    </v-container>
-  </v-form>
+        )
+    v-container(v-if="editing",class="flex-center")
+      v-btn(@click="addElement")
+        span Add new secured party
 </template>
 
 <script lang="ts">

@@ -15,7 +15,7 @@
         return-object=false
       )
     div(v-if="layout === 'minimal' && partyCode && !editing")
-      span {{partyCode.clientCode }}, {{partyCode.business}}
+      span {{partyCode.business}} ({{partyCode.clientCode }})
     div(v-if="layout !== 'minimal' && partyCode && !editing")
       v-simple-table
         tbody

@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     div(v-if="layout==='minimal'")
-      div Client Code: {{partyCode.clientCode }}, Company Name: {{partyCode.business}}
+      div {{partyCode.business}} ({{partyCode.clientCode }})
     div(v-else)
       v-row
         v-col(cols="2")

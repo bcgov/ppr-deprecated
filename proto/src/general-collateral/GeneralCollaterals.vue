@@ -5,9 +5,7 @@
         v-for="(collateral, index) in value",
         :key="collateral.listId",
         class="list-item",
-        :editing="editing",
-        :index="index",
-        list-length="0"
+        :editing="editing"
       )
         template(#header) Enter the general collateral description
 

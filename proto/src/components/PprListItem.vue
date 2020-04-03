@@ -53,11 +53,13 @@ export default createComponent({
       type: Boolean
     },
     listLength: {
-      required: true,
+      default: 0,
+      required: false,
       type: Number
     },
     index: {
-      required: true,
+      default: 0,
+      required: false,
       type: Number
     }
   },

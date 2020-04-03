@@ -28,14 +28,15 @@
     div(v-else)
       v-row
         v-col(cols="12",sm="4")
-          v-card(class="pa-2",outlined)
-            div Base Registration Number: {{ value.baseRegistrationNumber }}
-            div Expiry Date: {{ value.expiryDate }}
-            div Registration Date: {{ value.registrationDateTime }}
+          div Base Registration Number: {{ value.baseRegistrationNumber }}
+          div Expiry Date: {{ value.expiryDate }}
+          div Registration Date: {{ value.registrationDateTime }}
         v-col(cols="12",sm="4")
-          v-card(class="pa-2",outlined)
-            div Type: {{ value.type }}
-            div Life in Years: {{ value.lifeYears }}
+          div Type: {{ value.type }}
+          div Life in Years: {{ value.lifeYears }}
+        v-col(cols="12",sm="4")
+          div Registering Party
+          registering-party(:value="value.registeringParty", layout="minimal")
 </template>
 
 <script lang="ts">
