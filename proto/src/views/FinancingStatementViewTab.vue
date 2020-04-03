@@ -51,7 +51,7 @@ export default createComponent({
   setup(_, { root }) {
     const editing = ref(true)
     const formValid = ref(true)
-    const { createFinancingStatement, findFinancingStatement, registerFinancingStatement } = useFinancingStatements()
+    const { createFinancingStatement, findFinancingStatementByRegNum, registerFinancingStatement } = useFinancingStatements()
     const financingStatement = ref(createFinancingStatement())
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
@@ -62,7 +62,7 @@ export default createComponent({
     const submitButtonText = computed(() => (currentRole.value !== Roles.Staff ? 'Pay and Register' : 'Register'))
 
     if (regNum) {
-      financingStatement.value = findFinancingStatement(regNum)
+      financingStatement.value = findFinancingStatementByRegNum(regNum)
       editing.value = false
     } else {
       editing.value = true

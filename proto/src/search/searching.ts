@@ -7,7 +7,6 @@ import { useUsers } from '@/users/users'
 export enum SearchTypes {
   REG_NUM,
   DEBTOR,
-  SECURED,
   SERIAL,
   GENERAL
 }
@@ -93,15 +92,22 @@ function getDefs() {
   }
 
   function runSearch(record: SearchRecord ) {
+    const {findFinancingStatementByRegNum} = useFinancingStatements()
     console.log('runSearch', record)
     if (record.type === SearchTypes.REG_NUM) {
-      const {findFinancingStatement} = useFinancingStatements()
-      const stmt = findFinancingStatement(record.term)
+      const stmt = findFinancingStatementByRegNum(record.term)
       console.log('found? ', stmt)
       if(stmt) {
         record.addToList(stmt.baseRegistrationNumber)
         // TODO add, if needed, amendment ids
       }
+    }
+    if (record.type === SearchTypes.SERIAL) {
+      // const stmt = findFinancingStatementByRegNum(record.term)
+      // console.log('found? ', stmt)
+      // if(stmt) {
+      //   record.addToList(stmt.baseRegistrationNumber)
+      // }
     }
     // TODO add search for other types
   }
@@ -130,13 +136,13 @@ function getDefs() {
   }
 
   function searchGetResults(searchId: string): FinancingStatementInterface[] {
-    const {findFinancingStatement} = useFinancingStatements()
+    const {findFinancingStatementByRegNum} = useFinancingStatements()
     const record = searchGet(searchId)
     // console.log('get results', searchId, record)
     const results: FinancingStatementInterface[] = []
     if(record) {
       record.list.map( num => {
-        const stmt = findFinancingStatement(num)
+        const stmt = findFinancingStatementByRegNum(num)
         // TODO add, if needed, amendment ids
         results.push(stmt)
       })

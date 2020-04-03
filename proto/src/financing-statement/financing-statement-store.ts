@@ -44,7 +44,7 @@ function getDefs() {
     )
   }
 
-  function findFinancingStatement( regNum: string) {
+  function findFinancingStatementByRegNum( regNum: string) {
     return financingStatementsList.value.find( element => {
       return element.baseRegistrationNumber === regNum
     })
@@ -112,7 +112,7 @@ function getDefs() {
     getFinancingStatementStash,
     getUsersFinancingStatementList,
     loadFinancingStatementStash,
-    findFinancingStatement,
+    findFinancingStatementByRegNum,
     registerFinancingStatement
   }
 }

@@ -57,10 +57,10 @@ export default createComponent({
     }
   },
   setup() {
-    const {findFinancingStatement} = useFinancingStatements()
+    const {findFinancingStatementByRegNum} = useFinancingStatements()
 
     function getFinancingStatement(regNum) {
-      return findFinancingStatement(regNum)
+      return findFinancingStatementByRegNum(regNum)
     }
     return {
       getFinancingStatement
