@@ -39,8 +39,21 @@
         )
     div(v-else, style="display:inline")
       div(v-if="layout==='condensed'")  display condensed {{value }}
-      div(v-if="layout==='minimal'",style="display:inline")   display minimal {{value }}
-      div(v-else)  display full {{value }}
+      div(v-if="layout==='minimal'",style="display:inline")
+        div {{ minimalText }}
+      div(v-else)
+        v-simple-table
+          tbody
+            tr
+              td Business:
+              td {{value.business}}
+            tr
+              td Individual:
+              td {{personName}}
+            tr
+              td Address:
+              td
+                address-segment(:value="value.address")
 </template>
 
 <script lang="ts">
@@ -75,6 +88,31 @@ export default createComponent({
 
     const formIsValid = ref<boolean>(false)
     const debtor = ref(props.value)
+
+    const personName = computed(() => {
+      const d= props.value
+      let text = d.last
+      if (d.first) {
+        text += ', ' + d.first
+      }
+      if (d.middle) {
+        text += ', ' + d.middle
+      }
+      return text
+    })
+
+    const minimalText = computed(() => {
+      const d= props.value
+      let text = ''
+      if(d.business) {
+        text += d.business
+      }
+      else {
+        text += personName.value
+      }
+      return text
+    })
+
 
     /*  Create a structure to hold the validation state of the various sections of the form.
     */
@@ -127,6 +165,8 @@ export default createComponent({
       formIsValid,
       getFormClass,
       emitValid,
+      personName,
+      minimalText,
       update
     }
   }

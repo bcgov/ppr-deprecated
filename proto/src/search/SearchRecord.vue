@@ -1,16 +1,21 @@
 <template lang="pug">
-  div
-    div(class="part")
+  v-row
+    v-col(cols="1")
       div Searched for:
       div {{record.term}}
-    div(class="part")
-      div Date:
+    v-col(cols="1")
+      div Search Date:
       div {{ record.date }}
-    div(class="part")
-      div Liens:
-    div(class="part")
-      div(v-for="regNum in record.list", key="regNum")
-        financing-statement-minimal(:value="getFinancingStatement(regNum)")
+    v-col(cols="1")
+      div Liens found:
+    v-col
+      v-simple-table
+        tbody
+          tr(v-for="regNum in record.list", key="regNum")
+            td
+              financing-statement-minimal(:value="getFinancingStatement(regNum)")
+              financing-statement-actions(:value="getFinancingStatement(regNum)")
+
 
 </template>
 
@@ -18,10 +23,31 @@
 import { computed, createComponent } from '@vue/composition-api'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import { SearchInterface } from '@/search/searching'
+import FinancingStatementActions from '@/financing-statement/FinancingStatementActions.vue'
 import FinancingStatementMinimal from '@/financing-statement/FinancingStatementMinimal.vue'
 
+/*
+  div
+    div(class="part")
+      div Searched for:
+      div {{record.term}}
+    div(class="part")
+      div Search Date:
+      div {{ record.date }}
+    div(class="part")
+      div Liens found:
+    div(class="part")
+      v-simple-table
+        tbody
+          tr(v-for="regNum in record.list", key="regNum")
+            td
+              financing-statement-minimal(:value="getFinancingStatement(regNum)")
+              financing-statement-actions(:value="getFinancingStatement(regNum)")
+
+ */
 export default createComponent({
   components: {
+    FinancingStatementActions,
     FinancingStatementMinimal
   },
   props: {
@@ -47,5 +73,8 @@ export default createComponent({
   .part {
     display: table-cell;
     padding-right: 1rem;
+  }
+  tbody td {
+      border: none !important;
   }
 </style>

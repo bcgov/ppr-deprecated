@@ -65,9 +65,10 @@ export class FinancingStatementModel {
   public registerLien() {
     function getRandomDocId() {
       const base = 100000000
-      return Math.floor(Math.random() * base)
+      let str:string = ''+ Math.floor(Math.random() * base)
+      return str.padStart(8, '0')
     }
-    this._baseRegistrationNumber = '' + getRandomDocId()
+    this._baseRegistrationNumber = getRandomDocId()
     this._registrationDateTime = moment().format("MMM DD YYYY")
     this._expiryDate = moment().add(this.lifeYears, 'years').format("MMM DD YYYY")
   }

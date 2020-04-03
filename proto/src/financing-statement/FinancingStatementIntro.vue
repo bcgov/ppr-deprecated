@@ -11,10 +11,10 @@
       cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
       proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-    v-expansion-panels
+    v-expansion-panels(v-if="editing")
       v-expansion-panel
         v-expansion-panel-header
-          v-simple-table(v-if="editing")
+          v-simple-table
             thead
               tr
                 th Type of Lien

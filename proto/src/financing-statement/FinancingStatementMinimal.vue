@@ -1,7 +1,7 @@
 <template lang="pug">
   div
-    div(class="part") {{ value.baseRegistrationNumber }}
-    div(class="part") exp: {{ value.expiryDate }}
+    div(class="part") Number: {{ value.baseRegistrationNumber }}
+    div(class="part") Expires: {{ value.expiryDate }}
     div(class="part fsType") {{ value.type }}
     div(class="part")
       span Base debtor:
