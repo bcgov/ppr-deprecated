@@ -1,5 +1,7 @@
 import datetime
 
+import datedelta
+
 import models.party
 from models.financing_statement import FinancingStatement, FinancingStatementEvent
 from schemas.financing_statement import RegistrationType
@@ -132,14 +134,43 @@ def test_as_schema_life_has_years_value():
     assert schema.lifeInfinite is False
 
 
+def test_as_schema_life_has_no_value():
+    model = stub_financing_statement(life=None, type_code=RegistrationType.REPAIRERS_LIEN)
+
+    schema = model.as_schema()
+
+    assert schema.lifeYears is None
+    assert schema.lifeInfinite is None
+
+
+def test_as_schema_provides_trust_indenture():
+    model = stub_financing_statement(trust=True)
+
+    schema = model.as_schema()
+
+    assert schema.trustIndenture is True
+
+
+def test_as_schema_provides_repairers_lien_fields():
+    surrender = datetime.date.today() - datedelta.datedelta(days=5)
+    amount = '500'
+    model = stub_financing_statement(type_code=RegistrationType.REPAIRERS_LIEN, surrender=surrender, amount=amount,
+                                     life=None)
+
+    schema = model.as_schema()
+
+    assert amount == amount
+    assert schema.surrenderDate == surrender
+
+
 def stub_financing_statement(
         reg_num: str = '123456A', type_code: RegistrationType = RegistrationType.SECURITY_AGREEMENT, life: int = -1,
-        parties: list = [], events: list = None
+        trust: bool = None, surrender: datetime.date = None, amount: str = None, parties: list = [], events: list = None
 ):
     if events is None:
         events = [FinancingStatementEvent(registration_number=reg_num, base_registration_number=reg_num,
                                           registration_date=datetime.datetime.now())]
     return FinancingStatement(
-        registration_number=reg_num, registration_type_code=type_code.value, life_in_years=life, parties=parties,
-        events=events
+        registration_number=reg_num, registration_type_code=type_code.value, life_in_years=life, trust_indenture=trust,
+        surrender_date=surrender, lien_amount=amount, parties=parties, events=events
     )

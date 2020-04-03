@@ -22,6 +22,9 @@ class FinancingStatement(BaseORM):
     account_id = sqlalchemy.Column(sqlalchemy.String(length=36))  # Designates ownership of the financing statement
     last_updated = sqlalchemy.Column('last_update_timestamp', sqlalchemy.DateTime, server_default=sqlalchemy.func.now(),
                                      onupdate=sqlalchemy.func.now())
+    trust_indenture = sqlalchemy.Column('trust', sqlalchemy.BOOLEAN)
+    surrender_date = sqlalchemy.Column(sqlalchemy.Date)
+    lien_amount = sqlalchemy.Column('lien_value', sqlalchemy.String(length=15))
 
     events = sqlalchemy.orm.relationship('FinancingStatementEvent', back_populates='base_registration')
     parties = sqlalchemy.orm.relationship(
@@ -44,7 +47,7 @@ class FinancingStatement(BaseORM):
         base_event = self.get_base_event()
         reg_date = base_event.registration_date if base_event else None
         reg_party_model = self.get_registering_party()
-        infinite = self.life_in_years == -1
+        infinite = self.life_in_years == -1 if self.life_in_years is not None else None
         years = self.life_in_years if not infinite else None
 
         reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
@@ -57,6 +60,7 @@ class FinancingStatement(BaseORM):
         return schemas.financing_statement.FinancingStatement(
             baseRegistrationNumber=self.registration_number, registrationDateTime=reg_date, expiryDate=self.expiry_date,
             lifeYears=years, lifeInfinite=infinite, type=RegistrationType(self.registration_type_code).name,
+            trustIndenture=self.trust_indenture, lienAmount=self.lien_amount, surrenderDate=self.surrender_date,
             registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
             vehicleCollateral=vehicle_collateral_schema, generalCollateral=general_collateral_schema
         )

@@ -268,6 +268,7 @@ paths:
                         documentId: D0000123
                         registrationDateTime: '2020-01-02T21:08:32Z'
                         lifeYears: 5
+                        trustIndenture: false
                         payment:
                           id: 1234
                           status: CREATED
@@ -391,7 +392,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/financing-statement'
               examples:
-                New Financing Statement:
+                New Security Agreement:
                   value:
                     type: SECURITY_AGREEMENT
                     registeringParty:
@@ -437,6 +438,7 @@ paths:
                     documentId: B5645289
                     registrationDateTime: '2020-02-21T18:38:20Z'
                     lifeYears: 5
+                    trustIndenture: false
                     payment:
                       id: 1234
                       status: CREATED
@@ -453,7 +455,7 @@ paths:
             schema:
               $ref: '#/components/schemas/financing-statement'
             examples:
-              Register Financing Statement:
+              Register a Security Agreement:
                 value:
                   type: SECURITY_AGREEMENT
                   registeringParty:
@@ -495,6 +497,7 @@ paths:
                     - description: A ride on lawn mower that has a great deal of personal value.
                       addedDateTime: '2020-02-21T18:38:20Z'
                   lifeYears: 5
+                  trustIndenture: false
       parameters:
         - schema:
             type: string
@@ -888,6 +891,7 @@ paths:
                       detailsAdded:
                         type: SECURITY_AGREEMENT
                         lifeYears: 2
+                        trustIndenture: false
                         expiryDate: '2022-02-21'
                         registeringParty:
                           businessName: Mr. Plow
@@ -1127,6 +1131,7 @@ paths:
                       registrationDateTime: '2020-02-21T18:38:20Z'
                       detailsAdded:
                         type: SECURITY_AGREEMENT
+                        trustIndenture: false
                         lifeYears: 2
                         expiryDate: '2022-02-21'
                         registeringParty:
@@ -1411,6 +1416,17 @@ components:
           description: Set to true if the registration has an infinite life (no expiry date). Cannot be true when lifeYears has a value. Cannot be true when type is REPAIRERS_LIEN. Must be true or lifeYears must have a value for remaining types.
         payment:
           $ref: '#/components/schemas/payment'
+        trustIndenture:
+          type: boolean
+          description: Indicates if security interest is contained in a Trust Indenture. Required when the type is SECURITY_AGREEMENT. Should be null otherwise.
+        lienAmount:
+          type: string
+          maxLength: 15
+          description: The value of a lien. Required when the type is REPAIRERS_LIEN. Should be null otherwise.
+        surrenderDate:
+          type: string
+          format: date
+          description: The date the vehicle was or will be  surrendered to the owner. When provided it must be within the past 21 days or a later date. Required when the type is REPAIRERS_LIEN. Should be null otherwise.
       required:
         - type
         - securedParties

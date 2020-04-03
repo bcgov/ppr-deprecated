@@ -77,13 +77,38 @@ def test_financing_statement_infinite_life_with_0_years():
         pytest.fail('A validation error was expected since life cannot be true when years are provided')
 
 
-def test_financing_statement_years_infinite_life():
+def test_financing_statement_no_years_infinite_life():
     financing_statement = stub_financing_statement_base(infinite=True)
     assert financing_statement.lifeInfinite is True
 
 
+def test_financing_statement_infinite_life_with_repairers_lien():
+    try:
+        stub_financing_statement_base(infinite=True, reg_type=RegistrationType.REPAIRERS_LIEN.name)
+    except ValueError:
+        pass
+    else:
+        pytest.fail("A validation error was expected since life cannot be provided when it's a Repairer's Lien")
+
+
+def test_financing_statement_years_life_with_repairers_lien():
+    try:
+        stub_financing_statement_base(years=5, reg_type=RegistrationType.REPAIRERS_LIEN.name)
+    except ValueError:
+        pass
+    else:
+        pytest.fail("A validation error was expected since life cannot be provided when it's a Repairer's Lien")
+
+
+def test_financing_statement_no_life_with_repairers_lien():
+    financing_statement = stub_financing_statement_base(years=None, infinite=None,
+                                                        reg_type=RegistrationType.REPAIRERS_LIEN.name)
+    assert financing_statement.lifeInfinite is None
+    assert financing_statement.lifeYears is None
+
+
 def stub_financing_statement_base(
-        years=None, infinite: bool = None, reg_type: str = RegistrationType.SECURITY_AGREEMENT.name,
+        years: int = None, infinite: bool = None, reg_type: str = RegistrationType.SECURITY_AGREEMENT.name,
         secured_parties: list = [], debtors: list = [], vehicle_collateral: list = [], general_collateral: list = []):
     return schemas.financing_statement.FinancingStatementBase(
         lifeYears=years, lifeInfinite=infinite, type=reg_type, securedParties=secured_parties, debtors=debtors,

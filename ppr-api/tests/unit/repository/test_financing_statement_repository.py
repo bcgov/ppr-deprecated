@@ -1,6 +1,7 @@
 import datetime
 from unittest.mock import patch
 
+import datedelta
 import freezegun
 
 import auth.authentication
@@ -25,13 +26,24 @@ def test_create_financing_statement_event_registration_and_base_registration_are
 
 
 @patch('sqlalchemy.orm.Session')
-def test_create_financing_statement_event_user_is_saved(mock_session):
+def test_create_financing_statement_user_is_saved_on_event(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
     user = stub_user(user_id='789')
 
     financing_statement = repo.create_financing_statement(stub_financing_statement_input(), user)
 
     assert financing_statement.events[0].user_id == '789'
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_account_is_saved_on_event_and_statement(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    user = stub_user(account_id='789')
+
+    financing_statement = repo.create_financing_statement(stub_financing_statement_input(), user)
+
+    assert financing_statement.account_id == '789'
+    assert financing_statement.events[0].account_id == '789'
 
 
 @patch('sqlalchemy.orm.Session')
@@ -69,6 +81,18 @@ def test_create_financing_statement_leap_day_to_leap_year_should_expire_on_leap_
     assert financing_statement.life_in_years == 24
 
 
+@freezegun.freeze_time('2020-03-29 12:00:00')
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_repairers_lien_should_expire_in_180_days(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(reg_type=RegistrationType.REPAIRERS_LIEN)
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    assert financing_statement.expiry_date == datetime.date(2020, 9, 25)
+    assert financing_statement.life_in_years is None
+
+
 @patch('sqlalchemy.orm.Session')
 def test_create_financing_statement_type_code_is_enum_value(mock_session):
     repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
@@ -86,6 +110,64 @@ def test_create_financing_statement_status_is_active(mock_session):
     financing_statement = repo.create_financing_statement(stub_financing_statement_input(), stub_user())
 
     assert financing_statement.status == 'A'
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_is_trust_indenture(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(trust=True, reg_type=RegistrationType.SECURITY_AGREEMENT)
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    assert financing_statement.trust_indenture is True
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_trust_indenture_defaults_to_false_on_security_agreement(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(trust=None, reg_type=RegistrationType.SECURITY_AGREEMENT)
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    assert financing_statement.trust_indenture is False
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_trust_indenture_ignored_when_not_security_agreement(mock_session):
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(trust=True, reg_type=RegistrationType.REPAIRERS_LIEN)
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    assert financing_statement.trust_indenture is None
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_surrender_date_and_amount_on_repairers_lien(mock_session):
+    surrender_date = datetime.date.today() - datedelta.datedelta(days=5)
+    lien_amount = '500'
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(surrender=surrender_date, amount=lien_amount,
+                                            reg_type=RegistrationType.REPAIRERS_LIEN)
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    assert financing_statement.lien_amount == lien_amount
+    assert financing_statement.surrender_date == surrender_date
+
+
+@patch('sqlalchemy.orm.Session')
+def test_create_financing_statement_surrender_date_and_amount_ignored_when_not_repairers_lien(mock_session):
+    surrender_date = datetime.date.today() - datedelta.datedelta(days=5)
+    lien_amount = '500'
+    repo = repository.financing_statement_repository.FinancingStatementRepository(mock_session)
+    schema = stub_financing_statement_input(surrender=surrender_date, amount=lien_amount,
+                                            reg_type=RegistrationType.SECURITY_AGREEMENT)
+
+    financing_statement = repo.create_financing_statement(schema, stub_user())
+
+    assert financing_statement.lien_amount is None
+    assert financing_statement.surrender_date is None
 
 
 @patch('sqlalchemy.orm.Session')
@@ -349,15 +431,19 @@ def stub_vehicle_collateral(vehicle_type: VehicleType = VehicleType.MANUFACTURED
 
 def stub_financing_statement_input(
         reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT, life_years: int = None,
-        life_infinite: bool = True, reg_party: schemas.party.Party = stub_party(), secured_parties=[stub_party()],
-        debtors=[stub_debtor()], general_collateral=[], vehicle_collateral=[]
+        life_infinite: bool = None, trust: bool = None, amount: str = None, surrender: datetime.date = None,
+        reg_party: schemas.party.Party = stub_party(), secured_parties=[stub_party()], debtors=[stub_debtor()],
+        general_collateral=[], vehicle_collateral=[]
 ):
+    if reg_type != RegistrationType.REPAIRERS_LIEN and life_years is None and life_infinite is None:
+        life_infinite = True
+
     return schemas.financing_statement.FinancingStatementBase(
-        type=reg_type.name, lifeYears=life_years, lifeInfinite=life_infinite, registeringParty=reg_party,
-        securedParties=secured_parties, debtors=debtors, vehicleCollateral=vehicle_collateral,
-        generalCollateral=general_collateral
+        type=reg_type.name, lifeYears=life_years, lifeInfinite=life_infinite, trustIndenture=trust,
+        surrenderDate=surrender, lienAmount=amount, registeringParty=reg_party, securedParties=secured_parties,
+        debtors=debtors, vehicleCollateral=vehicle_collateral, generalCollateral=general_collateral
     )
 
 
-def stub_user(user_id: str = '12345'):
-    return auth.authentication.User(user_id=user_id, user_name='fred', account_id='54321')
+def stub_user(user_id: str = '12345', account_id: str = '54321'):
+    return auth.authentication.User(user_id=user_id, user_name='fred', account_id=account_id)

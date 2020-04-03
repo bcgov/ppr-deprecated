@@ -25,21 +25,29 @@ class FinancingStatementBase(pydantic.BaseModel):  # pylint:disable=no-member
     type: str
     lifeYears: int = None
     lifeInfinite: bool = None
+    trustIndenture: bool = None
+    lienAmount: str = None
+    surrenderDate: datetime.date = None
     registeringParty: schemas.party.Party = None
     securedParties: typing.List[schemas.party.Party]
     debtors: typing.List[schemas.party.Debtor]
     vehicleCollateral: typing.List[schemas.collateral.VehicleCollateral]
     generalCollateral: typing.List[schemas.collateral.GeneralCollateral]
 
+    # TODO ppr#889 Suppress validation by default, only call it explicitly on write operations
     @pydantic.root_validator
     def validate_life(cls, values):  # pylint:disable=no-self-argument # noqa: N805
+        reg_type = RegistrationType[values.get('type')]
         years = values.get('lifeYears')
         infinite = values.get('lifeInfinite')
 
-        if bool(infinite) != bool(years is None):
-            raise ValueError('Either lifeYears must have a value or infiniteYears must be true')
-        if not infinite:
-            if years < 1 or years > 25:
+        if reg_type == RegistrationType.REPAIRERS_LIEN:
+            if not (infinite is None and years is None):
+                raise ValueError('lifeYears and lifeInfinite must be null when type is REPAIRERS_LIEN')
+        else:
+            if bool(infinite) != bool(years is None):
+                raise ValueError('Either lifeYears must have a value or infiniteYears must be true')
+            if not infinite and not 1 <= years <= 25:
                 raise ValueError('lifeYears must be in the range 1-25')
 
         return values
