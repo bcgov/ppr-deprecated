@@ -19,7 +19,7 @@
           secured-parties(
             :editing="editing",
             :value="value.securedParties",
-            @input="updateSecuredParties",
+            @input="updateList('secured',$event)",
             @valid="emitValid('securedParties', $event)"
           )
       v-tab-item
@@ -27,32 +27,48 @@
           debtor-parties(
             :editing="editing",
             :value="value.debtorParties",
-            @input="updateDebtorParties",
+            @input="updateList('debtor',$event)",
             @valid="emitValid('debtorParties', $event)"
           )
       v-tab-item
         v-card
-          div Collateral General
+          general-collaterals(
+            :editing="editing",
+            :value="value.generalCollateral",
+            @input="updateList('general',$event)",
+            @valid="emitValid('generalCollatoral', $event)"
+          )
       v-tab-item
         v-card
-          div Collateral Serial
+          serial-collaterals(
+          :editing="editing",
+          :value="value.serialCollateral",
+          @input="updateList('serial',$event)",
+          @valid="emitValid('serialCollateral', $event)"
+          )
 </template>
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
+import { GeneralCollateralModel } from '@/general-collateral/general-collateral-model'
 import { DebtorModel } from '@/debtor-parties/debtor-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/person-name/person-name-model'
-import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
+import { SecuredPartyModel } from '@/secured-parties/secured-party-model'
+import { SerialCollateralModel } from '@/serial-collateral/serial-collateral-model'
+import GeneralCollaterals from '@/general-collateral/GeneralCollaterals.vue'
+import SerialCollaterals from '@/serial-collateral/SerialCollaterals.vue'
 import DebtorParties from '@/debtor-parties/DebtorParties.vue'
 import FinancingStatementMain from '@/financing-statement/FinancingStatementMain.vue'
 import SecuredParties from '@/secured-parties/SecuredParties.vue'
 
 export default createComponent({
   components: {
+    GeneralCollaterals,
     DebtorParties,
     FinancingStatementMain,
+    SerialCollaterals,
     SecuredParties
   },
   props: {
@@ -75,7 +91,9 @@ export default createComponent({
     const validationState = {
       main: false,
       debtorParties: false,
-      securedParties: false
+      securedParties: false,
+      generalCollatoral: false,
+      serialCollateral: false
     }
 
     // Callback function for emitting form validity on the header section back to the parent.
@@ -88,24 +106,53 @@ export default createComponent({
       emit('valid', formValid)
     }
 
-    function updateSecuredParties(newSecuredParties: SecuredPartyModel[]): void {
-      emit('input', new FinancingStatementModel(
-        props.value.type,
-        props.value.lifeYears,
-        props.value.registeringParty,
-        newSecuredParties,
-        props.value.debtorParties
-      ))
-    }
-
-    function updateDebtorParties(newDebtorParties: DebtorModel[]): void {
-      emit('input', new FinancingStatementModel(
-        props.value.type,
-        props.value.lifeYears,
-        props.value.registeringParty,
-        props.value.securedParties,
-        newDebtorParties
-      ))
+    function updateList(key: string, newList: DebtorModel[] | GeneralCollateralModel[] | SecuredPartyModel[] | SerialCollateralModel[]): void {
+      let newModel: FinancingStatementModel
+      if (key === 'secured') {
+        newModel = new FinancingStatementModel(
+          props.value.type,
+          props.value.lifeYears,
+          props.value.registeringParty,
+          newList as SecuredPartyModel[],
+          props.value.debtorParties,
+          props.value.generalCollateral,
+          props.value.serialCollateral
+        )
+      }
+      if (key === 'secured') {
+        newModel = new FinancingStatementModel(
+          props.value.type,
+          props.value.lifeYears,
+          props.value.registeringParty,
+          props.value.securedParties,
+          newList as DebtorModel[],
+          props.value.generalCollateral,
+          props.value.serialCollateral
+        )
+      }
+      if (key === 'general') {
+        newModel = new FinancingStatementModel(
+          props.value.type,
+          props.value.lifeYears,
+          props.value.registeringParty,
+          props.value.securedParties,
+          props.value.debtorParties,
+          newList as GeneralCollateralModel[],
+          props.value.serialCollateral
+        )
+      }
+        if (key === 'serial') {
+          newModel = new FinancingStatementModel(
+            props.value.type,
+            props.value.lifeYears,
+            props.value.registeringParty,
+            props.value.securedParties,
+            props.value.debtorParties,
+            props.value.generalCollateral,
+            newList as SerialCollateralModel[],
+          )
+        }
+        emit('input', newModel)
     }
 
     function updateMain(newFinancingStatement: FinancingStatementModel): void {
@@ -122,9 +169,8 @@ export default createComponent({
     return {
       formIsValid,
       getFormClass,
-      updateDebtorParties,
+      updateList,
       updateMain,
-      updateSecuredParties,
       emitValid,
       validationState
     }

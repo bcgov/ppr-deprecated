@@ -13,6 +13,11 @@ export interface SerialCollateralInterface {
 }
 
 export class SerialCollateralModel {
+  /**
+   * Provide a publicly accessible property that lists can use to index parties
+   */
+  public listId: number = 0
+
   private _make: string | undefined
   private _model: string | undefined
   private _serial: string | undefined

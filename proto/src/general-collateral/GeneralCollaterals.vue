@@ -2,39 +2,38 @@
   v-form
     v-list
       ppr-list-item(
-        v-for="(debtorParty, index) in value",
-        :key="debtorParty.listId",
+        v-for="(collateral, index) in value",
+        :key="collateral.listId",
         class="list-item",
         :editing="editing",
         :index="index",
-        :list-length="value.length",
-        @remove="removeElement"
+        list-length="0"
       )
-        template(#header) Enter the contact information for this <strong>Debtor</strong>
+        template(#header) Enter the general collateral description
 
-        debtor-party(
-          :value="debtorParty",
+        general-collateral(
+          :value="collateral",
           :editing="editing",
-          prompt="How should we identify this Debtor?",
+          prompt="Describe",
           @input="updateElement($event, index)",
           @valid="emitValidity($event, index)"
         )
-    div(v-if="editing",class="flex-center")
-      v-btn(@click="addElement")
-        span Add new Debtor
 </template>
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { DebtorModel } from '@/debtor-parties/debtor-model'
-import DebtorParty from '../debtor-parties/DebtorParty.vue'
-import FormSectionHeader from '../components/FormSectionHeader.vue'
+import { GeneralCollateralModel } from '@/general-collateral/general-collateral-model'
+import GeneralCollateral from '@/general-collateral/GeneralCollateral.vue'
 import PprListItem from '../components/PprListItem.vue'
+/*
+The general collateral list contains just one element when initially registering a form.  Later after
+there are amendments the list contains successive new elements.
 
+TODO  connect with serial collateral. User can remove a general collateral during edit if they have a serial collateral item, and vice versa
+ */
 export default createComponent({
   components: {
-    DebtorParty,
-    FormSectionHeader,
+    GeneralCollateral,
     PprListItem
   },
   props: {
@@ -45,7 +44,7 @@ export default createComponent({
     },
     value: {
       required: true,
-      type: Array // a list of parties
+      type: Array // a list of general collaterals
     }
   },
 
@@ -66,36 +65,19 @@ export default createComponent({
       emit('valid', formIsValid.value)
     }
 
-    // Vue is not able to detect changes inside arrays so when emitting the array of parties
+    // Vue is not able to detect changes inside arrays so when emitting the array
     // be sure to clone the array.
-    function updateElement(newParty: DebtorModel, index: number): void {
+    function updateElement(newParty: GeneralCollateralModel, index: number): void {
       let sp = [...props.value]
-      const previous: DebtorModel = props.value[index] as DebtorModel
+      const previous: GeneralCollateralModel = props.value[index] as GeneralCollateralModel
       newParty.listId = previous.listId
       sp[index] = newParty
       emit('input', sp)
     }
 
-    function addElement() {
-      let sp = [...props.value]
-      const last: DebtorModel = props.value[props.value.length - 1] as DebtorModel
-      const newParty = new DebtorModel()
-      newParty.listId = last.listId + 1
-      sp.push(newParty)
-      emit('input', sp)
-    }
-
-    function removeElement(index: number) {
-      let sp = [...props.value]
-      sp.splice(index, 1)
-      emit('input', sp)
-    }
-
     return {
-      addElement,
       emitValidity,
       formIsValid,
-      removeElement,
       updateElement
     }
   }

@@ -1,99 +1,97 @@
 <template>
-  <v-card outlined>
-    <v-form @input="validForm($event)">
-      <v-container>
-        <div v-if="editing">
-          <v-select
-            data-test-id="SerialCollateral.input.type"
-            :items="serialCollateralTypes"
-            :rules="typeRules"
-            :value="value.type"
-            label="Type"
-            @input="updateType($event)"
-          />
-          <v-text-field
-            v-if="!typeIsManufacturedHome"
-            data-test-id="SerialCollateral.input.make"
-            :rules="makeRules"
-            :value="value.make"
-            label="Make"
-            @input="updateStringProperty('make', $event)"
-          />
-          <v-text-field
-            v-if="!typeIsManufacturedHome"
-            data-test-id="SerialCollateral.input.model"
-            :rules="modelRules"
-            :value="value.model"
-            label="Model"
-            @input="updateStringProperty('model', $event)"
-          />
-          <v-text-field
-            v-if="!typeIsManufacturedHomeRegistered"
-            data-test-id="SerialCollateral.input.serial"
-            :rules="serialRules"
-            :value="value.serial"
-            :label="serialLabel"
-            @input="updateStringProperty('serial', $event)"
-          />
-          <v-text-field
-            v-if="!typeIsManufacturedHome"
-            data-test-id="SerialCollateral.input.year"
-            :rules="yearRules"
-            :value="value.year"
-            label="Year"
-            @input="updateYear($event)"
-          />
-          <v-text-field
-            v-if="typeIsManufacturedHomeRegistered"
-            data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"
-            :rules="manufacturedHomeRegNumberRules"
-            :value="value.manufacturedHomeRegNumber"
-            label="Manufactured Home Registration Number"
-            @input="updateStringProperty('manufacturedHomeRegNumber', $event)"
-          />
-        </div>
+  <v-form @input="validForm($event)">
+    <v-container>
+      <div v-if="editing">
+        <v-select
+          data-test-id="SerialCollateral.input.type"
+          :items="serialCollateralTypes"
+          :rules="typeRules"
+          :value="value.type"
+          label="Type"
+          @input="updateType($event)"
+        />
+        <v-text-field
+          v-if="!typeIsManufacturedHome"
+          data-test-id="SerialCollateral.input.make"
+          :rules="makeRules"
+          :value="value.make"
+          label="Make"
+          @input="updateStringProperty('make', $event)"
+        />
+        <v-text-field
+          v-if="!typeIsManufacturedHome"
+          data-test-id="SerialCollateral.input.model"
+          :rules="modelRules"
+          :value="value.model"
+          label="Model"
+          @input="updateStringProperty('model', $event)"
+        />
+        <v-text-field
+          v-if="!typeIsManufacturedHomeRegistered"
+          data-test-id="SerialCollateral.input.serial"
+          :rules="serialRules"
+          :value="value.serial"
+          :label="serialLabel"
+          @input="updateStringProperty('serial', $event)"
+        />
+        <v-text-field
+          v-if="!typeIsManufacturedHome"
+          data-test-id="SerialCollateral.input.year"
+          :rules="yearRules"
+          :value="value.year"
+          label="Year"
+          @input="updateYear($event)"
+        />
+        <v-text-field
+          v-if="typeIsManufacturedHomeRegistered"
+          data-test-id="SerialCollateral.input.manufacturedHomeRegNumber"
+          :rules="manufacturedHomeRegNumberRules"
+          :value="value.manufacturedHomeRegNumber"
+          label="Manufactured Home Registration Number"
+          @input="updateStringProperty('manufacturedHomeRegNumber', $event)"
+        />
+      </div>
 
-        <div v-else>
-          <div>
-            Type:
-            <span data-test-id="SerialCollateral.display.type">
-              {{ value.type }}
-            </span>
-          </div>
-          <div v-if="!typeIsManufacturedHome">
-            Make:
-            <span data-test-id="SerialCollateral.display.make">
-              {{ value.make }}
-            </span>
-          </div>
-          <div v-if="!typeIsManufacturedHome">
-            Model:
-            <span data-test-id="SerialCollateral.display.model">
-              {{ value.model }}
-            </span>
-          </div>
-          <div v-if="!typeIsManufacturedHomeRegistered">
-            {{ serialLabel }}:
-            <span data-test-id="SerialCollateral.display.serial">
-              {{ value.serial }}
-            </span>
-          </div>
-          <div v-if="!typeIsManufacturedHome">
-            Year:
-            <span data-test-id="SerialCollateral.display.year">
-              {{ value.year }}
-            </span>
-          </div>
-          <div v-if="typeIsManufacturedHomeRegistered">
-            Manufactured Home Registration Number:
-            <span data-test-id="SerialCollateral.display.manufacturedHomeRegNumber">
-              {{ value.manufacturedHomeRegNumber }}
-            </span>
-          </div>
+      <div v-else>
+        <div>
+          Type:
+          <span data-test-id="SerialCollateral.display.type">
+            {{ value.type }}
+          </span>
         </div>
-      </v-container>
-    </v-form>
-  </v-card>
+        <div v-if="!typeIsManufacturedHome">
+          Make:
+          <span data-test-id="SerialCollateral.display.make">
+            {{ value.make }}
+          </span>
+        </div>
+        <div v-if="!typeIsManufacturedHome">
+          Model:
+          <span data-test-id="SerialCollateral.display.model">
+            {{ value.model }}
+          </span>
+        </div>
+        <div v-if="!typeIsManufacturedHomeRegistered">
+          {{ serialLabel }}:
+          <span data-test-id="SerialCollateral.display.serial">
+            {{ value.serial }}
+          </span>
+        </div>
+        <div v-if="!typeIsManufacturedHome">
+          Year:
+          <span data-test-id="SerialCollateral.display.year">
+            {{ value.year }}
+          </span>
+        </div>
+        <div v-if="typeIsManufacturedHomeRegistered">
+          Manufactured Home Registration Number:
+          <span data-test-id="SerialCollateral.display.manufacturedHomeRegNumber">
+            {{ value.manufacturedHomeRegNumber }}
+          </span>
+        </div>
+      </div>
+    </v-container>
+  </v-form>
 </template>
 
 <script lang="ts">

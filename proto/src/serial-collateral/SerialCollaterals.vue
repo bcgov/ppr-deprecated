@@ -2,39 +2,37 @@
   v-form
     v-list
       ppr-list-item(
-        v-for="(debtorParty, index) in value",
-        :key="debtorParty.listId",
+        v-for="(element, index) in value",
+        :key="element.listId",
         class="list-item",
         :editing="editing",
         :index="index",
         :list-length="value.length",
         @remove="removeElement"
       )
-        template(#header) Enter the contact information for this <strong>Debtor</strong>
+        template(#header) Enter a collateral with a serial number
 
-        debtor-party(
-          :value="debtorParty",
+        serial-collateral(
+          :value="element",
           :editing="editing",
-          prompt="How should we identify this Debtor?",
+          prompt="Serial number",
           @input="updateElement($event, index)",
           @valid="emitValidity($event, index)"
         )
     div(v-if="editing",class="flex-center")
       v-btn(@click="addElement")
-        span Add new Debtor
+        span Add new serial collateral item
 </template>
 
 <script lang="ts">
 import { createComponent, ref } from '@vue/composition-api'
-import { DebtorModel } from '@/debtor-parties/debtor-model'
-import DebtorParty from '../debtor-parties/DebtorParty.vue'
-import FormSectionHeader from '../components/FormSectionHeader.vue'
-import PprListItem from '../components/PprListItem.vue'
+import { SerialCollateralModel } from '@/serial-collateral/serial-collateral-model'
+import SerialCollateral from '@/serial-collateral/SerialCollateral.vue'
+import PprListItem from '@/components/PprListItem.vue'
 
 export default createComponent({
   components: {
-    DebtorParty,
-    FormSectionHeader,
+    SerialCollateral,
     PprListItem
   },
   props: {
@@ -68,9 +66,9 @@ export default createComponent({
 
     // Vue is not able to detect changes inside arrays so when emitting the array of parties
     // be sure to clone the array.
-    function updateElement(newParty: DebtorModel, index: number): void {
+    function updateElement(newParty: SerialCollateralModel, index: number): void {
       let sp = [...props.value]
-      const previous: DebtorModel = props.value[index] as DebtorModel
+      const previous: SerialCollateralModel = props.value[index] as SerialCollateralModel
       newParty.listId = previous.listId
       sp[index] = newParty
       emit('input', sp)
@@ -78,8 +76,8 @@ export default createComponent({
 
     function addElement() {
       let sp = [...props.value]
-      const last: DebtorModel = props.value[props.value.length - 1] as DebtorModel
-      const newParty = new DebtorModel()
+      const last: SerialCollateralModel = props.value[props.value.length - 1] as SerialCollateralModel
+      const newParty = new SerialCollateralModel()
       newParty.listId = last.listId + 1
       sp.push(newParty)
       emit('input', sp)

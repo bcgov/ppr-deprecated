@@ -2,6 +2,8 @@ import { ref } from '@vue/composition-api'
 import { DebtorModel, } from '@/debtor-parties/debtor-model'
 import { FinancingStatementInterface, FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
+import { GeneralCollateralModel } from '@/general-collateral/general-collateral-model'
+import { SerialCollateralModel } from '@/serial-collateral/serial-collateral-model'
 import { SecuredPartyModel} from '@/secured-parties/secured-party-model.ts'
 import { useRegisteredParty } from '@/registering-party/registering-party-model'
 import { useUsers } from '@/users/users'
@@ -12,16 +14,30 @@ function getDefs() {
 
   function createFinancingStatement(): FinancingStatementModel {
     const { createFromCurrentUser } = useRegisteredParty()
+
     const firstSecuredParty = new SecuredPartyModel()
     firstSecuredParty.listId = 0
     const securedParties = [firstSecuredParty]
+
     const firstDebtor = new DebtorModel()
     firstDebtor.listId = 0
     const debtorParties = [firstDebtor]
+
+    const firstGeneral = new GeneralCollateralModel()
+    firstGeneral.listId = 0
+    const generalCollateral = [firstGeneral]
+
+    const firstSerial = new SerialCollateralModel()
+    firstSerial.listId = 0
+    const serialCollateral = [firstSerial]
+
     const registeringParty = createFromCurrentUser()
+
     return new FinancingStatementModel(
       FinancingStatementType.SECURITY_AGREEMENT, 5,
-      registeringParty, securedParties, debtorParties)
+      registeringParty, securedParties, debtorParties,
+      generalCollateral, serialCollateral
+    )
   }
 
   function findFinancingStatement( regNum: string) {

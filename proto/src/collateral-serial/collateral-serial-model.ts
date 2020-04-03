@@ -27,14 +27,14 @@ export class DebtorModel {
     first?: string,
     middle?: string,
     last?: string,
-    address : AddressInterface = new AddressModel(),
+    address? : AddressInterface,
     birthDate?: string
   ) {
     this._business = business
     this._first = first
     this._middle = middle
     this._last = last
-    this._address = address as AddressModel
+    this._address = address as AddressModel || new AddressModel()
     this._birthDate = birthDate
   }
 

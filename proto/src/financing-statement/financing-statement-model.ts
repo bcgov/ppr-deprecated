@@ -1,5 +1,7 @@
 import moment from 'moment'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
+import { GeneralCollateralModel, GeneralCollateralInterface } from '@/general-collateral/general-collateral-model'
+import { SerialCollateralModel, SerialCollateralInterface } from '@/serial-collateral/serial-collateral-model'
 import { DebtorInterface, DebtorModel, } from '@/debtor-parties/debtor-model'
 import { RegisteringPartyInterface, RegisteringPartyModel } from '@/registering-party/registering-party-model'
 import { SecuredPartyModel, SecuredPartyInterface } from '@/secured-parties/secured-party-model.ts'
@@ -10,13 +12,13 @@ import { SecuredPartyModel, SecuredPartyInterface } from '@/secured-parties/secu
 export interface FinancingStatementInterface {
   baseRegistrationNumber: string | undefined;
   expiryDate: string | undefined;
-  generalCollateral: [];
+  generalCollateral: GeneralCollateralInterface[];
   registeringParty: RegisteringPartyInterface;
   registrationDateTime: string | undefined;
   securedParties: SecuredPartyInterface[];
-  debtors: DebtorInterface[];
+  debtorParties: DebtorInterface[];
   type: FinancingStatementType;
-  serialCollateral: [];
+  serialCollateral: SerialCollateralInterface[];
   lifeYears: number;
 }
 
@@ -29,6 +31,8 @@ export class FinancingStatementModel {
   private _lifeYears: number
   private _securedParties: SecuredPartyModel[]
   private _debtorParties: DebtorModel[]
+  private _generalCollateral: GeneralCollateralModel[]
+  private _serialCollateral: SerialCollateralModel[]
 
   /**
    * Creates a new FinancingStatementModel model instance.
@@ -48,6 +52,8 @@ export class FinancingStatementModel {
     registeringParty: RegisteringPartyModel,
     securedParties: SecuredPartyModel[] = [new SecuredPartyModel()],
     debtorParties: DebtorModel[] = [new DebtorModel()],
+    generalCollateral: GeneralCollateralModel[] = [new GeneralCollateralModel()],
+    serialCollateral: SerialCollateralModel[] = [new SerialCollateralModel()],
     baseRegistrationNumber?: string,
     registrationDatetime?: string,
     expiryDate?: string
@@ -57,6 +63,8 @@ export class FinancingStatementModel {
     this._registeringParty = registeringParty
     this._securedParties = securedParties
     this._debtorParties = debtorParties
+    this._generalCollateral = generalCollateral
+    this._serialCollateral = serialCollateral
     this._baseRegistrationNumber = baseRegistrationNumber
     this._registrationDateTime = registrationDatetime
     this._expiryDate = expiryDate
@@ -93,15 +101,11 @@ export class FinancingStatementModel {
     return this._securedParties
   }
 
-  public get debtors(): [] {
-    return []
+  public get generalCollateral(): GeneralCollateralModel[] {
+    return this._generalCollateral
   }
-
-  public get generalCollateral(): [] {
-    return []
-  }
-  public get serialCollateral(): [] {
-    return []
+  public get serialCollateral(): SerialCollateralModel[] {
+    return this._serialCollateral
   }
 
   /**
@@ -151,16 +155,24 @@ export class FinancingStatementModel {
     this.debtorParties.forEach((sp: DebtorModel): void => {
       theDbers.push(sp.toJson())
     })
+    const generalCollateral: GeneralCollateralInterface[] = []
+    this.generalCollateral.forEach((elem: GeneralCollateralModel): void => {
+      generalCollateral.push(elem.toJson())
+    })
+    const serialCollateral: SerialCollateralInterface[] = []
+    this.serialCollateral.forEach((elem: SerialCollateralModel): void => {
+      serialCollateral.push(elem.toJson())
+    })
     const rval: FinancingStatementInterface = {
       baseRegistrationNumber: this.baseRegistrationNumber,
       expiryDate: this.expiryDate,
-      generalCollateral: [],
+      generalCollateral: generalCollateral,
       registeringParty: this.registeringParty.toJson(),
       registrationDateTime: this.registrationDateTime,
       securedParties: theSPs,
-      debtors: theDbers,
+      debtorParties: theDbers,
       type: this.type,
-      serialCollateral: [],
+      serialCollateral: serialCollateral,
       lifeYears: this.lifeYears
     }
     return rval
@@ -196,6 +208,8 @@ export class FinancingStatementModel {
     let registeringParty: RegisteringPartyModel | undefined
     let securedParties: SecuredPartyModel[] = []
     let debtorParties: DebtorModel[] = []
+    let generalCollateral: GeneralCollateralModel[] = []
+    let serialCollateral: SerialCollateralModel[] = []
 
     if (jsonObject.registeringParty) {
       registeringParty = RegisteringPartyModel.fromJson(jsonObject.registeringParty)
@@ -206,9 +220,19 @@ export class FinancingStatementModel {
         securedParties.push(SecuredPartyModel.fromJson(sp))
       })
     }
-    if (jsonObject.debtors) {
-      jsonObject.debtors.forEach((sp: DebtorInterface): void => {
+    if (jsonObject.debtorParties) {
+      jsonObject.debtorParties.forEach((sp: DebtorInterface): void => {
         debtorParties.push(DebtorModel.fromJson(sp))
+      })
+    }
+    if (jsonObject.generalCollateral) {
+      jsonObject.generalCollateral.forEach((sp: GeneralCollateralInterface): void => {
+        generalCollateral.push(GeneralCollateralModel.fromJson(sp))
+      })
+    }
+    if (jsonObject.serialCollateral) {
+      jsonObject.serialCollateral.forEach((sp: SerialCollateralInterface): void => {
+        serialCollateral.push(SerialCollateralModel.fromJson(sp))
       })
     }
 
@@ -218,6 +242,8 @@ export class FinancingStatementModel {
       registeringParty,
       securedParties.length > 0 ? securedParties : undefined,
       debtorParties.length > 0 ? debtorParties : undefined,
+      generalCollateral.length > 0 ? generalCollateral : undefined,
+      serialCollateral.length > 0 ? serialCollateral: undefined,
       jsonObject.baseRegistrationNumber,
       jsonObject.registrationDateTime,
       jsonObject.expiryDate

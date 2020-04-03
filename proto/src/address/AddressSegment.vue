@@ -2,17 +2,17 @@
   div(style="display:inline")
     v-form(v-if="editing", @input="emitValid($event)")
       v-row
-        v-col
+        v-col(class="ppr-col")
           v-text-field(label="Street",:value="value.street",@input="update('street', $event)")
       v-row
-        v-col
+        v-col(class="ppr-col")
           v-text-field(label="City",:value="value.city",@input="update('city', $event)")
-        v-col
+        v-col(class="ppr-col")
           v-text-field(label="Province",:value="value.province",@input="update('province', $event)")
       v-row
-        v-col
+        v-col(class="ppr-col")
           v-text-field(label="Country",:value="value.country",@input="update('country', $event)")
-        v-col
+        v-col(class="ppr-col")
           v-text-field(label="Postal",:value="value.postal",@input="update('postal', $event)")
     div(v-else) {{oneLine}}
 </template>
@@ -85,3 +85,19 @@ export default createComponent({
 })
 </script>
 
+<style lang="scss" scoped>
+  @import "../assets/styles/theme.scss";
+
+  .ppr-col {
+    padding: 3px !important;
+    margin: 0 !important;
+  }
+  .col {
+    padding: 3px !important;
+    margin: 0 !important;
+  }
+  .row {
+    margin: 0 !important;
+  }
+
+</style>
