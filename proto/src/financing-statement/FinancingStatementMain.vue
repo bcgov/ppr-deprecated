@@ -94,7 +94,9 @@ export default createComponent({
         newLife, // props.value.life,
         props.value.registeringParty,
         props.value.securedParties,
-        props.value.debtorParties
+        props.value.debtorParties,
+        props.value.generalCollateral,
+        props.value.serialCollateral
       ))
     }
 
@@ -105,7 +107,9 @@ export default createComponent({
         props.value.lifeYears,
         props.value.registeringParty,
         props.value.securedParties,
-        props.value.debtorParties
+        props.value.debtorParties,
+        props.value.generalCollateral,
+        props.value.serialCollateral
       ))
     }
 

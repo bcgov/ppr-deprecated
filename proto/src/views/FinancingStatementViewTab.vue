@@ -69,7 +69,7 @@ export default createComponent({
     }
 
     function updateFinancingModel(newValue: FinancingStatementModel) {
-      console.log('updateFinancingModel newValue:', newValue)
+      // console.log('updateFinancingModel newValue:', newValue)
       financingStatement.value = newValue
     }
 

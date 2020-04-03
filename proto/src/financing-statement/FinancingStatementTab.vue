@@ -92,8 +92,8 @@ export default createComponent({
       main: false,
       debtorParties: false,
       securedParties: false,
-      generalCollatoral: false,
-      serialCollateral: false
+      generalCollatoral: true,
+      serialCollateral: true
     }
 
     // Callback function for emitting form validity on the header section back to the parent.
@@ -103,6 +103,7 @@ export default createComponent({
         return accumulator && elementState
       }, true)
       formIsValid.value = formValid
+      // console.log('FST emit valid key, validElement, form', key, validElement, formIsValid.value)
       emit('valid', formValid)
     }
 
@@ -119,7 +120,7 @@ export default createComponent({
           props.value.serialCollateral
         )
       }
-      if (key === 'secured') {
+      if (key === 'debtor') {
         newModel = new FinancingStatementModel(
           props.value.type,
           props.value.lifeYears,
@@ -151,6 +152,9 @@ export default createComponent({
             props.value.generalCollateral,
             newList as SerialCollateralModel[],
           )
+        }
+        if (!newModel) {
+          console.error('Coding error.  Need to creaet a new FS for', key)
         }
         emit('input', newModel)
     }

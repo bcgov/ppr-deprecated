@@ -34,9 +34,13 @@ function getDefs() {
     const registeringParty = createFromCurrentUser()
 
     return new FinancingStatementModel(
-      FinancingStatementType.SECURITY_AGREEMENT, 5,
-      registeringParty, securedParties, debtorParties,
-      generalCollateral, serialCollateral
+      FinancingStatementType.SECURITY_AGREEMENT,
+      5,
+      registeringParty,
+      securedParties,
+      debtorParties,
+      generalCollateral,
+      serialCollateral
     )
   }
 
