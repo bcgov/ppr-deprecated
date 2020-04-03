@@ -8,11 +8,10 @@
         :editing="editing"
       )
         template(#header) Enter the general collateral description
-
         general-collateral(
           :value="collateral",
           :editing="editing",
-          prompt="Describe",
+          :layout="editing ? 'full' : 'minimal'",
           @input="updateElement($event, index)",
           @valid="emitValidity($event, index)"
         )

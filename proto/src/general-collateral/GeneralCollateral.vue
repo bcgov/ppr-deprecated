@@ -2,15 +2,14 @@
   div(style="display:inline")
     v-card(flat, v-if="editing")
       v-form(
-        v-if="editing",
-        :class="getFormClass()",
         class="base-form",
         @input="emitValid($event)"
       )
-        v-text-field(
-        label="Business",
-        :value="value.description",
-        @input="update($event)"
+        v-textarea(
+            outlined=true,
+            label="General Collateral",
+            :value="value.description",
+            @input="update($event)"
         )
     div(v-else, style="display:inline")
       div(v-if="layout==='minimal'",style="display:inline")
