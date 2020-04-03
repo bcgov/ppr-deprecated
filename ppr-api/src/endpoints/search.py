@@ -19,7 +19,8 @@ import schemas.party
 import schemas.payment
 import schemas.search
 import services.payment_service
-import utils
+import utils.datetime
+from schemas.financing_statement import RegistrationType
 from schemas.party import PartyType
 
 
@@ -104,11 +105,15 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
             schemas.financing_statement.FinancingStatement
     """
     fs_model = event.base_registration
+    is_repairers_lien = fs_model.registration_type_code == RegistrationType.REPAIRERS_LIEN.value
     target_events = sorted(filter(lambda e: e.registration_date <= event.registration_date, fs_model.events),
                            key=lambda e: e.registration_date)
+    infinite = None
     years = 0
-    infinite = False
-    expiry = utils.datetime.today_pacific()
+    expiry = utils.datetime.to_date_pacific(fs_model.get_base_event().registration_date)
+    if is_repairers_lien:
+        expiry += datedelta.datedelta(days=180)
+        years = None
 
     parties_snapshot = []
     general_collateral_snapshot = []
@@ -122,8 +127,9 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
         vehicle_collateral_snapshot = filter_ending(applied_event.registration_number, vehicle_collateral_snapshot)
         vehicle_collateral_snapshot.extend(applied_event.starting_vehicle_collateral)
 
+        # TODO ppr#708 Need to detect Repairer's Lien renewals to increase expiry date by another 180 days
         # Apply the life of each event to capture the combined expiry. This includes renewals.
-        if not infinite:
+        if not infinite and not is_repairers_lien:
             if applied_event.life_in_years == -1:
                 infinite = True
                 years = None
@@ -131,6 +137,7 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
             elif applied_event.life_in_years and applied_event.life_in_years > 0:
                 years += applied_event.life_in_years
                 expiry += datedelta.datedelta(years=applied_event.life_in_years)
+                infinite = False
 
     reg_party_model = next((p for p in parties_snapshot if p.type_code == PartyType.REGISTERING.value), None)
     reg_party_schema = reg_party_model.as_schema() if reg_party_model else None
@@ -145,6 +152,7 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
     return schemas.financing_statement.FinancingStatement(
         baseRegistrationNumber=event.base_registration_number, registrationDateTime=event.registration_date,
         documentId=event.document_number, expiryDate=expiry, lifeYears=years, lifeInfinite=infinite,
+        trustIndenture=fs_model.trust_indenture, lienAmount=fs_model.lien_amount, surrenderDate=fs_model.surrender_date,
         registeringParty=reg_party_schema, securedParties=secured_parties_schema, debtors=debtors_schema,
         vehicleCollateral=vehicle_collateral_schema, generalCollateral=general_collateral_schema,
         type=schemas.financing_statement.RegistrationType(fs_model.registration_type_code).name

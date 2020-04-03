@@ -11,6 +11,7 @@ import schemas.collateral
 import schemas.financing_statement
 import schemas.party
 import utils.datetime
+from schemas.financing_statement import RegistrationType
 
 
 def map_party_schema_to_model(party_type: schemas.party.PartyType, schema: schemas.party.Party, birthdate=None):
@@ -42,13 +43,25 @@ class FinancingStatementRepository:
 
     def create_financing_statement(self, fs_input: schemas.financing_statement.FinancingStatementBase,
                                    user: auth.authentication.User):
+        reg_type = RegistrationType[fs_input.type]
         reg_num = self.next_registration_number()
-        years = -1 if fs_input.lifeInfinite else fs_input.lifeYears
-        expiry_date = utils.datetime.today_pacific() + datedelta.datedelta(years=years) if years > 0 else None
+        today = utils.datetime.today_pacific()
+        years = None
+        amount = None
+        surrender = None
+        trust = fs_input.trustIndenture or False if reg_type == RegistrationType.SECURITY_AGREEMENT else None
+
+        if reg_type == RegistrationType.REPAIRERS_LIEN:
+            expiry_date = today + datedelta.datedelta(days=180)
+            amount = fs_input.lienAmount
+            surrender = fs_input.surrenderDate
+        else:
+            years = -1 if fs_input.lifeInfinite else fs_input.lifeYears
+            expiry_date = today + datedelta.datedelta(years=years) if years > 0 else None
 
         model = models.financing_statement.FinancingStatement(
-            registration_number=reg_num, status='A', life_in_years=years, expiry_date=expiry_date,
-            registration_type_code=schemas.financing_statement.RegistrationType[fs_input.type].value,
+            registration_number=reg_num, status='A', registration_type_code=reg_type.value, life_in_years=years,
+            expiry_date=expiry_date, trust_indenture=trust, lien_amount=amount, surrender_date=surrender,
             account_id=user.account_id
         )
         event_model = models.financing_statement.FinancingStatementEvent(

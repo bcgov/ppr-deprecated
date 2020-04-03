@@ -1,7 +1,7 @@
 import datetime
 
+import datedelta
 import fastapi
-import freezegun
 import pytest
 
 import endpoints.search
@@ -273,10 +273,10 @@ def test_read_search_results_life_has_years_value():
     assert results[0].financingStatement.lifeInfinite is False
 
 
-@freezegun.freeze_time('2020-02-29 12:00:00')
-def test_read_search_results_life_accumulates_from_events():
+def test_read_search_results_life_accumulates_from_events_and_starts_from_base_registration_date():
+    reg_date = datetime.datetime(2020, 2, 29, 12, 0, 0)
     fin_stmt = stub_financing_statement(life=7)
-    stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    stub_financing_statement_event(fin_stmt.registration_number, reg_date=reg_date, financing_statement=fin_stmt)
     stub_financing_statement_event('123456B', financing_statement=fin_stmt)
     event = stub_financing_statement_event('123456C', life=5, financing_statement=fin_stmt)
     search_record = models.search.Search(results=[stub_search_result(event)])
@@ -290,16 +290,68 @@ def test_read_search_results_life_accumulates_from_events():
     assert results[0].financingStatement.expiryDate == datetime.date(2032, 3, 1)
 
 
-def stub_financing_statement(base_reg_number: str = '123456A', life: int = -1,
-                             last_updated: datetime.datetime = datetime.datetime.now()):
+def test_read_search_results_repairers_lien_sets_expiry_to_180_days_after_registration_date():
+    reg_date = datetime.datetime(2020, 3, 29, 12, 0, 0)
+    fin_stmt = stub_financing_statement(reg_type='RL')
+    event = stub_financing_statement_event(fin_stmt.registration_number, reg_date=reg_date,
+                                           financing_statement=fin_stmt)
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.expiryDate == datetime.date(2020, 9, 25)
+    assert results[0].financingStatement.lifeYears is None
+    assert results[0].financingStatement.lifeInfinite is None
+
+
+def test_read_search_results_trust_indenture_resolved_from_financing_statement():
+    fin_stmt = stub_financing_statement(reg_type='SA', trust=True)
+    event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.trustIndenture is True
+
+
+def test_read_search_results_surrender_date_resolved_from_financing_statement():
+    surrender_date = datetime.date.today() - datedelta.datedelta(days=20)
+    fin_stmt = stub_financing_statement(reg_type='RL', surrender=surrender_date)
+    event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.surrenderDate == surrender_date
+
+
+def test_read_search_results_lien_amount_resolved_from_financing_statement():
+    lien_amount = '$10,000'
+    fin_stmt = stub_financing_statement(reg_type='RL', amount=lien_amount)
+    event = stub_financing_statement_event(fin_stmt.registration_number, financing_statement=fin_stmt)
+    search_record = models.search.Search(results=[stub_search_result(event)])
+    repo = MockSearchRepository(search_record)
+
+    results = endpoints.search.read_search_results(27, repo)
+
+    assert results[0].financingStatement.lienAmount == lien_amount
+
+
+def stub_financing_statement(base_reg_number: str = '123456A', life: int = -1, trust: bool = None,
+                             surrender: datetime.date = None, amount: str = None,
+                             last_updated: datetime.datetime = datetime.datetime.now(), reg_type: str = 'SA'):
     return models.financing_statement.FinancingStatement(
-        registration_number=base_reg_number, registration_type_code='SA', status='A', life_in_years=life,
-        last_updated=last_updated
+        registration_number=base_reg_number, registration_type_code=reg_type, status='A', life_in_years=life,
+        trust_indenture=trust, surrender_date=surrender, lien_amount=amount, last_updated=last_updated
     )
 
 
 def stub_financing_statement_event(reg_number: str, base_reg_number: str = None, life: int = None,
-                                   financing_statement: models.financing_statement.FinancingStatement = None):
+                                   financing_statement: models.financing_statement.FinancingStatement = None,
+                                   reg_date: datetime.datetime = datetime.datetime.now()):
     if financing_statement:
         base_reg_number = financing_statement.registration_number
     elif not base_reg_number:
@@ -310,7 +362,7 @@ def stub_financing_statement_event(reg_number: str, base_reg_number: str = None,
 
     return models.financing_statement.FinancingStatementEvent(
         registration_number=reg_number, base_registration_number=base_reg_number, document_number='A1234567',
-        registration_date=datetime.datetime.now(), user_id='user_id_stub', life_in_years=life,
+        registration_date=reg_date, user_id='user_id_stub', life_in_years=life,
         base_registration=financing_statement or stub_financing_statement(base_reg_number, life)
     )
 

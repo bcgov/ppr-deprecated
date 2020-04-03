@@ -57,6 +57,7 @@ As of April 7, 2020, only a subset of of the intended features have been impleme
     cause errors on the rare occasion that malformed data exists in the database. **Consider preventing automatic
     validation** and [validate manually](https://github.com/samuelcolvin/pydantic/issues/559#issuecomment-496538989)
     only on write operations containing a payload.
+    [Only perform validation on write operation](https://github.com/bcgov/ppr/issues/889) describes this in more detail. 
 - Error response bodies have **not been implemented**:
   - The response formats have been defined in the spec, an error handler has not yet been implemented to ensure the
     response bodies match this format.  This is outlined in
@@ -97,20 +98,20 @@ Create a new financing statement.  The financing statement should not be availab
 nor should it be available for any other write operation until payment is completed. The user should be able to perform
 `GET` operations with the returned base registration number.
 
+There are some special rules about General Collateral. Though it is an array, it should not have more than one value
+in this operation. A discussion on the design is discussed in this
+[Collateral comment](https://github.com/bcgov/ppr/issues/815#issuecomment-603935842).
+
 **Endpoint:** `POST /financing-statements`
 
 **Implementation Status:** For the most part this endpoint is operational. Still outstanding:
-- Fields specific to Repairer's Liens: [Trust Indenture](https://github.com/bcgov/ppr/issues/818),
-  [Lien amount](https://github.com/bcgov/ppr/issues/819), [Surrender Date](https://github.com/bcgov/ppr/issues/820)
-- General Collateral requires some changes to support the solution outlined in this
-  [Collateral comment](https://github.com/bcgov/ppr/issues/815#issuecomment-603935842)
 - Some validation is incomplete. Fully required details along with current uncertainties are outlined in
   [API & Form Validation](https://github.com/bcgov/ppr/issues/830#issuecomment-603495048)
 - Payment is not yet implemented:
   - Use the the `INFRG` fee code when the `lifeInfinite` property is `true`
   - Use the the `FSREG` fee code along with a quantity matching the `lifeYears` property when life isn't infinite
   - A Repairer's Lien may require its own fee code, though `FSREG` with a quantity of `1` may be sufficient
-  
+
 **Registering Party:** For the moment, registering party details are accepted by the API. There has been consideration
 that it would be preferable to use the logged in user as the registering party.  In that case, some decisions still need
 to be considered in how to implement that:
@@ -149,11 +150,7 @@ The _financingStatementId_ URL path variable is interchangeable with base regist
 
 **Endpoint:** `GET /financing-statements/{financingStatementId}`
 
-**Implementation Status:** For the most part this endpoint is operational. Still outstanding:
-- Fields specific to Repairer's Liens: [Trust Indenture](https://github.com/bcgov/ppr/issues/818),
-  [Lien amount](https://github.com/bcgov/ppr/issues/819), [Surrender Date](https://github.com/bcgov/ppr/issues/820)
-- General Collateral requires some changes to support the solution outlined in this
-  [Collateral comment](https://github.com/bcgov/ppr/issues/815#issuecomment-603935842)
+**Implementation Status:** For the most part this endpoint is operational. One item is still outstanding:
 - The Payment portion is not yet included in the response payload
 
 **Data Restriction:** This should only provide records that are available to the calling user.  For public users, this
@@ -171,6 +168,9 @@ and instead just have a "General Change" operation.
 As for the proposed implementation of changes, there are a few possible approaches. Ultimately, we've recommended a
 `POST` to events as it ties changes to the event model. Some aspects of a change event to not go well with a state
 based model, such as payments, extending life (renewals, described separately below) or adding general collateral.
+
+When implementing, be aware that Trust Indenture, Lien Amount and Surrender Date can not be changed in the course of an
+amendment or change statement. These values can only be written during the original registration and then are read-only.
 
 It may be possible to use a more general CRUD approach to updating financing statements, and build events by comparing
 the deltas of the existing record and submitted payload. Some potential alternatives are described below.

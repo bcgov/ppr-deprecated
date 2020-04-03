@@ -199,9 +199,13 @@ def test_read_financing_statement_vehicle_collateral_should_be_included():
     assert next(x for x in result.vehicleCollateral if x.manufacturedHomeRegNumber == '5678943')
 
 
-def stub_financing_statement(base_reg_number: str, years: int = -1, parties: list = None, general_collateral=[],
+def stub_financing_statement(base_reg_number: str, years: int = None, parties: list = None, general_collateral=[],
                              vehicle_collateral=[], reg_type: RegistrationType = RegistrationType.SECURITY_AGREEMENT):
-    expiry = datetime.date.today() + datedelta.datedelta(years=years) if years > 0 else None
+    if reg_type == RegistrationType.REPAIRERS_LIEN:
+        expiry = datetime.date.today() + datedelta.datedelta(days=180)
+    else:
+        years = -1 if years is None else years
+        expiry = datetime.date.today() + datedelta.datedelta(years=years) if years > 0 else None
     parties = [models.party.Party(type_code=PartyType.REGISTERING.value, base_registration_number=base_reg_number,
                                   starting_registration_number=base_reg_number, first_name='Fred',
                                   last_name='Flintstone')] if parties is None else parties
