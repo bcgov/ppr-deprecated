@@ -3,7 +3,7 @@
     h1 {{ title }}
     p.
       &nbsp;
-    p.
+    p(v-if="editing").
       A lien is ....Lorem ipsum dolor sit amet, consectetur adipiscing elit,
       sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
       minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
@@ -41,6 +41,7 @@
 <script>
 import { computed, createComponent } from '@vue/composition-api'
 import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
+import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 
 export default createComponent({
@@ -54,11 +55,16 @@ export default createComponent({
       default: false,
       required: false,
       type: Boolean
+    },
+    value: {
+      required: true,
+      type: FinancingStatementModel
     }
   },
   setup(props) {
     const title = computed(() => {
-      return props.editing ? 'Register a Lien' : (props.submitted ? 'Successful Registration' : 'View Your Lien')
+      const view = 'View Lien #' + props.value.baseRegistrationNumber
+      return props.editing ? 'Register a Lien' : (props.submitted ? 'Successful Registration' : view)
     })
     return {
       title

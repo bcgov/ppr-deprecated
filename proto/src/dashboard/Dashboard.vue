@@ -40,9 +40,7 @@ export default createComponent({
   .customDash {
     .v-item-group {
       background-color: #f1f3f5 !important;
-
     }
-
     .v-tab {
       background-color: #38598A !important;
       color: white !important;

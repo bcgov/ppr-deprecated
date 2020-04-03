@@ -1,14 +1,17 @@
 <template lang="pug">
-  div
-    party-code(v-for="party in partyList", :key="party.clientCode", :value="party", class="party-code")
+  v-list
+    ppr-list-item(v-for="party in partyList", :key="party.clientCode")
+      party-code(:value="party", class="party-code")
 
 </template>
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 import { usePartyCodes } from '../party-code/party-code-model'
 import PartyCode from '@/party-code/PartyCode.vue'
+import PprListItem from '../components/PprListItem.vue'
+
 export default createComponent({
-  components: { PartyCode },
+  components: { PartyCode, PprListItem },
   setup() {
     const { partyList } = usePartyCodes()
 
@@ -21,6 +24,7 @@ export default createComponent({
 <style lang="scss" scoped>
   @import '../assets/styles/theme.scss';
   .party-code {
-    margin: 1rem 0;
+    margin: 0;
+    border-bottom: 1px solid grey;
   }
 </style>

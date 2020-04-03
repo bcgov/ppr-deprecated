@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    v-tabs(fixed-tabs, background-color="white", dark)
+    v-tabs(fixed-tabs, class="customDash")
       v-tab Main
       v-tab Secured Parties
       v-tab Debtors
@@ -197,14 +197,18 @@ export default createComponent({
 .v-card {
   padding: 1rem;
 }
-
+.customDash {
+  .v-item-group {
+    background-color: #f1f3f5 !important;
+  }
   .v-tab {
-    background-color: #0d47a1 !important;
+    background-color: #38598A !important;
+    color: white !important;
+    font-size: 1.1rem;
     margin-right: 1rem;
-    transition: none !important
   }
   .v-tab--active {
-    background-color: #fefefe !important;
+    background-color: #E6EAF4 !important;
     color: #0d47a1 !important;
   }
   .v-data-table {
@@ -223,4 +227,6 @@ export default createComponent({
       background-color: white;
     }
   }
+}
+
 </style>

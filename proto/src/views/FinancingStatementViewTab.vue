@@ -2,7 +2,7 @@
   div
     v-container(class="view-container")
       article(id="financingStatementIntro")
-        financing-statement-intro(:editing="editing")
+        financing-statement-intro(:value="financingStatement",:editing="editing")
     v-container(class="view-container")
       article(id="financingStatement")
         section(v-if="editing")
