@@ -24,7 +24,7 @@ import { useUsers } from '@/users/users'
 import Drafts from '@/drafts/Drafts.vue'
 import ClientCodesTab from '@/dashboard/ClientCodesTab.vue'
 import RegistrationsTab from '@/dashboard/RegistrationsTab.vue'
-import SearchesTab from '@/dashboard/SearchesTab.vue'
+import SearchesTab from '@/search/SearchesTab.vue'
 
 export default createComponent({
   components: { Drafts, RegistrationsTab, ClientCodesTab, SearchesTab },

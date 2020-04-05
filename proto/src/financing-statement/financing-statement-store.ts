@@ -76,13 +76,12 @@ function getDefs() {
     return usersList
   }
 
-
-  function getFinancingStatementListForIdList(idList: string[]): FinancingStatementInterface[] {
-    return financingStatementsList.value.filter((fs) => {
-      return idList.includes(fs.baseRegistrationNumber)
+  function findFinancingStatementByRegNum( regNum: string): FinancingStatementInterface {
+    return financingStatementsList.value.find( element => {
+      return element.baseRegistrationNumber === regNum
     })
-  }
 
+  }
 
   // Private methods
 
@@ -107,12 +106,13 @@ function getDefs() {
 
   return {
     // refs
+    // share the list ONLY for searching.  real app would not do this
     financingStatementsList,
     // functions
     createFinancingStatement,
     clearFinancingStatementStash,
+    findFinancingStatementByRegNum,
     getFinancingStatementStash,
-    getFinancingStatementListForIdList,
     getUsersFinancingStatementList,
     loadFinancingStatementStash,
     registerFinancingStatement

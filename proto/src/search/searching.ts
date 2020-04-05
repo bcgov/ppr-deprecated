@@ -103,7 +103,12 @@ function getDefs() {
   // PRIVATE
   let searchList = undefined
 
-  function getSearchRecordsList(): SearchInterface[] {
+  /**
+   * Get the internal list of all search records
+   * @return {SearchInterface[]}
+   * @private
+   */
+  function _getSearchRecordsList(): SearchInterface[] {
     if(!searchList) {
       searchList = []
       const stash = localStorage.getItem('searchList')
@@ -124,49 +129,54 @@ function getDefs() {
 
   /**
    * Stash the given search record for recall later
+   * @private
    * @param record
    */
-  function _addToSearchRecordsList(record) {
-    const list = getSearchRecordsList()
+  function _stashRecord(record) {
+    const list = _getSearchRecordsList()
     list.push(record)
     localStorage.setItem('searchList', JSON.stringify(list, null, 2))
   }
 
-  function getUserId() {
+  /**
+   * Get the current user id for filtering and authentication purposes
+   * @return {string}
+   * @private
+   */
+  function _getUserId() {
     const { currentUser } = useUsers()
     return currentUser.value.userId
   }
 
   /**
    * Run the search and place the results into the given search record
+   * @private
    * @param {SearchRecord} record
    */
   function _runSearch(record: SearchRecord ) {
     console.log('_runSearch', record)
     if (record.type === SearchTypes.REG_NUM) {
-      findFinancingStatementByRegNum(record)
+      _searchByRegNum(record)
     }
     if (record.type === SearchTypes.SERIAL) {
-      findFinancingStatementsBySerial(record)
+      __searchBySerial(record)
     }
     // TODO add search for other types
   }
 
 
-  function findFinancingStatementByRegNum( record: SearchRecord) {
-    const {financingStatementsList} = useFinancingStatements()
+  function _searchByRegNum( record: SearchRecord) {
+    const {findFinancingStatementByRegNum} = useFinancingStatements()
     const regNum = record.term
+    const found = findFinancingStatementByRegNum(regNum)
     const exact = new Set<string>()
-    const found = financingStatementsList.value.find( element => {
-      return element.baseRegistrationNumber === regNum
-    })
     if(found) {
       exact.add(found.baseRegistrationNumber)
     }
     record.resetLists(exact)
   }
 
-  function findFinancingStatementsBySerial( record: SearchRecord): void {
+  function __searchBySerial( record: SearchRecord): void {
     const {financingStatementsList} = useFinancingStatements()
     const serial = record.term
     const exact = new Set<string>()
@@ -176,12 +186,16 @@ function getDefs() {
       const brn = element.baseRegistrationNumber
       element.serialCollateral.forEach((serialCollateral: SerialCollateralModel) => {
         const elementSerial = serialCollateral.serial
-        if (elementSerial === serial) {
-          exact.add(brn)
-        } else {
-          const lastSix = serial.substr(serial.length - 6)
-          if (elementSerial === lastSix) {
-            similar.add(brn)
+        console.log('element serial', elementSerial)
+        if(elementSerial) {
+          if (elementSerial === serial) {
+            exact.add(brn)
+          } else {
+            const lastSix = serial.substr(serial.length - 6)
+            console.log('last six', lastSix)
+            if (elementSerial.includes(lastSix)) {
+              similar.add(brn)
+            }
           }
         }
       })
@@ -199,25 +213,25 @@ function getDefs() {
    */
   function searchDo(type: SearchTypes, term: string): string {
     const searchId = uniqid.time()
-    const userId = getUserId()
+    const userId = _getUserId()
     const date = moment().format('YYYY-MM-DD HH:mm:ss')
     const record = new SearchRecord(searchId, userId, type, term, date)
     _runSearch(record)
-    _addToSearchRecordsList(record)
+    _stashRecord(record)
     return record.id
   }
 
   function searchGetResults(searchId: string): SearchInterface {
-    const userId = getUserId()
-    return getSearchRecordsList().find((rec: SearchInterface) => {
+    const userId = _getUserId()
+    return _getSearchRecordsList().find((rec: SearchInterface) => {
       return rec.id === searchId && rec.userId === userId
     })
   }
 
 
-  function searchGetList(): SearchInterface[] {
-    const userId = getUserId()
-    return getSearchRecordsList().filter((rec: SearchInterface) => rec.userId === userId )
+  function searchGetUserList(): SearchInterface[] {
+    const userId = _getUserId()
+    return _getSearchRecordsList().filter((rec: SearchInterface) => rec.userId === userId )
   }
 
   // PROTOTYPE ADMIN
@@ -226,10 +240,9 @@ function getDefs() {
   }
 
   return {
-    findFinancingStatementByRegNum,
     searchAdminReset,
     searchDo,
-    searchGetList,
+    searchGetUserList,
     searchGetResults,
   }
 }

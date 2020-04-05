@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { computed, createComponent, ref } from '@vue/composition-api'
+import { computed, createComponent, ref, Ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import { useSearching, SearchTypes, SearchInterface } from '@/search/searching'
@@ -55,7 +55,7 @@ export default createComponent({
     const { createFinancingStatement, registerFinancingStatement } = useFinancingStatements()
     const { findFinancingStatementByRegNum } = useSearching()
 
-    const financingStatement = ref(createFinancingStatement())
+    const financingStatement: Ref<FinancingStatementModel> = ref(createFinancingStatement())
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 

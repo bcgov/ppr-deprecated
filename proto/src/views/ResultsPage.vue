@@ -3,9 +3,12 @@
     <v-container class="view-container">
       <article id="mockSearchResultsPage">
         <header>
-          <h1>Results for your search</h1>
+          <h1>Search Results</h1>
         </header>
         <section>
+          <p>
+          This prototype demonstrations a limited set of what a real PPR search needs to do.
+          </p>
           <search-results />
         </section>
       </article>
