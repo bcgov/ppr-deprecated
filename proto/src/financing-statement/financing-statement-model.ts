@@ -38,12 +38,14 @@ export class FinancingStatementModel {
    * Creates a new FinancingStatementModel model instance.
    *
    * @param type the type of financing statement. A value from the FinancingStatementType enum
-   * @param years the number of years the financing statement is registered for. A value between 1 and 25.
+   * @param lifeYears the number of years the financing statement is registered for. A value between 1 and 25.
    * @param registeringParty the party who registered the financing statement
    * @param securedParties the list of secured parties who own the lien
    * @param debtorParties the list of debtors who own the lien
+   * @param generalCollateral
+   * @param serialCollateral
    * @param baseRegistrationNumber the unique registration number for the financing statement, may be undefined.
-   * @param registrationDateTime the date and time that the financing statement was registered.
+   * @param registrationDatetime the date and time that the financing statement was registered.
    * @param expiryDate the expiry date of the financing statement.
    */
   public constructor(
@@ -72,9 +74,12 @@ export class FinancingStatementModel {
 
   public registerLien() {
     function getRandomDocId() {
-      const base = 100000000
-      let str:string = ''+ Math.floor(Math.random() * base)
-      return str.padStart(8, '0')
+      // produce len character string number
+      // every number in this system starts with the letter 'r'
+      const len = 8 - 1 // reduce length by one for the 'r' prefix
+      const base = Math.pow(10, len - 1)
+      let str:string = 'r'+ Math.floor(Math.random() * base)
+      return str.padStart(len, '0')
     }
     this._baseRegistrationNumber = getRandomDocId()
     this._registrationDateTime = moment().format("MMM DD YYYY")

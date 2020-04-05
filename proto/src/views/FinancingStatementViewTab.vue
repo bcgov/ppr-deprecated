@@ -39,7 +39,6 @@
 import { computed, createComponent, ref, Ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
-import { useSearching, SearchTypes, SearchInterface } from '@/search/searching'
 import { useUsers, Roles } from '@/users/users'
 import DialogConfirm from "@/components/DialogConfirm.vue"
 import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
@@ -50,18 +49,17 @@ export default createComponent({
   components: { DialogConfirm, FinancingStatementTab, FinancingStatementIntro },
 
   setup(_, { root }) {
+    const { createFinancingStatement, findFinancingStatementByRegNum, registerFinancingStatement } = useFinancingStatements()
+    const { currentRole } = useUsers()
+
+    const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
+    const submitted = ref(root.$route.query['success'] === 'true')
+
     const editing = ref(true)
     const formValid = ref(true)
-    const { createFinancingStatement, registerFinancingStatement } = useFinancingStatements()
-    const { findFinancingStatementByRegNum } = useSearching()
 
     const financingStatement: Ref<FinancingStatementModel> = ref(createFinancingStatement())
 
-    const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
-
-    const submitted = ref(root.$route.query['success'] === 'true' ? true : false)
-
-    const { currentRole } = useUsers()
     const submitButtonText = computed(() => (currentRole.value !== Roles.Staff ? 'Pay and Register' : 'Register'))
 
     if (regNum) {
@@ -72,7 +70,6 @@ export default createComponent({
     }
 
     function updateFinancingModel(newValue: FinancingStatementModel) {
-      // console.log('updateFinancingModel newValue:', newValue)
       financingStatement.value = newValue
     }
 

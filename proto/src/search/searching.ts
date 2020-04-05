@@ -183,16 +183,14 @@ function getDefs() {
     const similar = new Set<string>()
 
     financingStatementsList.value.forEach( element => {
-      const brn = element.baseRegistrationNumber
       element.serialCollateral.forEach((serialCollateral: SerialCollateralModel) => {
         const elementSerial = serialCollateral.serial
-        console.log('element serial', elementSerial)
         if(elementSerial) {
+          const brn = element.baseRegistrationNumber
           if (elementSerial === serial) {
             exact.add(brn)
           } else {
             const lastSix = serial.substr(serial.length - 6)
-            console.log('last six', lastSix)
             if (elementSerial.includes(lastSix)) {
               similar.add(brn)
             }
@@ -202,6 +200,8 @@ function getDefs() {
     })
     record.resetLists(exact, similar)
   }
+
+
   //  PUBLIC
 
   /**
