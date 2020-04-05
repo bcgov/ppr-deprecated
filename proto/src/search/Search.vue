@@ -10,6 +10,16 @@
       )
     section
       search-input(
+      id="serial",
+      label="Serial number",
+      :hint="serialValidDescription",
+      :rules="serialValidationRules",
+      @search="doSearch('serial',$event)"
+      )
+    p.
+      Debtor search is not yet implemented in this prototype.
+    section
+      search-input(
       id="debtor",
       disabled=true,
       label="Debtor name",
@@ -17,14 +27,7 @@
       :rules="debtorValidationRules",
       @search="doSearch('debtor',$event)"
       )
-    section
-      search-input(
-      id="serial",
-      label="Serial number",
-      :hint="serialValidDescription",
-      :rules="serialValidationRules",
-      @search="doSearch('serial',$event)"
-      )
+
 </template>
 
 <script lang="ts">
