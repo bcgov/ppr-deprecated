@@ -13,7 +13,7 @@
         )
     div(v-else, style="display:inline")
       div(v-if="layout==='minimal'",style="display:inline")
-        div {{ value.description }}
+        div {{ minimalCollateral }}
       div(v-else)
         v-row
           v-col(cols="2")
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { GeneralCollateralModel } from '@/general-collateral/general-collateral-model'
 
 export default createComponent({
@@ -55,8 +55,20 @@ export default createComponent({
       emit('input',new GeneralCollateralModel(model))
     }
 
+    const minimalCollateral = computed(() => {
+      let rval =''
+      const max = 50
+      const gc = props.value
+      if(gc.description > 0) {
+        rval = gc.description
+        rval = rval.length > max ? rval.substring(max) + '...' : rval
+        }
+      return rval
+    })
+
     return {
       emitValid,
+      minimalCollateral,
       update
     }
   }

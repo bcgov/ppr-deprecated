@@ -3,6 +3,8 @@ import moment from 'moment'
 import { FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import { useUsers } from '@/users/users'
+import { SerialCollateralModel } from '@/serial-collateral/serial-collateral-model'
+import { DebtorModel, } from '@/debtor-parties/debtor-model'
 
 export enum SearchTypes {
   REG_NUM,
@@ -42,8 +44,9 @@ export class SearchRecord implements SearchInterface {
   readonly _typeAsString: string
   readonly _term: string
   readonly _date: string
-  readonly _exactList: string[]
-  readonly _similarList: string[]
+  private _exactList: string[]
+  private _similarList: string[]
+
   constructor(id: string, userId: string, type: SearchTypes, term: string, date: string) {
     this._id = id
     this._userId = userId
@@ -84,6 +87,15 @@ export class SearchRecord implements SearchInterface {
   public get similarList() {
     return [...this._similarList]
   }
+  public resetLists (exact: Set<string>, similar?: Set<string>) {
+    this._exactList = Array.from(exact) as string[]
+    if(similar) {
+      this._similarList = Array.from(similar) as string[]
+    } else {
+      this._similarList = []
+    }
+
+  }
 }
 
 function getDefs() {
@@ -110,7 +122,11 @@ function getDefs() {
     return searchList
   }
 
-  function addToSearchRecordsList(record) {
+  /**
+   * Stash the given search record for recall later
+   * @param record
+   */
+  function _addToSearchRecordsList(record) {
     const list = getSearchRecordsList()
     list.push(record)
     localStorage.setItem('searchList', JSON.stringify(list, null, 2))
@@ -121,64 +137,87 @@ function getDefs() {
     return currentUser.value.userId
   }
 
-  function runSearch(record: SearchRecord ) {
-    console.log('runSearch', record)
+  /**
+   * Run the search and place the results into the given search record
+   * @param {SearchRecord} record
+   */
+  function _runSearch(record: SearchRecord ) {
+    console.log('_runSearch', record)
     if (record.type === SearchTypes.REG_NUM) {
-      const {findFinancingStatementByRegNum} = useFinancingStatements()
-      const stmt = findFinancingStatementByRegNum(record.term)
-      console.log('found? ', stmt)
-      if(stmt) {
-        record.addToExactList(stmt.baseRegistrationNumber)
-        // TODO add, if needed, amendment ids
-      }
+      findFinancingStatementByRegNum(record)
     }
     if (record.type === SearchTypes.SERIAL) {
-      const {findFinancingStatementsBySerial} = useFinancingStatements()
-
-      const results:SearchResultsInterface = findFinancingStatementsBySerial(record.term)
-      console.log('findFinancingStatementsBySerial? ', results)
-      results.exact.map((regNum:string) => record.addToExactList(regNum))
-      results.similar.map((regNum:string) => record.addToSimilarList(regNum))
+      findFinancingStatementsBySerial(record)
     }
     // TODO add search for other types
   }
 
+
+  function findFinancingStatementByRegNum( record: SearchRecord) {
+    const {financingStatementsList} = useFinancingStatements()
+    const regNum = record.term
+    const exact = new Set<string>()
+    const found = financingStatementsList.value.find( element => {
+      return element.baseRegistrationNumber === regNum
+    })
+    if(found) {
+      exact.add(found.baseRegistrationNumber)
+    }
+    record.resetLists(exact)
+  }
+
+  function findFinancingStatementsBySerial( record: SearchRecord): void {
+    const {financingStatementsList} = useFinancingStatements()
+    const serial = record.term
+    const exact = new Set<string>()
+    const similar = new Set<string>()
+
+    financingStatementsList.value.forEach( element => {
+      const brn = element.baseRegistrationNumber
+      element.serialCollateral.forEach((serialCollateral: SerialCollateralModel) => {
+        const elementSerial = serialCollateral.serial
+        if (elementSerial === serial) {
+          exact.add(brn)
+        } else {
+          const lastSix = serial.substr(serial.length - 6)
+          if (elementSerial === lastSix) {
+            similar.add(brn)
+          }
+        }
+      })
+    })
+    record.resetLists(exact, similar)
+  }
   //  PUBLIC
+
+  /**
+   * given the search criteria and search type, create a search record, run the search and place
+   * the results into the record, store the record, and finally return the search record id.
+   * @param {SearchTypes} type
+   * @param {string} term
+   * @return {string}
+   */
   function searchDo(type: SearchTypes, term: string): string {
     const searchId = uniqid.time()
     const userId = getUserId()
     const date = moment().format('YYYY-MM-DD HH:mm:ss')
     const record = new SearchRecord(searchId, userId, type, term, date)
-    runSearch(record)
-    addToSearchRecordsList(record)
+    _runSearch(record)
+    _addToSearchRecordsList(record)
     return record.id
   }
 
-  function searchGet(searchId: string): SearchInterface {
+  function searchGetResults(searchId: string): SearchInterface {
     const userId = getUserId()
     return getSearchRecordsList().find((rec: SearchInterface) => {
       return rec.id === searchId && rec.userId === userId
     })
   }
 
+
   function searchGetList(): SearchInterface[] {
     const userId = getUserId()
     return getSearchRecordsList().filter((rec: SearchInterface) => rec.userId === userId )
-  }
-
-  function searchGetResults(searchId: string): FinancingStatementInterface[] {
-    const {findFinancingStatementByRegNum} = useFinancingStatements()
-    const record = searchGet(searchId)
-    // console.log('get results', searchId, record)
-    const results: FinancingStatementInterface[] = []
-    if(record) {
-      record.exactList.map( num => {
-        const stmt = findFinancingStatementByRegNum(num)
-        // TODO add, if needed, amendment ids
-        results.push(stmt)
-      })
-    }
-    return results
   }
 
   // PROTOTYPE ADMIN
@@ -187,9 +226,9 @@ function getDefs() {
   }
 
   return {
+    findFinancingStatementByRegNum,
     searchAdminReset,
     searchDo,
-    searchGet,
     searchGetList,
     searchGetResults,
   }

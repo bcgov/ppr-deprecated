@@ -45,37 +45,6 @@ function getDefs() {
     )
   }
 
-  function findFinancingStatementByRegNum( regNum: string) {
-    return financingStatementsList.value.find( element => {
-      return element.baseRegistrationNumber === regNum
-    })
-  }
-
-  function findFinancingStatementsBySerial( serial: string): SearchResultsInterface {
-    const exact = new Set()
-    const similar = new Set()
-
-    financingStatementsList.value.forEach( element => {
-      const brn = element.baseRegistrationNumber
-      element.serialCollateral.forEach((serialCollateral: SerialCollateralModel) => {
-        const elementSerial = serialCollateral.serial
-        if (elementSerial === serial) {
-          exact.add(brn)
-        } else {
-          const lastSix = serial.substr(serial.length - 6)
-          if (elementSerial === lastSix) {
-            similar.add(brn)
-          }
-        }
-      })
-    })
-    return {
-      exact: Array.from(exact) as string[],
-      similar: Array.from(similar) as string[]
-    }
-  }
-
-
   function registerFinancingStatement( fs: FinancingStatementModel): string {
     fs.registerLien()
     financingStatementsList.value.push(fs)
@@ -108,6 +77,13 @@ function getDefs() {
   }
 
 
+  function getFinancingStatementListForIdList(idList: string[]): FinancingStatementInterface[] {
+    return financingStatementsList.value.filter((fs) => {
+      return idList.includes(fs.baseRegistrationNumber)
+    })
+  }
+
+
   // Private methods
 
   function _loadList(): FinancingStatementInterface[] {
@@ -136,9 +112,8 @@ function getDefs() {
     createFinancingStatement,
     clearFinancingStatementStash,
     getFinancingStatementStash,
+    getFinancingStatementListForIdList,
     getUsersFinancingStatementList,
-    findFinancingStatementByRegNum,
-    findFinancingStatementsBySerial,
     loadFinancingStatementStash,
     registerFinancingStatement
   }

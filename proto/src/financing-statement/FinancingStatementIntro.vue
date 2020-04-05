@@ -23,15 +23,15 @@
                 th Condition
             tbody
               tr
-                td Security Aggreement
+                td Security Agreement
                 td PPS Act
                 td blah blah
               tr
-                td Security Aggreement
+                td Security Agreement
                 td PPS Act
                 td blah blah
               tr
-                td Security Aggreement
+                td Security Agreement
                 td PPS Act
                 td blah blah
 

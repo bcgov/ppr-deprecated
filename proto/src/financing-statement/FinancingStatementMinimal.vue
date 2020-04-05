@@ -1,18 +1,27 @@
 <template lang="pug">
-  div
-    div(class="part") Number: {{ value.baseRegistrationNumber }}
-    div(class="part") Expires: {{ value.expiryDate }}
-    div(class="part fsType") {{ value.type }}
-    div(class="part")
-      span Base debtor:
-        debtor-party(:value="value.debtorParties[0]", layout="minimal")
-    div(class="part")
-      span Base secured party:
-        secured-party(:value="value.securedParties[0]", layout="minimal")
+  v-container
+    v-row
+      v-col(cols="2")
+        div(class="part") Number: {{ value.baseRegistrationNumber }}
+      v-col(cols="2")
+        div(class="part") Expires: {{ value.expiryDate }}
+      v-col(cols="4")
+        span Base debtor:
+          debtor-party(:value="value.debtorParties[0]", layout="minimal")
+      v-col(cols="4")
+        span Base secured party:
+          secured-party(:value="value.securedParties[0]", layout="minimal")
+    v-row
+      v-col(cols="2")
+        div(class="part fsType") {{ value.type }}
+      v-col(cols="4")
+        general-collateral(:value="value.generalCollateral[0]", layout="minimal")
+      v-col(cols="4")
+        serial-collateral(:value="value.serialCollateral[0]", layout="minimal")
 </template>
 
 <script lang="ts">
-import { createComponent } from '@vue/composition-api'
+import { computed, createComponent } from '@vue/composition-api'
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
@@ -21,12 +30,16 @@ import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import DebtorParty from '@/debtor-parties/DebtorParty.vue'
 import RegisteringParty from '@/registering-party/RegisteringParty.vue'
 import SecuredParty from '@/secured-parties/SecuredParty.vue'
+import GeneralCollateral from '@/general-collateral/GeneralCollateral.vue'
+import SerialCollateral from '@/serial-collateral/SerialCollateral.vue'
 
 export default createComponent({
   components: {
     DebtorParty,
+    GeneralCollateral,
     RegisteringParty,
-    SecuredParty
+    SecuredParty,
+    SerialCollateral
   },
   props: {
     editing: {
@@ -45,6 +58,13 @@ export default createComponent({
       const baseRegistrationNumber = props.value.baseRegistrationNumber
       root.$router.push({ name: 'financing-view', query: { regNum: baseRegistrationNumber } })
     }
+
+    const general = computed(() => {
+      let rval
+      if (props.value.generalCollateral.length > 0 && props.value.generalCollateral[0].type)
+
+      return rval
+    })
     return {
       view
     }

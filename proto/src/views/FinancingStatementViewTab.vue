@@ -39,10 +39,11 @@
 import { computed, createComponent, ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
-import FinancingStatementTab from '@/financing-statement/FinancingStatementTab.vue'
-import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
-import DialogConfirm from "@/components/DialogConfirm.vue"
+import { useSearching, SearchTypes, SearchInterface } from '@/search/searching'
 import { useUsers, Roles } from '@/users/users'
+import DialogConfirm from "@/components/DialogConfirm.vue"
+import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
+import FinancingStatementTab from '@/financing-statement/FinancingStatementTab.vue'
 
 
 export default createComponent({
@@ -51,7 +52,9 @@ export default createComponent({
   setup(_, { root }) {
     const editing = ref(true)
     const formValid = ref(true)
-    const { createFinancingStatement, findFinancingStatementByRegNum, registerFinancingStatement } = useFinancingStatements()
+    const { createFinancingStatement, registerFinancingStatement } = useFinancingStatements()
+    const { findFinancingStatementByRegNum } = useSearching()
+
     const financingStatement = ref(createFinancingStatement())
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined

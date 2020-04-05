@@ -53,41 +53,48 @@
       </div>
 
       <div v-else>
-        <div>
-          Type:
-          <span data-test-id="SerialCollateral.display.type">
-            {{ value.type }}
-          </span>
+        <div v-if="layout==='minimal'" style="display:inline">
+          <div>
+            {{ minimalCollateral }}
+          </div>
         </div>
-        <div v-if="!typeIsManufacturedHome">
-          Make:
-          <span data-test-id="SerialCollateral.display.make">
-            {{ value.make }}
-          </span>
-        </div>
-        <div v-if="!typeIsManufacturedHome">
-          Model:
-          <span data-test-id="SerialCollateral.display.model">
-            {{ value.model }}
-          </span>
-        </div>
-        <div v-if="!typeIsManufacturedHomeRegistered">
-          {{ serialLabel }}:
-          <span data-test-id="SerialCollateral.display.serial">
-            {{ value.serial }}
-          </span>
-        </div>
-        <div v-if="!typeIsManufacturedHome">
-          Year:
-          <span data-test-id="SerialCollateral.display.year">
-            {{ value.year }}
-          </span>
-        </div>
-        <div v-if="typeIsManufacturedHomeRegistered">
-          Manufactured Home Registration Number:
-          <span data-test-id="SerialCollateral.display.manufacturedHomeRegNumber">
-            {{ value.manufacturedHomeRegNumber }}
-          </span>
+        <div v-else>
+          <div>
+            Type:
+            <span data-test-id="SerialCollateral.display.type">
+              {{ value.type }}
+            </span>
+          </div>
+          <div v-if="!typeIsManufacturedHome">
+            Make:
+            <span data-test-id="SerialCollateral.display.make">
+              {{ value.make }}
+            </span>
+          </div>
+          <div v-if="!typeIsManufacturedHome">
+            Model:
+            <span data-test-id="SerialCollateral.display.model">
+              {{ value.model }}
+            </span>
+          </div>
+          <div v-if="!typeIsManufacturedHomeRegistered">
+            {{ serialLabel }}:
+            <span data-test-id="SerialCollateral.display.serial">
+              {{ value.serial }}
+            </span>
+          </div>
+          <div v-if="!typeIsManufacturedHome">
+            Year:
+            <span data-test-id="SerialCollateral.display.year">
+              {{ value.year }}
+            </span>
+          </div>
+          <div v-if="typeIsManufacturedHomeRegistered">
+            Manufactured Home Registration Number:
+            <span data-test-id="SerialCollateral.display.manufacturedHomeRegNumber">
+              {{ value.manufacturedHomeRegNumber }}
+            </span>
+          </div>
         </div>
       </div>
     </v-container>
@@ -102,6 +109,11 @@ import { SerialCollateralType, serialCollateralTypeCodeList } from '@/serial-col
 
 export default createComponent({
   props: {
+    layout: {
+      default: 'full',
+      required: false,
+      type: String
+    },
     editing: {
       default: false,
       required: false,
@@ -232,9 +244,15 @@ export default createComponent({
       emit('input', SerialCollateralModel.fromJson(newSerialCollateralModel))
     }
 
+    const minimalCollateral = computed(() => {
+      const gc = props.value
+      return gc.serial && gc.serial.length > 0 ? gc.serial : ''
+    })
+
     return {
       makeRules,
       manufacturedHomeRegNumberRules,
+      minimalCollateral,
       modelRules,
       serialCollateralTypes,
       serialLabel,

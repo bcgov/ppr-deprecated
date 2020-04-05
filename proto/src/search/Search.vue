@@ -6,7 +6,7 @@
       label="Registration number",
       :hint="regNumValidDescription",
       :rules="regNumValidationRules",
-      @search="regNumSearch"
+      @search="doSearch('regNum',$event)"
       )
     section
       search-input(
@@ -15,7 +15,7 @@
       label="Debtor name",
       :hint="debtorValidDescription",
       :rules="debtorValidationRules",
-      @search="debtorSearch"
+      @search="doSearch('debtor',$event)"
       )
     section
       search-input(
@@ -23,16 +23,7 @@
       label="Serial number",
       :hint="serialValidDescription",
       :rules="serialValidationRules",
-      @search="serialSearch"
-      )
-    section
-      search-input(
-      id="general",
-      disabled=true,
-      label="General collateral",
-      :hint="generalValidDescription",
-      :rules="generalValidationRules",
-      @search="generalSearch"
+      @search="doSearch('serial',$event)"
       )
 </template>
 
@@ -44,16 +35,32 @@
   export default createComponent({
     components: {SearchInput},
 
-    setup(_, {root}) {
-      const {regNumSearch, regNumValidationRules, regNumValidDescription} = useRegNum(root)
-      const {generalSearch, generalValidDescription, generalValidationRules} = useGeneral(root)
-      const {debtorSearch, debtorValidationRules, debtorValidDescription} = useDebtor(root)
-      const {serialSearch, serialValidDescription, serialValidationRules} = useSerial(root)
+    setup(_, { root }) {
+      const {regNumValidationRules, regNumValidDescription} = useRegNum(root)
+      const {generalValidDescription, generalValidationRules} = useGeneral(root)
+      const {debtorValidationRules, debtorValidDescription} = useDebtor(root)
+      const {serialValidDescription, serialValidationRules} = useSerial(root)
+
+      function doSearch(key: string, term: string) {
+        let type: SearchTypes
+        if (key === 'debtor')
+          type = SearchTypes.DEBTOR
+        if (key === 'regNum')
+          type = SearchTypes.REG_NUM
+        if (key === 'serial')
+          type = SearchTypes.SERIAL
+
+        const { searchDo } = useSearching()
+        const searchId = searchDo(type, term)
+        root.$router.push({ name: 'results', query: { searchId: searchId } })
+      }
+
       return {
-        debtorSearch, debtorValidationRules, debtorValidDescription,
-        generalSearch, generalValidDescription, generalValidationRules,
-        regNumSearch, regNumValidationRules, regNumValidDescription,
-        serialSearch, serialValidDescription, serialValidationRules
+        doSearch,
+        debtorValidationRules, debtorValidDescription,
+        generalValidDescription, generalValidationRules,
+        regNumValidationRules, regNumValidDescription,
+        serialValidDescription, serialValidationRules
       }
     }
   })
@@ -84,13 +91,7 @@
 
     const debtorValidDescription = computed(() => TEXT.describeValid)
 
-    function debtorSearch(term) {
-      const { searchDo } = useSearching()
-      const searchId = searchDo(SearchTypes.DEBTOR, term)
-      root.$router.push({ name: 'results', query: { searchId: searchId } })
-    }
-
-    return {debtorSearch, debtorValidDescription, debtorValidationRules}
+    return {debtorValidDescription, debtorValidationRules}
   }
 
   function useGeneral(root) {
@@ -115,13 +116,7 @@
 
     const generalValidDescription = computed(() => TEXT.describeValid)
 
-    function generalSearch(term) {
-      const { searchDo } = useSearching()
-      const searchId = searchDo(SearchTypes.GENERAL, term)
-      root.$router.push({ name: 'results', query: { searchId: searchId } })
-    }
-
-    return {generalSearch, generalValidDescription, generalValidationRules}
+    return {generalValidDescription, generalValidationRules}
   }
 
   function useRegNum(root) {
@@ -151,13 +146,7 @@
 
     const regNumValidDescription = computed(() => TEXT.describeValid)
 
-    function regNumSearch(term) {
-      const { searchDo } = useSearching()
-      const searchId = searchDo(SearchTypes.REG_NUM, term)
-      root.$router.push({ name: 'results', query: { searchId: searchId } })
-    }
-
-    return {regNumSearch, regNumValidDescription, regNumValidationRules}
+    return {regNumValidDescription, regNumValidationRules}
   }
 
   function useSerial(root) {
@@ -187,13 +176,7 @@
 
     const serialValidDescription = computed(() => TEXT.describeValid)
 
-    function serialSearch(term) {
-      const { searchDo } = useSearching()
-      const searchId = searchDo(SearchTypes.SERIAL, term)
-      root.$router.push({ name: 'results', query: { searchId: searchId } })
-    }
-
-    return {serialSearch, serialValidDescription, serialValidationRules}
+    return {serialValidDescription, serialValidationRules}
   }
 </script>
 
