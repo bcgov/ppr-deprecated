@@ -17,7 +17,6 @@ import schemas.payment
 def create_test_financing_statement(**kwargs):
     options = dict({
         'type_code': schemas.financing_statement.RegistrationType.SECURITY_AGREEMENT.value,  # RegistrationType value
-        'num_of_events': 1,
         'years': -1,  # An int from 1 to 25, or -1 for Infinity
         'registering_party': None,  # a dict with keys first_name, middle_name, last_name, business_name & address
         'secured_parties': [],  # a list of dict with keys first_name, middle_name, last_name, business_name & address
@@ -58,12 +57,6 @@ def create_test_financing_statement(**kwargs):
             collateral = models.collateral.VehicleCollateral(**vehicle)
             fin_stmt.vehicle_collateral.append(collateral)
             event.starting_vehicle_collateral.append(collateral)
-
-        # Add additional events if needed
-        for n in range(1, options['num_of_events']):
-            fin_stmt.events.append(
-                models.financing_statement.FinancingStatementEvent(registration_number=next_reg_number(db))
-            )
 
         db.add(fin_stmt)
         db.commit()
@@ -189,7 +182,7 @@ def create_test_search_record(type_code: str, criteria: dict, matches: list = []
 def retrieve_search_record(search_id: int):
     db = models.database.SessionLocal()
     try:
-        return db.query(models.search.Search).get(search_id)
+        return db.query(models.search.Search).options(sqlalchemy.orm.joinedload('results')).get(search_id)
     finally:
         db.close()
 

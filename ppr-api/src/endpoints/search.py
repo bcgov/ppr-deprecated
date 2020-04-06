@@ -57,11 +57,10 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
     criteria_value = search_input.criteria['value'].strip() if 'value' in search_input.criteria else None
 
     if search_input.type == schemas.search.SearchType.REGISTRATION_NUMBER.value:
-        fs_event = fs_repo.find_event_by_registration_number(criteria_value)
-        if fs_event:
-            exact_matches = [fs_event.registration_number]
+        match = search_exec_service.find_latest_event_number_for_registration_number(criteria_value)
+        exact_matches = [match] if match else []
     elif search_input.type == schemas.search.SearchType.MHR_NUMBER.value:
-        exact_matches = search_exec_service.find_registrations_for_mhr_number(criteria_value)
+        exact_matches = search_exec_service.find_latest_event_numbers_for_mhr_number(criteria_value)
 
     payment = payment_service.create_payment(services.payment_service.FilingCode.SEARCH)
     search_model = search_repository.create_search(search_input, exact_matches, similar_matches, user, payment)

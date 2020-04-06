@@ -355,7 +355,7 @@ response.
 **Endpoint:** `POST /searches`
 
 **Implementation Status:** A _partial_ implementation is in place:
-- Only search by Registration Number may is implemented.
+- Only search by Registration Number and MHR Number are implemented. These both return only exact matches.
 - The current implementation does not currently enforce any eligibility requirements.
   [Update Search with Business Rules](https://github.com/bcgov/ppr/issues/726) is intended to address this.
 - There is currently very little validation on the search input. Consider what limitations should be present. 

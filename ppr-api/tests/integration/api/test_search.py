@@ -1,4 +1,6 @@
 import datetime
+import random
+import string
 
 from starlette.testclient import TestClient
 
@@ -45,6 +47,32 @@ def test_create_registration_number_search():
     assert body['searchDateTime'] == stored.creation_date_time.isoformat(timespec='seconds')
 
 
+def test_create_mhr_number_search():
+    mhr_number = ''.join(random.choices(string.digits, k=7))
+    fin_stmt = sample_data_utility.create_test_financing_statement(
+        vehicle_collateral=[{'type_code': 'MH', 'mhr_number': mhr_number}]
+    )
+    search_input = {'type': 'MHR_NUMBER', 'criteria': {'value': mhr_number}}
+
+    rv = client.post('/searches', json=search_input, headers={'Account-Id': 'fake_account_id'})
+
+    assert rv.status_code == 201
+    body = rv.json()
+    assert body['type'] == 'MHR_NUMBER'
+    assert body['criteria'] == {'value': mhr_number}
+    result_id = body['id']
+    assert result_id > 0
+
+    stored = sample_data_utility.retrieve_search_record(result_id)
+    assert stored
+    assert stored.type_code == 'MHR_NUMBER'
+    assert stored.criteria == {'value': mhr_number}
+
+    assert len(stored.results) == 1
+    assert stored.results[0].registration_number == fin_stmt.get_base_event().registration_number
+    assert stored.results[0].exact is True
+
+
 def test_create_search_returns_payment_info():
     search_input = {'type': 'SERIAL_NUMBER', 'criteria': {'value': 'ABC123456'}}
 
@@ -78,8 +106,13 @@ def test_create_search_with_exact_match():
     assert search_result.selected
 
 
-def test_create_registration_number_search_matches_non_base_registration():
-    search_value = sample_data_utility.create_test_financing_statement(num_of_events=2).events[1].registration_number
+def test_create_registration_number_search_matches_latest_registration_number():
+    fin_stmt = sample_data_utility.create_test_financing_statement()
+    fin_stmt = sample_data_utility.create_test_financing_statement_event(fin_stmt)
+    fin_stmt = sample_data_utility.create_test_financing_statement_event(fin_stmt)
+    events = sorted(fin_stmt.events, key=lambda e: e.registration_date)
+    search_value = events[1].registration_number
+    expected_result = events[2].registration_number
     search_input = {'type': 'REGISTRATION_NUMBER', 'criteria': {'value': search_value}}
 
     rv = client.post('/searches', json=search_input)
@@ -90,7 +123,7 @@ def test_create_registration_number_search_matches_non_base_registration():
     search_results = sample_data_utility.retrieve_search_result_records(search_id)
     assert len(search_results) == 1
     search_result = search_results[0]
-    assert search_result.registration_number == search_value
+    assert search_result.registration_number == expected_result
 
 
 def test_read_singular_search_results():
