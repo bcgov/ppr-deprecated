@@ -43,7 +43,7 @@ describe('FinancingStatementView.vue', (): void => {
       })
     })
 
-    it('Test the financing view', async (): Promise<void> => {
+    it('Test the financing view submitted text', async (): Promise<void> => {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       await new Promise((r) => setTimeout(r, 2000))
       expect(wrapper.get('#financingStatement').text()).toContain('submitted financing statement')
@@ -75,7 +75,7 @@ describe('FinancingStatementView.vue', (): void => {
       })
     })
 
-    it('Test the financing view', async (): Promise<void> => {
+    it('Test the financing view created text', async (): Promise<void> => {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       await new Promise((r) => setTimeout(r, 2000))
       expect(wrapper.get('#financingStatement').text()).toContain('create a financing statement')

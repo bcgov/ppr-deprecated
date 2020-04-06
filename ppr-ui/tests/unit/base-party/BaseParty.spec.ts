@@ -36,7 +36,7 @@ describe('BaseParty.vue', (): void => {
       expect(wrapper.findAll('input').exists()).toBeFalsy()
     })
 
-    it(':editing - reactivity test', async (): Promise<void> => {
+    it(':editing - reactivity test for inputs', async (): Promise<void> => {
       const properties = ref<{ editing: boolean; value: BasePartyModel }>({
         editing: false,
         value: new BasePartyModel()

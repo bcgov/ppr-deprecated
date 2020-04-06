@@ -24,6 +24,4 @@ describe('load-indicator.ts', (): void => {
     loadIndicator.stop()
     expect(loadIndicator.isLoading() === false)
   })
-
 })
-
