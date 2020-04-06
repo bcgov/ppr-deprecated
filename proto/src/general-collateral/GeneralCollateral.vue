@@ -59,7 +59,7 @@ export default createComponent({
       let rval =''
       const max = 50
       const gc = props.value
-      if(gc.description > 0) {
+      if(gc.description.length > 0) {
         rval = gc.description
         rval = rval.length > max ? rval.substring(max) + '...' : rval
         }

@@ -19,20 +19,19 @@
               :disabled="!formValid",
               @click="submit"
             ) {{ submitButtonText }}
-            dialog-confirm(
-              :value="confirmDialogOpen",
-              title="Confirm Pay and Register",
-              :message="confirmPaymentMessage",
-              :options="{ok:'Confirm', width:600}",
-              @cancel="confirmCanceled($event)",
-              @ok="confirmConfirmed($event)"
-            )
 
         section(v-else)
           financing-statement-tab(
             :value="financingStatement",
             :editing="editing"
           )
+    payment-dialog(
+    title="Pay and Register",
+    :message="confirmPaymentMessage",
+    :open="openPaymentDialog",
+    @proceed="proceed",
+    @cancel="cancel"
+    )
 </template>
 
 <script lang="ts">
@@ -40,27 +39,32 @@ import { computed, createComponent, ref, Ref } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import { useUsers, Roles } from '@/users/users'
-import DialogConfirm from "@/components/DialogConfirm.vue"
 import FinancingStatementIntro from '@/financing-statement/FinancingStatementIntro.vue'
 import FinancingStatementTab from '@/financing-statement/FinancingStatementTab.vue'
+import PaymentDialog from "@/payment/PaymentDialog.vue"
 
 
 export default createComponent({
-  components: { DialogConfirm, FinancingStatementTab, FinancingStatementIntro },
+  components: { FinancingStatementTab, FinancingStatementIntro, PaymentDialog },
 
   setup(_, { root }) {
     const { createFinancingStatement, findFinancingStatementByRegNum, registerFinancingStatement } = useFinancingStatements()
     const { currentRole } = useUsers()
 
-    const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
-    const submitted = ref(root.$route.query['success'] === 'true')
-
     const editing = ref(true)
+
     const formValid = ref(true)
 
     const financingStatement: Ref<FinancingStatementModel> = ref(createFinancingStatement())
 
+    const openPaymentDialog = ref<>(false)
+
+    const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
+
+    const submitted = ref(root.$route.query['success'] === 'true')
+
     const submitButtonText = computed(() => (currentRole.value !== Roles.Staff ? 'Pay and Register' : 'Register'))
+
 
     if (regNum) {
       financingStatement.value = findFinancingStatementByRegNum(regNum)
@@ -73,37 +77,35 @@ export default createComponent({
       financingStatement.value = newValue
     }
 
-    // Controls confirmation to register dialog state.
-    const confirmDialogOpen = ref(false)
-
     const confirmPaymentMessage = computed((): string => {
       const fees = 5 * financingStatement.value.lifeYears
       return `To register this lien you need to pay $${fees}.  Do you wish to proceed?.`
     })
 
-    function confirmCanceled() {
-      confirmDialogOpen.value = false
+    function submit() {
+      openPaymentDialog.value = true
     }
 
-    function confirmConfirmed() {
-      confirmDialogOpen.value = false
+    function proceed() {
+      // User does not need to pay or consented to pay.
+      openPaymentDialog.value = false
       const baseRegistrationNumber = registerFinancingStatement(financingStatement.value)
       root.$router.push({ name: 'financing', query: { regNum: baseRegistrationNumber, success: "true" } })
     }
-
-    function submit() {
-      confirmDialogOpen.value = true
+    function cancel() {
+      // User chose to not pay.
+      openPaymentDialog.value = false
     }
 
 
-    return {currentRole,
-      confirmCanceled,
-      confirmConfirmed,
-      confirmDialogOpen,
+    return {
+      cancel,
       confirmPaymentMessage,
       editing,
       financingStatement,
       formValid,
+      openPaymentDialog,
+      proceed,
       submit,
       submitted,
       submitButtonText,

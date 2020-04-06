@@ -21,12 +21,8 @@
 </template>
 
 <script lang="ts">
-import { computed, createComponent } from '@vue/composition-api'
-import { BasePartyModel } from '@/base-party/base-party-model'
+import { createComponent } from '@vue/composition-api'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
-import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { PersonNameModel } from '@/person-name/person-name-model'
-import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import DebtorParty from '@/debtor-parties/DebtorParty.vue'
 import RegisteringParty from '@/registering-party/RegisteringParty.vue'
 import SecuredParty from '@/secured-parties/SecuredParty.vue'
@@ -59,12 +55,6 @@ export default createComponent({
       root.$router.push({ name: 'financing-view', query: { regNum: baseRegistrationNumber } })
     }
 
-    const general = computed(() => {
-      let rval
-      if (props.value.generalCollateral.length > 0 && props.value.generalCollateral[0].type)
-
-      return rval
-    })
     return {
       view
     }

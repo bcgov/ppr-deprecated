@@ -32,8 +32,9 @@
 </template>
 
 <script lang="ts">
-import { computed, createComponent, ref, Ref, Readonly } from '@vue/composition-api'
-import { useFinancingStatements, FinancingStatementInterface } from '@/financing-statement/financing-statement-store'
+import { computed, createComponent, ref, Ref } from '@vue/composition-api'
+import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
+import { FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
 import { useSearching, SearchTypes, SearchInterface } from '@/search/searching'
 import FinancingStatementActions from '@/financing-statement/FinancingStatementActions.vue'
 import FinancingStatementMinimal from '@/financing-statement/FinancingStatementMinimal.vue'
@@ -48,7 +49,7 @@ export default createComponent({
     const { searchGetResults } = useSearching()
     const {findFinancingStatementByRegNum} = useFinancingStatements()
 
-    const record: Ref<SearchInterface> = computed(() => searchGetResults(searchId))
+    const record: Ref<SearchInterface> = computed(() => searchGetResults(searchId)) as Ref<SearchInterface>
 
     function getFinancingStatement(regNum) {
       return findFinancingStatementByRegNum(regNum)

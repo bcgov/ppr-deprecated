@@ -1,22 +1,20 @@
 import uniqid from 'uniqid'
 import moment from 'moment'
-import { FinancingStatementInterface } from '@/financing-statement/financing-statement-model'
 import { useFinancingStatements } from '@/financing-statement/financing-statement-store'
 import { useUsers } from '@/users/users'
 import { SerialCollateralModel } from '@/serial-collateral/serial-collateral-model'
-import { DebtorModel, } from '@/debtor-parties/debtor-model'
 
 export enum SearchTypes {
   REG_NUM,
   DEBTOR,
-  SERIAL
+  SERIAL,
+  NONE
 }
 
 export interface SearchResultsInterface {
   exact: string[];
   similar: string[]
 }
-
 
 export interface SearchInterface {
   id: string;
@@ -154,7 +152,6 @@ function getDefs() {
    * @param {SearchRecord} record
    */
   function _runSearch(record: SearchRecord ) {
-    console.log('_runSearch', record)
     if (record.type === SearchTypes.REG_NUM) {
       _searchByRegNum(record)
     }
