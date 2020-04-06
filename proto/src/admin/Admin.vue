@@ -20,6 +20,11 @@
         div
           v-btn(@click="searchAdminReset") Reset
 
+    section
+      h2 Payment
+      v-container
+        div
+          v-btn(@click="paymentAdminReset") Reset
 
 
 </template>
@@ -28,11 +33,13 @@
 import { createComponent } from '@vue/composition-api'
 import { useAdmin } from '@/admin/admin'
 import { useSearching } from '@/search/searching'
+import { usePaymentSystem } from '@/payment/payment-system'
 
 export default createComponent({
   setup() {
     const { clearLocalStorage, clearFinancingStatementStash, loadFinancingStatements, saveFinancingStatements } = useAdmin()
     const { searchAdminReset } = useSearching()
+    const { paymentAdminReset } = usePaymentSystem
 
     function setFile (event) {
       const file = event.target.files[0]
@@ -44,7 +51,8 @@ export default createComponent({
       clearFinancingStatementStash,
       saveFinancingStatements,
       setFile,
-      searchAdminReset
+      searchAdminReset,
+      paymentAdminReset
     }
   }
 })

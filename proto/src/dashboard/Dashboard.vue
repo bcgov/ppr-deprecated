@@ -5,6 +5,7 @@
     v-tab Searches
     v-tab Client Codes
     v-tab Drafts
+    v-tab Payments
     v-tab-item
       v-card
         registrations-tab
@@ -17,17 +18,27 @@
     v-tab-item
       v-card
         drafts
+    v-tab-item
+      v-card
+        payments-tab
 </template>
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
 import { useUsers } from '@/users/users'
-import Drafts from '@/drafts/Drafts.vue'
 import ClientCodesTab from '@/dashboard/ClientCodesTab.vue'
+import Drafts from '@/drafts/Drafts.vue'
+import PaymentsTab from '@/payment/PaymentsTab.vue'
 import RegistrationsTab from '@/dashboard/RegistrationsTab.vue'
 import SearchesTab from '@/search/SearchesTab.vue'
 
 export default createComponent({
-  components: { Drafts, RegistrationsTab, ClientCodesTab, SearchesTab },
+  components: {
+    ClientCodesTab,
+    Drafts,
+    PaymentsTab,
+    RegistrationsTab,
+    SearchesTab
+  },
   setup() {
     const { authenticated, currentUser} = useUsers()
 

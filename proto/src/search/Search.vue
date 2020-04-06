@@ -30,7 +30,8 @@
 
       payment-dialog(
       title="Pay and Search",
-      message="The cost to perform a PPR search is $7.00.",
+      paymentCode="SEARCH",
+      quantity="1",
       :open="openPaymentDialog",
       @proceed="proceed",
       @cancel="cancel"
@@ -53,7 +54,7 @@
       const {debtorValidationRules, debtorValidDescription} = useDebtor(root)
       const {serialValidDescription, serialValidationRules} = useSerial(root)
 
-      const openPaymentDialog = ref<>(false)
+      const openPaymentDialog = ref<boolean>(false)
 
       interface CriteriaInterface {
         type: SearchTypes;

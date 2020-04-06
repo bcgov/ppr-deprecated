@@ -27,8 +27,9 @@
           )
     payment-dialog(
     title="Pay and Register",
-    :message="confirmPaymentMessage",
     :open="openPaymentDialog",
+    paymentCode="REGISTER",
+    :quantity="''+financingStatement.lifeYears",
     @proceed="proceed",
     @cancel="cancel"
     )
@@ -57,7 +58,7 @@ export default createComponent({
 
     const financingStatement: Ref<FinancingStatementModel> = ref(createFinancingStatement())
 
-    const openPaymentDialog = ref<>(false)
+    const openPaymentDialog = ref<boolean>(false)
 
     const regNum = root.$route.query ? root.$route.query['regNum'] as string : undefined
 
@@ -77,11 +78,6 @@ export default createComponent({
       financingStatement.value = newValue
     }
 
-    const confirmPaymentMessage = computed((): string => {
-      const fees = 5 * financingStatement.value.lifeYears
-      return `To register this lien you need to pay $${fees}.  Do you wish to proceed?.`
-    })
-
     function submit() {
       openPaymentDialog.value = true
     }
@@ -100,7 +96,6 @@ export default createComponent({
 
     return {
       cancel,
-      confirmPaymentMessage,
       editing,
       financingStatement,
       formValid,

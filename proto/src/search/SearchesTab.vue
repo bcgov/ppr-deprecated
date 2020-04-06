@@ -16,7 +16,7 @@
               div Exact Matches: {{record.exactList.length}}
             v-col(cols="2")
               div Similar Matches: {{record.similarList.length}}
-            v-col(cols="1")
+            v-col(cols="1", v-if="record.exactList.length > 0 || record.similarList.length > 0")
               v-btn(@click="view(record.id)") View
 
 </template>

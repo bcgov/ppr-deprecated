@@ -7,7 +7,6 @@ import { SerialCollateralModel } from '@/serial-collateral/serial-collateral-mod
 import { SecuredPartyModel} from '@/secured-parties/secured-party-model.ts'
 import { useRegisteredParty } from '@/registering-party/registering-party-model'
 import { useUsers } from '@/users/users'
-import { SearchResultsInterface } from '@/search/searching'
 
 
 function getDefs() {

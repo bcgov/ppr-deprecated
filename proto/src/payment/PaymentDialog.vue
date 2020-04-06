@@ -12,6 +12,7 @@
 
 <script lang="ts">
   import {computed, createComponent, ref, watch} from '@vue/composition-api'
+  import { usePaymentSystem } from '@/payment/payment-system'
   import { useUsers, Roles } from '@/users/users'
   import DialogConfirm from "@/components/DialogConfirm.vue"
 
@@ -25,7 +26,11 @@
         required: true,
         type: String
       },
-      message: {
+      paymentCode: {
+        required: true,
+        type: String
+      },
+      quantity: {
         required: true,
         type: String
       }
@@ -41,10 +46,27 @@
   })
 
   function usePayDialog(props, emit) {
-    const confirmDialogOpen = ref<>(false)
+    const confirmDialogOpen = ref<boolean>(false)
+
+    const amount = computed(() => {
+      const code = props.paymentCode
+      let amount = parseInt(props.quantity)
+      if (code === "REGISTER")
+        amount *= 5
+      if (code === "SEARCH")
+        amount *= 7
+      return '' + amount
+    })
 
     const confirmPaymentMessage = computed((): string => {
-      return `${props.message}  Do you wish to proceed?.`
+      const code = props.paymentCode
+      let message = ''
+      if (code === "REGISTER")
+        message = `The cost to perform a PPR search is $${amount.value}.`
+      if (code === "SEARCH")
+        message = `To register this lien you need to pay $${amount.value}.`
+
+      return `${message}  Do you wish to proceed?.`
     })
 
     function confirmCanceled() {
@@ -53,8 +75,13 @@
     }
 
     function confirmConfirmed() {
+      const { paymentDo } = usePaymentSystem()
+      const code = props.paymentCode
+      const quantity = props.quantity
+      const folio = "TO DO add folio"
+      const payId = paymentDo(amount.value, code, folio, quantity)
       confirmDialogOpen.value = false
-      emit('proceed')
+      emit('proceed', payId)
     }
 
     function onOpen() {
