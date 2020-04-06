@@ -3,6 +3,7 @@ import sqlalchemy.orm
 
 import models.collateral
 import models.party
+import models.payment
 import schemas.financing_statement
 from schemas.financing_statement import RegistrationType
 from schemas.party import PartyType
@@ -91,6 +92,7 @@ class FinancingStatementEvent(BaseORM):
     account_id = sqlalchemy.Column(sqlalchemy.String(length=36))
     user_id = sqlalchemy.Column(sqlalchemy.String(length=36))
     life_in_years = sqlalchemy.Column('life', sqlalchemy.Integer)
+    payment_id = sqlalchemy.Column(sqlalchemy.BigInteger, sqlalchemy.ForeignKey('payment.id'))
 
     base_registration = sqlalchemy.orm.relationship('FinancingStatement', back_populates='events')
     starting_parties = sqlalchemy.orm.relationship(
@@ -111,3 +113,5 @@ class FinancingStatementEvent(BaseORM):
     ending_vehicle_collateral = sqlalchemy.orm.relationship(
         models.collateral.VehicleCollateral.__name__, foreign_keys='VehicleCollateral.ending_registration_number'
     )
+
+    payment = sqlalchemy.orm.relationship(models.payment.Payment.__name__)
