@@ -11,7 +11,7 @@ objects:
       role: ${APP_NAME}
     name: ${APP_NAME}
   spec:
-    replicas: 3
+    replicas: 1
     revisionHistoryLimit: 10
     selector:
       app: ppr
@@ -75,9 +75,6 @@ objects:
             terminationMessagePath: /dev/termination-log
             terminationMessagePolicy: File
             volumeMounts:
-              - mountPath: /var/www/html${APP_PATH}/config
-                name: ${APP_CONFIG}
-                readOnly: true
               - mountPath: /etc/Caddyfile
                 name: ${CADDY_CONFIG}
                 readOnly: true
@@ -88,10 +85,6 @@ objects:
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-          - configMap:
-              defaultMode: 420
-              name: ${APP_CONFIG}
-            name: ${APP_CONFIG}
           - configMap:
               defaultMode: 420
               name: ${CADDY_CONFIG}
@@ -167,34 +160,7 @@ objects:
           regexp .*
           to {path} ${APP_PATH}/
       }
-- apiVersion: v1
-  kind: ConfigMap
-  metadata:
-    labels:
-      app: ppr
-      pprgroup: ${PPR_GROUP}
-      role: ${APP_NAME}
-    name: ${APP_CONFIG}
-  data:
-    configuration.json: |+
-      {
-      "API_URL": "${API_URL}",
-      "AUTH_URL": "${AUTH_URL}",
-      "LAUNCH_DARKLY_CLIENT_KEY": "${LAUNCH_DARKLY_CLIENT_KEY}",
-      "PAY_API_URL": "${PAY_API_URL}",
-      "SENTRY_DSN": "${SENTRY_DSN}",
-      "SENTRY_ENVIRONMENT": "${SENTRY_ENVIRONMENT}"
-      }
 parameters:
-- description: The full url to the PPR API
-  displayName: API URL
-  name: API_URL
-  required: true
-- description: Volume name for web app config
-  displayName: Web application config volume mount name
-  name: APP_CONFIG
-  required: true
-  value: ppr-web-ui-config
 - description: The name of the Web application.
   displayName: APP name
   name: APP_NAME
@@ -202,10 +168,6 @@ parameters:
 - description: The sub-path to the web application
   displayName: APP path
   name: APP_PATH
-  required: true
-- description: The full url to the authentication service
-  displayName: AUTH_URL
-  name: AUTH_URL
   required: true
 - description: Name for caddy configuration
   displayName: Caddy config volume mount name
@@ -219,14 +181,6 @@ parameters:
   displayName: Image Tag
   name: IMAGE_TAG
   required: true
-- description: The API key for the launch darkly service
-  displayName: LAUNCH_DARKLY_CLIENT_KEY
-  name: LAUNCH_DARKLY_CLIENT_KEY
-  required: true
-- description: The full url to the payment service
-  displayName: PAY API URL
-  name: PAY_API_URL
-  required: true
 - description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
   displayName: PPR group
   name: PPR_GROUP
@@ -235,10 +189,3 @@ parameters:
   displayName: Route HOST
   name: ROUTE_HOST
   required: true
-- description: The key for the PPR sentry service
-  displayName: SENTRY_DSN
-  name: SENTRY_DSN
-  required: true
-- description: The environment tag sentry. E.g. Dev, yourName, Test, Prod etc.
-  displayName: Sentry Environment
-  name: SENTRY_ENVIRONMENT

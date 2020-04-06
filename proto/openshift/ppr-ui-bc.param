@@ -6,8 +6,8 @@
 # Template File: ppr-ui/openshift/ppr-ui-bc.yaml
 # Hint: oc process -f ppr-ui-bc.yaml --param-file=ppr-ui-bc.param | oc apply -n zwmtib-tools -f -
 #=========================================================
-APP_INTER_NAME="ppr-ui-inter"
+APP_INTER_NAME="ppr-ui-proto-inter"
 APP_INTER_TAG="latest"
-APP_NAME="ppr-ui"
-APP_PATH="/cooperatives/ppr"
-PPR_GROUP="ppr-ui"
+APP_NAME="ppr-ui-proto"
+APP_PATH="/"
+PPR_GROUP="ppr-ui-proto"

@@ -6,8 +6,8 @@
 # Template File: ppr-ui/openshift/ppr-ui-bc-inter.yaml
 # Hint: oc process -f ppr-ui-inter-bc.yaml --param-file=ppr-ui-inter-bc.param | oc apply -n zwmtib-tools -f -
 #=========================================================
-APP_NAME="ppr-ui-inter"
-APP_PATH="/cooperatives/ppr"
-GIT_REF="master"    
+APP_NAME="ppr-ui-proto-inter"
+APP_PATH="/"
+GIT_REF="prototype"
 GIT_URI="https://github.com/bcgov/ppr"
-PPR_GROUP="ppr-ui"
+PPR_GROUP="ppr-ui-proto"
