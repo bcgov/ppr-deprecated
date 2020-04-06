@@ -725,18 +725,6 @@ describe('SerialCollateral.vue', (): void => {
       expect(emittedSerialCollateral.year).toBe(expected)
     })
 
-    it('@input - year change should be emitted', async (): Promise<void> => {
-      const expected = '2013'
-      const properties = ref({ editing: true, value: new SerialCollateralModel() })
-      const wrapper: Wrapper<Vue> = mount(SerialCollateral, { propsData: properties.value, vuetify })
-
-      wrapper.get('[data-test-id="SerialCollateral.input.year"]').setValue(expected)
-      await Vue.nextTick()
-
-      const emittedSerialCollateral = wrapper.emitted('input').slice(-1)[0][0]
-      expect(emittedSerialCollateral.year).toBe(expected)
-    })
-
     // "valid" event.
 
     it('@valid - all motor vehicle fields to emit true', async (): Promise<void> => {
