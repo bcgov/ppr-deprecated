@@ -85,6 +85,15 @@ def test_search_base_validate_criteria_with_inddebtor_when_value_instead_of_debt
         pytest.fail('A validation error was expected since there was no debtorName field in the criteria')
 
 
+def test_search_base_validate_criteria_when_value_contains_percent():
+    try:
+        schemas.search.SearchBase(criteria={'value': '12345%'}, type=schemas.search.SearchType.REGISTRATION_NUMBER.name)
+    except ValueError:
+        pass
+    else:
+        pytest.fail('A validation error was expected since a percent (SQL wild cards) are not allowed')
+
+
 def test_search_base_validate_type_when_invalid():
     try:
         schemas.search.SearchBase(type='INVALID_ENUM', criteria={'value': '1234567'})

@@ -47,6 +47,8 @@ class SearchBase(pydantic.BaseModel):  # pylint:disable=no-member
                 raise ValueError('"first" is required in criteria.debtorName')
         elif 'value' not in criteria:
             raise ValueError('"value" is required in criteria')
+        elif '%' in criteria['value']:
+            raise ValueError('"%" is not permitted in criteria.value')
 
         return criteria
 

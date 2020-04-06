@@ -100,10 +100,5 @@ class FinancingStatementRepository:
     def get_financing_statement(self, base_registration_number: str):
         return self.db.query(models.financing_statement.FinancingStatement).get(base_registration_number)
 
-    def find_event_by_registration_number(self, registration_number: str):
-        return self.db.query(models.financing_statement.FinancingStatementEvent)\
-            .filter(models.financing_statement.FinancingStatementEvent.registration_number.ilike(registration_number))\
-            .first()
-
     def next_registration_number(self):
         return str(self.db.execute(sqlalchemy.Sequence('reg_number_seq')))
