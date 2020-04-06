@@ -22,13 +22,8 @@ Vue.component('user-layout', layoutUser)
 Vue.config.errorHandler = (err, vm, info) => {
   console.log('Err', err)
   console.log('Err info', info)
-  // err: error trace
-  // vm: component in which error occured
-  // info: Vue specific error information such as lifecycle hooks, events etc.
-
-  // TODO: Perform any custom logic or log to server
-
 }
+
 const vConfig = {
   vuetify: new Vuetify(opts),
   router,
@@ -40,6 +35,6 @@ Promise.resolve()
     new Vue(vConfig).$mount('#app')
   })
   .catch((error): void => {
-    console.error('error fetching config -', error)
+    console.error('error loading app -', error)
     alert('Fatal error loading app')
   })

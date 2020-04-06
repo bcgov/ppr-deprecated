@@ -28,13 +28,11 @@
 import { createComponent, ref } from '@vue/composition-api'
 import { DebtorModel } from '@/debtor-parties/debtor-model'
 import DebtorParty from '../debtor-parties/DebtorParty.vue'
-import FormSectionHeader from '../components/FormSectionHeader.vue'
 import PprListItem from '../components/PprListItem.vue'
 
 export default createComponent({
   components: {
     DebtorParty,
-    FormSectionHeader,
     PprListItem
   },
   props: {

@@ -8,6 +8,9 @@ export enum FinancingStatementType {
   MISCELLANEOUS_REGISTRATION = 'MISCELLANEOUS_REGISTRATION',
 }
 
+/*
+Sort most frequently used first
+ */
 export enum FinancingStatementTypeText {
   SECURITY_AGREEMENT = 'PPSA Security Agreement',
   REPAIRERS_LIEN = 'Repairer\'s Lien',

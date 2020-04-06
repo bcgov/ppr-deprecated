@@ -26,13 +26,11 @@
 import { createComponent, ref } from '@vue/composition-api'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import SecuredParty from '@/secured-parties/SecuredParty.vue'
-import FormSectionHeader from '@/components/FormSectionHeader.vue'
 import PprListItem from '@/components/PprListItem.vue'
 
 export default createComponent({
   components: {
     SecuredParty,
-    FormSectionHeader,
     PprListItem
   },
   props: {

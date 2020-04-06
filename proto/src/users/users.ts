@@ -108,6 +108,13 @@ export function useUsers() {
   return Instance()
 }
 
+/**
+ * Create the initial prototype list of users. Match the company names to the client code business names so the
+ * system can link the users to client codes.
+ *
+ * @return {UserInterface[]}
+ * @constructor
+ */
 function UserList(): UserInterface[] {
   let _cnt = 0
   const list: UserInterface[] = [

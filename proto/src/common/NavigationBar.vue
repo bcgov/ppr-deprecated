@@ -1,6 +1,6 @@
 <template lang="pug">
     div(class="nav-bar")
-      v-toolbar(flat, class="nav-bar")
+      v-toolbar(flat, class="nav-bar container")
         v-toolbar-title
           router-link(to="/") PPR Prototype
         v-toolbar-items

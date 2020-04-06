@@ -8,7 +8,6 @@
 
 <script lang="ts">
 import { createComponent } from '@vue/composition-api'
-import { BasePartyModel } from '@/base-party/base-party-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
 import { PersonNameModel } from '@/person-name/person-name-model'
