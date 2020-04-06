@@ -32,19 +32,24 @@
                 tr
                   td Role:
                   td {{ currentUser.role }}
-                tr
+                tr(v-if="currentUser && currentUser.party")
                   td Party:
                   td
-                    party-code(v-if="currentUser", :value="currentUser.party")
+                    party-code(:value="currentUser.party")
+          proto-to-do
+            p.
+              Buttons like this one will appear throughout the prototype. Click them to see a list if ideas, suggestions
+              to consider or, sometimes, to see what is not complete in the prototype.
 </template>
 
 <script lang="ts">
 import {createComponent, ref} from '@vue/composition-api'
 import { useUsers } from '@/users/users'
 import PartyCode from '@/party-code/PartyCode.vue'
+import ProtoToDo from '@/components/ProtoToDo.vue'
 
 export default createComponent({
-  components: { PartyCode },
+  components: { PartyCode, ProtoToDo },
   setup() {
     const { authenticated, currentUser} = useUsers()
     return {authenticated, currentUser}

@@ -12,7 +12,7 @@ export enum Roles {
 }
 
 const AdminRoles = [  Roles.Admin ]
-const PowerUserRoles = [ Roles.Staff, Roles.SP, Roles.Admin, Roles.RP ]
+const DashboardUserRoles = [ Roles.Staff, Roles.SP, Roles.RP ]
 const RegisterRoles = [ Roles.SP, Roles.RP, Roles.Tax ]
 
 export interface UserInterface {
@@ -62,7 +62,7 @@ function getDefs() {
 
   const currentRole = computed( (): Roles => currentUser.value ? currentUser.value.role : Roles.None)
   const canAdmin = computed((): boolean => AdminRoles.includes(currentRole.value))
-  const canDash = computed((): boolean => PowerUserRoles.includes(currentRole.value))
+  const canDash = computed((): boolean => DashboardUserRoles.includes(currentRole.value))
   const canRegister = computed((): boolean => RegisterRoles.includes(currentRole.value))
 
   function setUser(userId): void {
