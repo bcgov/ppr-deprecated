@@ -7,11 +7,12 @@
         v-col(cols="2")
           proto-to-do
             p.
-              The Register a Lien page one of two primary functions of the PPR. It allows qualified users to register
+              The Register a Lien page is one of two primary functions of the PPR. The second is the Search page.
+              This page allows qualified users to register
               that a "secured party" holds a lien against a debtor with some specified property as collateral. This is
               registered to protect their claim in the case they need to go to court and seek remedies.
             p.
-              In this prototype this form needs a lot of finishing touches.
+              This prototype form needs a lot of finishing touches.
             ul
               li User's who work with Tax Liens should only see these types.
               li User's who are marked a repairer's should default to the repairer lien type.

@@ -2,8 +2,15 @@
   div
     v-container(class="view-container")
       article(id="dashboardArticle")
-        header
-          h1 Welcome {{ currentUser ? currentUser.name : '' }} to the prototype Personal Property Registry
+        v-row
+          v-col(cols="10")
+            header
+              h1 Welcome {{ currentUser ? currentUser.name : '' }} to the prototype Personal Property Registry
+          v-col(cols="2")
+            proto-to-do
+              p.
+                Buttons like this one will appear throughout the prototype. Click them to see a list if ideas, suggestions
+                to consider or, sometimes, to see what is not complete in the prototype.
 
         div(class="page-content")
           div(class="page-content__main")
@@ -36,10 +43,6 @@
                   td Party:
                   td
                     party-code(:value="currentUser.party")
-          proto-to-do
-            p.
-              Buttons like this one will appear throughout the prototype. Click them to see a list if ideas, suggestions
-              to consider or, sometimes, to see what is not complete in the prototype.
 </template>
 
 <script lang="ts">
