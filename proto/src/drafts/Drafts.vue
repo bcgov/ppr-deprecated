@@ -1,6 +1,8 @@
 <template lang="pug">
   v-container(class="grey lighten-5")
-    div(class="draft-header") This content is purely mockup base on the UX wireframe.  Except it's not a true representation of the wireframes.  For example the UX calls for elements that can filter and sort the list of drafts.
+    div(class="draft-header").
+      This tab content is purely mockup roughly based on UX wireframes.
+      TO DO implement drafts
     v-simple-table
       tbody
         tr(v-for="draft in draftList" :key="draft.key")
