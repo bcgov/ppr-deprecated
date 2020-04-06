@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
-import Vuetify from 'vuetify'
 
 import BusinessName from '@/components/BusinessName.vue'
 import { BusinessNameModel } from '@/components/business-name-model'
@@ -104,6 +104,7 @@ describe('BusinessName.vue', (): void => {
       expect(element.text()).toBe(expected)
     })
   })
+
   describe('@events', (): void => {
     it('@input - business name change should be emitted', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new BusinessNameModel('BusinessName') })
@@ -136,6 +137,5 @@ describe('BusinessName.vue', (): void => {
       const emitted = wrapper.emitted('valid').slice(-1)[0][0]
       expect(emitted).toBe(true)
     })
-
   })
 })

@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { reactive } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
-import Vuetify from 'vuetify'
 
 import FormSectionHeader from '@/components/FormSectionHeader.vue'
 
@@ -11,7 +11,6 @@ Vue.use(VueCompositionApi)
 const vuetify = new Vuetify()
 
 describe('FormSectionHeader.vue', (): void => {
-
   describe(':props', (): void => {
     it(':label - should display the label', (): void => {
       const properties = reactive({ label: 'LABEL1' })
@@ -31,5 +30,4 @@ describe('FormSectionHeader.vue', (): void => {
       expect(wrapper.text()).toContain('LABEL2')
     })
   })
-
 })

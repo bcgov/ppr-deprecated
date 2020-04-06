@@ -1,6 +1,6 @@
 import { featureFlags } from '@/flags/feature-flags'
 
-describe('FeatureFlags', (): void => {
+describe('feature-flags.ts', (): void => {
   it('has falsy default value for flag1', (): void => {
     expect(featureFlags.getFlag('flag1')).not.toBeTruthy()
   })

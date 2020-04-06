@@ -2,11 +2,10 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueCompositionApi from '@vue/composition-api'
 import { shallowMount, Wrapper } from '@vue/test-utils'
+
 import LoadIndicator from '@/load-indicator/LoadIndicator.vue'
 import { LoadIndicator as LI, LoadIndicatorSymbol } from '@/load-indicator'
-
-import { RouterSymbol } from '@/router/router'
-import router from '@/router/router'
+import router, { RouterSymbol } from '@/router/router'
 
 const loadIndicator = LI.Instance
 
@@ -42,5 +41,4 @@ describe('LoadIndicator.vue', (): void => {
     let foo = wrapper.find('.loading__content')
     expect(foo).toBeDefined()
   })
-
 })

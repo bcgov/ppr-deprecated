@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { reactive } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
-import Vuetify from 'vuetify'
 
 import SearchInput from '@/search/SearchInput.vue'
 

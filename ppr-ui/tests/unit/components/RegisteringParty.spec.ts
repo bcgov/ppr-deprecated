@@ -3,8 +3,8 @@ import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
 
-import RegisteringParty from '@/components/RegisteringParty.vue'
 import { PersonNameModel } from '@/components/person-name-model'
+import RegisteringParty from '@/components/RegisteringParty.vue'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)

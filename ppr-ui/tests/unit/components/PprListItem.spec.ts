@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
-import Vuetify from 'vuetify'
 
 import PprListItem from '@/components/PprListItem.vue'
 
@@ -56,9 +56,8 @@ describe('PprListItem.vue', (): void => {
 
       expect(wrapper.find('button[data-test-id="ListItem.button.remove"]').exists()).toBeTruthy()
     })
-
-
   })
+
   describe('@events', (): void => {
     it('@input - business name change should be emitted', async (): Promise<void> => {
       const expected = 2
@@ -72,6 +71,5 @@ describe('PprListItem.vue', (): void => {
       const emitted = wrapper.emitted('remove').slice(-1)[0][0]
       expect(emitted).toBe(expected)
     })
-
   })
 })

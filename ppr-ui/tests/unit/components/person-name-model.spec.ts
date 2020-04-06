@@ -1,6 +1,6 @@
 import { PersonNameModel } from '@/components/person-name-model'
 
-describe('person-name-model', (): void => {
+describe('person-name-model.ts', (): void => {
   it('has empty names for default constructor', (): void => {
     const person = new PersonNameModel()
 

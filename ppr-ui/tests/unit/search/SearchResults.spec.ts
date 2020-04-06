@@ -1,10 +1,11 @@
+import axios from 'axios'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueCompositionApi from '@vue/composition-api'
 import { mount, Wrapper, createLocalVue } from '@vue/test-utils'
-import SearchResults from '@/search/SearchResults.vue'
+
 import { LoadIndicator, LoadIndicatorSymbol } from '@/load-indicator'
-import axios from 'axios'
+import SearchResults from '@/search/SearchResults.vue'
 
 jest.mock('@/utils/config')
 jest.mock('axios')
@@ -40,5 +41,4 @@ describe('SearchResults.vue', (): void => {
   it('Test the search results page wrapper', (): void => {
     expect(wrapper).toBeDefined()
   })
-
 })

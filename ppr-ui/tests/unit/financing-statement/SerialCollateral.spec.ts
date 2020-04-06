@@ -1,7 +1,7 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
-import Vuetify from 'vuetify'
 
 import SerialCollateral from '@/financing-statement/SerialCollateral.vue'
 import { SerialCollateralModel } from '@/financing-statement/serial-collateral-model'

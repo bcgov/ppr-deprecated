@@ -1,10 +1,10 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
+
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { BusinessNameModel } from '@/components/business-name-model'
-import Vuetify from 'vuetify'
-
 import SecuredParties from '@/financing-statement/SecuredParties.vue'
 
 Vue.use(Vuetify)
@@ -25,14 +25,15 @@ describe('SecuredParties.vue', (): void => {
 
       expect(wrapper.find('button[data-test-id="SecuredParties.button.add"]').exists()).toBeFalsy()
     })
+
     it(':editing - true, add button does exist', (): void => {
       const properties = ref({ editing: true, value: securedParties })
       const wrapper: Wrapper<Vue> = mount(SecuredParties, { propsData: properties.value, vuetify })
 
       expect(wrapper.find('button[data-test-id="SecuredParties.button.add"]').exists()).toBeTruthy()
     })
-
   })
+
   describe('@events', (): void => {
     it('@input - add button should emit input with new list', async (): Promise<void> => {
       const properties = ref({ editing: true, value: securedParties })
@@ -51,6 +52,7 @@ describe('SecuredParties.vue', (): void => {
     it('remove method should emit input shorter list', async (): Promise<void> => {
       const properties = ref({ editing: true, value: securedParties })
       const wrapper: Wrapper<Vue> = mount(SecuredParties, { propsData: properties.value, vuetify })
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const vm: any = wrapper.vm
       vm.removeElement()
@@ -63,6 +65,7 @@ describe('SecuredParties.vue', (): void => {
     it('update method should emit input with same list but updated element', async (): Promise<void> => {
       const properties = ref({ editing: true, value: securedParties })
       const wrapper: Wrapper<Vue> = mount(SecuredParties, { propsData: properties.value, vuetify })
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const vm: any = wrapper.vm
       const updated = new BasePartyModel(new BusinessNameModel('aBusiness'))

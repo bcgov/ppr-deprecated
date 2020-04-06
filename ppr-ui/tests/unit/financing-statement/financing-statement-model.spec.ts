@@ -1,11 +1,9 @@
 import { BasePartyModel } from '@/base-party/base-party-model'
+import { PersonNameModel } from '@/components/person-name-model'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { PersonNameModel } from '@/components/person-name-model'
 
-
-describe('FinancingStatementModel', (): void => {
-
+describe('financing-statement-model.ts', (): void => {
   describe('FinancingStatementModel.isValidYears', (): void => {
     function test(input: string, expected: boolean): void {
       const isValid = FinancingStatementModel.isValidYears(input)
@@ -97,7 +95,6 @@ describe('FinancingStatementModel', (): void => {
       expect(fstmt.securedParties[0].personName?.first).toEqual(testPerson.first)
     })
 
-
     it('construct with base registration number', (): void => {
       const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, '123456A')
 
@@ -105,13 +102,15 @@ describe('FinancingStatementModel', (): void => {
     })
 
     it('construct with registration date and time', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined, '2020-01-01T01:01:01')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined,
+        '2020-01-01T01:01:01')
 
       expect(fstmt.registrationDateTime).toEqual('2020-01-01T01:01:01')
     })
 
     it('construct with expiry date', (): void => {
-      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined, undefined, '2030-01-01')
+      const fstmt = new FinancingStatementModel(undefined, undefined, undefined, undefined, undefined, undefined,
+        undefined, '2030-01-01')
 
       expect(fstmt.expiryDate).toEqual('2030-01-01')
     })
@@ -163,6 +162,5 @@ describe('FinancingStatementModel', (): void => {
 
       expect(fstmtReceived).toEqual(fstmt)
     })
-
   })
 })
