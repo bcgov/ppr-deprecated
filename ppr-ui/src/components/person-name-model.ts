@@ -53,11 +53,21 @@ export class PersonNameModel {
    * Gets the JSON representation of the PersonNameModel object.
    */
   public toJson(): PersonNameInterface {
-    return {
-      first: this.first,
-      middle: this.middle,
-      last: this.last
+    let rval: PersonNameInterface = {}
+
+    if (this.first) {
+      rval = Object.assign(rval, { first: this.first })
     }
+
+    if (this.middle) {
+      rval = Object.assign(rval, { middle: this.middle })
+    }
+
+    if (this.last) {
+      rval = Object.assign(rval, { last: this.last })
+    }
+
+    return rval
   }
 
   /*

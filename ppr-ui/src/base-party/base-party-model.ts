@@ -11,7 +11,7 @@ export interface BasePartyInterface {
 }
 
 /**
- * The model for a that may be a person or a business, such as for a registering party.
+ * The model for a party that may be a person or a business, such as for a registering party.
  */
 export class BasePartyModel {
   private _businessName?: BusinessNameModel

@@ -78,6 +78,9 @@ describe('person-name-model.ts', (): void => {
     const json = {}
     const person = new PersonNameModel()
 
+    expect(json).not.toHaveProperty('first')
+    expect(json).not.toHaveProperty('middle')
+    expect(json).not.toHaveProperty('last')
     expect(person.toJson()).toEqual(json)
     expect(PersonNameModel.fromJson(json)).toEqual(person)
   })
@@ -86,6 +89,9 @@ describe('person-name-model.ts', (): void => {
     const json = { first: 'First', middle: 'Middle', last: 'Last' }
     const person = new PersonNameModel('First', 'Middle', 'Last')
 
+    expect(json).toHaveProperty('first')
+    expect(json).toHaveProperty('middle')
+    expect(json).toHaveProperty('last')
     expect(person.toJson()).toEqual(json)
     expect(PersonNameModel.fromJson(json)).toEqual(person)
   })
