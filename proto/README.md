@@ -2,7 +2,29 @@
 
 > Objective to build a prototypical PPR application that can demonstrate the basic flows.
 
-All prototyping work will be stored withing the "proto" branch.
+
+# System Deployment
+
+See the deployment configuration and property files in the openshift folder.  Apply the following once to set up the 
+OpenShift artifacts.
+
+```
+oc process -f ppr-ui-bc.yaml --param-file=ppr-ui-bc.param | oc apply -n zwmtib-tools -f -
+
+oc process -f ppr-ui-inter-bc.yaml --param-file=ppr-ui-inter-bc.param | oc apply -n zwmtib-tools -f -
+
+oc process -f ppr-ui-dc.yaml --param-file=ppr-ui-dc.dev.param | oc -n zwmtib-dev apply -f -
+```
+
+Apply the following to update the build images after a code change
+
+```
+oc start-build ppr-ui-proto-inter --follow --wait  &&  oc start-build ppr-ui-proto
+```
+
+
+
+# System Description
 
 Let 
 
@@ -21,9 +43,9 @@ Let
 Replace the common component header with a proto header. Copy the code from common. Replace the login button
 with a new button that goes to a proto login page.
 
-When the user is "logged into the prototype" change this button to go to a proto logout page.
+When the user is "logged into the prototype" change this login button to clear the current user and go to Home.
 
-User accounts, may if time permits, reflect different roles that uses may have. E.g. staff, etc.
+User accounts, partially, reflect different roles that uses may have. E.g. staff, etc.
 
 ## Login Page
 
@@ -35,24 +57,16 @@ A string version of the JSON user data will do.
 
 Take the user to the home page.
 
-## Logout Page
-
-This page will have a single logout button. Pressing this button will clear the user data from the session storage
-and return the user to the home page.
-
-This page may have a download data button which would download a JSON file containing the financing statements
-and amendments created during the session.
-
 ## ProtoAPI
 
 The prototype will operate purely with data in memory. There will be no API calls.  Interactions between the code and
 the in-memory data will strive to follow the API design, when known.
 
-
 POST /FS with a FS body will add (register) a FS to the sample data
 
 GET /FS/# will get the FS from the sample data
 
+Not implemented: 
 PATCH /FS/# with an amendment will add (register) an amendment to the sample data.
 
 ### Proto Amendment
@@ -106,8 +120,8 @@ The prototype user will select the "user" (persona) to use for simulation.
 
 ## Page: /FS  register a FS
 
-The FS page will appear much as it does on the master branch at the time this prototype was started with the following
-changes.
+The FS page shows a fuller yet still incomplete picture of how a user can register a lien. See the Prototype To Dos 
+on that page for a list of what can be done.
 
 - will implement the SC and GC lists
 - will modify the RP to be read only and use the user data
@@ -138,8 +152,7 @@ Add to the home page the following, as each is implemented in the prototype.
 Only show this page to users who are SBC staff or work for a company that is in PPR list of RPs or SPs.
 
 FS List  
- - If persona's company is of type RP then list the FS that have RP equal to user's company.
- - If persona's company is of type SP then list the FS that have SP equal to user's company.
+ - List the FS that have RP equal to user's company.
  - If persona is SBC staff then list all FS
 
 ## Page: /client-codes
