@@ -1,13 +1,11 @@
-import Admin from '@/views/Admin.vue'
 import About from '@/views/About.vue'
+import Admin from '@/views/Admin.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import FinancingStatement from '@/views/FinancingStatementViewTab.vue'
 import Home from '@/views/Home.vue'
-import PartyCodes from '@/views/PartyCodes.vue'
+import Login from '@/views/Login.vue'
 import ResultsPage from '@/views/ResultsPage.vue'
 import SearchPage from '@/views/SearchPage.vue'
-
-import Login from '@/views/Login.vue'
 
 export default [
   {
@@ -20,12 +18,6 @@ export default [
     path: '/about',
     name: 'about',
     component: About, //() => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-    meta: { layout: 'public' }
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: Login,
     meta: { layout: 'public' }
   },
   {
@@ -53,10 +45,10 @@ export default [
     meta: { requiresAuth: true, layout: 'user' }
   },
   {
-    path: '/party-codes',
-    name: 'partyCodes',
-    component: PartyCodes,
-    meta: { requiresAuth: true, layout: 'user' }
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: { layout: 'public' }
   },
   {
     path: '/results',
