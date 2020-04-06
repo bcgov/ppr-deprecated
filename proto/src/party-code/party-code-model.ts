@@ -74,7 +74,7 @@ export function PartiesList(): PartyCodeInterface[] {
         postal: " XnX YnY",
         country: "Canada"
       },
-      contact:"Carol"
+      contact:"Fred"
     },
     {
       clientCode: '' + _cnt++,

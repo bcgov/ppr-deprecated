@@ -1,21 +1,19 @@
 import { computed, ref } from '@vue/composition-api'
 import { usePartyCodes, PartyCodeInterface } from '@/party-code/party-code-model'
-import { SearchInterface } from '@/search/searching'
 
 export enum Roles {
   None = "no user",
   User = "User",
-  SP = "SP",
-  SPAdmin = "SPAdmin",
-  RP = "RP",
+  SP = "Securing Party",
+  RP = "Registering Agent",
   Tax = "Tax",
   Staff = "PPR Staff",
   Admin = "Admin"
 }
 
-const AdminRoles = [ Roles.SPAdmin, Roles.Staff]
-const SuperRoles = [ Roles.Admin]
-const PowerUserRoles = [ Roles.Staff, Roles.SP, Roles.SPAdmin, Roles.Admin, Roles.RP ]
+const AdminRoles = [  Roles.Admin ]
+const PowerUserRoles = [ Roles.Staff, Roles.SP, Roles.Admin, Roles.RP ]
+const RegisterRoles = [ Roles.SP, Roles.RP, Roles.Tax ]
 
 export interface UserInterface {
   userId: string;
@@ -44,6 +42,7 @@ function getDefs() {
       user.party = party
     }
   })
+
   // export the list of users
   const userList = ref(list)
 
@@ -64,7 +63,7 @@ function getDefs() {
   const currentRole = computed( (): Roles => currentUser.value ? currentUser.value.role : Roles.None)
   const canAdmin = computed((): boolean => AdminRoles.includes(currentRole.value))
   const canDash = computed((): boolean => PowerUserRoles.includes(currentRole.value))
-  const canSuper = computed((): boolean => SuperRoles.includes(currentRole.value))
+  const canRegister = computed((): boolean => RegisterRoles.includes(currentRole.value))
 
   function setUser(userId): void {
     currentUserIndex.value = userId
@@ -88,7 +87,7 @@ function getDefs() {
     authenticated,
     canAdmin,
     canDash,
-    canSuper,
+    canRegister,
     currentRole,
     currentUserIndex,
     currentUser,
@@ -136,7 +135,7 @@ function UserList(): UserInterface[] {
       last: 'Minister',
       company:"Big Bank", // same as John Jones
       occupation: "Administrator",
-      role: Roles.SPAdmin
+      role: Roles.SP
     },
     {
       userId: 'user' + _cnt++,

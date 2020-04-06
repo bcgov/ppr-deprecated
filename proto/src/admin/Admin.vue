@@ -39,7 +39,7 @@ export default createComponent({
   setup() {
     const { clearLocalStorage, clearFinancingStatementStash, loadFinancingStatements, saveFinancingStatements } = useAdmin()
     const { searchAdminReset } = useSearching()
-    const { paymentAdminReset } = usePaymentSystem
+    const { paymentAdminReset } = usePaymentSystem()
 
     function setFile (event) {
       const file = event.target.files[0]

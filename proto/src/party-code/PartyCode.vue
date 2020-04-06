@@ -19,11 +19,8 @@
     v-simple-table
       tbody
         tr
-          td Code:
-          td {{value.clientCode}}
-        tr
           td Business:
-          td {{value.business}}
+          td {{value.business}}  ({{value.clientCode}})
         tr
           td Contact:
           td {{value.contact}}

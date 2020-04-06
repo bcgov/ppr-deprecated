@@ -1,50 +1,41 @@
-<template>
-  <div>
-    <v-container class="view-container">
-      <article id="dashboardArticle">
-        <header>
-          <h1>Welcome {{ currentUser ? currentUser.name : '' }} to the prototype Personal Property Registry</h1>
-        </header>
+<template lang="pug">
+  div
+    v-container(class="view-container")
+      article(id="dashboardArticle")
+        header
+          h1 Welcome {{ currentUser ? currentUser.name : '' }} to the prototype Personal Property Registry
 
-        <div class="page-content">
-          <div class="page-content__main">
-            <p>
-              <em>Note: This web site is a PROTOTYPE.</em>
-            </p>
-            <p>
+        div(class="page-content")
+          div(class="page-content__main")
+            p
+              em Note: This web site is a PROTOTYPE. The following text is sample content.
+            p.
               Protect yourself from loss or legal conflict by registering your interest in personal property (cars,
               boats, trailers or machinery) or searching for existing liens on personal property prior to purchase.
-            </p>
-            <p>
+            p.
               The Personal Property Registry records all of the encumbrances (such as liens) created against personal
               property in B.C., whether it belongs to a business or an individual. The Registry provides personal
               property registration and search services for lenders, sellers, garage keepers, taxing authorities,
               government agencies, purchasers and general public.
-            </p>
-            <p>
-              For more information please visit
-              <a href="https://www2.gov.bc.ca/gov/content?id=568423FB83BD44A28B80B48EE85A0810">
-                Personal Property Registry
-              </a>
-            </p>
-          </div>
-          <div v-if="authenticated">
-            Current persona is:
-            <div class="user-section">
-              <div> Name: {{ currentUser.name }} {{ currentUser.last }}, </div>
-              <div> Company: {{ currentUser.company }}, </div>
-              <div> Occupation: {{ currentUser.occupation }} </div>
-              <div> Role: {{ currentUser.role }} </div>
-              <div>
-                Party:
-                <party-code :value="currentUser.party" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </article>
-    </v-container>
-  </div>
+            p For more information please visit &nbsp;
+              a(href="https://www2.gov.bc.ca/gov/content?id=568423FB83BD44A28B80B48EE85A0810") Personal Property Registry
+          div(v-if="authenticated")
+            p Current prototype persona is:
+            v-simple-table
+              tbody
+                tr
+                  td Name:
+                  td {{ currentUser.name }} {{ currentUser.last }}
+                tr
+                  td Occupation:
+                  td {{ currentUser.occupation }}
+                tr
+                  td Role:
+                  td {{ currentUser.role }}
+                tr
+                  td Party:
+                  td
+                    party-code(v-if="currentUser", :value="currentUser.party")
 </template>
 
 <script lang="ts">
