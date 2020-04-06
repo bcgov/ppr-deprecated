@@ -1,6 +1,6 @@
-import {LoadIndicator} from '@/load-indicator'
+import { LoadIndicator } from '@/load-indicator'
 
-describe('load indicator', (): void => {
+describe('load-indicator.ts', (): void => {
   let loadIndicator: LoadIndicator
 
   beforeAll((): void => {

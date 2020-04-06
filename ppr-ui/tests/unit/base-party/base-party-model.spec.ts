@@ -2,7 +2,7 @@ import { BasePartyModel } from '@/base-party/base-party-model'
 import { BusinessNameModel } from '@/components/business-name-model'
 import { PersonNameModel } from '@/components/person-name-model'
 
-describe('BasePartyModel', (): void => {
+describe('base-party-model.ts', (): void => {
   it('has undefined business and person with default constructor', (): void => {
     const model = new BasePartyModel()
 
@@ -17,7 +17,6 @@ describe('BasePartyModel', (): void => {
 
     expect(model.businessName?.businessName).toEqual(name)
   })
-
 
   it('has person name when set', (): void => {
     const name = 'a person'
@@ -57,6 +56,21 @@ describe('BasePartyModel', (): void => {
     expect(json.personName?.last).toBe(personLastName)
   })
 
+  it('toJson produces person last name', (): void => {
+    const personLastName = 'Last Name'
+    const person = new PersonNameModel(undefined, undefined, personLastName)
+    const model = new BasePartyModel(undefined, person)
+
+    const json = model.toJson()
+
+    expect(json).toBeDefined()
+    expect(json.businessName).not.toBeDefined()
+    expect(json.personName).toBeDefined()
+    expect(json.personName?.first).not.toBeDefined()
+    expect(json.personName?.middle).not.toBeDefined()
+    expect(json.personName?.last).toBe(personLastName)
+  })
+
   it('can construct using JSON', (): void => {
     const aBusiness = 'a business'
     const aPerson = 'a person'
@@ -73,5 +87,4 @@ describe('BasePartyModel', (): void => {
 
     expect(result).not.toBeDefined()
   })
-
 })

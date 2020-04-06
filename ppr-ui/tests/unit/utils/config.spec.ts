@@ -1,10 +1,11 @@
 import axios from 'axios'
+
 import Config from '@/utils/config'
 
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
-describe('Config', (): void => {
+describe('config.ts', (): void => {
   it('has empty string default value for apiUrl', (): void => {
     Config.setup().then((): void => {
       expect(Config.apiUrl).toBe('')

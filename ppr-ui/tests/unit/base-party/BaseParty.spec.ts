@@ -12,27 +12,25 @@ Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
 const vuetify = new Vuetify()
 
-
 describe('BaseParty.vue', (): void => {
   describe(':props', (): void => {
     // General form tests.
 
     it(':editing - true, inputs exist', (): void => {
-      const properties = ref({ editing: true, value: new BasePartyModel() })
+      const properties = ref({ editing: true })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
       expect(wrapper.findAll('input').exists()).toBeTruthy()
     })
 
     it(':editing - false by default, inputs do not exist', (): void => {
-      const properties = ref({ value: new BasePartyModel() })
-      const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+      const wrapper: Wrapper<Vue> = mount(BaseParty, { vuetify })
 
       expect(wrapper.findAll('input').exists()).toBeFalsy()
     })
 
     it(':editing - false, inputs do not exist', (): void => {
-      const properties = ref({ editing: false, value: new BasePartyModel() })
+      const properties = ref({ editing: false })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
       expect(wrapper.findAll('input').exists()).toBeFalsy()
@@ -56,8 +54,7 @@ describe('BaseParty.vue', (): void => {
 
     // :editing Tests for the type selection.
     it(':editing - true, radio controls exists', (): void => {
-      const model = new BasePartyModel()
-      const properties = ref({ editing: true, value: model })
+      const properties = ref({ editing: true })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
       expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeTruthy()
@@ -65,8 +62,7 @@ describe('BaseParty.vue', (): void => {
     })
 
     it(':editing - false, radio controls does not exists', (): void => {
-      const model = new BasePartyModel()
-      const properties = ref({ editing: false, value: model })
+      const properties = ref({ editing: false })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
       expect(wrapper.find('[data-test-id="BaseParty.radio.business"]').exists()).toBeFalsy()
@@ -96,11 +92,11 @@ describe('BaseParty.vue', (): void => {
       expect(wrapper.find('[data-test-id="BaseParty.radio.person"]').exists()).toBeFalsy()
       expect(wrapper.find('[data-test-id="BaseParty.form"]').attributes().class).not.toContain('invalid')
     })
-
   })
+
   describe('@events', (): void => {
     it('@input - select business show business name not person name', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new BasePartyModel() })
+      const properties = ref({ editing: true })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
       wrapper.find('[data-test-id="BaseParty.radio.business"]').trigger('click')
@@ -111,7 +107,7 @@ describe('BaseParty.vue', (): void => {
     })
 
     it('@input - select person show person name not business name', async (): Promise<void> => {
-      const properties = ref({ editing: true, value: new BasePartyModel() })
+      const properties = ref({ editing: true })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
 
       wrapper.find('[data-test-id="BaseParty.radio.person"]').trigger('click')
@@ -126,8 +122,10 @@ describe('BaseParty.vue', (): void => {
       const model = new BasePartyModel(undefined, undefined)
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+
       wrapper.find('[data-test-id="BaseParty.radio.business"]').trigger('click')
       await Vue.nextTick()
+
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(false)
     })
 
@@ -135,8 +133,10 @@ describe('BaseParty.vue', (): void => {
       const model = new BasePartyModel(undefined, undefined)
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+
       wrapper.find('[data-test-id="BaseParty.radio.person"]').trigger('click')
       await Vue.nextTick()
+
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(false)
     })
 
@@ -144,8 +144,10 @@ describe('BaseParty.vue', (): void => {
       const model = new BasePartyModel(new BusinessNameModel('abusiness'), undefined)
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+
       wrapper.find('[data-test-id="BaseParty.radio.business"]').trigger('click')
       await Vue.nextTick()
+
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
 
@@ -153,8 +155,10 @@ describe('BaseParty.vue', (): void => {
       const model = new BasePartyModel(undefined, new PersonNameModel('a person', 'm', 'last'))
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+
       wrapper.find('[data-test-id="BaseParty.radio.person"]').trigger('click')
       await Vue.nextTick()
+
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
 
@@ -171,6 +175,7 @@ describe('BaseParty.vue', (): void => {
 
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
+
     it('@valid - reactive change to person name should validate', async (): Promise<void> => {
       const model = new BasePartyModel(undefined, undefined)
       const properties = ref({ editing: true, value: model })
@@ -193,13 +198,13 @@ describe('BaseParty.vue', (): void => {
 
       wrapper.find('[data-test-id="BaseParty.radio.business"]').trigger('click')
       await Vue.nextTick()
-
       wrapper.find('[data-test-id="BaseParty.radio.person"]').trigger('click')
       await Vue.nextTick()
       wrapper.get('input[data-test-id="PersonName.first"]').setValue('afirst')
       wrapper.get('input[data-test-id="PersonName.last"]').setValue('alast')
       await Vue.nextTick()
       await Vue.nextTick()
+
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
 
@@ -210,22 +215,22 @@ describe('BaseParty.vue', (): void => {
 
       wrapper.find('[data-test-id="BaseParty.radio.person"]').trigger('click')
       await Vue.nextTick()
-
       wrapper.find('[data-test-id="BaseParty.radio.business"]').trigger('click')
       await Vue.nextTick()
       wrapper.get('input[data-test-id="BusinessName.input.name"]').setValue('abusiness')
       await Vue.nextTick()
       await Vue.nextTick()
+
       expect(wrapper.emitted('valid').slice(-1)[0][0]).toBe(true)
     })
-
-
   })
+
   describe('radio button state', (): void => {
     it('base party with business name should be visible and radio button set', async (): Promise<void> => {
       const model = new BasePartyModel(new BusinessNameModel('abusiness'), undefined)
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+
       const radioBusiness = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
       expect(radioBusiness.checked).toBe(true)
       const radioPerson = wrapper.get('[data-test-id="BaseParty.radio.person"]').element as HTMLInputElement
@@ -236,11 +241,11 @@ describe('BaseParty.vue', (): void => {
       const model = new BasePartyModel(undefined, new PersonNameModel('first', undefined, 'last'))
       const properties = ref({ editing: true, value: model })
       const wrapper: Wrapper<Vue> = mount(BaseParty, { propsData: properties.value, vuetify })
+
       const radioBusiness = wrapper.get('[data-test-id="BaseParty.radio.business"]').element as HTMLInputElement
       expect(radioBusiness.checked).toBe(false)
       const radioPerson = wrapper.get('[data-test-id="BaseParty.radio.person"]').element as HTMLInputElement
       expect(radioPerson.checked).toBe(true)
     })
-
   })
 })

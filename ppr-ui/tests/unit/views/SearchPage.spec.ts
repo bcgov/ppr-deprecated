@@ -1,13 +1,13 @@
+import axios from 'axios'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import VueCompositionApi from '@vue/composition-api'
-import { mount, Wrapper } from '@vue/test-utils'
-import SearchInput from '@/search/SearchInput.vue'
-import SearchPage from '@/views/SearchPage.vue'
+import { mount, RouterLinkStub, Wrapper } from '@vue/test-utils'
+
 import { LoadIndicator, LoadIndicatorSymbol } from '@/load-indicator'
 import router, { RouterSymbol } from '@/router/router'
-import axios from 'axios'
-import { RouterLinkStub } from '@vue/test-utils'
+import SearchInput from '@/search/SearchInput.vue'
+import SearchPage from '@/views/SearchPage.vue'
 
 jest.mock('@/utils/config')
 jest.mock('axios')
@@ -43,7 +43,6 @@ describe('SearchPage.vue', (): void => {
     expect(elem).toBeDefined()
     expect(elem.text()).toContain('Personal Property Registry')
   })
-
 
   it('Test the search page contains SearchInput', (): void => {
     expect(wrapper.find(SearchInput).exists()).toBe(true)

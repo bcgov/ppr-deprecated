@@ -1,10 +1,10 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
+
 import { BasePartyModel } from '@/base-party/base-party-model'
 import { BusinessNameModel } from '@/components/business-name-model'
-import Vuetify from 'vuetify'
-
 import DebtorParties from '@/financing-statement/DebtorParties.vue'
 
 Vue.use(Vuetify)
@@ -25,14 +25,15 @@ describe('DebtorParties.vue', (): void => {
 
       expect(wrapper.find('button[data-test-id="DebtorParties.button.add"]').exists()).toBeFalsy()
     })
+
     it(':editing - true, add button does exist', (): void => {
       const properties = ref({ editing: true, value: debtorParties })
       const wrapper: Wrapper<Vue> = mount(DebtorParties, { propsData: properties.value, vuetify })
 
       expect(wrapper.find('button[data-test-id="DebtorParties.button.add"]').exists()).toBeTruthy()
     })
-
   })
+
   describe('@events', (): void => {
     it('@input - add button should emit input with new list', async (): Promise<void> => {
       const properties = ref({ editing: true, value: debtorParties })

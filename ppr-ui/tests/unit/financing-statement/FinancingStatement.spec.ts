@@ -1,20 +1,20 @@
 import Vue from 'vue'
+import Vuetify from 'vuetify'
 import VueCompositionApi, { ref } from '@vue/composition-api'
 import { mount, Wrapper } from '@vue/test-utils'
-import Vuetify from 'vuetify'
 
-import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { BasePartyModel } from '@/base-party/base-party-model'
+import { PersonNameModel } from '@/components/person-name-model'
+import FinancingStatement from '@/financing-statement/FinancingStatement.vue'
 import { FinancingStatementModel } from '@/financing-statement/financing-statement-model'
 import { FinancingStatementType } from '@/financing-statement/financing-statement-type'
-import { PersonNameModel } from '@/components/person-name-model'
 
 Vue.use(Vuetify)
 Vue.use(VueCompositionApi)
 
 const vuetify = new Vuetify()
 
-describe('FinancingStatmentContainer.vue', (): void => {
+describe('FinancingStatement.vue', (): void => {
   describe(':props', (): void => {
     it(':editing - false contains no inputs', (): void => {
       const properties = ref({ editing: false, value: new FinancingStatementModel() })
@@ -52,15 +52,18 @@ describe('FinancingStatmentContainer.vue', (): void => {
     it('@input - type change should be displayed', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
       const sel = wrapper.get('input[data-test-id="FinancingStatement.type.select"]')
       sel.setValue('REPAIRERS_LIEN')
       await Vue.nextTick()
+
       expect(wrapper.text()).toContain(FinancingStatementType.REPAIRERS_LIEN)
     })
 
     it('@input - type change should be emitted', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
       const sel = wrapper.get('input[data-test-id="FinancingStatement.type.select"]')
       sel.setValue('REPAIRERS_LIEN')
       await Vue.nextTick()
@@ -115,7 +118,6 @@ describe('FinancingStatmentContainer.vue', (): void => {
   })
 
   describe('white box testing', (): void => {
-
     function makeFS(): FinancingStatementModel {
       let aParty
       aParty = new BasePartyModel()
@@ -136,6 +138,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
         new PersonNameModel('first', 'middle', 'last'), securedParties, debtorParties)
       return financingStatement
     }
+
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     function addParty(list: BasePartyModel[]) {
       let sp = [...list]
@@ -143,6 +146,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
       const newParty = new BasePartyModel()
       newParty.listId = last.listId + 1
       sp.push(newParty)
+
       return sp
     }
 
@@ -150,6 +154,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
       const financingStatement = makeFS()
       const properties = ref({ editing: true, value: financingStatement })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const vm: any = wrapper.vm
       vm.updateType(FinancingStatementType.REPAIRERS_LIEN)
@@ -164,6 +169,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
       const financingStatement = makeFS()
       const properties = ref({ editing: true, value: financingStatement })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const vm: any = wrapper.vm
       const newList = addParty(financingStatement.securedParties)
@@ -179,6 +185,7 @@ describe('FinancingStatmentContainer.vue', (): void => {
       const financingStatement = makeFS()
       const properties = ref({ editing: true, value: financingStatement })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const vm: any = wrapper.vm
       const newList = addParty(financingStatement.debtorParties)
@@ -190,5 +197,4 @@ describe('FinancingStatmentContainer.vue', (): void => {
       expect(emitted.debtorParties).toHaveLength(3)
     })
   })
-
 })
