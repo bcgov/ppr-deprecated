@@ -6,6 +6,7 @@ from sqlalchemy.dialects import postgresql
 
 import models.financing_statement
 import models.payment
+import schemas.search
 
 from .database import BaseORM
 
@@ -26,6 +27,13 @@ class Search(BaseORM):
     results = sqlalchemy.orm.relationship('SearchResult', back_populates='search')
     payment = sqlalchemy.orm.relationship(models.payment.Payment.__name__)
 
+    def as_schema(self):
+        """Convert search meta data to its API Schema representation."""
+        return schemas.search.Search(
+            id=self.id, type=self.type_code, criteria=self.criteria, searchDateTime=self.creation_date_time,
+            payment=self.payment.as_schema() if self.payment else None
+        )
+
 
 class SearchResult(BaseORM):
     """Represents the database structure for storing search results."""
@@ -40,3 +48,10 @@ class SearchResult(BaseORM):
 
     search = sqlalchemy.orm.relationship('Search', back_populates='results')
     financing_statement_event = sqlalchemy.orm.relationship(models.financing_statement.FinancingStatementEvent.__name__)
+
+    def as_schema(self):
+        """Convert a search result to its external facing schema representation."""
+        return schemas.search.SearchResult(
+            type=schemas.search.SearchResultType(self.exact).name,
+            financingStatement=self.financing_statement_event.as_financing_statement_schema()
+        )

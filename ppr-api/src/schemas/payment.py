@@ -9,8 +9,3 @@ class Payment(pydantic.BaseModel):  # pylint:disable=no-member
     id: int
     status: str
     method: str
-
-    class Config:
-        """pydantic configuration that allows automatic mapping from a database model class."""
-
-        orm_mode = True

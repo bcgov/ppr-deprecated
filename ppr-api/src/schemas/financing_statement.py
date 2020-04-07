@@ -8,6 +8,7 @@ import pydantic
 
 import schemas.collateral
 import schemas.party
+import schemas.payment
 
 
 class RegistrationType(enum.Enum):
@@ -67,6 +68,7 @@ class FinancingStatement(FinancingStatementBase):
     documentId: str = None
     registrationDateTime: datetime.datetime = None
     expiryDate: datetime.date = None
+    payment: schemas.payment.Payment = None
 
     class Config:
         """pydantic configuration that configures the API to output date times to the second."""

@@ -62,15 +62,6 @@ class SearchBase(pydantic.BaseModel):  # pylint:disable=no-member
 
         return criteria
 
-    class Config:
-        """pydantic configuration allowing mapping from the model."""
-
-        orm_mode = True
-        allow_population_by_alias = True
-        fields = {
-            'type': {'alias': 'type_code'}
-        }
-
 
 class Search(SearchBase):  # pylint:disable=no-member
     """The API representation of a search, including all output fields."""
@@ -80,13 +71,8 @@ class Search(SearchBase):  # pylint:disable=no-member
     payment: schemas.payment.Payment = None
 
     class Config:
-        """pydantic configuration allowing mapping from the model."""
+        """pydantic configuration for formatting output."""
 
-        orm_mode = True
-        allow_population_by_alias = True
-        fields = {
-            'searchDateTime': {'alias': 'creation_date_time'}
-        }
         json_encoders = {
             datetime.datetime: lambda dt: dt.isoformat(timespec='seconds')
         }

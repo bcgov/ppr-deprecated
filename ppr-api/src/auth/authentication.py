@@ -19,7 +19,7 @@ bearer_scheme = fastapi.security.HTTPBearer()
 
 
 def check_auth_response(response: requests.Response):
-    """Review the response from the external response and throw an error if it was forbidden or unauthorized."""
+    """Review the response from the external API and throw an error if it was forbidden or unauthorized."""
     if response.status_code in [http.HTTPStatus.UNAUTHORIZED, http.HTTPStatus.FORBIDDEN]:
         try:
             body = response.json()
