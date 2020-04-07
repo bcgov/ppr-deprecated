@@ -38,7 +38,10 @@
             p.
               In a production system the entire user draft data may be stored as a single JSON data string keyed by the
               user's id. On load the API could be queried for the stash.  Periodically, this client can PUT an update
-              (say once every five minutes after a change in drafts has been detected).
+              (say once every five minutes after a change in drafts has been detected).  BUT, this approach needs to address
+              synchronization; when a user works on two machines at the same time.  So, consider the simple approach: the
+              user's drafts are private to the user's browser and not shared with anyone, not even with their self on another
+              browser or machine.
             h4 Payments
             p.
               This tab needs a tool bar to let the user filter and sort their list. A download or report generation may
