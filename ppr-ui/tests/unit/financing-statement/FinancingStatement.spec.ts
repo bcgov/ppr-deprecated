@@ -83,6 +83,16 @@ describe('FinancingStatement.vue', (): void => {
       expect(emitted.years).toBe('22')
     })
 
+    it('@valid - missing life should be false', async (): Promise<void> => {
+      const properties = ref({ editing: true, value: new FinancingStatementModel() })
+      const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
+
+      wrapper.get('input[name="lifeInput"]').setValue('')
+      await Vue.nextTick()
+
+      expect(wrapper.emitted('valid').slice(-1)[0][0]).toBeFalsy()
+    })
+
     it('@valid - invalid life should be false', async (): Promise<void> => {
       const properties = ref({ editing: true, value: new FinancingStatementModel() })
       const wrapper: Wrapper<Vue> = mount(FinancingStatement, { propsData: properties.value, vuetify })
