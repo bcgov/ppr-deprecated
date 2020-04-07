@@ -1,0 +1,16 @@
+#=========================================================
+# Template parameters for:
+# Project: ppr
+# Component: ppr-ui
+# Action: deploy
+# Template File: ppr-ui/openshift/ppr-ui-dc.yaml
+# Hint: oc process -f ppr-ui-dc.yaml --param-file=ppr-ui-dc.dev.param | oc -n zwmtib-dev apply -f -
+#=========================================================
+APP_NAME="ppr-ui-proto"
+APP_PATH="/"
+CADDY_CONFIG="ppr-ui-caddy-config"
+ENVIRONMENT="dev"
+IMAGE_TAG="latest"
+PPR_GROUP="ppr-ui-proto"
+ROUTE_HOST="ppr-proto.pathfinder.gov.bc.ca"
+
