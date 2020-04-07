@@ -1,0 +1,17 @@
+#=========================================================
+# Template parameters for:
+# Project: ppr
+# Component: ppr-ui-inter
+# Action: build
+# Template File: ppr-ui/openshift/ppr-ui-bc-inter.yaml
+# Hint: oc process -f ppr-ui-inter-bc.yaml --param-file=ppr-ui-inter-bc.param | oc apply -n zwmtib-tools -f -
+
+# Hint to build
+# oc start-build $APP_INTER_NAME --follow --wait  &&  oc start-build $APP_UI_NAME
+# oc start-build ppr-ui-proto-inter --follow --wait  &&  oc start-build ppr-ui-proto
+#=========================================================
+APP_NAME="ppr-ui-proto-inter"
+APP_PATH="/"
+GIT_REF="prototype"
+GIT_URI="https://github.com/bcgov/ppr"
+PPR_GROUP="ppr-ui-proto"

@@ -1,0 +1,77 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app: ppr
+      build: ${APP_NAME}
+      pprgroup: ${PPR_GROUP}
+      role: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    failedBuildsHistoryLimit: 5
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APP_NAME}:latest
+    resources:
+      limits:
+        cpu: '2'
+        memory: 3Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
+    source:
+      # 1. Checks out the repo; 2 sets the context to be the UI client code; 3 builds the Vue app.
+      # result is an image containing the client code folder and a fully built Vue distribution (in dist folder)
+      contextDir: proto
+      dockerfile: |
+        FROM node:8
+        COPY . .
+        RUN npm install
+        RUN npm run build
+      git:
+        uri: ${GIT_URI}
+        ref: ${GIT_REF}
+      type: Git
+    strategy:
+      dockerStrategy:
+        env:
+          - name: APP_PATH
+            value: ${APP_PATH}
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ppr
+      pprgroup: ${PPR_GROUP}
+      role: ${APP_NAME}
+    name: ${APP_NAME}
+  spec:
+    lookupPolicy:
+      local: false
+parameters:
+- description: The name of the intermediate build image for the PPR UI
+  displayName: APP Name
+  name: APP_NAME
+  required: true
+- description: The sub-path to the web application
+  displayName: APP path
+  name: APP_PATH
+  required: true
+- description: The git repository ref (branch)
+  displayName: Git ref (branch)
+  name: GIT_REF
+  required: true
+- description: The git repository URI
+  displayName: Git URI
+  name: GIT_URI
+  required: true
+- description: A label applied to all PPR UI related resources across tools and dev namespaces. Useful to use with oc get all -l apptag=ppr
+  displayName: PPR group
+  name: PPR_GROUP
+  required: true

@@ -1,0 +1,29 @@
+/*
+Import the SCSS definitions.  Theses definitions are also imported into
+components, as needed, because the definitions are just variables
+and mixins there is no CSS code bloat.
+ */
+@import 'theme';
+@import 'base';
+@import 'layout';
+@import "overrides";
+
+.app-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+.app-body {
+  padding-bottom: 2rem;
+}
+
+.invalid {
+  border: 1px solid red;
+}
+
+
+section {
+  margin: 1rem 0;
+}
