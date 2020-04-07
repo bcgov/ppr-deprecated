@@ -1,5 +1,22 @@
 <template lang="pug">
   v-form
+    proto-to-do
+      p.
+        This tab lets the user determine who owns the lien. In older PPR systems these fields are free form
+        and users can enter business or person names with addresses. In this prototype we show what it'd be like
+        if the user is restricted to use pre-defined "client codes".  The name "client code" or "party code" comes
+        from the code number used to identify the party in the older system.  In a newer system it's preferable to just
+        use the business name in the lookahead.  Begs the question, what to call these.
+      p.
+        Once a user selects a secured party from the lookup list we must show the address.
+        Also consider making it easy for the user to create a new "client code"
+      p.
+        The lookup id could be (should be?) stored in the financing statement.  This way the party record can be
+        updated/corrected later. Or this way a Global Change of Registered Interest (GCRI) can be applied with consistency
+        and certainty.  A GCRI is usefule when one secured party sells all their interests to another business entity.
+      p.
+        Question: should the client code be replace with a reference to the BC business (VON) registry?
+
     v-list
       ppr-list-item(
         v-for="(securedParty, index) in value",
@@ -27,11 +44,12 @@ import { createComponent, ref } from '@vue/composition-api'
 import { SecuredPartyModel } from '@/secured-parties/secured-party-model.ts'
 import SecuredParty from '@/secured-parties/SecuredParty.vue'
 import PprListItem from '@/components/PprListItem.vue'
+import ProtoToDo from '@/components/ProtoToDo.vue'
 
 export default createComponent({
   components: {
     SecuredParty,
-    PprListItem
+    PprListItem, ProtoToDo
   },
   props: {
     editing: {

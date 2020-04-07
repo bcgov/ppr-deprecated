@@ -1,40 +1,44 @@
 <template lang="pug">
   div
     section
+      p.
+        Registration number search performs an exact match lookup on the base registration number property.
       search-input(
-      id="regNum",
-      label="Registration number",
-      :hint="regNumValidDescription",
-      :rules="regNumValidationRules",
-      @search="doSearch('regNum',$event)"
+        id="regNum",
+        label="Registration number",
+        :hint="regNumValidDescription",
+        :rules="regNumValidationRules",
+        @search="doSearch('regNum',$event)"
+        )
+    section
+      p.
+        Serial number search looks for exact matches and for any serial number that matches the last six characters (similar matches).
+      search-input(
+        id="serial",
+        label="Serial number",
+        :hint="serialValidDescription",
+        :rules="serialValidationRules",
+        @search="doSearch('serial',$event)"
       )
     section
+      p.
+        Debtor search is not yet implemented, in this prototype.
       search-input(
-      id="serial",
-      label="Serial number",
-      :hint="serialValidDescription",
-      :rules="serialValidationRules",
-      @search="doSearch('serial',$event)"
-      )
-    p.
-      Debtor search is not yet implemented in this prototype.
-    section
-      search-input(
-      id="debtor",
-      disabled=true,
-      label="Debtor name",
-      :hint="debtorValidDescription",
-      :rules="debtorValidationRules",
-      @search="doSearch('debtor',$event)"
+        id="debtor",
+        disabled=true,
+        label="Debtor name",
+        :hint="debtorValidDescription",
+        :rules="debtorValidationRules",
+        @search="doSearch('debtor',$event)"
       )
 
       payment-dialog(
-      title="Pay and Search",
-      paymentCode="SEARCH",
-      quantity="1",
-      :open="openPaymentDialog",
-      @proceed="proceed",
-      @cancel="cancel"
+        title="Pay and Search",
+        paymentCode="SEARCH",
+        quantity="1",
+        :open="openPaymentDialog",
+        @proceed="proceed",
+        @cancel="cancel"
       )
 
 </template>
