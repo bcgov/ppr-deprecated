@@ -1,3 +1,5 @@
+"""Contains an IoC injectable repository class for interactions with the database involving Financing Statements."""
+
 import datedelta
 import fastapi
 import sqlalchemy.orm
@@ -15,6 +17,7 @@ from schemas.financing_statement import RegistrationType
 
 
 def map_party_schema_to_model(party_type: schemas.party.PartyType, schema: schemas.party.Party, birthdate=None):
+    """Map a party provided from user input to the model object representing the database structure."""
     address = models.party.Address(
         line1=schema.address.street, line2=schema.address.streetAdditional, city=schema.address.city,
         region=schema.address.region, country=schema.address.country, postal_code=schema.address.postalCode
@@ -29,6 +32,7 @@ def map_party_schema_to_model(party_type: schemas.party.PartyType, schema: schem
 
 
 def map_vehicle_collateral_schema_to_model(schema: schemas.collateral.VehicleCollateral):
+    """Map vehicle collateral from user input to the model object representing the database structure."""
     return models.collateral.VehicleCollateral(
         type_code=schemas.collateral.VehicleType[schema.type].value, year=schema.year, make=schema.make,
         model=schema.model, serial_number=schema.serial, mhr_number=schema.manufacturedHomeRegNumber
@@ -36,13 +40,17 @@ def map_vehicle_collateral_schema_to_model(schema: schemas.collateral.VehicleCol
 
 
 class FinancingStatementRepository:
+    """Class for performing database operations on Financing Statements."""
+
     db: sqlalchemy.orm.Session
 
     def __init__(self, session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
+        """Initialize the repository with a session provided by Dependency Injection."""
         self.db = session
 
     def create_financing_statement(self, fs_input: schemas.financing_statement.FinancingStatementBase,
                                    user: auth.authentication.User):
+        """Create a new Financing Statement record with a corresponding event."""
         reg_type = RegistrationType[fs_input.type]
         reg_num = self.next_registration_number()
         today = utils.datetime.today_pacific()
@@ -98,7 +106,9 @@ class FinancingStatementRepository:
         return model
 
     def get_financing_statement(self, base_registration_number: str):
+        """Find the Financing Statement record with the matching registration number, or None if not found."""
         return self.db.query(models.financing_statement.FinancingStatement).get(base_registration_number)
 
     def next_registration_number(self):
+        """Get the next available Registration Number based on the database sequence."""
         return str(self.db.execute(sqlalchemy.Sequence('reg_number_seq')))

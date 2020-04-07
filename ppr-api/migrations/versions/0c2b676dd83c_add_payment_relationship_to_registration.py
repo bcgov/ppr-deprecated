@@ -1,4 +1,4 @@
-"""Add payment relationship to registration
+"""Add payment relationship to registration.
 
 Revision ID: 0c2b676dd83c
 Revises: 78102181c4b3

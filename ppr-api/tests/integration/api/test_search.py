@@ -155,8 +155,8 @@ def test_search_results_should_provide_party_at_time_of_search():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         registering_party={'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
                            'business_name': 'Mr. Plow',
-                           'address':  {'line1': '724 Evergreen Terrace', 'line2': 'first floor', 'city': 'Springfield',
-                                        'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}
+                           'address': {'line1': '724 Evergreen Terrace', 'line2': 'first floor', 'city': 'Springfield',
+                                       'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}
     )
     fin_stmt = sample_data_utility.create_test_financing_statement_event(
         fin_stmt, registering_party={'first_name': 'Charles', 'middle_name': 'Montgomery', 'last_name': 'Burns'}
@@ -208,8 +208,8 @@ def test_search_results_should_provide_secured_parties_details():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         secured_parties=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson',
                           'business_name': 'Mr. Plow',
-                          'address':  {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
-                                       'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
+                          'address': {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
+                                      'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
     )
     search = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER',
                                                            {'value': fin_stmt.registration_number},
@@ -237,8 +237,8 @@ def test_search_results_should_provide_debtor_details():
     fin_stmt = sample_data_utility.create_test_financing_statement(
         debtors=[{'first_name': 'Homer', 'middle_name': 'Jay', 'last_name': 'Simpson', 'business_name': 'Mr. Plow',
                   'birthdate': datetime.date(2019, 6, 17),
-                  'address':  {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
-                               'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
+                  'address': {'line1': '724 Evergreen Terrace', 'line2': '1st floor', 'city': 'Springfield',
+                              'region': 'BC', 'country': 'CA', 'postal_code': 'V1A 1A1'}}]
     )
     search = sample_data_utility.create_test_search_record('REGISTRATION_NUMBER',
                                                            {'value': fin_stmt.registration_number},

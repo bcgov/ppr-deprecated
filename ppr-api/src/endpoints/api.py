@@ -1,4 +1,4 @@
-""" Set up all the endpoints for the web service. """
+"""Set up all the endpoints for the web service."""
 
 import fastapi
 

@@ -1,4 +1,4 @@
-"""add birthdate field to financing statement party
+"""add birthdate field to financing statement party.
 
 Revision ID: 324c3ef5f86c
 Revises: b80c93987478

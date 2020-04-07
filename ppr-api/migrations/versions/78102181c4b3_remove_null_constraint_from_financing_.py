@@ -1,4 +1,4 @@
-"""Remove null constraint from financing_statement.life
+"""Remove null constraint from financing_statement.life.
 
 Revision ID: 78102181c4b3
 Revises: 0cd6352f62d1

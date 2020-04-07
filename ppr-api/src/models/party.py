@@ -1,3 +1,5 @@
+"""Module for database models encapsulating party related tables."""
+
 import sqlalchemy
 import sqlalchemy.orm
 
@@ -7,6 +9,8 @@ from .database import BaseORM
 
 
 class Party(BaseORM):
+    """Represents the database structure of all types of parties."""
+
     __tablename__ = 'fs_party'
 
     id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
@@ -27,6 +31,7 @@ class Party(BaseORM):
     address = sqlalchemy.orm.relationship('Address')
 
     def as_schema(self):
+        """Convert a party to its API Schema representation."""
         person_name = schemas.party.IndividualName(
             first=self.first_name, middle=self.middle_name, last=self.last_name
         ) if self.last_name else None
@@ -43,6 +48,8 @@ class Party(BaseORM):
 
 
 class Address(BaseORM):
+    """Represents the database structure of an address."""
+
     __tablename__ = 'address'
 
     id = sqlalchemy.Column('addr_id', sqlalchemy.BigInteger, primary_key=True)
@@ -55,6 +62,7 @@ class Address(BaseORM):
     postal_code = sqlalchemy.Column('postal_cd', sqlalchemy.String)
 
     def as_schema(self):
+        """Convert an address to its API Schema representation."""
         return schemas.party.Address(
             street=self.line1, streetAdditional=self.line2, city=self.city, region=self.region, country=self.country,
             postalCode=self.postal_code

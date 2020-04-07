@@ -1,4 +1,4 @@
-"""Create financing statement_code_tables
+"""Create financing statement code tables.
 
 Revision ID: 5f4529578e39
 Revises: 1461b03c20de

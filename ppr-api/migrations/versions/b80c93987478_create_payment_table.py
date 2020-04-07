@@ -1,4 +1,4 @@
-"""Create payment table
+"""Create payment table.
 
 Revision ID: b80c93987478
 Revises: 0268e186a129

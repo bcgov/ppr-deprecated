@@ -1,3 +1,5 @@
+"""Module for database models encapsulating collateral tables."""
+
 import itertools
 
 import sqlalchemy
@@ -12,6 +14,8 @@ REGISTRATION_KEY = 'registration.reg_number'
 
 
 class GeneralCollateral(BaseORM):
+    """Represents the database structure of General Collateral."""
+
     __tablename__ = 'general'
 
     id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
@@ -27,6 +31,8 @@ class GeneralCollateral(BaseORM):
     @staticmethod
     def list_as_schema(general_collateral: list, events: list):
         """
+        Group GeneralCollateral descriptions into one for each event.
+
         When output in the API, individual lines added for a single event need to be combined into one. This is
         primarily for the purpose of handling historical data from the legacy PPR system, but also allows the API to
         split input that too large into multiple rows.
@@ -38,7 +44,7 @@ class GeneralCollateral(BaseORM):
             list of schemas.collateral.GeneralCollateral
         """
         def grouped_gc_to_schema(event_reg_number, gc_event_list):
-            """For each starting event, the general collateral descriptions should be joined together into one"""
+            """For each starting event, the general collateral descriptions should be joined together into one."""
             event = next((e for e in events if e.registration_number == event_reg_number), None)
             sorted_collateral = sorted(gc_event_list, key=lambda e: e.index or 0)
             description = ''.join(map(lambda gc: gc.description, sorted_collateral))
@@ -50,6 +56,8 @@ class GeneralCollateral(BaseORM):
 
 
 class VehicleCollateral(BaseORM):
+    """Represents the database structure of Vehicle (or serial) Collateral."""
+
     __tablename__ = 'vehicle'
 
     id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
@@ -67,6 +75,7 @@ class VehicleCollateral(BaseORM):
     mhr_number = sqlalchemy.Column(sqlalchemy.String(length=7))
 
     def as_schema(self):
+        """Convert a Vehicle Collateral to its API Schema representation."""
         return schemas.collateral.VehicleCollateral(
             type=schemas.collateral.VehicleType(self.type_code).name, year=self.year, make=self.make, model=self.model,
             serial=self.serial_number, manufacturedHomeRegNumber=self.mhr_number

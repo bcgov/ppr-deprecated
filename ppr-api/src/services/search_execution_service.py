@@ -1,3 +1,5 @@
+"""A service module for implementing search functionality."""
+
 import fastapi
 import sqlalchemy.orm
 
@@ -40,15 +42,20 @@ JOIN (
 
 
 class SearchExecutionService:
+    """A Dependency Injection enabled class that encapsulates the business logic for search operations."""
+
     db: sqlalchemy.orm.Session
 
     def __init__(self, session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
+        """Initialize the service with a database session provided by Dependency Injection."""
         self.db = session
 
     def find_latest_event_numbers_for_mhr_number(self, mhr_number: str):
+        """Perform a search by MHR Number. Returns a list of event registration numbers."""
         results = self.db.execute(MHR_SEARCH_SQL, {'mhr_number': mhr_number.upper()})
         return list(map(lambda row: row[0], results))
 
     def find_latest_event_number_for_registration_number(self, reg_number: str):
+        """Perform a search by Registration Number. Returns an event registration numbers or None if not found."""
         row = self.db.execute(REGISTRATION_SEARCH_SQL, {'registration_number': reg_number.upper()}).first()
         return row[0] if row else None

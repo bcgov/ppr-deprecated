@@ -15,7 +15,7 @@ db.close()
 
 @pytest.fixture(autouse=True)
 def default_remote_user_dependency():
-    """Override the get_user_from_auth Fast API dependency to eliminate the need for an external Auth API service"""
+    """Override the get_user_from_auth Fast API dependency to eliminate the need for an external Auth API service."""
     def mock_get_user_from_auth():
         return {'keycloakGuid': 'fake_user_id', 'username': 'fake_user_name'}
 
@@ -30,13 +30,13 @@ def create_mock_remote_payment():
 
 @pytest.fixture
 def mock_payment():
-    """Fixture that can be injected into a test to get a new Payment object directly"""
+    """Fixture that can be injected into a test to get a new Payment object directly."""
     return create_mock_remote_payment()
 
 
 @pytest.fixture(autouse=True)
 def default_payment_dependency():
-    """Override the PaymentService Fast API dependency to eliminate the need for an external Payment service"""
+    """Override the PaymentService Fast API dependency to eliminate the need for an external Payment service."""
     main.app.dependency_overrides[services.payment_service.PaymentService] = MockPaymentService
 
 

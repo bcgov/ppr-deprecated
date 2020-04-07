@@ -1,4 +1,4 @@
-"""create collateral tables
+"""create collateral tables.
 
 Revision ID: 34af2f12a9ae
 Revises: 6411b673d98b

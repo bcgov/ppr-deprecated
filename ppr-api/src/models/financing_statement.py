@@ -1,3 +1,5 @@
+"""Module for database models encapsulating the core financing statement tables."""
+
 import sqlalchemy
 import sqlalchemy.orm
 
@@ -12,6 +14,8 @@ from .database import BaseORM
 
 
 class FinancingStatement(BaseORM):
+    """Represents the database structure of a Financing Statement."""
+
     __tablename__ = 'financing_statement'
 
     registration_number = sqlalchemy.Column('reg_number', sqlalchemy.String(length=10), primary_key=True)
@@ -45,6 +49,7 @@ class FinancingStatement(BaseORM):
     )
 
     def as_schema(self):
+        """Convert a Financing Statement to its API Schema representation."""
         base_event = self.get_base_event()
         reg_date = base_event.registration_date if base_event else None
         reg_party_model = self.get_registering_party()
@@ -67,19 +72,25 @@ class FinancingStatement(BaseORM):
         )
 
     def get_base_event(self):
+        """Find the event created for the Base Registration."""
         return next((e for e in self.events if e.registration_number == self.registration_number), None)
 
     def get_debtors(self):
+        """Filter the parties to get only the debtors."""
         return list(filter(lambda p: p.type_code == PartyType.DEBTOR.value, self.parties))
 
     def get_registering_party(self):
+        """Fine the registering party from the list of active parties."""
         return next((p for p in self.parties if p.type_code == PartyType.REGISTERING.value), None)
 
     def get_secured_parties(self):
+        """Filter the parties to get only the secured parties."""
         return list(filter(lambda p: p.type_code == PartyType.SECURED.value, self.parties))
 
 
 class FinancingStatementEvent(BaseORM):
+    """Represents the database structure of a Financing Statement Event (aka Registration)."""
+
     __tablename__ = 'registration'
 
     registration_number = sqlalchemy.Column('reg_number', sqlalchemy.String(length=10), primary_key=True)

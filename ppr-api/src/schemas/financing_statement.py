@@ -1,3 +1,5 @@
+"""Provides classes that represent financing statements in the API contract."""
+
 import datetime
 import enum
 import typing
@@ -9,6 +11,8 @@ import schemas.party
 
 
 class RegistrationType(enum.Enum):
+    """An enumeration of the allowable financing statement types."""
+
     SECURITY_AGREEMENT = 'SA'             # PPSA Security Agreement
     REPAIRERS_LIEN = 'RL'                 # Repairer's Lien
     MFD_HOME_SEPARATION_AGREEMENT = 'FR'  # Marriage/Separation Agreement affecting Mfd. Home under Family Law Act
@@ -22,6 +26,8 @@ class RegistrationType(enum.Enum):
 
 
 class FinancingStatementBase(pydantic.BaseModel):  # pylint:disable=no-member
+    """The API representation of input fields supported for a financing statement."""
+
     type: str
     lifeYears: int = None
     lifeInfinite: bool = None
@@ -37,6 +43,7 @@ class FinancingStatementBase(pydantic.BaseModel):  # pylint:disable=no-member
     # TODO ppr#889 Suppress validation by default, only call it explicitly on write operations
     @pydantic.root_validator
     def validate_life(cls, values):  # pylint:disable=no-self-argument # noqa: N805
+        """Validate life input to ensure it is allowable based on type and field combinations."""
         reg_type = RegistrationType[values.get('type')]
         years = values.get('lifeYears')
         infinite = values.get('lifeInfinite')
@@ -54,12 +61,16 @@ class FinancingStatementBase(pydantic.BaseModel):  # pylint:disable=no-member
 
 
 class FinancingStatement(FinancingStatementBase):
+    """The API representation of a financing statement, including all output fields."""
+
     baseRegistrationNumber: str
     documentId: str = None
     registrationDateTime: datetime.datetime = None
     expiryDate: datetime.date = None
 
     class Config:
+        """pydantic configuration that configures the API to output date times to the second."""
+
         json_encoders = {
             datetime.datetime: lambda dt: dt.isoformat(timespec='seconds')
         }

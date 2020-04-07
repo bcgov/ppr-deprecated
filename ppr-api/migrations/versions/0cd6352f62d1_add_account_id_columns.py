@@ -1,4 +1,4 @@
-"""Add account id columns
+"""Add account id columns.
 
 Revision ID: 0cd6352f62d1
 Revises: a40891a0a749

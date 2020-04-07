@@ -1,3 +1,5 @@
+"""The entry point into the PPR API Application."""
+
 import fastapi
 import sentry_sdk
 import sentry_sdk.integrations.sqlalchemy

@@ -1,4 +1,4 @@
-"""Create foreign key relationship between search_result and registration
+"""Create foreign key relationship between search_result and registration.
 
 Revision ID: 947ffeeeda60
 Revises: fc3c53132a9b
