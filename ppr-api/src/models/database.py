@@ -1,6 +1,7 @@
 """
-A proxy class for database access for use while we have multiple databases configured.  For the time being it will
-point to the patroni configuration, but can be changed down the road when we switch to EDB.
+A proxy class for database access for use while we have multiple databases configured.
+
+For the time being it will point to the patroni configuration, but can be changed down the road when we switch to EDB.
 """
 
 import sqlalchemy.ext.declarative

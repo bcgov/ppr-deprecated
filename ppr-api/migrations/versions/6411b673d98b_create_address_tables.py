@@ -1,4 +1,4 @@
-"""create_address_tables
+"""Create address tables.
 
 Revision ID: 6411b673d98b
 Revises: 947ffeeeda60

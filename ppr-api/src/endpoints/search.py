@@ -1,4 +1,4 @@
-""" Define the endpoints for searching. """
+"""Define the endpoints for searching."""
 
 import typing
 
@@ -18,8 +18,8 @@ import schemas.financing_statement
 import schemas.party
 import schemas.payment
 import schemas.search
-import service.search_execution_service
 import services.payment_service
+import services.search_execution_service
 import utils.datetime
 from schemas.financing_statement import RegistrationType
 from schemas.party import PartyType
@@ -32,7 +32,7 @@ router = fastapi.APIRouter()
 def read_search(search_id: int, search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
                 user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
     """
-    Get the details for a previously submitted search request
+    Get the details for a previously submitted search request.
 
         Parameters:
             search_id: The identifier of the search instance to lookup
@@ -50,8 +50,9 @@ def create_search(response: responses.Response, search_input: schemas.search.Sea
                   search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
                   fs_repo: repository.financing_statement_repository.FinancingStatementRepository = fastapi.Depends(),
                   user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user),
-                  search_exec_service: service.search_execution_service.SearchExecutionService = fastapi.Depends(),
+                  search_exec_service: services.search_execution_service.SearchExecutionService = fastapi.Depends(),
                   payment_service: services.payment_service.PaymentService = fastapi.Depends()):
+    """Submit and execute a new search."""
     exact_matches = []
     similar_matches = []
     criteria_value = search_input.criteria['value'].strip() if 'value' in search_input.criteria else None
@@ -75,7 +76,7 @@ def read_search_results(search_id: int,
                         search_repository: repository.search_repository.SearchRepository = fastapi.Depends(),
                         user: auth.authentication.User = fastapi.Depends(auth.authentication.get_current_user)):
     """
-    List the results for the provided search
+    List the results for the provided search.
 
         Parameters:
             search_id: The identifier of the search instance to lookup
@@ -90,6 +91,7 @@ def read_search_results(search_id: int,
 
 
 def map_search_result_output(search_result: models.search.SearchResult):
+    """Convert a search result database object to its external facing schema representation."""
     search_result_type = schemas.search.SearchResultType(search_result.exact).name
     event = search_result.financing_statement_event
     financing_statement = rebuild_financing_statement_to_event(event)
@@ -99,6 +101,8 @@ def map_search_result_output(search_result: models.search.SearchResult):
 
 def rebuild_financing_statement_to_event(event: models.financing_statement.FinancingStatementEvent):
     """
+    Rebuild the state of a financing statement up to the point of the provided event.
+
     Given an event, provide a Financing Statement result that represents the state as once that event was applied. This
     is done by applying events in order and ignoring events that occur after the one provided.
 
@@ -164,7 +168,8 @@ def rebuild_financing_statement_to_event(event: models.financing_statement.Finan
 
 def filter_ending(registration_number: str, items: list):
     """
-    Get a subset of the provided list that excludes items that were not removed for the specified registration number
+    Get a subset of the provided list that excludes items that were not removed for the specified registration number.
+
     :param registration_number: The registration number to filter out items for
     :param items: A list of items to be filtered.  Must have a 'ending_registration_number' attribute
     :return: The filtered list

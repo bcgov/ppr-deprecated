@@ -1,4 +1,4 @@
-"""Create search table
+"""Create search table.
 
 Revision ID: c17a9c638a89
 Revises:

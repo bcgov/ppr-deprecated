@@ -1,4 +1,4 @@
-"""add UUID supporting userid
+"""add UUID supporting user_id.
 
 Revision ID: 0268e186a129
 Revises: b4ee1da81531

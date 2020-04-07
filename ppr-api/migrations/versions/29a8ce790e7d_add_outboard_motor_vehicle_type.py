@@ -1,4 +1,4 @@
-"""Add Outboard Motor vehicle type
+"""Add Outboard Motor vehicle type.
 
 Revision ID: 29a8ce790e7d
 Revises: 324c3ef5f86c

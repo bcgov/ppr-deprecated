@@ -1,3 +1,5 @@
+"""Module for database models encapsulating search related tables."""
+
 import sqlalchemy
 import sqlalchemy.orm
 from sqlalchemy.dialects import postgresql
@@ -9,6 +11,8 @@ from .database import BaseORM
 
 
 class Search(BaseORM):
+    """Represents the database structure of search metadata."""
+
     __tablename__ = 'search'
 
     id = sqlalchemy.Column(sqlalchemy.BigInteger, primary_key=True)
@@ -24,6 +28,8 @@ class Search(BaseORM):
 
 
 class SearchResult(BaseORM):
+    """Represents the database structure for storing search results."""
+
     __tablename__ = 'search_result'
 
     search_id = sqlalchemy.Column(sqlalchemy.BigInteger, sqlalchemy.ForeignKey('search.id'), primary_key=True)

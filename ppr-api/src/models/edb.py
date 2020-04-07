@@ -1,4 +1,4 @@
-""" Set up SQL Alchemy to access the EDB (or stand-in PostgreSQL) database. """
+"""Set up SQL Alchemy to access the EDB (or stand-in PostgreSQL) database."""
 
 import sqlalchemy
 import sqlalchemy.orm
@@ -20,8 +20,9 @@ SessionLocal = sqlalchemy.orm.sessionmaker(autocommit=False, autoflush=False, bi
 
 def get_session():
     """
-    Returns a session using yield to facilitate using it as a dependency in FastAPI.  See
-    https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/
+    Get a new session using yield to facilitate using it as a dependency in FastAPI.
+
+    See https://fastapi.tiangolo.com/tutorial/dependencies/dependencies-with-yield/
     """
     db = SessionLocal()
     try:

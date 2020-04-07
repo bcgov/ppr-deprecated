@@ -1,4 +1,4 @@
-""" Define the Kubernetes health checks, plus health check of the database. """
+"""Define the Kubernetes health checks, plus health check of the database."""
 
 import logging
 import time
@@ -21,9 +21,7 @@ STATUS_DOWN = 'DOWN'
 
 @router.get('/health')
 def health():
-    """
-    Returns a health check for this service - if reachable always indicates up.
-    """
+    """Determine the health of the PPR API service - if reachable always indicates up."""
     return {
         'status': STATUS_UP
     }
@@ -32,30 +30,25 @@ def health():
 @router.get('/database')
 def database(response: responses.Response,
              session: sqlalchemy.orm.Session = fastapi.Depends(models.database.get_session)):
-    """
-    Returns a health check for the reachability of the default system database.
-    """
+    """Determine the health for the reachability of the default system database."""
     return db_health(response, session, 'Database delegator')
 
 
 @router.get('/patroni')
 def patroni(response: responses.Response,
             session: sqlalchemy.orm.Session = fastapi.Depends(models.patroni.get_session)):
-    """
-    Returns a health check for the reachability of the Patroni database.
-    """
+    """Determine the health for the reachability of the Patroni database."""
     return db_health(response, session, 'Patroni')
 
 
 @router.get('/edb')
 def edb(response: responses.Response, session: sqlalchemy.orm.Session = fastapi.Depends(models.edb.get_session)):
-    """
-    Returns a health check for the reachability of the EDB (or stand-in) database.
-    """
+    """Determine the health for the reachability of the EDB (or stand-in) database."""
     return db_health(response, session, 'EDB')
 
 
 def db_health(response: responses.Response, session: sqlalchemy.orm.Session, name: str):
+    """Query the database to check the health of the provided session."""
     try:
         start: float = time.perf_counter()
         session.execute('SELECT 1')

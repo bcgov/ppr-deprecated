@@ -1,4 +1,4 @@
-"""Create search_result table
+"""Create search_result table.
 
 Revision ID: 1461b03c20de
 Revises: c17a9c638a89

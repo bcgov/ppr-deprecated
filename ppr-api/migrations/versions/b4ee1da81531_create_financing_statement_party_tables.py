@@ -1,4 +1,4 @@
-"""create financing statement party tables
+"""create financing statement party tables.
 
 Revision ID: b4ee1da81531
 Revises: 34af2f12a9ae

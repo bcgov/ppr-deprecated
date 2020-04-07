@@ -1,3 +1,5 @@
+"""A module that provides functionality for accessing the Payments API."""
+
 import enum
 import http
 import logging
@@ -17,21 +19,27 @@ CORP_TYPE = 'PPR'
 
 
 class FilingCode(enum.Enum):
+    """An enumeration of the filing codes available to PPR."""
+
     SEARCH = 'SERCH'
     YEARLY_REGISTRATION = 'FSREG'
     INFINITE_REGISTRATION = 'INFRG'
 
 
 class PaymentService:
+    """A service used for interacting with the Payments API."""
+
     auth_header: HTTPAuthorizationCredentials
     account_id: str
 
     def __init__(self, auth_header: HTTPAuthorizationCredentials = Depends(auth.authentication.bearer_scheme),
                  account_id: str = Header(None)):
+        """Initialize the repository with the Authorization and Account-Id headers provided in the request."""
         self.auth_header = auth_header
         self.account_id = account_id
 
     def create_payment(self, filing_code: FilingCode):
+        """Submit a payment request and provide the details to the caller."""
         request = {
             'businessInfo': {'corpType': CORP_TYPE},
             'filingInfo': {'filingTypes': [{'filingTypeCode': filing_code.value}]}

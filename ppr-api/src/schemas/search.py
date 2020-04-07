@@ -1,3 +1,5 @@
+"""Provides classes that represent searches in the API contract."""
+
 import datetime
 import enum
 
@@ -8,6 +10,8 @@ import schemas.payment
 
 
 class SearchType(enum.Enum):
+    """An enumeration of the allowable types of search."""
+
     AIRCRAFT_DOT = 'AIRCRAFT_DOT'
     BUSINESS_DEBTOR = 'BUSINESS_DEBTOR'
     INDIVIDUAL_DEBTOR = 'INDIVIDUAL_DEBTOR'
@@ -17,16 +21,21 @@ class SearchType(enum.Enum):
 
 
 class SearchResultType(enum.Enum):
+    """An enumeration of the search result types."""
+
     EXACT = True
     SIMILAR = False
 
 
 class SearchBase(pydantic.BaseModel):  # pylint:disable=no-member
+    """The API representation of input fields supported for a search."""
+
     type: str
     criteria: dict
 
     @pydantic.validator('type')
     def type_must_match_search_type(cls, search_type):  # pylint:disable=no-self-argument # noqa: N805
+        """Ensure the type is a valid SearchType."""
         try:
             SearchType[search_type]
         except KeyError:
@@ -35,6 +44,7 @@ class SearchBase(pydantic.BaseModel):  # pylint:disable=no-member
 
     @pydantic.validator('criteria')
     def criteria_must_match_format_for_type(cls, criteria, values):  # pylint:disable=no-self-argument # noqa: N805
+        """Validate the search criteria based on type."""
         if 'type' not in values:
             return criteria
 
@@ -53,6 +63,8 @@ class SearchBase(pydantic.BaseModel):  # pylint:disable=no-member
         return criteria
 
     class Config:
+        """pydantic configuration allowing mapping from the model."""
+
         orm_mode = True
         allow_population_by_alias = True
         fields = {
@@ -61,11 +73,15 @@ class SearchBase(pydantic.BaseModel):  # pylint:disable=no-member
 
 
 class Search(SearchBase):  # pylint:disable=no-member
+    """The API representation of a search, including all output fields."""
+
     id: int
     searchDateTime: datetime.datetime
     payment: schemas.payment.Payment = None
 
     class Config:
+        """pydantic configuration allowing mapping from the model."""
+
         orm_mode = True
         allow_population_by_alias = True
         fields = {
@@ -77,11 +93,14 @@ class Search(SearchBase):  # pylint:disable=no-member
 
 
 class SearchResult(pydantic.BaseModel):  # pylint:disable=no-member
+    """The API representation of a search result."""
+
     type: str
     financingStatement: schemas.financing_statement.FinancingStatement = None
 
     @pydantic.validator('type')
     def type_must_match_search_result_type(cls, value):  # pylint:disable=no-self-argument # noqa: N805
+        """Ensure the type is a valid SearchResultType."""
         try:
             SearchResultType[value]
         except KeyError:
@@ -89,6 +108,8 @@ class SearchResult(pydantic.BaseModel):  # pylint:disable=no-member
         return value
 
     class Config:
+        """pydantic configuration for formatting output."""
+
         json_encoders = {
             datetime.datetime: lambda dt: dt.isoformat(timespec='seconds')
         }

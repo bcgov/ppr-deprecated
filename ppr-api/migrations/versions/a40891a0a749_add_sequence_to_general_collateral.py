@@ -1,4 +1,4 @@
-"""Add sequence to general collateral
+"""Add sequence to general collateral.
 
 Revision ID: a40891a0a749
 Revises: 29a8ce790e7d

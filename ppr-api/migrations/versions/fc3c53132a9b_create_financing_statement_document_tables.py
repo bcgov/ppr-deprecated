@@ -1,4 +1,4 @@
-"""Create financing statement document tables
+"""Create financing statement document tables.
 
 Revision ID: fc3c53132a9b
 Revises: 5f4529578e39

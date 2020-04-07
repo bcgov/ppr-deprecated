@@ -1,3 +1,5 @@
+"""A module that provides methods for accessing the Auth API and providing the logged in user details."""
+
 import http
 import json
 import logging
@@ -17,6 +19,7 @@ bearer_scheme = fastapi.security.HTTPBearer()
 
 
 def check_auth_response(response: requests.Response):
+    """Review the response from the external response and throw an error if it was forbidden or unauthorized."""
     if response.status_code in [http.HTTPStatus.UNAUTHORIZED, http.HTTPStatus.FORBIDDEN]:
         try:
             body = response.json()
@@ -30,6 +33,7 @@ def check_auth_response(response: requests.Response):
 
 
 def get_user_from_auth(auth: fastapi.security.http.HTTPAuthorizationCredentials = fastapi.Depends(bearer_scheme)):
+    """Make a request to Auth API and return the response body."""
     auth_response = requests.get('{}/users/@me'.format(config.AUTH_API_URL),
                                  headers={'Authorization': '{} {}'.format(auth.scheme, auth.credentials)})
 
@@ -43,10 +47,13 @@ def get_user_from_auth(auth: fastapi.security.http.HTTPAuthorizationCredentials 
 
 
 def get_current_user(auth_api_user: dict = fastapi.Depends(get_user_from_auth), account_id: str = fastapi.Header(None)):
+    """Parse the provided dict into a User instance."""
     return User(user_id=auth_api_user['keycloakGuid'], user_name=auth_api_user['username'], account_id=account_id)
 
 
 class User(BaseModel):
+    """Represents the minimal user details provided by the Auth API."""
+
     user_id: str
     user_name: str
     account_id: str = None
