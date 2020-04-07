@@ -13,22 +13,32 @@
               registered to protect their claim in the case they need to go to court and seek remedies.
             p.
               This prototype form needs a lot of finishing touches.
+            h4 Main
             ul
               li User's who work with Tax Liens should only see these types.
               li User's who are marked a repairer's should default to the repairer lien type.
               li Repairer's Liens need to hide the Life In Years, Indenture, Infinity and show Surrender Date and ?
               li Add indenture boolean.  Add infinity life option and adjust the payment system.
+              li Is this a place to have Court Informationa and/or Additional Description? (Content that acts like General Collateral)
+            h4 Secured Parties
+            ul
               li If the user has only one client code in their account list then prepopulate the Secured Party record.
               li Add a dialog to let users add a new client to their account, for user in the Secured Party section.
               li.
                 Store just the hidden client code in the Financing Statement. When a user views or edits a Financing
                 Statement then do a lookup and replace the hidden code with a human readable description of the party.
               li Registering party needs to be stored as a client code and not the full data set.
+            h4 General
+            ul
               li General collateral validation and display of remaining characters (8,000 char limit)
+            h4 Serial
+            ul
               li.
                 Serial collateral. Default to Vehicle type. Let user enter the VIN and use standard APIs or code to
                 transform the VIN into Make, Model, Year. (https://www.autocheck.com/vehiclehistory/vin-basics)
               li Integrate with the drafts system.
+            h4 Overall
+            ul
               li.
                 Add navigation guards so that when a user selects another web page they are prompted to confirm saving
                 the draft.
