@@ -9,15 +9,20 @@ import models.collateral
 import models.financing_statement
 import models.party
 import models.search
+import schemas.search
 
 
 def test_read_search_returns_value():
-    search_record = models.search.Search(id=27, type_code='REGISTRATION_NUMBER', criteria={
-                                         'value': '1234'}, creation_date_time=datetime.datetime.now())
+    search_record = models.search.Search(id=27, type_code='REGISTRATION_NUMBER', criteria={'value': '1234'},
+                                         creation_date_time=datetime.datetime.now())
     repo = MockSearchRepository(search_record)
     actual = endpoints.search.read_search(27, repo)
 
-    assert search_record == actual
+    assert isinstance(actual, schemas.search.Search)
+    assert actual.id == 27
+    assert actual.type == 'REGISTRATION_NUMBER'
+    assert actual.criteria == {'value': '1234'}
+    assert actual.searchDateTime == search_record.creation_date_time
 
 
 def test_read_search_not_found():
