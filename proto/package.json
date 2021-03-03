@@ -69,7 +69,7 @@
     "fibers": "^4.0.2",
     "geckodriver": "^1.19.0",
     "node-sass": "^4.13.1",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "pug-plain-loader": "^1.0.0",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
